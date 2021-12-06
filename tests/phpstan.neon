@@ -1,0 +1,16 @@
+includes:
+  - ../vendor/phpstan/phpstan-phpunit/extension.neon
+  - ../vendor/phpstan/phpstan-mockery/extension.neon
+  - ../vendor/phpstan/phpstan-symfony/extension.neon
+  - ../vendor/phpstan/phpstan-symfony/rules.neon
+  #   - ../vendor/phpstan/phpstan-doctrine/extension.neon
+  - ../vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+  level: 8
+  paths:
+    - ../src
+    - ../tests
+  #  excludes_analyse: ~
+  checkMissingIterableValueType: false
+  checkGenericClassInNonGenericObjectType: false
