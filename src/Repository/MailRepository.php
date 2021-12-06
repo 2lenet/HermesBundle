@@ -29,7 +29,7 @@ class MailRepository extends ServiceEntityRepository
     {
         $copyMail = clone $mail;
         $copyMail->setStatus('draft');
-        $copyMail->setDateEnvoi(null);
+        $copyMail->setSendingDate(null);
         $copyMail->setTotalSended(0);
         $copyMail->setTotalOpened(0);
         $copyMail->setTotalUnsubscribed(0);
