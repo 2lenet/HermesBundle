@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,10 +46,8 @@ class Mail
 
     /**
      * @ORM\Column(type="json", nullable=false)
-     * @Assert\Json()
      */
     #[ORM\Column(type: Types::JSON, nullable: false)]
-    #[Assert\Json]
     protected array $data = [];
 
     /**
@@ -63,18 +62,14 @@ class Mail
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank
      */
     #[ORM\Column(type: Types::INTEGER)]
-    #[Assert\NotBlank]
     protected int $totalToSend = 0;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank
      */
     #[ORM\Column(type: Types::INTEGER)]
-    #[Assert\NotBlank]
     protected int $totalSended = 0;
 
     /**
@@ -109,7 +104,7 @@ class Mail
      * @ORM\Column(type="text", nullable=true)
      */
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    protected ?string $texte = null;
+    protected ?string $text = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -131,23 +126,18 @@ class Mail
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank
      */
     #[ORM\Column(type: Types::INTEGER)]
-    #[Assert\NotBlank]
     protected int $totalUnsubscribed = 0;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank
      */
     #[ORM\Column(type: Types::INTEGER)]
-    #[Assert\NotBlank]
     protected int $totalError = 0;
 
     /**
      * @ORM\Column(type="json")
-     * @Assert\Json
      */
     #[ORM\Column(type: Types::JSON)]
     protected array $attachement = [];
@@ -156,8 +146,12 @@ class Mail
      * @ORM\Column(type="integer")
      */
     #[ORM\Column(type: Types::INTEGER)]
-    #[Assert\Json]
     protected int $totalOpened = 0;
+
+    public function __construct()
+    {
+        $this->recipients = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -355,18 +349,18 @@ class Mail
     /**
      * @return string|null
      */
-    public function getTexte(): ?string
+    public function getText(): ?string
     {
-        return $this->texte;
+        return $this->text;
     }
 
     /**
-     * @param string|null $texte
+     * @param string|null $text
      * @return Mail
      */
-    public function setTexte(?string $texte): Mail
+    public function setText(?string $text): Mail
     {
-        $this->texte = $texte;
+        $this->text = $text;
         return $this;
     }
 

@@ -5,3 +5,4 @@
 /vendor/
 /.phpcs-cache
 /phpunit.report.xml
+/tests/phpunit/.phpunit.result.cache
