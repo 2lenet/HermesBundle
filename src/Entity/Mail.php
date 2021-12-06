@@ -78,7 +78,7 @@ class Mail
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected ?DateTime $dateEnvoi = null;
+    protected ?DateTime $sendingDate = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -303,18 +303,18 @@ class Mail
     /**
      * @return DateTime|null
      */
-    public function getDateEnvoi(): ?DateTime
+    public function getSendingDate(): ?DateTime
     {
-        return $this->dateEnvoi;
+        return $this->sendingDate;
     }
 
     /**
-     * @param DateTime|null $dateEnvoi
+     * @param DateTime|null $sendingDate
      * @return Mail
      */
-    public function setDateEnvoi(?DateTime $dateEnvoi): Mail
+    public function setSendingDate(?DateTime $sendingDate): Mail
     {
-        $this->dateEnvoi = $dateEnvoi;
+        $this->sendingDate = $sendingDate;
         return $this;
     }
 

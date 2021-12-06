@@ -48,6 +48,8 @@ class MailTest extends TestCase
         $recipients = $mail->getRecipients();
         self::assertTrue($recipients->contains($recipient));
         self::assertEquals($mail, $recipients->first()->getMail());
+        $mail->removeRecipient($recipient);
+        self::assertCount(0, $mail->getRecipients());
 
         $mail->setSubject('subject');
         self::assertEquals('subject', $mail->getSubject());
@@ -73,6 +75,11 @@ class MailTest extends TestCase
         $updatedAt = new DateTime();
         $mail->setUpdatedAt($updatedAt);
         self::assertEquals($updatedAt, $mail->getUpdatedAt());
+
+        self::assertNull($mail->getSendingDate());
+        $sendingDate = new DateTime();
+        $mail->setSendingDate($sendingDate);
+        self::assertEquals($sendingDate, $mail->getSendingDate());
 
         self::assertEquals(0, $mail->getTotalUnsubscribed());
         $mail->setTotalUnsubscribed(2);
