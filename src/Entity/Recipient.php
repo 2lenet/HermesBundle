@@ -60,7 +60,7 @@ class Recipient
     protected int $nbRetry = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Mail", inversedBy="recipient" ,cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail", inversedBy="recipient" ,cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected Mail $mail;

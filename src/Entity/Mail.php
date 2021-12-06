@@ -31,7 +31,7 @@ class Mail
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Template")
+     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Template")
      * @Assert\NotBlank
      */
     protected Template $template;
@@ -59,7 +59,7 @@ class Mail
     protected int $totalSended = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Recipient", mappedBy="mail", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\Recipient", mappedBy="mail", cascade={"persist", "remove"})
      */
     protected Collection $recipients;
 
