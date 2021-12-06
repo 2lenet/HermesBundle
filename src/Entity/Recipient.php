@@ -4,6 +4,7 @@ namespace Lle\HermesBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Lle\HermesBundle\Repository\RecipientRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author 2LE <2le@2le.net>
  *
- * @ORM\Entity(repositoryClass=Recipient::class)
+ * @ORM\Entity(repositoryClass=RecipientRepository::class)
  * @ORM\Table(name="lle_hermes_recipient")
  */
 class Recipient
@@ -36,6 +37,8 @@ class Recipient
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max=255)
+     * @Assert\Email
+     * @Assert\NotBlank
      */
     protected string $toEmail;
 
@@ -47,6 +50,7 @@ class Recipient
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max=255)
+     * @Assert\NotBlank
      */
     protected string $status;
 
@@ -64,7 +68,7 @@ class Recipient
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected ?DateTime $opentDate = null;
+    protected ?DateTime $openDate = null;
 
     /**
      * @return int
@@ -195,18 +199,18 @@ class Recipient
     /**
      * @return DateTime|null
      */
-    public function getOpentDate(): ?DateTime
+    public function getOpenDate(): ?DateTime
     {
-        return $this->opentDate;
+        return $this->openDate;
     }
 
     /**
-     * @param DateTime|null $opentDate
+     * @param DateTime|null $openDate
      * @return Recipient
      */
-    public function setOpentDate(?DateTime $opentDate): Recipient
+    public function setOpenDate(?DateTime $openDate): Recipient
     {
-        $this->opentDate = $opentDate;
+        $this->openDate = $openDate;
         return $this;
     }
 }

@@ -31,7 +31,7 @@ class Template
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
-    protected string $libelle = '';
+    protected string $libelle;
 
     /**
      * @ORM\Column(type="string", length=1024)
@@ -50,6 +50,7 @@ class Template
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
+     * @Assert\Email
      */
     protected string $senderEmail;
 
@@ -61,7 +62,7 @@ class Template
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    protected ?string $texte = null;
+    protected ?string $text = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -191,18 +192,18 @@ class Template
     /**
      * @return string|null
      */
-    public function getTexte(): ?string
+    public function getText(): ?string
     {
-        return $this->texte;
+        return $this->text;
     }
 
     /**
-     * @param string|null $texte
+     * @param string|null $text
      * @return Template
      */
-    public function setTexte(?string $texte): Template
+    public function setText(?string $text): Template
     {
-        $this->texte = $texte;
+        $this->text = $text;
         return $this;
     }
 
