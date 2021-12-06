@@ -5,7 +5,6 @@ namespace Lle\HermesBundle\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\MailRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,8 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=MailRepository::class)
  * @ORM\Table(name="lle_hermes_mail")
  */
-#[ORM\Entity(repositoryClass: MailRepository::class)]
-#[ORM\Table(name: 'lle_hermes_mail')]
 class Mail
 {
 
@@ -31,23 +28,17 @@ class Mail
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Template")
      * @Assert\NotBlank
      */
-    #[ORM\ManyToOne(targetEntity: Template::class)]
-    #[Assert\NotBlank]
     protected Template $template;
 
     /**
      * @ORM\Column(type="json", nullable=false)
      */
-    #[ORM\Column(type: Types::JSON, nullable: false)]
     protected array $data = [];
 
     /**
@@ -55,27 +46,21 @@ class Mail
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
     protected string $status;
 
     /**
      * @ORM\Column(type="integer")
      */
-    #[ORM\Column(type: Types::INTEGER)]
     protected int $totalToSend = 0;
 
     /**
      * @ORM\Column(type="integer")
      */
-    #[ORM\Column(type: Types::INTEGER)]
     protected int $totalSended = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Recipient", mappedBy="mail", cascade={"persist", "remove"})
      */
-    #[ORM\OneToMany(targetEntity: Recipient::class, mappedBy: 'mail', cascade: ['persist', 'remove'])]
     protected Collection $recipients;
 
     /**
@@ -83,69 +68,56 @@ class Mail
      * @Assert\NotBlank
      * @Assert\Length(max=1024)
      */
-    #[ORM\Column(type: Types::STRING, length: 1024)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 1024)]
     protected string $subject;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $mjml = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTime $dateEnvoi = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $text = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
     protected ?string $html = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTime $createdAt = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTime $updatedAt = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    #[ORM\Column(type: Types::INTEGER)]
     protected int $totalUnsubscribed = 0;
 
     /**
      * @ORM\Column(type="integer")
      */
-    #[ORM\Column(type: Types::INTEGER)]
     protected int $totalError = 0;
 
     /**
      * @ORM\Column(type="json")
      */
-    #[ORM\Column(type: Types::JSON)]
     protected array $attachement = [];
 
     /**
      * @ORM\Column(type="integer")
      */
-    #[ORM\Column(type: Types::INTEGER)]
     protected int $totalOpened = 0;
 
     public function __construct()

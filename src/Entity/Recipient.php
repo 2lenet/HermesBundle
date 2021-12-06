@@ -3,9 +3,7 @@
 namespace Lle\HermesBundle\Entity;
 
 use DateTime;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Lle\HermesBundle\Repository\RecipientRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,8 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=Recipient::class)
  * @ORM\Table(name="lle_hermes_recipient")
  */
-#[ORM\Entity(repositoryClass: RecipientRepository::class)]
-#[ORM\Table(name: 'lle_hermes_recipient')]
 class Recipient
 {
 
@@ -29,64 +25,45 @@ class Recipient
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    #[Assert\Length(max: 255)]
     protected ?string $toName = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max=255)
      */
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\Length(max: 255)]
-    #[Assert\NotBlank()]
     protected string $toEmail;
 
     /**
      * @ORM\Column(type="json")
      */
-    #[ORM\Column(type: Types::JSON)]
-    #[Assert\Json()]
-    #[Assert\NotBlank()]
     protected array $data = [];
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max=255)
      */
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\Length(max: 255)]
-    #[Assert\NotBlank()]
     protected string $status;
 
     /**
      * @ORM\Column(type="integer")
      */
-    #[ORM\Column(type: Types::INTEGER)]
     protected int $nbRetry = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Mail", inversedBy="recipient" ,cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
-    #[ORM\ManyToOne(targetEntity: Mail::class, inversedBy: 'recipient', cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotBlank()]
     protected Mail $mail;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTime $opentDate = null;
 
     /**

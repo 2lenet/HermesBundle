@@ -2,7 +2,6 @@
 
 namespace Lle\HermesBundle\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,8 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=TemplateRepository::class)
  * @ORM\Table(name="lle_hermes_template")
  */
-#[ORM\Entity(repositoryClass: TemplateRepository::class)]
-#[ORM\Table(name: 'lle_hermes_template')]
 class Template
 {
     /**
@@ -27,9 +24,6 @@ class Template
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
@@ -37,9 +31,6 @@ class Template
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
     protected string $libelle = '';
 
     /**
@@ -47,17 +38,12 @@ class Template
      * @Assert\NotBlank
      * @Assert\Length(max=1024)
      */
-    #[ORM\Column(type: Types::STRING, length: 1024)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 1024)]
     protected string $subject;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Assert\Length(max: 255)]
     protected ?string $senderName = null;
 
     /**
@@ -65,21 +51,16 @@ class Template
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
     protected string $senderEmail;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    #[ORM\Column(type: Types::TEXT)]
     protected ?string $mjml = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    #[ORM\Column(type: Types::TEXT)]
     protected ?string $texte = null;
 
     /**
@@ -87,21 +68,16 @@ class Template
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
     protected string $code;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    #[ORM\Column(type: Types::STRING, nullable: true)]
     protected ?string $html = null;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    #[ORM\Column(type: Types::STRING, nullable: true)]
     protected bool $unsubscriptions = true;
 
     /**
