@@ -37,7 +37,7 @@ class LleHermesExtensionTest extends TestCase
         $mock->expects(self::exactly(1))
             ->method('fileExists')
             ->withConsecutive(
-                [self::equalTo('/var/www/html/src/DependencyInjection/../../config/services.xml')],
+                [self::equalTo('/app/src/DependencyInjection/../../config/services.xml')],
             );
 
         return $mock;
