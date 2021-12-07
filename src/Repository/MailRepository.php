@@ -16,6 +16,7 @@ use Lle\HermesBundle\Entity\Mail;
  * @method Mail|null findOneBy(array $criteria, array $orderBy = null)
  * @method Mail[]    findAll()
  * @method Mail[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Mail[]    findByStatus(string $status)
  */
 class MailRepository extends ServiceEntityRepository
 {

@@ -47,7 +47,7 @@ class EmailError
     private string $email;
 
     /**
-     * @ORM\OneToMany(targetEntity=Lle\HermesBundle\Entity\Error, mappedBy="emailError")
+     * @ORM\OneToMany(targetEntity=Lle\HermesBundle\Entity\Error::class, mappedBy="emailError")
      */
     private Collection $errors;
 

@@ -3,7 +3,7 @@ includes:
   - ../vendor/phpstan/phpstan-mockery/extension.neon
   - ../vendor/phpstan/phpstan-symfony/extension.neon
   - ../vendor/phpstan/phpstan-symfony/rules.neon
-  #   - ../vendor/phpstan/phpstan-doctrine/extension.neon
+  - ../vendor/phpstan/phpstan-doctrine/extension.neon
   - ../vendor/phpstan/phpstan-deprecation-rules/rules.neon
 
 parameters:
@@ -11,6 +11,5 @@ parameters:
   paths:
     - ../src
     - ../tests
-  #  excludes_analyse: ~
   checkMissingIterableValueType: false
   checkGenericClassInNonGenericObjectType: false

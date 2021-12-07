@@ -24,4 +24,15 @@ class UnsubscribeEmailRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, UnsubscribeEmail::class);
     }
+
+    /**
+     * @return string[]
+     */
+    public function findEmailUnsubscribed(): array
+    {
+        $qb = $this->createQueryBuilder('entity')
+            ->select('entity.email as email');
+
+        return $qb->getQuery()->getScalarResult();
+    }
 }

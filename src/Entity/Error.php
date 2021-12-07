@@ -45,7 +45,7 @@ class Error
     private string $content;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Lle\HermesBundle\Entity\EmailError, inversedBy="errors")
+     * @ORM\ManyToOne(targetEntity=Lle\HermesBundle\Entity\EmailError::class, inversedBy="errors")
      * @ORM\JoinColumn(nullable=false)
      * @Assert\NotBlank
      */
