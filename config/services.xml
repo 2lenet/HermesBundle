@@ -16,18 +16,23 @@
     <services>
         <service id="lle_hermes.repository.email_error" class="Lle\HermesBundle\Service\EmailErrorRepository">
             <argument type="service" id="doctrine"/>
+            <tag name="doctrine.repository_service"/>
         </service>
         <service id="lle_hermes.repository.error" class="Lle\HermesBundle\Service\ErrorRepository">
             <argument type="service" id="doctrine"/>
+            <tag name="doctrine.repository_service"/>
         </service>
         <service id="lle_hermes.repository.mail" class="Lle\HermesBundle\Service\MailRepository">
             <argument type="service" id="doctrine"/>
+            <tag name="doctrine.repository_service"/>
         </service>
         <service id="lle_hermes.repository.recipient" class="Lle\HermesBundle\Service\RecipientRepository">
             <argument type="service" id="doctrine"/>
+            <tag name="doctrine.repository_service"/>
         </service>
         <service id="lle_hermes.repository.template" class="Lle\HermesBundle\Service\TemplateRepository">
             <argument type="service" id="doctrine"/>
+            <tag name="doctrine.repository_service"/>
         </service>
         <service id="lle_hermes.repository.unsubscribe_email"
                  class="Lle\HermesBundle\Service\UnsubscribeEmailRepository">
