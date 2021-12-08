@@ -24,7 +24,8 @@
     "symfony/dependency-injection": "^5.4",
     "symfony/yaml": "^5.4",
     "symfony/mailer": "^5.4",
-    "symfony/twig-bundle": "^5.4"
+    "symfony/twig-bundle": "^5.4",
+    "symfony/lock": "^5.4"
   },
   "conflict": {
     "doctrine/mongodb": "<1.3",
