@@ -5,6 +5,7 @@ namespace Lle\HermesBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
+use Lle\HermesBundle\Enum\StatusEnum;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
@@ -71,7 +72,7 @@ class SenderService
             $template = $mail->getTemplate();
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
-            if ($template->getUnsubscriptions() == true) {
+            if ($template->isUnsubscriptions() == true) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus('unsubscribed');
                 } else {
@@ -87,7 +88,9 @@ class SenderService
     {
         $mails = $this->mailRepository->findByStatus('sending');
         foreach ($mails as $mail) {
-            $recipientsError = $this->recipientRepository->findBy(['status' => 'error', 'mail' => $mail->getId()]);
+            $recipientsError = $this->recipientRepository->findBy(
+                ['status' => StatusEnum::ERROR, 'mail' => $mail->getId()]
+            );
             $mail->setTotalError(count($recipientsError));
             $this->entityManager->persist($mail);
         }
@@ -132,10 +135,6 @@ class SenderService
 
         /** @var string $domain */
         $domain = $this->parameterBag->get('lle_hermes.app_domain');
-
-        $context = $this->router->getContext();
-        $context->setHost($domain);
-
 
         // Generate unsubscribe link
         /** @var string $secret */
@@ -208,23 +207,16 @@ class SenderService
     protected function updateMailAndRecipient(Mail $mail): void
     {
         $destinataireSent = $this->recipientRepository
-            ->findBy(['status' => 'sent', 'mail' => $mail]);
+            ->findBy(['status' => StatusEnum::SENT, 'mail' => $mail]);
+        $mail->setTotalSended(count($destinataireSent));
+
         $unsubscribedMails = $this->recipientRepository
-            ->findBy(['status' => 'unsubscribed', 'mail' => $mail]);
+            ->findBy(['status' => StatusEnum::UNSUBSCRIBED, 'mail' => $mail]);
+        $mail->setTotalUnsubscribed(count($unsubscribedMails));
+
         $errorMails = $this->recipientRepository
-            ->findBy(['status' => 'error', 'mail' => $mail]);
-
-        if (count($destinataireSent) > 0) {
-            $mail->setTotalSended(count($destinataireSent));
-        }
-
-        if (count($unsubscribedMails) > 0) {
-            $mail->setTotalUnsubscribed(count($unsubscribedMails));
-        }
-
-        if (count($errorMails) > 0) {
-            $mail->setTotalError(count($errorMails));
-        }
+            ->findBy(['status' => StatusEnum::ERROR, 'mail' => $mail]);
+        $mail->setTotalError(count($errorMails));
 
         $this->entityManager->persist($mail);
 
