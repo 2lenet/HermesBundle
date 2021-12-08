@@ -1,0 +1,9 @@
+/docker-compose.yaml
+/Dockerfile
+/.idea
+
+/vendor/
+/.phpcs-cache
+/phpunit.report.xml
+/tests/phpunit/.phpunit.result.cache
+/.phpunit.result.cache
