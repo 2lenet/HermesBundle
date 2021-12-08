@@ -152,7 +152,7 @@ class SenderService
         $data = array_merge($data, $unsubscribeLink);
 
         /** @var string $sender */
-        $sender = $this->parameterBag->get('lle_hermes.bounce.email');
+        $sender = $this->parameterBag->get('lle_hermes.bounce_email');
 
         $email = (new TemplatedEmail())
             ->sender($sender)

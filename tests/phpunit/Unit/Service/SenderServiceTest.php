@@ -134,7 +134,7 @@ class SenderServiceTest extends TestCase
         $mock->method('get')->will(self::returnCallback(function (string $name) {
             $value = $name;
             switch ($name) {
-                case 'lle_hermes.bounce.email':
+                case 'lle_hermes.bounce_email':
                     $value = 'no-reply@test.com';
                     break;
             }
