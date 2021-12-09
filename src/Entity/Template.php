@@ -81,6 +81,11 @@ class Template
      */
     protected bool $unsubscriptions = true;
 
+    public function __toString(): string
+    {
+        return sprintf('%s %s', $this->code, $this->getSubject());
+    }
+
     /**
      * @return int
      */

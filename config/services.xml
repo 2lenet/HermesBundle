@@ -1,43 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns="http://symfony.com/schema/dic/services"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services
-        https://symfony.com/schema/dic/services/services-1.0.xsd">
-    <services>
-        <service id="lle_hermes.repository.email_error" class="Lle\HermesBundle\Repository\EmailErrorRepository">
-            <argument type="service" id="doctrine"/>
-            <tag name="doctrine.repository_service"/>
-        </service>
-        <service id="lle_hermes.repository.error" class="Lle\HermesBundle\Repository\ErrorRepository">
-            <argument type="service" id="doctrine"/>
-            <tag name="doctrine.repository_service"/>
-        </service>
-        <service id="lle_hermes.repository.mail" class="Lle\HermesBundle\Repository\MailRepository">
-            <argument type="service" id="doctrine"/>
-            <tag name="doctrine.repository_service"/>
-        </service>
-        <service id="lle_hermes.repository.recipient" class="Lle\HermesBundle\Repository\RecipientRepository">
-            <argument type="service" id="doctrine"/>
-            <tag name="doctrine.repository_service"/>
-        </service>
-        <service id="lle_hermes.repository.template" class="Lle\HermesBundle\Repository\TemplateRepository">
-            <argument type="service" id="doctrine"/>
-            <tag name="doctrine.repository_service"/>
-        </service>
-        <service id="lle_hermes.repository.unsubscribe_email"
-                 class="Lle\HermesBundle\Repository\UnsubscribeEmailRepository">
-            <argument type="service" id="doctrine"/>
-        </service>
-        <service id="lle_hermes.service.sender" class="Lle\HermesBundle\Service\SenderService">
-            <argument type="service" id="mailer.mailer"/>
-            <argument type="service" id="doctrine.orm.default_entity_manager"/>
-            <argument type="service" id="lle_hermes.repository.recipient"/>
-            <argument type="service" id="lle_hermes.repository.mail"/>
-            <argument type="service" id="lle_hermes.repository.unsubscribe_email"/>
-            <argument type="service" id="parameter_bag"/>
-            <argument type="service" id="router.default"/>
-            <argument type="service" id="twig"/>
-        </service>
-    </services>
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <services>
+        <defaults autowire="true" autoconfigure="true"/>
+        <prototype namespace="Lle\HermesBundle\" resource="../src/*"
+                   exclude="../src/{DependencyInjection,Entity,Resources,Enum,LleHermesBundle.php}"/>
+    </services>
 </container>
