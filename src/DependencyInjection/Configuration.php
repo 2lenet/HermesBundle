@@ -17,14 +17,13 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('lle_hermes');
         $rootNode = $treeBuilder->getRootNode();
-        $rootNode
-            ->children()
-            ->scalarNode('root_dir')->isRequired()->end()
-            ->scalarNode('app_secret')->isRequired()->end()
-            ->scalarNode('app_domain')->isRequired()->end()
-            ->scalarNode('bounce_email')->isRequired()->end()
-            ->scalarNode('bounce_pass')->isRequired()->end()
-            ->scalarNode('bounce_host')->isRequired()->end();
+        $children = $rootNode->children();
+        $children->scalarNode('root_dir')->isRequired()->end();
+        $children->scalarNode('app_secret')->isRequired()->end();
+        $children->scalarNode('app_domain')->isRequired()->end();
+        $children->scalarNode('bounce_email')->isRequired()->end();
+        $children->scalarNode('bounce_pass')->isRequired()->end();
+        $children->scalarNode('bounce_host')->isRequired()->end();
         return $treeBuilder;
     }
 }
