@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main, init ]
   pull_request:
-    branches: [ main, init ]
+    branches: [ main ]
 
 jobs:
   php-coding-standard:
@@ -36,6 +36,9 @@ jobs:
           php_version: ${{ matrix.php_version }}
           version: 2
           args: --profile --ignore-platform-reqs
+
+      - name: 'PHP CodeSniffer Validations'
+        run: ~/.composer/vendor/bin/phpcs
 
       - name: 'PHPStan Static Analysis'
         uses: php-actions/phpstan@v2
