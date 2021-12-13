@@ -12,8 +12,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
         TemplateDatasource $datasource
-    )
-    {
+    ) {
         $this->datasource = $datasource;
     }
 

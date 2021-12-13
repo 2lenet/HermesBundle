@@ -12,8 +12,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
         RecipientDatasource $datasource
-    )
-    {
+    ) {
         $this->datasource = $datasource;
     }
 

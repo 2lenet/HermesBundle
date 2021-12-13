@@ -12,8 +12,7 @@ class MailCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
         MailDatasource $datasource
-    )
-    {
+    ) {
         $this->datasource = $datasource;
     }
 

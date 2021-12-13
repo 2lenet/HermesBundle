@@ -37,16 +37,15 @@ class SenderService
     private Environment $twig;
 
     public function __construct(
-        MailerInterface            $mailer,
-        EntityManagerInterface     $entityManager,
-        RecipientRepository        $recipientRepository,
+        MailerInterface $mailer,
+        EntityManagerInterface $entityManager,
+        RecipientRepository $recipientRepository,
         UnsubscribeEmailRepository $unsubscribeEmailRepository,
-        MailRepository             $mailRepository,
-        ParameterBagInterface      $parameterBag,
-        RouterInterface            $router,
-        Environment                $twig
-    )
-    {
+        MailRepository $mailRepository,
+        ParameterBagInterface $parameterBag,
+        RouterInterface $router,
+        Environment $twig
+    ) {
         $this->mailer = $mailer;
         $this->entityManager = $entityManager;
         $this->recipientRepository = $recipientRepository;
