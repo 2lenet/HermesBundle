@@ -38,7 +38,7 @@ jobs:
           args: --profile --ignore-platform-reqs
 
       - name: 'PHP CodeSniffer Validations'
-        run: /app/vendor/bin/phpcs
+        run: ~/vendor/bin/phpcs
 
       - name: 'PHPStan Static Analysis'
         uses: php-actions/phpstan@v2
