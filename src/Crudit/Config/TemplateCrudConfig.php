@@ -26,27 +26,32 @@ class TemplateCrudConfig extends AbstractCrudConfig
         $subject = Field::new('subject');
         $senderName = Field::new('senderName');
         $senderEmail = Field::new('senderEmail');
-        $mjml = Field::new('mjml');
         $text = Field::new('text');
         $code = Field::new('code');
         $html = Field::new('html');
         $unsubscriptions = Field::new('unsubscriptions');
         // you can return different fields based on the block key
-        if ($key == CrudConfigInterface::INDEX || $key == CrudConfigInterface::SHOW) {
+        if ($key == CrudConfigInterface::INDEX) {
             return [
                 $libelle,
                 $subject,
                 $senderName,
                 $senderEmail,
-                $mjml,
-                $text,
                 $code,
-                $html,
                 $unsubscriptions,
             ];
         }
 
-        return [];
+        return [
+            $libelle,
+            $subject,
+            $senderName,
+            $senderEmail,
+            $text,
+            $code,
+            $html,
+            $unsubscriptions,
+        ];
     }
 
     public function getRootRoute(): string

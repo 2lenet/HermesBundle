@@ -19,10 +19,7 @@ class TemplateFilterSet extends AbstractFilterSet
             StringFilterType::new('subject'),
             StringFilterType::new('senderName'),
             StringFilterType::new('senderEmail'),
-            StringFilterType::new('mjml'),
-            StringFilterType::new('text'),
             StringFilterType::new('code'),
-            StringFilterType::new('html'),
             StringFilterType::new('unsubscriptions'),
         ];
     }

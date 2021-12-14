@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Enum\StatusEnum;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
@@ -50,6 +51,19 @@ class SenderServiceTest extends TestCase
     protected function getMockEntityManager(): EntityManagerInterface
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects(self::exactly(2))
+            ->method('persist')
+            ->withConsecutive(
+                [self::callback(function (Recipient $recipient) {
+                    return StatusEnum::SENT === $recipient->getStatus();
+                })],
+                [self::callback(function (Mail $mail) {
+                    return StatusEnum::SENT === $mail->getStatus()
+                        && 1 === $mail->getTotalSended()
+                        && 1 === $mail->getTotalUnsubscribed()
+                        && 1 === $mail->getTotalError();
+                })]
+            );
         return $entityManager;
     }
 
@@ -94,6 +108,8 @@ class SenderServiceTest extends TestCase
         $mail->setMjml($template->getMjml());
         $mail->setHtml($template->getHtml());
         $mail->setText($template->getText());
+        $mail->setTotalToSend(1);
+        $mail->setStatus(StatusEnum::SENDING);
         return $mail;
     }
 

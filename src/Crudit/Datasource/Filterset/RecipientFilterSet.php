@@ -18,7 +18,7 @@ class RecipientFilterSet extends AbstractFilterSet
     public function getFilters(): array
     {
         return [
-            EntityFilterType::new('mail', Mail::class),
+            EntityFilterType::new('mail', Mail::class, 'lle_hermes_crudit_mail_autocomplete'),
             StringFilterType::new('toName'),
             StringFilterType::new('toEmail'),
             StringFilterType::new('status'),

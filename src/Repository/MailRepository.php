@@ -5,6 +5,7 @@ namespace Lle\HermesBundle\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Lle\HermesBundle\Entity\Mail;
+use Lle\HermesBundle\Enum\StatusEnum;
 
 /**
  * Class MailRepository
@@ -29,7 +30,7 @@ class MailRepository extends ServiceEntityRepository
     public function copyMail(Mail $mail): Mail
     {
         $copyMail = clone $mail;
-        $copyMail->setStatus('draft');
+        $copyMail->setStatus(StatusEnum::DRAFT);
         $copyMail->setSendingDate(null);
         $copyMail->setTotalSended(0);
         $copyMail->setTotalOpened(0);
@@ -38,7 +39,7 @@ class MailRepository extends ServiceEntityRepository
 
         foreach ($mail->getRecipients() as $recipient) {
             $cloneRecipient = clone $recipient;
-            $cloneRecipient->setStatus('draft');
+            $cloneRecipient->setStatus(StatusEnum::DRAFT);
             $cloneRecipient->setDateOuverture(null);
             $copyMail->addRecipient($cloneRecipient);
         }

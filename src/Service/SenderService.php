@@ -73,7 +73,7 @@ class SenderService
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
             if ($template->isUnsubscriptions() == true) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
-                    $recipient->setStatus('unsubscribed');
+                    $recipient->setStatus(StatusEnum::UNSUBSCRIBED);
                 } else {
                     $this->send($mail, $recipient);
                 }
@@ -100,12 +100,12 @@ class SenderService
     {
         try {
             $this->mailer->send($this->buildMail($mail, $recipient));
-            $recipient->setStatus('sent');
+            $recipient->setStatus(StatusEnum::SENT);
             $this->entityManager->persist($recipient);
             $this->entityManager->flush();
             $this->updateMailAndRecipient($mail);
         } catch (TransportException $transportException) {
-            echo $transportException->getMessage();
+            $recipient->setStatus(StatusEnum::ERROR);
         }
     }
 
@@ -217,11 +217,12 @@ class SenderService
             ->findBy(['status' => StatusEnum::ERROR, 'mail' => $mail]);
         $mail->setTotalError(count($errorMails));
 
-        $this->entityManager->persist($mail);
-
-        if ($mail->getTotalSended() == ($mail->getTotalToSend() - (count($unsubscribedMails) + count($errorMails)))) {
-            $mail->setStatus('sent');
+        $total = $mail->getTotalToSend() - $mail->getTotalUnsubscribed() + $mail->getTotalError();
+        if ($mail->getTotalSended() == $total) {
+            $mail->setStatus(StatusEnum::SENT);
         }
+
+        $this->entityManager->persist($mail);
 
         $this->entityManager->flush();
     }
