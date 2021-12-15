@@ -5,6 +5,7 @@ namespace phpunit\Unit\DependencyInjection;
 use Lle\HermesBundle\DependencyInjection\LleHermesExtension;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
@@ -20,7 +21,19 @@ class LleHermesExtensionTest extends TestCase
     {
         $extension = new LleHermesExtension();
         $containerBuilder = $this->getMockContainerBuilder();
-        $extension->load([], $containerBuilder);
+        $extension->load(
+            [
+                'lle_hermes' => [
+                    'root_dir' => '',
+                    'app_secret' => '',
+                    'app_domain' => '',
+                    'bounce_email' => '',
+                    'bounce_pass' => '',
+                    'bounce_host' => ''
+                ]
+            ],
+            $containerBuilder
+        );
     }
 
     protected function getMockContainerBuilder(): ContainerBuilder
@@ -45,6 +58,6 @@ class LleHermesExtensionTest extends TestCase
 
     protected function getMockParameterBag(): ParameterBagInterface
     {
-        return $this->createMock(ParameterBagInterface::class);
+        return $this->createPartialMock(ParameterBag::class, []);
     }
 }
