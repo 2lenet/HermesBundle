@@ -24,4 +24,9 @@ abstract class AbstractCrudConfig extends DefaultConfig
             str_replace('CrudConfig', 'Type', get_class($this))
         );
     }
+
+    public function getTranslationDomain(): string
+    {
+        return 'LleHermesBundle';
+    }
 }

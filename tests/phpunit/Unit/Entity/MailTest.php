@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Validation;
  */
 class MailTest extends TestCase
 {
-
     public function testMailCreate(): void
     {
         $mail = new Mail();

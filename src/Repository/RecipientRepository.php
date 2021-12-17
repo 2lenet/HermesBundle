@@ -23,7 +23,6 @@ use Lle\HermesBundle\Enum\StatusEnum;
  */
 class RecipientRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Recipient::class);

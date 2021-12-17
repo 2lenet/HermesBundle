@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Mail
 {
-
     /**
      * @var int
      *

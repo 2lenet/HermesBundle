@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
  */
 class StatusEnumTest extends TestCase
 {
-
     public function testGetConstants(): void
     {
         self::assertEquals([

@@ -21,7 +21,6 @@ use Lle\HermesBundle\Enum\StatusEnum;
  */
 class MailRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Mail::class);

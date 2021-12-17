@@ -19,7 +19,6 @@ use Lle\HermesBundle\Entity\UnsubscribeEmail;
  */
 class UnsubscribeEmailRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UnsubscribeEmail::class);

@@ -19,7 +19,6 @@ use Lle\HermesBundle\Entity\EmailError;
  */
 class EmailErrorRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, EmailError::class);
