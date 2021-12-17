@@ -43,3 +43,15 @@ return [
     Lle\HermesBundle\LleHermesBundle::class => ['all' => true],
 ];
 ```
+
+### Step 3: Add Route
+Then, add the bundle route to the `config/routes.yaml` file of your project:
+
+```yaml
+# config/route.yaml
+
+# ...
+hermes:
+  resource: "@LleHermesBundle/Resources/config/routes.xml"
+  prefix: /hermes
+```

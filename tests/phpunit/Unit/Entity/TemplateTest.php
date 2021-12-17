@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Validation;
  */
 class TemplateTest extends TestCase
 {
-
     public function testCreate(): void
     {
         $entity = new Template();

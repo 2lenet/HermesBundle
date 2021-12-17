@@ -19,7 +19,6 @@ use Lle\HermesBundle\Entity\Template;
  */
 class TemplateRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Template::class);

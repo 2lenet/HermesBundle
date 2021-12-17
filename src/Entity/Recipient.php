@@ -18,7 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Recipient
 {
-
     /**
      * @var int
      *

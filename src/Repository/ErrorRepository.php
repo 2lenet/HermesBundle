@@ -19,7 +19,6 @@ use Lle\HermesBundle\Entity\Error;
  */
 class ErrorRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Error::class);

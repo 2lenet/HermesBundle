@@ -16,7 +16,6 @@ use Symfony\Component\Validator\Validation;
  */
 class RecipientTest extends TestCase
 {
-
     public function testCreate(): void
     {
         $entity = new Recipient();

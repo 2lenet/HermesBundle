@@ -27,7 +27,6 @@ use Twig\Loader\LoaderInterface;
  */
 class SenderServiceTest extends TestCase
 {
-
     public function testSendAllMail(): void
     {
         $sender = new SenderService(

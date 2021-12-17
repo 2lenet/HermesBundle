@@ -1,0 +1,40 @@
+action:
+  add: Ajouter
+  delete: Supprimer
+  edit: Modifier
+  export: Exporter
+  show: Voir
+crudit:
+  action: Actions
+crud:
+  title:
+    list:
+      template: Template
+      mail: Mail
+      recipient: Destinataire
+export:
+  csv: Csv
+  excel: Excel
+field:
+  code: code
+  libelle: Libelle
+  mail: mail
+  'mail:sendingDate': Date d'envoi
+  openDate: Date d'ouverture
+  opendate: date d'ouverture
+  senderEmail: Email de l'expediteur
+  senderemail: Email de l'expediteur
+  senderName: Nom de l'expediteur
+  sendername: Nom de l'expediteur
+  sendingDate: Date d'envoie
+  sendingdate: date d'envoie
+  status: status
+  subject: Sujet
+  toEmail: A Email
+  toemail: à email
+  toName: A Nom
+  toname: à nom
+  unsubscriptions: Désescriptions
+menu:
+  lle_hermes:
+    hermes: Hermes

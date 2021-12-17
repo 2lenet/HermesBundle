@@ -16,7 +16,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class LleHermesExtensionTest extends TestCase
 {
-
     public function testLoad(): void
     {
         $extension = new LleHermesExtension();

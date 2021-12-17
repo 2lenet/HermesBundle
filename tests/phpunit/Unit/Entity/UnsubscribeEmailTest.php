@@ -15,7 +15,6 @@ use Symfony\Component\Validator\Validation;
  */
 class UnsubscribeEmailTest extends TestCase
 {
-
     public function testUnsubscribeEmailCreate(): void
     {
         $entity = new UnsubscribeEmail();
