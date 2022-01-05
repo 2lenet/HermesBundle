@@ -20,14 +20,14 @@ class HermesMenuProvider implements MenuProviderInterface
         /** @var LinkElement $menu */
         $menu = LinkElement::new(
             'menu.lle_hermes.hermes',
-            null,
-            Icon::new('/img/icons/groupes.svg', Icon::TYPE_IMG),
+            Path::new('lle_hermes_crudit_mail_index'),
+            Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
         )->setRole('ROLE_LLE_HERMES');
         $menu->addChild(
             LinkElement::new(
                 'menu.lle_hermes.template',
                 Path::new('lle_hermes_crudit_template_index'),
-                Icon::new('/img/icons/groupes.svg', Icon::TYPE_IMG),
+                Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
                 "ROLE_TEMPLATE_INDEX"
             )
         );
@@ -35,7 +35,7 @@ class HermesMenuProvider implements MenuProviderInterface
             LinkElement::new(
                 'menu.lle_hermes.mail',
                 Path::new('lle_hermes_crudit_mail_index'),
-                Icon::new('/img/icons/groupes.svg', Icon::TYPE_IMG),
+                Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
                 "ROLE_MAIL_INDEX"
             )
         );
@@ -43,7 +43,7 @@ class HermesMenuProvider implements MenuProviderInterface
             LinkElement::new(
                 'menu.lle_hermes.template',
                 Path::new('lle_hermes_crudit_recipient_index'),
-                Icon::new('/img/icons/groupes.svg', Icon::TYPE_IMG),
+                Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
                 "ROLE_RECIPIENT_INDEX"
             )
         );

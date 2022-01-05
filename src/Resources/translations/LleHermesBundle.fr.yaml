@@ -21,20 +21,20 @@ field:
   mail: mail
   'mail:sendingDate': Date d'envoi
   openDate: Date d'ouverture
-  opendate: date d'ouverture
+  opendate: Date d'ouverture
   senderEmail: Email de l'expediteur
   senderemail: Email de l'expediteur
   senderName: Nom de l'expediteur
   sendername: Nom de l'expediteur
-  sendingDate: Date d'envoie
-  sendingdate: date d'envoie
+  sendingDate: Date d'envoi
+  sendingdate: date d'envoi
   status: status
   subject: Sujet
   toEmail: A Email
   toemail: à email
   toName: A Nom
   toname: à nom
-  unsubscriptions: Désescriptions
+  unsubscriptions: Désinscriptions
 menu:
   lle_hermes:
     hermes: Hermes

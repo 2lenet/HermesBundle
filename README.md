@@ -19,6 +19,18 @@ Open a command console, enter your project directory and execute:
 $ composer require 2lenet/hermes-bundle
 ```
 
+add a file in /config/packages/hermes.yaml for the configuration : 
+
+```yaml 
+lle_hermes:
+  root_dir: /var/www/html
+  app_secret: toto
+  app_domain: titi
+  bounce_email: bounce@kiwi-backup.com
+  bounce_host: mail.2le.net
+  bounce_pass: toto
+```
+
 Applications that don't use Symfony Flex
 ----------------------------------------
 
