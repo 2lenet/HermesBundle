@@ -1,0 +1,41 @@
+{% block cmf_grapes_input_widget %}
+    {% block cmf_grapes_input_widget_js %}
+        {% block cmf_grapes_input_widget_assets -%}
+			{% block stylesheets -%}
+				<link rel="stylesheet" href="{{ asset('bundles/cmfgrapesjs/vendor/grapesjs/css/grapesjs.min.css') }}"/>
+				<link rel="stylesheet" href="{{ asset('bundles/cmfgrapesjs/vendor/grapesjs/css/grapesjs-preset-webpage.min.css') }}"/>
+			{%- endblock %}
+			{% block javascripts -%}
+				<script src="{{ asset('bundles/cmfgrapesjs/vendor/grapesjs/js/grapes.js') }}"></script>
+				<script src="{{ asset('bundles/cmfgrapesjs/vendor/grapesjs/js/grapesjs-preset-webpage.min.js') }}"></script>
+				<script src="{{ asset('bundles/cmfgrapesjs/js/cmf_grapes.js') }}"></script>
+			{%- endblock %}
+		{%- endblock %}
+
+		<script type="text/javascript">
+			jQuery(function ($) {
+				$('#{{ id }}-cmf-grapes').cmfGrapes({
+					grapes_options: {
+						style: '.txt-red{colo:red}',
+						plugins: ['gjs-preset-webpage'],
+						pluginsOpts: {
+							'gjs-preset-webpage': {
+								// options
+							}
+						}
+					},
+				    simple_form_content: {
+					  formId: '{{ id }}'
+				    }
+				});
+			});
+		</script>
+
+		{% endblock %}
+
+		<div id="{{ id }}-cmf-grapes-data" style="display: none">
+            {{ form_widget(form) }}
+		</div>
+
+		<div id="{{ id }}-cmf-grapes"></div>
+{% endblock %}

@@ -19,6 +19,7 @@ class TemplateType extends AbstractType
         $builder->add('subject', TextType::class);
         $builder->add('senderName', TextType::class);
         $builder->add('senderEmail', EmailType::class);
+        $builder->add('mjml', TextareaType::class);
         $builder->add('text', TextareaType::class);
         $builder->add('html', TextareaType::class);
     }
