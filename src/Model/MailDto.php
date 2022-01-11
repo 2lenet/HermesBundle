@@ -61,6 +61,10 @@ class MailDto
      */
     protected $attachments = [];
 
+    protected $status = "sending";
+
+
+    
     /**
      * @var array
      * Data to use for mail template
@@ -243,6 +247,24 @@ class MailDto
     {
         $this->data = $data;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     * @return MailDto
+     */
+    public function setStatus(string $status): MailDto
+    {
+        $this->status = $status;
         return $this;
     }
 }

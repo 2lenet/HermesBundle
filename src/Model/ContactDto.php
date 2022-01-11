@@ -17,6 +17,9 @@ class ContactDto
      */
     protected $name;
 
+    protected $data = [];
+
+
     /**
      * @var string
      * Contact's mail address
@@ -62,6 +65,24 @@ class ContactDto
     {
         $this->address = $address;
 
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param array $data
+     * @return ContactDto
+     */
+    public function setData(array $data): ContactDto
+    {
+        $this->data = $data;
         return $this;
     }
 }

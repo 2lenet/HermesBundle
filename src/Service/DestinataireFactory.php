@@ -15,8 +15,8 @@ class DestinataireFactory
         $dest = new Recipient();
         $dest->setToEmail($contactDto->getAddress());
         $dest->setToName($contactDto->getName());
-        //$dest->setData($contactDto->getData());
-        $dest->setStatus('draft');
+        $dest->setData($contactDto->getData());
+        $dest->setStatus('ok');
         $dest->setNbRetry(0);
         return $dest;
     }

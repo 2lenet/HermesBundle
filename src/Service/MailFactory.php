@@ -13,7 +13,7 @@ class MailFactory
     {
         $mail = new Mail();
         $mail->setTemplate($template);
-        $mail->setStatus('draft');
+        $mail->setStatus($mailDto->getStatus());
         $mail->setCreatedAt(new \DateTime('now'));
         $nbDest = 0;
         $destFactory = new DestinataireFactory();
@@ -22,7 +22,7 @@ class MailFactory
             $mail->addRecipient($dest);
             $nbDest++;
         }
-        //$mail->setData($data['data']);
+        $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
         $mail->setSubject($mail->getTemplate()->getSubject());
