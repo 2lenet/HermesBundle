@@ -9,7 +9,7 @@ namespace Lle\HermesBundle\Model;
  * @package Lle\HermesBundle\Entity
  * Represent a Hermes contact.
  */
-class Contact
+class ContactDto
 {
     /**
      * @var string

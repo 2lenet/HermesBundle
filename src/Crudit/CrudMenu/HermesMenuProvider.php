@@ -20,9 +20,18 @@ class HermesMenuProvider implements MenuProviderInterface
         /** @var LinkElement $menu */
         $menu = LinkElement::new(
             'menu.lle_hermes',
-            Path::new('lle_hermes_crudit_mail_index'),
+            Path::new('lle_hermes_dashboard'),
             Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
         )->setRole('ROLE_LLE_HERMES');
+
+        $menu->addChild(
+            LinkElement::new(
+                'menu.lle_hermes_dashboard',
+                Path::new('lle_hermes_dashboard'),
+                Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
+                "ROLE_LLE_HERMES"
+            )
+        );
         $menu->addChild(
             LinkElement::new(
                 'menu.lle_hermes_template',

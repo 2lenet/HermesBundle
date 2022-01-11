@@ -124,6 +124,11 @@ class Mail
         $this->recipients = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return (string)$this->subject;
+    }
+
     /**
      * @return int
      */
@@ -214,6 +219,15 @@ class Mail
         return $this;
     }
 
+    public function getPercent(): float
+    {
+        if ($this->totalToSend>0) {
+            return $this->totalSended / $this->totalToSend * 100;
+        } else {
+            return 0;
+        }
+    }
+    
     /**
      * @return int
      */

@@ -2,7 +2,7 @@
 
 namespace Lle\HermesBundle\Model;
 
-use Lle\HermesBundle\Model\Contact;
+use Lle\HermesBundle\Model\ContactDto;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
  * @package Lle\HermesBundle\Entity
  * Represents a Hermes mail.
  */
-class Mail
+class MailDto
 {
     /**
      * @var int
@@ -37,13 +37,13 @@ class Mail
     protected $htmlContent;
 
     /**
-     * @var Contact[]
+     * @var ContactDto[]
      * People that should receive the mail.
      */
     protected $to = [];
 
     /**
-     * @var Contact
+     * @var ContactDto
      * The person that sends the mail.
      */
     protected $from;
@@ -140,7 +140,7 @@ class Mail
     }
 
     /**
-     * @return Contact[]
+     * @return ContactDto[]
      */
     public function getTo(): ?array
     {
@@ -148,7 +148,7 @@ class Mail
     }
 
     /**
-     * @param Contact[] $to
+     * @param ContactDto[] $to
      */
     public function setTo(?array $to): self
     {
@@ -158,9 +158,9 @@ class Mail
     }
 
     /**
-     * @param Contact $to
+     * @param ContactDto $to
      */
-    public function addTo(?Contact $to): self
+    public function addTo(?ContactDto $to): self
     {
         $this->to[] = $to;
 
@@ -168,17 +168,17 @@ class Mail
     }
 
     /**
-     * @return Contact
+     * @return ContactDto
      */
-    public function getFrom(): ?Contact
+    public function getFrom(): ?ContactDto
     {
         return $this->from;
     }
 
     /**
-     * @param Contact $from
+     * @param ContactDto $from
      */
-    public function setFrom(?Contact $from): self
+    public function setFrom(?ContactDto $from): self
     {
         $this->from = $from;
 

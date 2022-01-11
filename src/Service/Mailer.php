@@ -2,8 +2,13 @@
 
 namespace Lle\HermesBundle\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Exception\MailerException;
 use Lle\HermesBundle\Model\Mail;
+use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Model\MailDto;
+use Lle\HermesBundle\Service\MailFactory;
+
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -13,10 +18,9 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class Mailer
 {
-
-    public function __construct()
-    {
-
+    public function __construct(EntityManagerInterface $em, MailFactory $mailerFactory) {
+        $this->em = $em;
+        $this->mailerFactory = $mailerFactory;
     }
 
     /**
@@ -63,17 +67,12 @@ class Mailer
      * @param Mail $mail Mail object
      * @return array
      */
-    public function send(Mail $mail)
+    public function send(MailDto $mail)
     {
-        /*$url = $this->urlHermes . "/mail/directly-send";
-        $response = $this->makeRequest("POST", $url, [
-            "body" => json_encode($this->serializeMail($mail)),
-        ]);
-
-        $responseData = json_decode($response->getContent(), true);
-        $mail->setId($this->getIdFromHermesUrl($responseData["edit_link"]));
-
-        return $responseData;*/
+        $template = $this->em->getRepository(Template::class)->find($mail->getTemplate());
+        $mailObj = $this->mailerFactory->createMailFromDto($mail, $template);
+        $this->em->persist($mailObj);
+        $this->em->flush();
     }
 
     /**

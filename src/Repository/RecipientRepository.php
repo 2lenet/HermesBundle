@@ -63,14 +63,14 @@ class RecipientRepository extends ServiceEntityRepository
 
     public function disableErrors(): void
     {
-        $qb = $this->createQueryBuilder('e')
+        /*$qb = $this->createQueryBuilder('e')
             ->update()
-            ->set('e.status', StatusEnum::ERROR)
+            ->set('e.status', "'error'")
             ->join(EmailError::class, 'ee', Join::WITH, 'ee.mail = e.toEmail');
         $qb->where(
             $qb->expr()->gte('ee.nbError', 3)
         );
-        $qb->getQuery()->execute();
+        $qb->getQuery()->execute();*/
     }
 
     public function updateStatus(Mail $mail, string $status): void

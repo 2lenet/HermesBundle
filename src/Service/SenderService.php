@@ -67,6 +67,7 @@ class SenderService
         $recipients = $this->recipientRepository
             ->findRecipientsSending('ok', 'sending', $limit);
         foreach ($recipients as $recipient) {
+            print($recipient->getToEmail());
             $mail = $recipient->getMail();
             $template = $mail->getTemplate();
 
@@ -98,13 +99,16 @@ class SenderService
 
     protected function send(Mail $mail, Recipient $recipient): void
     {
+        print("send");
         try {
             $this->mailer->send($this->buildMail($mail, $recipient));
+            dump($recipient);
             $recipient->setStatus(StatusEnum::SENT);
             $this->entityManager->persist($recipient);
             $this->entityManager->flush();
             $this->updateMailAndRecipient($mail);
         } catch (TransportException $transportException) {
+            print("exception". $transportException);
             $recipient->setStatus(StatusEnum::ERROR);
         }
     }
@@ -117,7 +121,7 @@ class SenderService
         $data = [];
 
         /** @var string $rootDir */
-        $rootDir = $this->parameterBag->get('lle_hermes.rootDir');
+        $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
         $attachmentsFilePath = sprintf(
             '%s/data/attachments/mail-%s/',
             $rootDir,
@@ -137,7 +141,7 @@ class SenderService
 
         // Generate unsubscribe link
         /** @var string $secret */
-        $secret = $this->parameterBag->get('lle_hermes.appSecret');
+        $secret = $this->parameterBag->get('lle_hermes.app_secret');
         $token = md5($recipient->getToEmail() . $secret);
         $context = $this->router->getContext();
         $context->setHost($domain);

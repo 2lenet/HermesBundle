@@ -1,0 +1,79 @@
+{% extends "base.html.twig" %}
+
+{% block page_title %}{{ 'hermes'|trans(domain='messages') }}{% endblock %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/llehermes/app.css') }}" xmlns="http://www.w3.org/1999/html"/>
+{% endblock %}
+
+{% block head_javascript %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/llehermes/app.js') }}"></script>
+{% endblock %}
+
+{% block main %}
+    {{ parent() }}
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-sm mb-2 mb-sm-0">
+                <h2 class="page-header-title text-primary">
+                    {{ 'dashboard' | trans }}
+                    <i id="gs-spin" class="fas fa-spin"></i>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for mail in mails %}
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas running"></i>{{ mail.subject }}
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 p-2">
+                                <button class="btn btn-sm position-relative">
+                                    <i class="far fa-envelope"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ mail.totalToSend }}
+                                    </span>
+                                </button>
+                                <button class="btn btn-sm position-relative">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ mail.totalError }}
+                                    </span>
+                                </button>
+                                <button class="btn btn-sm position-relative">
+                                    <i class="fas fa-user-slash"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ mail.totalUnsubscribed }}
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="col-6 p-2">
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
+                                         aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">15% opened
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 p-2">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                         role="progressbar"
+                                         style="width: {{ mail.percent }}%;" aria-valuenow="25" aria-valuemin="0"
+                                         aria-valuemax="100">{{ mail.percent }}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
