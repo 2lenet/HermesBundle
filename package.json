@@ -1,0 +1,37 @@
+{
+    "name": "hermes-bundle",
+    "version": "1.0.0",
+    "description": "Hermès Bundle",
+    "main": "webpack.config.js",
+    "directories": {
+        "doc": "docs",
+        "test": "tests"
+    },
+    "scripts": {
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/2lenet/HermesBundle.git"
+    },
+    "keywords": [
+        "hermes",
+        "2le",
+        "mail",
+        "symfony"
+    ],
+    "author": "2LE",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/2lenet/HermesBundle/issues"
+    },
+    "homepage": "https://github.com/2lenet/HermesBundle#readme",
+    "dependencies": {
+        "@symfony/webpack-encore": "^1.7.0",
+        "grapesjs": "^0.17.29",
+        "grapesjs-mjml": "^0.5.8"
+    }
+}

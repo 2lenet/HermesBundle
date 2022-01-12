@@ -7,3 +7,4 @@
 /phpunit.report.xml
 /tests/phpunit/.phpunit.result.cache
 /.phpunit.result.cache
+node_modules
