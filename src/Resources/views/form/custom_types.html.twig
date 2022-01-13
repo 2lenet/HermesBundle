@@ -3,14 +3,18 @@
     <link rel="stylesheet" href="{{ asset('bundles/llehermes/style.css') }}">
     <script src="{{ asset('bundles/llehermes/app.js') }}"></script>
 
-    <div class="lle_mjml_editor">
+    {% set input_id = 'lle_mjml_input_' ~ id %}
+
+    <input type="hidden" name="{{ full_name }}" id="{{ input_id }}">
+
+    <div class="lle_mjml_editor" data-input="#{{ input_id }}">
         <mjml>
             <mj-body>
                 {% if value %}
-                    {{ value }}
+                    {{ value | raw }}
                 {% else %}
                     {# empty canvas does not work with Firefox, so make sure there is at least one element #}
-                    <mj-column></mj-column>
+                    <mj-section></mj-section>
                 {% endif %}
             </mj-body>
         </mjml>
