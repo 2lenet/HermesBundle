@@ -8,15 +8,15 @@
     <input type="hidden" name="{{ full_name }}" id="{{ input_id }}">
 
     <div class="lle_mjml_editor" data-input="#{{ input_id }}">
-        <mjml>
-            <mj-body>
-                {% if value %}
-                    {{ value | raw }}
-                {% else %}
+        {% if value %}
+            {{ value | raw }}
+        {% else %}
+            <mjml>
+                <mj-body>
                     {# empty canvas does not work with Firefox, so make sure there is at least one element #}
                     <mj-section></mj-section>
-                {% endif %}
-            </mj-body>
-        </mjml>
+                </mj-body>
+            </mjml>
+        {% endif %}
     </div>
 {% endblock %}
