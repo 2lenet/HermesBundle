@@ -4,14 +4,14 @@
     <script src="{{ asset('bundles/llehermes/app.js') }}"></script>
 
     <div class="lle_mjml_editor">
-
         <mjml>
             <mj-body>
-                <mj-section>
-                    <mj-column>
-                        <mj-text>My Company</mj-text>
-                    </mj-column>
-                </mj-section>
+                {% if value %}
+                    {{ value }}
+                {% else %}
+                    {# empty canvas does not work with Firefox, so make sure there is at least one element #}
+                    <mj-column></mj-column>
+                {% endif %}
             </mj-body>
         </mjml>
     </div>
