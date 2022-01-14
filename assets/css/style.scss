@@ -1,0 +1,27 @@
+@import "grapesjs/dist/css/grapes.min.css";
+
+.lle_mjml_editor {
+    .fa {
+        /* GrapesJS-MJML FontAwesome icons are messed up, this fixes them */
+
+        &.fa-arrows-v::before {
+            content: "\f07d" !important;
+        }
+
+        &.fa-arrows-alt::before {
+            content: "\f0b2" !important;
+        }
+
+        &.fa-mobile::before {
+            content: "\f10b" !important;
+        }
+
+        &.fa-tablet::before {
+            content: "\f10a" !important;
+        }
+    }
+
+    .fa, .fas {
+        font-family: FontAwesome;
+    }
+}

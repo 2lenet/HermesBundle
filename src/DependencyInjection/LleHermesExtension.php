@@ -29,5 +29,13 @@ class LleHermesExtension extends Extension
         $container->setParameter('lle_hermes.bounce_email', $processedConfig['bounce_email']);
         $container->setParameter('lle_hermes.bounce_pass', $processedConfig['bounce_pass']);
         $container->setParameter('lle_hermes.bounce_host', $processedConfig['bounce_host']);
+
+        // Load Hermes' form types
+        if ($container->hasParameter("twig.form.resources")) {
+            $container->setParameter("twig.form.resources", array_merge(
+                ["@LleHermes/form/custom_types.html.twig"],
+                $container->getParameter("twig.form.resources")
+            ));
+        }
     }
 }

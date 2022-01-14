@@ -1,0 +1,22 @@
+{% block lle_hermes_mjml_widget %}
+
+    <link rel="stylesheet" href="{{ asset('bundles/llehermes/style.css') }}">
+    <script src="{{ asset('bundles/llehermes/app.js') }}"></script>
+
+    {% set input_id = 'lle_mjml_input_' ~ id %}
+
+    <input type="hidden" name="{{ full_name }}" id="{{ input_id }}">
+
+    <div class="lle_mjml_editor" data-input="#{{ input_id }}">
+        {% if value %}
+            {{ value | raw }}
+        {% else %}
+            <mjml>
+                <mj-body>
+                    {# empty canvas does not work with Firefox, so make sure there is at least one element #}
+                    <mj-section></mj-section>
+                </mj-body>
+            </mjml>
+        {% endif %}
+    </div>
+{% endblock %}

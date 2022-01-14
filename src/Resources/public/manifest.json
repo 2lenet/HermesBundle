@@ -1,0 +1,9 @@
+{
+  "bundles/hermes/app.js": "./app.js",
+  "bundles/hermes/style.css": "./style.css",
+  "bundles/hermes/images/main-fonts.svg?v=20": "./images/main-fonts.404be73e.svg",
+  "bundles/hermes/img/hermes.svg": "./img/hermes.svg",
+  "bundles/hermes/fonts/main-fonts.eot?v=20": "./fonts/main-fonts.b8dc4688.eot",
+  "bundles/hermes/fonts/main-fonts.ttf?v=20": "./fonts/main-fonts.4d0a7659.ttf",
+  "bundles/hermes/fonts/main-fonts.woff?v=20": "./fonts/main-fonts.dbf9ed7d.woff"
+}
