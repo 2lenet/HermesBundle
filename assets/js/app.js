@@ -2,6 +2,7 @@ import grapesjs from "grapesjs";
 import grapesjsmjml from "grapesjs-mjml";
 import fr from "grapesjs/locale/fr";
 import mjmlFr from "./locale/fr";
+import mjml2html from 'mjml'
 
 let onLoad = (callback) => {
     if (document.readyState !== "loading") {
@@ -38,16 +39,10 @@ onLoad(() => {
 
         function update() {
             let mjml = editor.getHtml(); // the code inside the editor is actually MJML, not HTML
-            let code = editor.runCommand("mjml-get-code");
-
-            for (let error of code.errors) {
-                // TODO: Show the error to the user
-                console.error(error.formattedMessage);
-            }
-
+            // DONT USE THE GRAPEJS HTML CODE IT'S UGLY
             input.value = JSON.stringify({
                 mjml: mjml,
-                html: code.html, // computed HTML from MJML
+                html: mjml2html(mjml), // computed HTML from MJML
             });
         }
 

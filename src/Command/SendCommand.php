@@ -14,7 +14,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Class SendCommand
  * @package Lle\HermesBundle\Command
  *
- * @author 2LE <2le@2le.net>
  */
 class SendCommand extends Command
 {
@@ -49,9 +48,9 @@ class SendCommand extends Command
 
         $nb = $input->getOption('nb');
 
-        $this->sender->sendAllMail($nb);
+        $nb_sent = $this->sender->sendAllMail($nb);
 
-        $io->success("Success");
+        $io->success("Success $nb_sent mails sent");
 
         return 0;
     }

@@ -8,7 +8,6 @@ use Lle\CruditBundle\Crud\AbstractCrudConfig as DefaultConfig;
  * Class AbstractCrudConfig
  * @package App\Crudit\Config
  *
- * @author Jérôme PERAT <jerome@2le.net>
  */
 abstract class AbstractCrudConfig extends DefaultConfig
 {

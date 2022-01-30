@@ -12,6 +12,10 @@ crud:
       template: Template
       mail: Mail
       recipient: Destinataire
+    show:
+      template: Edition template %entity%
+    edit:
+      template: Edition template %entity%
 export:
   csv: Csv
   excel: Excel

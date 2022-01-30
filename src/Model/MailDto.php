@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class MailDto
 {
+    const SENDING="sending";
+    const DRAFT="draft";
     /**
      * @var int
      * Mail's identifier. Can be custom

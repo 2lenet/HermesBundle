@@ -32,6 +32,7 @@
     "dependencies": {
         "@symfony/webpack-encore": "^1.7.0",
         "grapesjs": "^0.17.29",
-        "grapesjs-mjml": "^0.5.8"
+        "grapesjs-mjml": "^0.5.8",
+        "mjml": "^4.12.0"
     }
 }

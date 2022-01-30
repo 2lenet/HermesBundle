@@ -56,8 +56,9 @@ class SenderService
         $this->twig = $twig;
     }
 
-    public function sendAllMail(int $limit = 10): void
+    public function sendAllMail(int $limit = 10): int
     {
+        $nb = 0;
         $this->recipientRepository->disableErrors();
 
         $this->setMailTotalError();
@@ -67,7 +68,6 @@ class SenderService
         $recipients = $this->recipientRepository
             ->findRecipientsSending('ok', 'sending', $limit);
         foreach ($recipients as $recipient) {
-            print($recipient->getToEmail());
             $mail = $recipient->getMail();
             $template = $mail->getTemplate();
 
@@ -77,11 +77,14 @@ class SenderService
                     $recipient->setStatus(StatusEnum::UNSUBSCRIBED);
                 } else {
                     $this->send($mail, $recipient);
+                    $nb++;
                 }
             } else {
                 $this->send($mail, $recipient);
+                $nb++;
             }
         }
+        return $nb;
     }
 
     protected function setMailTotalError(): void
@@ -99,10 +102,8 @@ class SenderService
 
     protected function send(Mail $mail, Recipient $recipient): void
     {
-        print("send");
         try {
             $this->mailer->send($this->buildMail($mail, $recipient));
-            dump($recipient);
             $recipient->setStatus(StatusEnum::SENT);
             $this->entityManager->persist($recipient);
             $this->entityManager->flush();

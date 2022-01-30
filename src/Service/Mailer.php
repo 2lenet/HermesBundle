@@ -67,9 +67,9 @@ class Mailer
      * @param Mail $mail Mail object
      * @return array
      */
-    public function send(MailDto $mail, $status = "draft")
+    public function send(MailDto $mail, $status = MailDto::DRAFT)
     {
-        $template = $this->em->getRepository(Template::class)->find($mail->getTemplate());
+        $template = $this->em->getRepository(Template::class)->findOneBy(['code'=>$mail->getTemplate()]);
         $mailObj = $this->mailerFactory->createMailFromDto($mail, $template);
         $mailObj->setStatus($status);
         $this->em->persist($mailObj);
