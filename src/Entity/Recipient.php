@@ -69,6 +69,11 @@ class Recipient
      */
     protected ?DateTime $openDate = null;
 
+    public function __toString(): string
+    {
+        return (string)$this->toEmail;
+    }
+
     /**
      * @return int
      */

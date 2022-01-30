@@ -76,12 +76,18 @@ class SenderService
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus(StatusEnum::UNSUBSCRIBED);
                 } else {
-                    $this->send($mail, $recipient);
-                    $nb++;
+                    if ($this->send($mail, $recipient)) {
+                        $nb++;
+                    } else {
+                        print("error sending to ". $recipient);
+                    }
                 }
             } else {
-                $this->send($mail, $recipient);
-                $nb++;
+                if ($this->send($mail, $recipient)) {
+                    $nb++;
+                } else {
+                    print("error sending to ". $recipient);
+                }
             }
         }
         return $nb;
@@ -100,7 +106,7 @@ class SenderService
         $this->entityManager->flush();
     }
 
-    protected function send(Mail $mail, Recipient $recipient): void
+    protected function send(Mail $mail, Recipient $recipient): bool
     {
         try {
             $this->mailer->send($this->buildMail($mail, $recipient));
@@ -108,9 +114,10 @@ class SenderService
             $this->entityManager->persist($recipient);
             $this->entityManager->flush();
             $this->updateMailAndRecipient($mail);
+            return true;
         } catch (TransportException $transportException) {
-            print("exception". $transportException);
             $recipient->setStatus(StatusEnum::ERROR);
+            return false;
         }
     }
 
