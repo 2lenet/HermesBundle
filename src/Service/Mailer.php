@@ -3,7 +3,7 @@
 namespace Lle\HermesBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Lle\HermesBundle\Exception\MailerException;
+use Lle\HermesBundle\Exception\TemplateNotFoundException;
 use Lle\HermesBundle\Model\Mail;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Model\MailDto;
@@ -69,7 +69,15 @@ class Mailer
      */
     public function send(MailDto $mail, $status = MailDto::DRAFT)
     {
-        $template = $this->em->getRepository(Template::class)->findOneBy(['code'=>$mail->getTemplate()]);
+        $template = $this->em->getRepository(Template::class)
+            ->findOneBy([
+                "code" => $mail->getTemplate()
+            ]);
+
+        if (!$template) {
+            throw new TemplateNotFoundException($mail->getTemplate());
+        }
+
         $mailObj = $this->mailerFactory->createMailFromDto($mail, $template);
         $mailObj->setStatus($status);
         $this->em->persist($mailObj);

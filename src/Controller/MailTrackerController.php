@@ -23,7 +23,6 @@ class MailTrackerController extends AbstractController
         $this->parameterBag = $parameterBag;
     }
 
-
     /**
      * @Route("/unsubscribe/{email}/{token}", name="unsubscribe")
      */
