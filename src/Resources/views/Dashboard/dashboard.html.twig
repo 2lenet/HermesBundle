@@ -25,6 +25,8 @@
         </div>
     </div>
 
+    {{ include('@LleHermes/Dashboard/_pager.html.twig') }}
+
     <div class="row">
         {% for mail in mails %}
             <div class="col-4">
@@ -55,17 +57,18 @@
                                 </button>
                             </div>
                             <div class="col-6 p-2">
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
-                                         aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">15% opened
+                                <div class="progress" title="{{ '' }}">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ mail.percentOpened }}%"
+                                         aria-valuenow="{{ mail.percentOpened }}" aria-valuemin="0" aria-valuemax="100">
+                                        {{ mail.percentOpened }}%
                                     </div>
                                 </div>
                             </div>
                             <div class="col-12 p-2">
                                 <div class="progress">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                    <div class="progress-bar progress-bar-striped {% if mail.totalSended != mail.totalToSend %}progress-bar-animated{% endif %}"
                                          role="progressbar"
-                                         style="width: {{ mail.percent }}%;" aria-valuenow="25" aria-valuemin="0"
+                                         style="width: {{ mail.percentSent }}%;" aria-valuenow="25" aria-valuemin="0"
                                          aria-valuemax="100">{{ mail.percent }}%
                                     </div>
                                 </div>
@@ -76,4 +79,6 @@
             </div>
         {% endfor %}
     </div>
+
+    {{ include('@LleHermes/Dashboard/_pager.html.twig') }}
 {% endblock %}

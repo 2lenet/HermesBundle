@@ -144,6 +144,7 @@ class Mail
     public function setId(int $id): Mail
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -162,6 +163,7 @@ class Mail
     public function setTemplate($template)
     {
         $this->template = $template;
+
         return $this;
     }
 
@@ -180,6 +182,7 @@ class Mail
     public function setData(array $data): Mail
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -198,6 +201,7 @@ class Mail
     public function setStatus(string $status): Mail
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -216,18 +220,18 @@ class Mail
     public function setTotalToSend(int $totalToSend): Mail
     {
         $this->totalToSend = $totalToSend;
+
         return $this;
     }
 
+    /**
+     * @deprecated
+     */
     public function getPercent(): float
     {
-        if ($this->totalToSend>0) {
-            return $this->totalSended / $this->totalToSend * 100;
-        } else {
-            return 0;
-        }
+        return $this->getPercentSent();
     }
-    
+
     /**
      * @return int
      */
@@ -243,6 +247,7 @@ class Mail
     public function setTotalSended(int $totalSended): Mail
     {
         $this->totalSended = $totalSended;
+
         return $this;
     }
 
@@ -262,6 +267,7 @@ class Mail
     {
         $recipient->setMail($this);
         $this->recipients->add($recipient);
+
         return $this;
     }
 
@@ -274,6 +280,7 @@ class Mail
         if ($this->recipients->contains($recipient)) {
             $this->recipients->removeElement($recipient);
         }
+
         return $this;
     }
 
@@ -292,6 +299,7 @@ class Mail
     public function setSubject(string $subject): Mail
     {
         $this->subject = $subject;
+
         return $this;
     }
 
@@ -310,6 +318,7 @@ class Mail
     public function setMjml(?string $mjml): Mail
     {
         $this->mjml = $mjml;
+
         return $this;
     }
 
@@ -328,6 +337,7 @@ class Mail
     public function setSendingDate(?DateTime $sendingDate): Mail
     {
         $this->sendingDate = $sendingDate;
+
         return $this;
     }
 
@@ -346,6 +356,7 @@ class Mail
     public function setText(?string $text): Mail
     {
         $this->text = $text;
+
         return $this;
     }
 
@@ -364,6 +375,7 @@ class Mail
     public function setHtml(?string $html): Mail
     {
         $this->html = $html;
+
         return $this;
     }
 
@@ -382,6 +394,7 @@ class Mail
     public function setCreatedAt(?DateTime $createdAt): Mail
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -400,6 +413,7 @@ class Mail
     public function setUpdatedAt(?DateTime $updatedAt): Mail
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -418,6 +432,7 @@ class Mail
     public function setTotalUnsubscribed(int $totalUnsubscribed): Mail
     {
         $this->totalUnsubscribed = $totalUnsubscribed;
+
         return $this;
     }
 
@@ -436,6 +451,7 @@ class Mail
     public function setTotalError(int $totalError): Mail
     {
         $this->totalError = $totalError;
+
         return $this;
     }
 
@@ -454,6 +470,7 @@ class Mail
     public function setAttachement(array $attachement): Mail
     {
         $this->attachement = $attachement;
+
         return $this;
     }
 
@@ -472,6 +489,31 @@ class Mail
     public function setTotalOpened(int $totalOpened): Mail
     {
         $this->totalOpened = $totalOpened;
+
         return $this;
+    }
+
+    /**
+     * Get % of mails sent, on the total mails to send
+     */
+    public function getPercentSent(): float
+    {
+        if (!$this->totalToSend) {
+            return 0;
+        }
+
+        return round($this->totalSended / $this->totalToSend * 100, 2);
+    }
+
+    /**
+     * Get % of mails opened by the users, on the total mails to send
+     */
+    public function getPercentOpened(): float
+    {
+        if (!$this->totalToSend) {
+            return 0;
+        }
+
+        return round($this->totalOpened / $this->totalToSend * 100, 2);
     }
 }

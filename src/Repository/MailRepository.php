@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Enum\StatusEnum;
@@ -55,5 +56,19 @@ class MailRepository extends ServiceEntityRepository
             ->setParameter('mail', $mail->getId());
 
         $qb->getQuery()->execute();
+    }
+
+    public function getDashboardMails(int $page = 1, int $number = 30): Paginator
+    {
+        $qb = $this->createQueryBuilder("m")
+            ->orderBy("m.id", "DESC");
+
+        $paginator = new Paginator($qb);
+        $paginator
+            ->getQuery()
+            ->setFirstResult($number * ($page - 1))
+            ->setMaxResults($number);
+
+        return $paginator;
     }
 }

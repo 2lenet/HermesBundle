@@ -1,44 +1,59 @@
 action:
-  add: Ajouter
-  delete: Supprimer
-  edit: Modifier
-  export: Exporter
-  show: Voir
+    add: Ajouter
+    delete: Supprimer
+    edit: Modifier
+    export: Exporter
+    show: Voir
 crudit:
-  action: Actions
+    action: Actions
 crud:
-  title:
-    list:
-      template: Template
-      mail: Mail
-      recipient: Destinataire
-    show:
-      template: Edition template %entity%
-    edit:
-      template: Edition template %entity%
+    title:
+        list:
+            template: Template
+            mail: Mail
+            recipient: Destinataire
+        show:
+            template: Édition template %entity%
+        edit:
+            template: Édition template %entity%
 export:
-  csv: Csv
-  excel: Excel
+    csv: Csv
+    excel: Excel
 field:
-  code: code
-  libelle: Libelle
-  mail: mail
-  'mail:sendingDate': Date d'envoi
-  openDate: Date d'ouverture
-  opendate: Date d'ouverture
-  senderEmail: Email de l'expediteur
-  senderemail: Email de l'expediteur
-  senderName: Nom de l'expediteur
-  sendername: Nom de l'expediteur
-  sendingDate: Date d'envoi
-  sendingdate: date d'envoi
-  status: status
-  subject: Sujet
-  toEmail: A Email
-  toemail: à email
-  toName: A Nom
-  toname: à nom
-  unsubscriptions: Désinscriptions
+    code: code
+    libelle: Libellé
+    mail: mail
+    'mail:sendingDate': Date d'envoi
+    openDate: Date d'ouverture
+    opendate: Date d'ouverture
+    senderEmail: Email de l'expéditeur
+    senderemail: Email de l'expéditeur
+    senderName: Nom de l'expéditeur
+    sendername: Nom de l'expéditeur
+    sendingDate: Date d'envoi
+    sendingdate: date d'envoi
+    status: status
+    subject: Sujet
+    toEmail: À email
+    toemail: À email
+    toName: À nom
+    toname: À nom
+    unsubscriptions: Désinscriptions
 menu:
-  lle_hermes:
-    hermes: Hermes
+    lle_hermes:
+        hermes: Hermès
+pagination:
+    first: "Première"
+    previous: "Précédente"
+    next: "Suivante"
+    last: "Dernière"
+    firstPage: "Première page"
+    previousPage: "Page précédente"
+    nextPage: "Page suivante"
+    lastPage: "Dernière page"
+    goToPage: "Aller à la page %nb%"
+    items: "Mails"
+    to: "à"
+    of: "sur"
+    noItem: "Aucun mail trouvé"
+    limit: "Nombre de mails"

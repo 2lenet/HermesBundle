@@ -50,7 +50,7 @@ class HermesMenuProvider implements MenuProviderInterface
         );
         $menu->addChild(
             LinkElement::new(
-                'menu.lle_hermes_template',
+                'menu.lle_hermes_recipient',
                 Path::new('lle_hermes_crudit_recipient_index'),
                 Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
                 "ROLE_RECIPIENT_INDEX"
