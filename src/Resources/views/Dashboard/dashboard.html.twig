@@ -25,6 +25,8 @@
         </div>
     </div>
 
+    {{ include('@LleHermes/Dashboard/_pager.html.twig') }}
+
     <div class="row">
         {% for mail in mails %}
             <div class="col-4">
@@ -77,4 +79,6 @@
             </div>
         {% endfor %}
     </div>
+
+    {{ include('@LleHermes/Dashboard/_pager.html.twig') }}
 {% endblock %}

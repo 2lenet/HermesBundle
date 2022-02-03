@@ -26,16 +26,29 @@ class MailController extends AbstractCrudController
     }
 
     /**
-     * @Route("/dashboard", name="lle_hermes_dashboard")
+     * @Route("/dashboard", name="lle_hermes_dashboard", methods={"GET"})
      */
     public function dashboard(Request $request): Response
     {
         $this->denyAccessUnlessGranted("ROLE_LLE_HERMES");
 
-        $mails = $this->repo->findBy([], ["id" => "DESC"]);
+        $number = (int)$request->get("number", 30);
+        $page = (int)$request->get("page", 1);
+
+        $mails = $this->repo->getDashboardMails($page, $number);
+
+        $total = count($mails);
+        $from = $number * ($page - 1) + 1;
+        $to = min($number * $page, $total);
+        $totalPages = intdiv($total, $number) + ($total % $number > 0 ? 1 : 0);
 
         return $this->render("@LleHermes/Dashboard/dashboard.html.twig", [
-            "mails" => $mails
+            "mails" => $mails,
+            "total" => $total,
+            "from" => $from,
+            "to" => $to,
+            "page" => $page,
+            "total_pages" => $totalPages,
         ]);
     }
 }

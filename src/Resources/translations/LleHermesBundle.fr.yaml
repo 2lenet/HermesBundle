@@ -42,3 +42,18 @@ field:
 menu:
     lle_hermes:
         hermes: Hermès
+pagination:
+    first: "Première"
+    previous: "Précédente"
+    next: "Suivante"
+    last: "Dernière"
+    firstPage: "Première page"
+    previousPage: "Page précédente"
+    nextPage: "Page suivante"
+    lastPage: "Dernière page"
+    goToPage: "Aller à la page %nb%"
+    items: "Mails"
+    to: "à"
+    of: "sur"
+    noItem: "Aucun mail trouvé"
+    limit: "Nombre de mails"
