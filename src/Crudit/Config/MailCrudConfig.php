@@ -25,16 +25,28 @@ class MailCrudConfig extends AbstractCrudConfig
         $subject = Field::new('subject');
         $sendingDate = Field::new('sendingDate');
         $status = Field::new('status');
-        // you can return different fields based on the block key
-        if ($key == CrudConfigInterface::INDEX || $key == CrudConfigInterface::SHOW) {
-            return [
-                $subject,
-                $sendingDate,
-                $status
-            ];
+        $html = Field::new('html')->setTemplate('@LleHermes/_html.html.twig')->setCssClass('col-12');
+
+        $fields = [];
+
+        switch ($key) {
+            case CrudConfigInterface::SHOW:
+                $fields = [
+                    $subject,
+                    $sendingDate,
+                    $status,
+                    $html,
+                ];
+                break;
+            default:
+                $fields = [
+                    $subject,
+                    $sendingDate,
+                    $status,
+                ];
         }
 
-        return [];
+        return $fields;
     }
 
     public function getRootRoute(): string

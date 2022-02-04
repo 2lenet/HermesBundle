@@ -20,9 +20,9 @@ export:
     csv: Csv
     excel: Excel
 field:
-    code: code
+    code: Code
     libelle: Libellé
-    mail: mail
+    mail: Mail
     'mail:sendingDate': Date d'envoi
     openDate: Date d'ouverture
     opendate: Date d'ouverture
@@ -31,8 +31,8 @@ field:
     senderName: Nom de l'expéditeur
     sendername: Nom de l'expéditeur
     sendingDate: Date d'envoi
-    sendingdate: date d'envoi
-    status: status
+    sendingdate: Date d'envoi
+    status: Statut
     subject: Sujet
     toEmail: À email
     toemail: À email
