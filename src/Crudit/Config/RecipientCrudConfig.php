@@ -6,6 +6,7 @@ namespace Lle\HermesBundle\Crudit\Config;
 
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Dto\Field\Field;
+use Lle\CruditBundle\Field\DoctrineEntityField;
 use Lle\HermesBundle\Crudit\Datasource\RecipientDatasource;
 
 class RecipientCrudConfig extends AbstractCrudConfig
@@ -22,7 +23,9 @@ class RecipientCrudConfig extends AbstractCrudConfig
      */
     public function getFields($key): array
     {
-        $mail = Field::new('mail');
+        $mail = Field::new('mail', null, [
+            "route" => "lle_hermes_crudit_mail_show",
+        ])->setType(DoctrineEntityField::class);
         $sendingDate = Field::new('toName');
         $toEmail = Field::new('toEmail');
         $status = Field::new('status');

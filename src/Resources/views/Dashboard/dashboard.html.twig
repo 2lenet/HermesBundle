@@ -27,13 +27,15 @@
 
     {{ include('@LleHermes/Dashboard/_pager.html.twig') }}
 
-    <div class="row">
+    <div class="row my-2">
         {% for mail in mails %}
             <div class="col-4">
                 <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <i class="fas running"></i>{{ mail.subject }}
-                    </div>
+                    <a href="{{ path('lle_hermes_crudit_mail_show', {id: mail.id}) }}">
+                        <div class="card-header bg-primary text-white">
+                            {{ mail.subject }}
+                        </div>
+                    </a>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-6 p-2">

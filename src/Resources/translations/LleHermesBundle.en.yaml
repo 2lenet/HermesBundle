@@ -16,9 +16,9 @@ export:
     csv: Csv
     excel: Excel
 field:
-    code: code
+    code: Code
     libelle: Label
-    mail: mail
+    mail: Mail
     'mail:sendingDate': Sending date
     openDate: Open date
     opendate: Open date
