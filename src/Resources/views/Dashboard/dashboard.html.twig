@@ -33,7 +33,7 @@
                 <div class="card">
                     <a href="{{ path('lle_hermes_crudit_mail_show', {id: mail.id}) }}">
                         <div class="card-header bg-primary text-white">
-                            {{ mail.subject }}
+                            {{ lle_hermes_get_templater(mail).subject }}
                         </div>
                     </a>
                     <div class="card-body">

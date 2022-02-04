@@ -22,10 +22,13 @@ class MailCrudConfig extends AbstractCrudConfig
      */
     public function getFields($key): array
     {
-        $subject = Field::new('subject');
+        $subject = Field::new('subject')
+            ->setTemplate('@LleHermes/crud/_subject.html.twig');
         $sendingDate = Field::new('sendingDate');
         $status = Field::new('status');
-        $html = Field::new('html')->setTemplate('@LleHermes/_html.html.twig')->setCssClass('col-12');
+        $html = Field::new('html')
+            ->setTemplate('@LleHermes/crud/_html.html.twig')
+            ->setCssClass('col-12');
 
         $fields = [];
 

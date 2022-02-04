@@ -28,6 +28,8 @@ class MailFactory
         $mail->setSubject($mail->getTemplate()->getSubject());
         $mail->setMjml($mail->getTemplate()->getMjml());
         $mail->setHtml($mail->getTemplate()->getHtml());
+        $mail->setText($mail->getTemplate()->getText());
+
         return $mail;
     }
 
