@@ -127,9 +127,8 @@ class SenderService
 
         /** @var string $rootDir */
         $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
-        $attachmentsFilePath = sprintf(
-            '%s/data/attachments/mail-%s/',
-            $rootDir,
+        $attachmentsFilePath = $rootDir . sprintf(
+            MailFactory::ATTACHMENTS_DIR,
             $mail->getId()
         );
 

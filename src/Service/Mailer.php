@@ -79,6 +79,13 @@ class Mailer
         }
 
         $mailObj = $this->mailerFactory->createMailFromDto($mail, $template);
+        $mailObj->setStatus(MailDto::DRAFT);
+        $this->em->persist($mailObj);
+        $this->em->flush();
+
+        $this->mailerFactory->saveAttachments($mail, $mailObj);
+        // set status AFTER because we need the mail ID for attachments
+        // and we don't want Hermès to send a mail without its attachments
         $mailObj->setStatus($status);
         $this->em->persist($mailObj);
         $this->em->flush();

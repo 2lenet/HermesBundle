@@ -7,10 +7,10 @@ namespace Lle\HermesBundle\Model;
 interface AttachmentInterface
 {
     /**
-     * Get attachment as base64 encoded text
+     * Get attachment as text
      * @return string
      */
-    public function getBase64Data(): string;
+    public function getData(): string;
 
     /**
      * Get the attachment's filename

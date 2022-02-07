@@ -31,9 +31,9 @@ class Base64Attachment implements AttachmentInterface
     /**
      * @inheritdoc
      */
-    public function getBase64Data(): string
+    public function getData(): string
     {
-        return $this->data;
+        return base64_decode($this->data);
     }
 
     /**
