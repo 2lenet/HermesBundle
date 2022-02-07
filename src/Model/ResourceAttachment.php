@@ -31,9 +31,9 @@ class ResourceAttachment implements AttachmentInterface
     /**
      * @inheritdoc
      */
-    public function getBase64Data(): string
+    public function getData(): string
     {
-        return base64_encode(file_get_contents($this->path));
+        return file_get_contents($this->path);
     }
 
     /**

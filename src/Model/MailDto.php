@@ -12,8 +12,10 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class MailDto
 {
-    const SENDING="sending";
-    const DRAFT="draft";
+    const SENDING = "sending";
+
+    const DRAFT = "draft";
+
     /**
      * @var int
      * Mail's identifier. Can be custom
@@ -65,8 +67,6 @@ class MailDto
 
     protected $status = "sending";
 
-
-    
     /**
      * @var array
      * Data to use for mail template

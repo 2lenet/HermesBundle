@@ -28,7 +28,9 @@ class TemplateCrudConfig extends AbstractCrudConfig
         $senderEmail = Field::new('senderEmail');
         $text = Field::new('text');
         $code = Field::new('code');
-        $html = Field::new('html')->setTemplate('@LleHermes/_html.html.twig')->setCssClass('col-12');
+        $html = Field::new('html')
+            ->setTemplate('@LleHermes/crud/_template_html.html.twig')
+            ->setCssClass('col-12');
         $unsubscriptions = Field::new('unsubscriptions');
         // you can return different fields based on the block key
         if ($key == CrudConfigInterface::INDEX) {

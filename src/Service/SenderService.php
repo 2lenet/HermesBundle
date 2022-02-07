@@ -9,11 +9,11 @@ use Lle\HermesBundle\Enum\StatusEnum;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -121,28 +121,20 @@ class SenderService
         }
     }
 
-    protected function buildMail(Mail $mail, Recipient $recipient): TemplatedEmail
+    protected function buildMail(Mail $mail, Recipient $recipient): Email
     {
-        $template = $mail->getTemplate();
-        $subjectTemplate = $this->getSubjectTemplate($mail);
-        $htmlTemplate = $this->getHtmlTemplate($mail);
-        $data = [];
+        $templater = new MailTemplater($mail, $this->twig, $this->router);
 
         /** @var string $rootDir */
         $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
-        $attachmentsFilePath = sprintf(
-            '%s/data/attachments/mail-%s/',
-            $rootDir,
+        $attachmentsFilePath = $rootDir . sprintf(
+            MailFactory::ATTACHMENTS_DIR,
             $mail->getId()
         );
 
-        if ($mail->getData()) {
-            $data = array_merge($data, $mail->getData());
-        }
-        if ($recipient->getData()) {
-            $data = array_merge($data, $recipient->getData());
-            $data = array_merge($data, ['DEST_ID' => $recipient->getId()]);
-        }
+        $templater->addData($mail->getData());
+        $templater->addData($recipient->getData());
+        $templater->addData(["DEST_ID" => $recipient->getId()]);
 
         /** @var string $domain */
         $domain = $this->parameterBag->get('lle_hermes.app_domain');
@@ -159,21 +151,22 @@ class SenderService
             ['email' => $recipient->getToEmail(), 'token' => $token],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
-        $unsubscribeLink = ['UNSUBSCRIBE_LINK' => $link];
-        $data = array_merge($data, $unsubscribeLink);
+        $templater->addData(["UNSUBSCRIBE_LINK" => $link]);
 
         /** @var string $sender */
         $sender = $this->parameterBag->get('lle_hermes.bounce_email');
 
-        $email = (new TemplatedEmail())
+        $from = new Address($mail->getTemplate()->getSenderEmail(), $mail->getTemplate()->getSenderName() ?? "");
+        $to = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
+
+        $email = (new Email())
             ->sender($sender)
-            ->from(new Address($template->getSenderEmail(), $template->getSenderName() ?? ''))
-            ->to(new Address($recipient->getToEmail(), $recipient->getToName() ?? ''))
-            ->replyTo(new Address($template->getSenderEmail(), $template->getSenderName() ?? ''))
-            ->subject($subjectTemplate->render($data))
-            ->text((string)$mail->getText())
-            ->html($htmlTemplate->render($data))
-            ->context($data);
+            ->from($from)
+            ->to($to)
+            ->replyTo($from)
+            ->subject($templater->getSubject())
+            ->text($templater->getText())
+            ->html($templater->getHtml());
 
         if (count($mail->getAttachement()) > 0) {
             foreach ($mail->getAttachement() as $attachment) {
@@ -181,20 +174,11 @@ class SenderService
             }
         }
         $email = $this->attachBase64Img($email, $domain);
+
         return $email;
     }
 
-    protected function getSubjectTemplate(Mail $mail): TemplateWrapper
-    {
-        return $this->twig->createTemplate($mail->getSubject());
-    }
-
-    protected function getHtmlTemplate(Mail $mail): TemplateWrapper
-    {
-        return $this->twig->createTemplate((string)$mail->getHtml());
-    }
-
-    protected function attachBase64Img(TemplatedEmail $email, string $domain): TemplatedEmail
+    protected function attachBase64Img(Email $email, string $domain): Email
     {
         $newHtml = preg_replace_callback(
             '/src\s*=\s*"data:image\/(png|jpg|jpeg|gif);base64,(.*?)"/i',
