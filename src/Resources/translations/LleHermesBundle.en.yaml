@@ -4,17 +4,27 @@ action:
     edit: Edit
     export: Export
     show: Show
+
 crudit:
     action: Actions
+
 crud:
     title:
         list:
             template: Template
             mail: Mail
             recipient: Recipient
+        show:
+            template: Template %entity%
+            mail: Mail "%entity%"
+            recipient: Recipient %entity%
+        edit:
+            template: Edit template %entity%
+
 export:
     csv: Csv
     excel: Excel
+
 field:
     code: Code
     libelle: Label
@@ -29,15 +39,25 @@ field:
     sendingDate: Sending date
     sendingdate: Sending date
     status: status
+    html: HTML
     subject: Subject
     toEmail: To email
     toemail: To email
     toName: To name
     toname: To name
     unsubscriptions: Unsubscriptions
+
+title:
+    totalToSend: Mails to send
+    totalError: Mails in error
+    totalUnsubscribed: Total unsubscribed
+    totalOpened: Opening rate
+    totalSended: Sended mails
+
 menu:
     lle_hermes:
         hermes: Hermes
+
 pagination:
     first: "First"
     previous: "Previous"

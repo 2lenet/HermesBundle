@@ -4,8 +4,10 @@ action:
     edit: Modifier
     export: Exporter
     show: Voir
+
 crudit:
     action: Actions
+
 crud:
     title:
         list:
@@ -13,12 +15,16 @@ crud:
             mail: Mail
             recipient: Destinataire
         show:
-            template: Édition template %entity%
+            template: Modèle %entity%
+            mail: Mail "%entity%"
+            recipient: Destinataire %entity%
         edit:
-            template: Édition template %entity%
+            template: Édition modèle %entity%
+
 export:
     csv: Csv
     excel: Excel
+
 field:
     code: Code
     libelle: Libellé
@@ -33,15 +39,32 @@ field:
     sendingDate: Date d'envoi
     sendingdate: Date d'envoi
     status: Statut
+    html: HTML
     subject: Sujet
     toEmail: À email
     toemail: À email
     toName: À nom
     toname: À nom
     unsubscriptions: Désinscriptions
+
+title:
+    totalToSend: Mails à envoyer
+    totalError: Mails en erreur
+    totalUnsubscribed: Total désinscrits
+    totalOpened: Taux d'ouverture
+    totalSended: Mails envoyés
+
+status:
+    error: Erreur
+    draft: Brouillon
+    sending: En cours
+    sent: Envoyé
+    unsubscribed: Désinscrit
+
 menu:
     lle_hermes:
         hermes: Hermès
+
 pagination:
     first: "Première"
     previous: "Précédente"
