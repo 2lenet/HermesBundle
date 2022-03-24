@@ -13,13 +13,15 @@ of the Composer documentation.
 Applications that use Symfony Flex
 ----------------------------------
 
+### Step 1: Download the Bundle
 Open a command console, enter your project directory and execute:
 
 ```console
 $ composer require 2lenet/hermes-bundle
 ```
 
-add a file in /config/packages/hermes.yaml for the configuration : 
+### Step 2: Configure the Bundle
+Add a file in /config/packages/hermes.yaml for the configuration : 
 
 ```yaml 
 lle_hermes:
@@ -31,11 +33,19 @@ lle_hermes:
   bounce_pass: toto
 ```
 
+### Step 3: Configure locales
+You must configure locale for Crudit dependency. For that, add the folloxing lines in `config/services.yaml`:
+
+```yaml
+parameters:
+    locales: ['xx', 'yy']
+    default_locale: 'xx'
+```
+
 Applications that don't use Symfony Flex
 ----------------------------------------
 
 ### Step 1: Download the Bundle
-
 Open a command console, enter your project directory and execute the following command to download the latest stable
 version of this bundle:
 
@@ -44,7 +54,6 @@ $ composer require 2lenet/hermes-bundle
 ```
 
 ### Step 2: Enable the Bundle
-
 Then, enable the bundle by adding it to the list of registered bundles in the `config/bundles.php` file of your project:
 
 ```php
