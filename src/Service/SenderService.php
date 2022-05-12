@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Enum\StatusEnum;
+use Lle\HermesBundle\Exception\NoRecipientException;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
@@ -157,12 +158,26 @@ class SenderService
         $sender = $this->parameterBag->get('lle_hermes.bounce_email');
 
         $from = new Address($mail->getTemplate()->getSenderEmail(), $mail->getTemplate()->getSenderName() ?? "");
-        $to = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
 
-        $email = (new Email())
+        $email = new Email();
+
+        if (!$recipient->getMail() && !$recipient->getCcMail()) {
+            throw new NoRecipientException($mail->getId());
+        }
+
+        if ($recipient->getMail()) {
+            $to = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
+            $email->to($to);
+        }
+
+        if ($recipient->getCcMail()) {
+            $cc = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
+            $email->addCc($cc);
+        }
+
+        $email
             ->sender($sender)
             ->from($from)
-            ->to($to)
             ->replyTo($from)
             ->subject($templater->getSubject())
             ->text($templater->getText())

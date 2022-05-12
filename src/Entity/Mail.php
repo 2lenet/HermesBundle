@@ -119,9 +119,15 @@ class Mail
      */
     protected int $totalOpened = 0;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\Recipient", mappedBy="ccMail", cascade={"persist", "remove"})
+     */
+    protected Collection $ccRecipients;
+
     public function __construct()
     {
         $this->recipients = new ArrayCollection();
+        $this->ccRecipients = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -515,5 +521,38 @@ class Mail
         }
 
         return round($this->totalOpened / $this->totalToSend * 100, 2);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCcRecipients(): Collection
+    {
+        return $this->ccRecipients;
+    }
+
+    /**
+     * @param Recipient $ccRecipient
+     * @return $this
+     */
+    public function addCcRecipient(Recipient $ccRecipient): Mail
+    {
+        $ccRecipient->setCcMail($this);
+        $this->ccRecipients->add($ccRecipient);
+
+        return $this;
+    }
+
+    /**
+     * @param Recipient $ccRecipient
+     * @return $this
+     */
+    public function removeCcRecipient(Recipient $ccRecipient): Mail
+    {
+        if ($this->ccRecipients->contains($ccRecipient)) {
+            $this->ccRecipient->removeElement($ccRecipient);
+        }
+
+        return $this;
     }
 }
