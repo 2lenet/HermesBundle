@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Enum\StatusEnum;
+use Lle\HermesBundle\Exception\NoMailFoundException;
 use Lle\HermesBundle\Exception\NoRecipientException;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
@@ -69,7 +70,11 @@ class SenderService
         $recipients = $this->recipientRepository
             ->findRecipientsSending('ok', 'sending', $limit);
         foreach ($recipients as $recipient) {
-            $mail = $recipient->getMail();
+            if (!$recipient->getMail() && !$recipient->getCcMail()) {
+                throw new NoMailFoundException($recipient->getId());
+            }
+
+            $mail = $recipient->getMail() ?? $recipient->getCcMail();
             $template = $mail->getTemplate();
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
