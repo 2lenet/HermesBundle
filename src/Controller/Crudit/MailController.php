@@ -7,7 +7,9 @@ namespace Lle\HermesBundle\Controller\Crudit;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
+use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Repository\MailRepository;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,5 +52,13 @@ class MailController extends AbstractCrudController
             "page" => $page,
             "total_pages" => $totalPages,
         ]);
+    }
+
+    /**
+     * @Route("/show/{id}/{file}", name="lle_hermes_crudit_mail_show_attachement", methods={"GET"})
+     */
+    public function showAttachement(Mail $mail, string $file)
+    {
+        return new BinaryFileResponse($mail->getPathOfAttachement($file));
     }
 }

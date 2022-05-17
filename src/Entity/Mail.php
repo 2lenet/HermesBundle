@@ -555,4 +555,27 @@ class Mail
 
         return $this;
     }
+
+    public function canEdit(): bool
+    {
+        if ($this->status === "draft") {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getJsonAttachement(): array
+    {
+        return json_decode(json_encode($this->attachement), true);
+    }
+
+    public function getPathOfAttachement(string $file): string
+    {
+        foreach ($this->getJsonAttachement() as $attachement) {
+            if ($attachement["name"] === $file) {
+                return $attachement["path"] . $file;
+            }
+        }
+    }
 }
