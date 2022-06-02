@@ -59,15 +59,21 @@ class Recipient
     protected int $nbRetry = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail", inversedBy="recipient" ,cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail", inversedBy="recipients", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
-    protected Mail $mail;
+    protected ?Mail $mail = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected ?DateTime $openDate = null;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail", inversedBy="ccRecipients", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private ?Mail $ccMail = null;
 
     public function __toString(): string
     {
@@ -185,7 +191,7 @@ class Recipient
     /**
      * @return Mail
      */
-    public function getMail(): Mail
+    public function getMail(): ?Mail
     {
         return $this->mail;
     }
@@ -194,7 +200,7 @@ class Recipient
      * @param Mail $mail
      * @return Recipient
      */
-    public function setMail(Mail $mail): Recipient
+    public function setMail(?Mail $mail): Recipient
     {
         $this->mail = $mail;
         return $this;
@@ -215,6 +221,25 @@ class Recipient
     public function setOpenDate(?DateTime $openDate): Recipient
     {
         $this->openDate = $openDate;
+        return $this;
+    }
+
+    /**
+     * @return Mail
+     */
+    public function getCcMail(): ?Mail
+    {
+        return $this->ccMail;
+    }
+
+    /**
+     * @param Mail $ccMail
+     * @return Recipient
+     */
+    public function setCcMail(?Mail $ccMail): Recipient
+    {
+        $this->ccMail = $ccMail;
+
         return $this;
     }
 }

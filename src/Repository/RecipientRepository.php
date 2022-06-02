@@ -37,11 +37,18 @@ class RecipientRepository extends ServiceEntityRepository
     public function findRecipientsSending(string $statusDest, string $statusMail, int $limit): array
     {
         $qb = $this->createQueryBuilder('entity')
-            ->join('entity.mail', 'mail');
+            ->leftJoin('entity.mail', 'mail')
+            ->leftJoin('entity.ccMail', 'ccMail');
         $qb->where(
             $qb->expr()->andX(
                 $qb->expr()->eq('entity.status', ':statusDest'),
                 $qb->expr()->eq('mail.status', ':statusMail')
+            )
+        );
+        $qb->orWhere(
+            $qb->expr()->andX(
+                $qb->expr()->eq('entity.status', ':statusDest'),
+                $qb->expr()->eq('ccMail.status', ':statusMail')
             )
         );
         $qb->setParameters([
@@ -49,6 +56,7 @@ class RecipientRepository extends ServiceEntityRepository
             'statusMail' => $statusMail
         ]);
         $qb->setMaxResults($limit);
+
         return $qb->getQuery()->execute();
     }
 
