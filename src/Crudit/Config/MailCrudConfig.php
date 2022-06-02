@@ -24,11 +24,15 @@ class MailCrudConfig extends AbstractCrudConfig
     {
         $subject = Field::new('subject')
             ->setTemplate('@LleHermes/crud/_subject.html.twig');
+        $recipients = Field::new('recipients')
+            ->setTemplate('@LleHermes/crud/_recipient.html.twig');
         $sendingDate = Field::new('sendingDate');
         $status = Field::new('status');
         $html = Field::new('html')
             ->setTemplate('@LleHermes/crud/_html.html.twig')
             ->setCssClass('col-12');
+        $attachement = Field::new('jsonAttachement')
+            ->setTemplate('@LleHermes/crud/_attachement.html.twig');
 
         $fields = [];
 
@@ -36,14 +40,17 @@ class MailCrudConfig extends AbstractCrudConfig
             case CrudConfigInterface::SHOW:
                 $fields = [
                     $subject,
+                    $recipients,
                     $sendingDate,
                     $status,
                     $html,
+                    $attachement,
                 ];
                 break;
             default:
                 $fields = [
                     $subject,
+                    $recipients,
                     $sendingDate,
                     $status,
                 ];
