@@ -58,9 +58,7 @@
                                     </span>
                                 </button>
 
-                                <span class="badge float-end {% if mail.status == 'error' %}bg-danger{% else %}bg-primary{% endif %}">
-                                    {{ ('status.' ~ mail.status)|trans({}, 'LleHermesBundle') }}
-                                </span>
+                                {% include '@LleHermes/layout/status.html.twig' with {'status': mail.status, 'position': 'end'} %}
                             </div>
                             <div class="col-6 p-2">
                                 <div class="progress" title="{{ 'title.totalOpened'|trans({}, 'LleHermesBundle') }}">

@@ -20,6 +20,8 @@ crud:
             recipient: Recipient %entity%
         edit:
             template: Edit template %entity%
+    tab:
+        recipients: Recipients
 
 export:
     csv: Csv
@@ -29,6 +31,7 @@ field:
     code: Code
     libelle: Label
     mail: Mail
+    recipients: Recipients
     'mail:sendingDate': Sending date
     openDate: Open date
     opendate: Open date

@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\Service;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
@@ -118,7 +119,12 @@ class SenderService
             $this->mailer->send($this->buildMail($mail, $recipient));
             $recipient->setStatus(StatusEnum::SENT);
             $this->entityManager->persist($recipient);
+
+            $mail->setSendingDate(new DateTime());
+            $this->entityManager->persist($mail);
+
             $this->entityManager->flush();
+
             $this->updateMailAndRecipient($mail);
             return true;
         } catch (TransportException $transportException) {
@@ -140,7 +146,6 @@ class SenderService
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
-        $templater->addData(["DEST_ID" => $recipient->getId()]);
 
         /** @var string $domain */
         $domain = $this->parameterBag->get('lle_hermes.app_domain');
@@ -179,6 +184,16 @@ class SenderService
             $cc = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
             $email->addCc($cc);
         }
+
+        // Generate confirmation of receipt link
+        $templater->addData(['RECIPIENT_ID' => $recipient->getId()]);
+        $route = $this->router->generate('mail_opened', ['recipient' => 'RECIPIENT_TAG'], UrlGeneratorInterface::ABSOLUTE_URL);
+        $route = str_replace('RECIPIENT_TAG', '{{ RECIPIENT_ID }}', $route);
+        $mail->setHtml(str_replace(
+            '</body>',
+            '<img src="' . $route . '" alt="" /></body>',
+            $mail->getHtml()
+        ));
 
         $email
             ->sender($sender)

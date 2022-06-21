@@ -3,6 +3,8 @@
 namespace Lle\HermesBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Lle\HermesBundle\Entity\Mail;
+use Lle\HermesBundle\Entity\Recipient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -10,17 +12,20 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MailTrackerController extends AbstractController
 {
     protected $em;
     protected $parameterBag;
+    protected $kernel;
 
-    public function __construct(EntityManagerInterface $em, ParameterBagInterface $parameterBag)
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $parameterBag, KernelInterface $kernel)
     {
         $this->em = $em;
         $this->parameterBag = $parameterBag;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -43,21 +48,21 @@ class MailTrackerController extends AbstractController
     }
 
     /**
-     * @Route("/mailOpened/{destinataire}", name="mail_opened")
+     * @Route("/mailOpened/{recipient}", name="mail_opened")
      */
-    public function mailOpened(Destinataire $destinataire)
+    public function mailOpened(Recipient $recipient)
     {
-        $destinataire->setDateOuverture(new \DateTime('now'));
-        $this->em->persist($destinataire);
+        $recipient->setOpenDate(new \DateTime('now'));
+        $this->em->persist($recipient);
         $this->em->flush();
 
-        $destinatairesOpen = $this->em->getRepository(Destinataire::class)->countDestinatairesOpen($destinataire->getMail());
-        $this->em->getRepository(Mail::class)->updateTotalOpened($destinataire->getMail(), $destinatairesOpen['count']);
+        $recipientsOpen = $this->em->getRepository(Recipient::class)->countOpenRecipient($recipient->getMail());
+        $this->em->getRepository(Mail::class)->updateTotalOpened($recipient->getMail(), $recipientsOpen);
 
-        $img = $this->rootDir . '/public/img/pixel.png';
+        $image = $this->kernel->getProjectDir() . '/vendor/2lenet/hermes-bundle/assets/img/pixel.png';
         $headers = ['Content-Type' => 'image/png'];
 
-        return new BinaryFileResponse($img, 200, $headers);
+        return new BinaryFileResponse($image, 200, $headers);
     }
 
 }

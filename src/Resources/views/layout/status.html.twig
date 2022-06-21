@@ -1,0 +1,3 @@
+<span class="badge {% if position is defined %}float-{{ position }}{% endif %} {% if status == 'error' %}bg-danger{% else %}bg-primary{% endif %}">
+    {{ ('status.' ~ status)|trans({}, 'LleHermesBundle') }}
+</span>
