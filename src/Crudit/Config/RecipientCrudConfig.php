@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Crudit\Config;
 
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
+use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
+use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Field\DoctrineEntityField;
 use Lle\HermesBundle\Crudit\Datasource\RecipientDatasource;
 
 class RecipientCrudConfig extends AbstractCrudConfig
 {
-    public function __construct(
-        RecipientDatasource $datasource
-    ) {
+    public function __construct(RecipientDatasource $datasource)
+    {
         $this->datasource = $datasource;
     }
 
@@ -28,9 +29,9 @@ class RecipientCrudConfig extends AbstractCrudConfig
         ])->setType(DoctrineEntityField::class);
         $sendingDate = Field::new('toName');
         $toEmail = Field::new('toEmail');
-        $status = Field::new('status');
+        $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
         $openDate = Field::new('openDate');
-        // you can return different fields based on the block key
+
         if ($key == CrudConfigInterface::INDEX || $key == CrudConfigInterface::SHOW) {
             return [
                 $mail,
@@ -42,6 +43,60 @@ class RecipientCrudConfig extends AbstractCrudConfig
         }
 
         return [];
+    }
+
+    public function getItemActions(): array
+    {
+        $actions = [];
+
+        $actions[] = ItemAction::new(
+            'action.show',
+            $this->getPath(CrudConfigInterface::SHOW),
+            Icon::new('search')
+        )->setCssClass('btn btn-primary btn-sm mr-1');
+
+        return $actions;
+    }
+
+    public function getShowActions(): array
+    {
+        $actions = [];
+
+        $actions[] = ItemAction::new(
+            'action.list',
+            $this->getPath(CrudConfigInterface::INDEX),
+            Icon::new('list')
+        )->setCssClass('btn btn-secondary btn-sm mr-1');
+
+        return $actions;
+    }
+
+    public function getSublistAction(): array
+    {
+        $actions = [];
+
+        $actions[] = ItemAction::new(
+            'action.show',
+            $this->getPath(CrudConfigInterface::SHOW),
+            Icon::new('search')
+        )->setCssClass('btn btn-primary btn-sm mr-1');
+
+        return $actions;
+    }
+
+    public function getSublistFields(): array
+    {
+        $sendingDate = Field::new('toName');
+        $toEmail = Field::new('toEmail');
+        $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
+        $openDate = Field::new('openDate');
+
+        return [
+            $sendingDate,
+            $toEmail,
+            $status,
+            $openDate
+        ];
     }
 
     public function getRootRoute(): string
