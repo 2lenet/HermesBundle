@@ -16,7 +16,7 @@ crud:
             recipient: Recipient
         show:
             template: Template %entity%
-            mail: Mail "%entity%"
+            mail: ""
             recipient: Recipient %entity%
         edit:
             template: Edit template %entity%
@@ -46,6 +46,8 @@ field:
     toName: To name
     toname: To name
     unsubscriptions: Unsubscriptions
+    recipients: Recipient
+    jsonattachement: Attachments
 
 title:
     totalToSend: Mails to send
