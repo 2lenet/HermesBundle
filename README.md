@@ -21,7 +21,9 @@ $ composer require 2lenet/hermes-bundle
 ```
 
 ### Step 2: Configure the Bundle
-Add a file in /config/packages/hermes.yaml for the configuration : 
+Add a file in /config/packages/hermes.yaml for the configuration :
+
+:warning: Don't put any protocol in the `app_domain`
 
 ```yaml 
 lle_hermes:
