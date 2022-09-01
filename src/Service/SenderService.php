@@ -136,6 +136,7 @@ class SenderService
         $templater->addData($recipient->getData());
         $templater->addData(["DEST_ID" => $recipient->getId()]);
 
+
         /** @var string $domain */
         $domain = $this->parameterBag->get('lle_hermes.app_domain');
 

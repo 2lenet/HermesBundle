@@ -67,7 +67,7 @@ class Mailer
      * @param Mail $mail Mail object
      * @return array
      */
-    public function send(MailDto $mail, $status = MailDto::DRAFT)
+    public function send(MailDto $mail, $status = MailDto::DRAFT, $options = [])
     {
         $template = $this->em->getRepository(Template::class)
             ->findOneBy([
@@ -78,7 +78,7 @@ class Mailer
             throw new TemplateNotFoundException($mail->getTemplate());
         }
 
-        $mailObj = $this->mailerFactory->createMailFromDto($mail, $template);
+        $mailObj = $this->mailerFactory->createMailFromDto($mail, $template, $options);
         $mailObj->setStatus(MailDto::DRAFT);
         $this->em->persist($mailObj);
         $this->em->flush();
