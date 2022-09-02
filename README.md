@@ -34,6 +34,8 @@ lle_hermes:
   bounce_host: mail.2le.net
   bounce_pass: toto
 ```
+The bounce email is the adress where error emails will be sent
+
 
 ### Step 3: Configure locales
 You must configure locale for Crudit dependency. For that, add the folloxing lines in `config/services.yaml`:

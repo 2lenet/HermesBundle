@@ -42,8 +42,12 @@ class MailFactory
         $mail->setTotalSended(0);
         $mail->setSubject($mail->getTemplate()->getSubject());
         $mail->setMjml($mail->getTemplate()->getMjml());
-        $mail->setHtml($mail->getTemplate()->getHtml());
-        $mail->setText($mail->getTemplate()->getText());
+        if ($mailDto->isSendText()) {
+            $mail->setText($mail->getTemplate()->getText());
+        }
+        if ($mailDto->isSendHtml()) {
+            $mail->setHtml($mail->getTemplate()->getHtml());
+        }
 
         return $mail;
     }

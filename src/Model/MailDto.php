@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\Model;
 
+use Lle\HermesBundle\Enum\StatusEnum;
 use Lle\HermesBundle\Model\ContactDto;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -12,9 +13,9 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class MailDto
 {
-    const SENDING = "sending";
+    const SENDING = StatusEnum::SENDING;
 
-    const DRAFT = "draft";
+    const DRAFT = StatusEnum::DRAFT;
 
     /**
      * @var int
@@ -71,13 +72,17 @@ class MailDto
      */
     protected $attachments = [];
 
-    protected $status = "sending";
+    protected $status = StatusEnum::SENDING;
 
     /**
      * @var array
      * Data to use for mail template
      */
     protected $data = [];
+
+    protected bool $sendHtml = true;
+
+    protected bool $sendText = true;
 
     /**
      * @return int
@@ -302,5 +307,38 @@ class MailDto
     {
         $this->status = $status;
         return $this;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isSendHtml(): bool
+    {
+        return $this->sendHtml;
+    }
+
+    /**
+     * @param bool $sendHtml
+     */
+    public function setSendHtml(bool $sendHtml): void
+    {
+        $this->sendHtml = $sendHtml;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendText(): bool
+    {
+        return $this->sendText;
+    }
+
+    /**
+     * @param bool $sendText
+     */
+    public function setSendText(bool $sendText): void
+    {
+        $this->sendText = $sendText;
     }
 }
