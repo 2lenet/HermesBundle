@@ -2,10 +2,13 @@
 
 namespace Lle\HermesBundle\Service;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Enum\StatusEnum;
+use Lle\HermesBundle\Exception\NoMailFoundException;
+use Lle\HermesBundle\Exception\NoRecipientException;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
@@ -68,7 +71,11 @@ class SenderService
         $recipients = $this->recipientRepository
             ->findRecipientsSending('ok', 'sending', $limit);
         foreach ($recipients as $recipient) {
-            $mail = $recipient->getMail();
+            if (!$recipient->getMail() && !$recipient->getCcMail()) {
+                throw new NoMailFoundException($recipient->getId());
+            }
+
+            $mail = $recipient->getMail() ?? $recipient->getCcMail();
             $template = $mail->getTemplate();
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
@@ -112,7 +119,12 @@ class SenderService
             $this->mailer->send($this->buildMail($mail, $recipient));
             $recipient->setStatus(StatusEnum::SENT);
             $this->entityManager->persist($recipient);
+
+            $mail->setSendingDate(new DateTime());
+            $this->entityManager->persist($mail);
+
             $this->entityManager->flush();
+
             $this->updateMailAndRecipient($mail);
             return true;
         } catch (TransportException $transportException) {
@@ -134,7 +146,6 @@ class SenderService
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
-        $templater->addData(["DEST_ID" => $recipient->getId()]);
 
         /** @var string $domain */
         $domain = $this->parameterBag->get('lle_hermes.app_domain');
@@ -157,11 +168,36 @@ class SenderService
         $returnPath = $this->parameterBag->get('lle_hermes.bounce_email');
 
         $from = new Address($mail->getTemplate()->getSenderEmail(), $mail->getTemplate()->getSenderName() ?? "");
-        $to = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
 
-        $email = (new Email())
+
+        $email = new Email();
+
+        if (!$recipient->getMail() && !$recipient->getCcMail()) {
+            throw new NoRecipientException($mail->getId());
+        }
+
+        if ($recipient->getMail()) {
+            $to = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
+            $email->to($to);
+        }
+
+        if ($recipient->getCcMail()) {
+            $cc = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
+            $email->addCc($cc);
+        }
+
+        // Generate confirmation of receipt link
+        $templater->addData(['RECIPIENT_ID' => $recipient->getId()]);
+        $route = $this->router->generate('mail_opened', ['recipient' => 'RECIPIENT_TAG'], UrlGeneratorInterface::ABSOLUTE_URL);
+        $route = str_replace('RECIPIENT_TAG', '{{ RECIPIENT_ID }}', $route);
+        $mail->setHtml(str_replace(
+            '</body>',
+            '<img src="' . $route . '" alt="" /></body>',
+            $mail->getHtml()
+        ));
+
+        $email
             ->from($from)
-            ->to($to)
             ->replyTo($from)
             ->subject($templater->getSubject())
             ->returnPath($returnPath)

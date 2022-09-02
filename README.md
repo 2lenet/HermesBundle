@@ -21,7 +21,9 @@ $ composer require 2lenet/hermes-bundle
 ```
 
 ### Step 2: Configure the Bundle
-Add a file in /config/packages/hermes.yaml for the configuration : 
+Add a file in /config/packages/hermes.yaml for the configuration :
+
+:warning: Don't put any protocol in the `app_domain`
 
 ```yaml 
 lle_hermes:
@@ -78,3 +80,13 @@ hermes:
   resource: "@LleHermesBundle/Resources/config/routes.xml"
   prefix: /hermes
 ```
+
+## Notes
+
+### Messenger
+
+If you have Messenger installed and use default configuration, the mails will be asynchronous and sent in a queue. You either need to uninstall Messenger (DoctrineMessenger is installed by default on Symfony projects) or configure Hermès/Messenger differently.
+
+### CRON
+
+Hermès sends mails with a command. You need to create a CRON if you want your mails to be sent automatically.

@@ -21,6 +21,9 @@ class HermesExtension extends AbstractExtension
         $this->router = $router;
     }
 
+    /**
+     * @return array
+     */
     public function getFunctions()
     {
         return [

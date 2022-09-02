@@ -16,10 +16,12 @@ crud:
             recipient: Destinataire
         show:
             template: Modèle %entity%
-            mail: Mail "%entity%"
+            mail: ""
             recipient: Destinataire %entity%
         edit:
             template: Édition modèle %entity%
+    tab:
+        recipients: Destinataires
 
 export:
     csv: Csv
@@ -29,6 +31,7 @@ field:
     code: Code
     libelle: Libellé
     mail: Mail
+    recipients: Destinataires
     'mail:sendingDate': Date d'envoi
     openDate: Date d'ouverture
     opendate: Date d'ouverture
@@ -46,6 +49,7 @@ field:
     toName: À nom
     toname: À nom
     unsubscriptions: Désinscriptions
+    jsonattachement: Pièces jointes
 
 title:
     totalToSend: Mails à envoyer

@@ -32,6 +32,11 @@ class MailFactory
             $mail->addRecipient($dest);
             $nbDest++;
         }
+        foreach ($mailDto->getCc() as $ccDto) {
+            $dest = $destFactory->createDestinataireFromData($ccDto);
+            $mail->addCcRecipient($dest);
+            $nbDest++;
+        }
         $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);

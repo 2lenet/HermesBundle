@@ -48,6 +48,12 @@ class MailDto
     protected $to = [];
 
     /**
+     * @var ContactDto[
+     * People in copy
+     */
+    protected $cc = [];
+
+    /**
      * @var ContactDto
      * The person that sends the mail.
      */
@@ -174,6 +180,34 @@ class MailDto
     public function addTo(?ContactDto $to): self
     {
         $this->to[] = $to;
+
+        return $this;
+    }
+
+    /**
+     * @return ContactDto[]
+     */
+    public function getCc(): ?array
+    {
+        return $this->cc;
+    }
+
+    /**
+     * @param ContactDto[] $cc
+     */
+    public function setCc(?array $cc): self
+    {
+        $this->cc = $cc;
+
+        return $this;
+    }
+
+    /**
+     * @param ContactDto $cc
+     */
+    public function addCc(?ContactDto $cc): self
+    {
+        $this->cc[] = $cc;
 
         return $this;
     }
