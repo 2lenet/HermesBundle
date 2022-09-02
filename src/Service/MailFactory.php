@@ -19,7 +19,7 @@ class MailFactory
         $this->parameters = $parameters;
     }
 
-    public function createMailFromDto(MailDto $mailDto, $template, $options = []): ?Mail
+    public function createMailFromDto(MailDto $mailDto, $template): ?Mail
     {
         $mail = new Mail();
         $mail->setTemplate($template);
@@ -37,9 +37,10 @@ class MailFactory
         $mail->setTotalSended(0);
         $mail->setSubject($mail->getTemplate()->getSubject());
         $mail->setMjml($mail->getTemplate()->getMjml());
-        $mail->setText($mail->getTemplate()->getText());
-
-        if (!array_key_exists('textOnly', $options) || $options['textOnly'] === false) {
+        if ($mailDto->isSendText()) {
+            $mail->setText($mail->getTemplate()->getText());
+        }
+        if ($mailDto->isSendHtml()) {
             $mail->setHtml($mail->getTemplate()->getHtml());
         }
 

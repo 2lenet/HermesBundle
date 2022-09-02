@@ -136,7 +136,6 @@ class SenderService
         $templater->addData($recipient->getData());
         $templater->addData(["DEST_ID" => $recipient->getId()]);
 
-
         /** @var string $domain */
         $domain = $this->parameterBag->get('lle_hermes.app_domain');
 
@@ -155,19 +154,24 @@ class SenderService
         $templater->addData(["UNSUBSCRIBE_LINK" => $link]);
 
         /** @var string $sender */
-        $sender = $this->parameterBag->get('lle_hermes.bounce_email');
+        $returnPath = $this->parameterBag->get('lle_hermes.bounce_email');
 
         $from = new Address($mail->getTemplate()->getSenderEmail(), $mail->getTemplate()->getSenderName() ?? "");
         $to = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
 
         $email = (new Email())
-            ->sender($sender)
             ->from($from)
             ->to($to)
             ->replyTo($from)
             ->subject($templater->getSubject())
-            ->text($templater->getText())
-            ->html($templater->getHtml());
+            ->returnPath($returnPath)
+            ;
+        if ($templater->getText()) {
+            $email->text($templater->getText());
+        }
+        if ($templater->getHtml()) {
+            $email->html($templater->getHtml());
+        }
 
         if (count($mail->getAttachement()) > 0) {
             foreach ($mail->getAttachement() as $attachment) {
