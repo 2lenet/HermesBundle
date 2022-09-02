@@ -76,38 +76,6 @@ class MailDto
 
     protected bool $sendHtml = true;
 
-    /**
-     * @return bool
-     */
-    public function isSendHtml(): bool
-    {
-        return $this->sendHtml;
-    }
-
-    /**
-     * @param bool $sendHtml
-     */
-    public function setSendHtml(bool $sendHtml): void
-    {
-        $this->sendHtml = $sendHtml;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSendText(): bool
-    {
-        return $this->sendText;
-    }
-
-    /**
-     * @param bool $sendText
-     */
-    public function setSendText(bool $sendText): void
-    {
-        $this->sendText = $sendText;
-    }
-
     protected bool $sendText = true;
 
     /**
@@ -305,5 +273,38 @@ class MailDto
     {
         $this->status = $status;
         return $this;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isSendHtml(): bool
+    {
+        return $this->sendHtml;
+    }
+
+    /**
+     * @param bool $sendHtml
+     */
+    public function setSendHtml(bool $sendHtml): void
+    {
+        $this->sendHtml = $sendHtml;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendText(): bool
+    {
+        return $this->sendText;
+    }
+
+    /**
+     * @param bool $sendText
+     */
+    public function setSendText(bool $sendText): void
+    {
+        $this->sendText = $sendText;
     }
 }
