@@ -92,7 +92,7 @@ class SenderService
             if ($this->send($mail, $recipient)) {
                 $nb++;
             } else {
-                print("error sending to ". $recipient);
+                print("error sending to " . $recipient);
             }
 
             $this->updateMail($mail);

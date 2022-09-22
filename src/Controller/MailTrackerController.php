@@ -41,5 +41,4 @@ class MailTrackerController extends AbstractController
 
         return new BinaryFileResponse($image, 200, $headers);
     }
-
 }

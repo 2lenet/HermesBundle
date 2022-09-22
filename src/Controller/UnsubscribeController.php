@@ -88,5 +88,4 @@ class UnsubscribeController extends AbstractController
 
         return false;
     }
-
 }
