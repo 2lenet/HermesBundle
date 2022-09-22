@@ -27,11 +27,11 @@ class UnsubscribeEmailRepository extends ServiceEntityRepository
     /**
      * @return string[]
      */
-    public function findEmailUnsubscribed(): array
+    public function findEmailsUnsubscribed(): array
     {
-        $qb = $this->createQueryBuilder('entity')
-            ->select('entity.email as email');
-
-        return $qb->getQuery()->getScalarResult();
+        return $this->createQueryBuilder('entity')
+            ->select('entity.email as email')
+            ->getQuery()
+            ->getScalarResult();
     }
 }

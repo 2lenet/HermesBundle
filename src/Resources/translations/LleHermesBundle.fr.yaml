@@ -52,6 +52,7 @@ field:
     jsonattachement: Pièces jointes
 
 title:
+    dashboard: Tableau de bord
     totalToSend: Mails à envoyer
     totalError: Mails en erreur
     totalUnsubscribed: Total désinscrits
@@ -84,3 +85,12 @@ pagination:
     of: "sur"
     noItem: "Aucun mail trouvé"
     limit: "Nombre de mails"
+
+text:
+    confirmUnsubscribtionQuestion: Souhaitez-vous réellement désinscrire l'adresse email suivante ?
+    confirmUnsubscribtion: Oui, se désinscrire
+    cancelUnsubscribtion: Non, annuler
+    errorOccured: "Une erreur est survenue : disparité du jeton"
+    unsubscribtionConfirmed: Désinscription confirmée, vous pouvez fermer cette fenêtre
+    unsubscribtionCancelled: Désinscription annulée, vous pouvez fermer cette fenêtre
+    alreadyUnsubscribe: Vous êtes déjà désinscrit, vous pouvez fermer cette fenêtre

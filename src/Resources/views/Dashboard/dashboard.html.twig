@@ -1,10 +1,8 @@
 {% extends "base.html.twig" %}
 
-{% block page_title %}{{ 'hermes'|trans(domain='messages') }}{% endblock %}
-
 {% block head_stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/llehermes/app.css') }}" xmlns="http://www.w3.org/1999/html"/>
+    <link rel="stylesheet" href="{{ asset('bundles/llehermes/app.css') }}" />
 {% endblock %}
 
 {% block head_javascript %}
@@ -17,10 +15,7 @@
     <div class="page-header">
         <div class="row align-items-center">
             <div class="col-sm mb-2 mb-sm-0">
-                <h2 class="page-header-title text-primary">
-                    {{ 'dashboard' | trans }}
-                    <i id="gs-spin" class="fas fa-spin"></i>
-                </h2>
+                <h2 class="page-header-title text-primary">{{ 'title.dashboard'|trans({}, 'LleHermesBundle') }}</h2>
             </div>
         </div>
     </div>
