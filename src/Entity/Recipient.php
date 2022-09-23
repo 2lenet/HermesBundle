@@ -3,6 +3,8 @@
 namespace Lle\HermesBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -74,6 +76,16 @@ class Recipient
      * @ORM\JoinColumn(nullable=true)
      */
     private ?Mail $ccMail = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="recipient", cascade={"persist", "remove"})
+     */
+    protected Collection $linkOpenings;
+
+    public function __construct()
+    {
+        $this->linkOpenings = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -239,6 +251,30 @@ class Recipient
     public function setCcMail(?Mail $ccMail): Recipient
     {
         $this->ccMail = $ccMail;
+
+        return $this;
+    }
+
+    public function getLinkOpenings(): Collection
+    {
+        return $this->linkOpenings;
+    }
+
+    public function addLinkOpening(LinkOpening $linkOpening): self
+    {
+        if (!$this->linkOpenings->contains($linkOpening)) {
+            $linkOpening->setRecipient($this);
+            $this->linkOpenings->add($linkOpening);
+        }
+
+        return $this;
+    }
+
+    public function removeLinkOpening(LinkOpening $linkOpening): self
+    {
+        if ($this->linkOpenings->contains($linkOpening)) {
+            $this->linkOpenings->removeElement($linkOpening);
+        }
 
         return $this;
     }
