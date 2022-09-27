@@ -42,5 +42,4 @@ class StatisticsController extends AbstractController
 
         return new RedirectResponse($link->getUrl());
     }
-
 }
