@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\LinkOpeningRepository;
 
@@ -39,6 +40,21 @@ class LinkOpening
      * @ORM\Column(type="integer")
      */
     protected int $nbOpenings = 0;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected ?DateTimeInterface $createdAt = null;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected ?DateTimeInterface $updatedAt = null;
+
+    public function __toString(): string
+    {
+        return $this->url;
+    }
 
     public function getId(): int
     {
@@ -83,6 +99,30 @@ class LinkOpening
     public function setNbOpenings(int $nbOpenings): self
     {
         $this->nbOpenings = $nbOpenings;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

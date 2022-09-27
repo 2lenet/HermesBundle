@@ -141,6 +141,26 @@ class Mail
         return (string)$this->subject;
     }
 
+    public function getTotalLinkOpening(): int
+    {
+        $total = 0;
+        foreach ($this->links as $link) {
+            $total += $link->getTotalOpened();
+        }
+
+        return $total;
+    }
+
+    public function getTotalLinkOpeningRate(): float
+    {
+        $openinglinks = 0;
+        foreach ($this->links as $link) {
+            $openinglinks += $link->getLinkOpenings()->count();
+        }
+
+        return round($openinglinks / $this->recipients->count() * 100, 2);
+    }
+
     /**
      * @return int
      */

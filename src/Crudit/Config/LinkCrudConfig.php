@@ -10,16 +10,16 @@ use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Field\DoctrineEntityField;
-use Lle\HermesBundle\Crudit\Datasource\RecipientDatasource;
+use Lle\HermesBundle\Crudit\Datasource\LinkDatasource;
 
-class RecipientCrudConfig extends AbstractCrudConfig
+class LinkCrudConfig extends AbstractCrudConfig
 {
-    private LinkCrudConfig $linkCrudConfig;
+    private LinkOpeningCrudConfig $linkOpeningCrudConfig;
 
-    public function __construct(RecipientDatasource $datasource, LinkCrudConfig $linkCrudConfig)
+    public function __construct(LinkDatasource $datasource, LinkOpeningCrudConfig $linkOpeningCrudConfig)
     {
         $this->datasource = $datasource;
-        $this->linkCrudConfig = $linkCrudConfig;
+        $this->linkOpeningCrudConfig = $linkOpeningCrudConfig;
     }
 
     /**
@@ -29,22 +29,16 @@ class RecipientCrudConfig extends AbstractCrudConfig
     public function getFields($key): array
     {
         $mail = Field::new('mail', null, [
-            "route" => "lle_hermes_crudit_mail_show",
+            'route' => 'lle_hermes_crudit_mail_show',
         ])->setType(DoctrineEntityField::class);
-        $sendingDate = Field::new('toName');
-        $toEmail = Field::new('toEmail');
-        $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
-        $openDate = Field::new('openDate');
-        $linkOpening = Field::new('totalLinkOpening')->setLabel('field.nbopenings');
+        $url = Field::new('url');
+        $totalOpened = Field::new('totalOpened')->setLabel('field.nbopenings');
 
         if ($key == CrudConfigInterface::INDEX || $key == CrudConfigInterface::SHOW) {
             return [
                 $mail,
-                $sendingDate,
-                $toEmail,
-                $status,
-                $openDate,
-                $linkOpening
+                $url,
+                $totalOpened
             ];
         }
 
@@ -92,32 +86,25 @@ class RecipientCrudConfig extends AbstractCrudConfig
 
     public function getSublistFields(): array
     {
-        $toName = Field::new('toName');
-        $toEmail = Field::new('toEmail');
-        $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
-        $openDate = Field::new('openDate');
-        $linkOpening = Field::new('totalLinkOpening')->setLabel('field.nbopenings');
+        $url = Field::new('url');
+        $linkOpenings = Field::new('totalOpened')->setLabel('field.nbopenings');
 
         return [
-            $toName,
-            $toEmail,
-            $status,
-            $openDate,
-            $linkOpening
+            $url,
+            $linkOpenings
         ];
     }
 
     public function getTabs(): array
     {
         return [
-            'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
-                ->setActions($this->linkCrudConfig->getSublistAction())
-                ->setFields($this->linkCrudConfig->getSublistFields())
+            'tab.linkOpening' => SublistConfig::new('link', $this->linkOpeningCrudConfig)
+                ->setFields($this->linkOpeningCrudConfig->getSublistFields())
         ];
     }
 
     public function getRootRoute(): string
     {
-        return 'lle_hermes_crudit_recipient';
+        return 'lle_hermes_crudit_link';
     }
 }

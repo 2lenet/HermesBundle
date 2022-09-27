@@ -34,13 +34,13 @@ class Link
     protected string $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail")
+     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail", inversedBy="links", cascade={"persist"})
      * @Assert\NotBlank
      */
     protected Mail $mail;
 
     /**
-     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="recipient", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="link", cascade={"persist", "remove"})
      */
     protected Collection $linkOpenings;
 
@@ -52,6 +52,16 @@ class Link
     public function __toString(): string
     {
         return $this->url;
+    }
+
+    public function getTotalOpened(): int
+    {
+        $total = 0;
+        foreach ($this->getLinkOpenings() as $linkOpening) {
+            $total += $linkOpening->getNbOpenings();
+        }
+
+        return $total;
     }
 
     public function getId(): int

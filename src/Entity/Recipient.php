@@ -92,6 +92,17 @@ class Recipient
         return (string)$this->toEmail;
     }
 
+    public function getTotalLinkOpening(): int
+    {
+        $total = 0;
+
+        foreach ($this->linkOpenings as $linkOpening) {
+            $total += $linkOpening->getNbOpenings();
+        }
+
+        return $total;
+    }
+
     /**
      * @return int
      */

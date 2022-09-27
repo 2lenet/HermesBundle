@@ -52,6 +52,12 @@
                                         {{ mail.totalUnsubscribed }}
                                     </span>
                                 </button>
+                                <button class="btn btn-sm position-relative" title="{{ 'title.totalLinkOpenned'|trans({}, 'LleHermesBundle') }}">
+                                    <i class="fas fa-link"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ mail.totalLinkOpening }}
+                                    </span>
+                                </button>
 
                                 {% include '@LleHermes/layout/status.html.twig' with {'status': mail.status, 'position': 'end'} %}
                             </div>
