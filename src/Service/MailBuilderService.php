@@ -52,11 +52,6 @@ class MailBuilderService
         $context->setHost($domain);
         $context->setScheme('https');
 
-        // Generate unsubscribe link
-        if ($mail->getTemplate()->isUnsubscriptions()) {
-            $this->generateUnsubscribeLink($templater, $mail, $recipient);
-        }
-
         $from = new Address($mail->getTemplate()->getSenderEmail(), $mail->getTemplate()->getSenderName() ?? "");
 
         $email = new Email();
@@ -75,24 +70,32 @@ class MailBuilderService
             $email->addCc($cc);
         }
 
-        // Generate confirmation of receipt link
-        $this->generateReceiptConfirmationLink($templater, $mail, $recipient);
-
-        if ($mail->getTemplate()->hasStatistics()) {
-            $this->generateStatsLinks($mail, $recipient);
-        }
-
         $email
             ->from($from)
             ->replyTo($from)
             ->subject($templater->getSubject())
             ->returnPath($returnPath)
         ;
+
+        $html = $templater->getHtml();
+
+        // Generate unsubscribe link
+        if ($mail->getTemplate()->isUnsubscriptions()) {
+            $this->generateUnsubscribeLink($html, $recipient);
+        }
+
+        // Generate confirmation of receipt link
+        $html = $this->generateReceiptConfirmationLink($html, $recipient);
+
+        if ($mail->getTemplate()->hasStatistics()) {
+            $html = $this->generateStatsLinks($html, $mail, $recipient);
+        }
+
         if ($templater->getText()) {
             $email->text($templater->getText());
         }
         if ($templater->getHtml()) {
-            $email->html($templater->getHtml());
+            $email->html($html);
         }
 
         if (count($mail->getAttachement()) > 0) {
@@ -100,12 +103,10 @@ class MailBuilderService
                 $email->attachFromPath($attachmentsFilePath . $attachment['name']);
             }
         }
-        $email = $this->attachBase64Img($email, $domain);
-
-        return $email;
+        return $this->attachBase64Img($email, $domain);
     }
 
-    private function generateUnsubscribeLink(MailTemplater $templater, Mail $mail, Recipient $recipient): Mail
+    private function generateUnsubscribeLink(string $html, Recipient $recipient): string
     {
         $token = md5($recipient->getToEmail() . $this->secret);
         $link = $this->router->generate(
@@ -113,50 +114,42 @@ class MailBuilderService
             ['email' => $recipient->getToEmail(), 'token' => $token],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
-        $templater->addData(["UNSUBSCRIBE_LINK" => $link]);
 
-        return $mail->setHtml(str_replace(
+        return str_replace(
             '{{ UNSUBSCRIBE_LINK }}',
             $link,
-            $mail->getHtml()
-        ));
+            $html
+        );
     }
 
-    private function generateReceiptConfirmationLink(MailTemplater $templater, Mail $mail, Recipient $recipient): Mail
+    private function generateReceiptConfirmationLink(string $html, Recipient $recipient): string
     {
-        $templater->addData(['RECIPIENT_ID' => $recipient->getId()]);
         $route = $this->router->generate('mail_opened', ['recipient' => $recipient->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        return $mail->setHtml(str_replace(
+        return str_replace(
             '</body>',
             '<img src="' . $route . '" alt="" /></body>',
-            $mail->getHtml()
-        ));
+            $html
+        );
     }
 
-    private function generateStatsLinks(Mail $mail, Recipient $recipient): Mail
+    private function generateStatsLinks(string $html, Mail $mail, Recipient $recipient): string
     {
-        if ($mail->getTemplate()->hasStatistics()) {
-            $html = preg_replace_callback(
-                '/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/',
-                function ($matches) use ($mail, $recipient) {
-                    $link = new Link();
-                    $link->setMail($mail);
-                    $link->setUrl($matches[2]);
-                    $this->em->persist($link);
-                    $this->em->flush();
+        return preg_replace_callback(
+            '/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/s',
+            function ($matches) use ($mail, $recipient) {
+                $link = new Link();
+                $link->setMail($mail);
+                $link->setUrl($matches[2]);
+                $this->em->persist($link);
+                $this->em->flush();
 
-                    $route = $this->router->generate('statistics', ['recipient' => $recipient->getId(), 'link' => $link->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $route = $this->router->generate('statistics', ['recipient' => $recipient->getId(), 'link' => $link->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-                    return '<a' . $matches[1] . 'href="' . $route . '"' . $matches[3] . '>' . $matches[4] . '</a>';
-                },
-                $mail->getHtml()
-            );
-
-            return $mail->setHtml($html);
-        }
-
-        return $mail;
+                return '<a' . $matches[1] . 'href="' . $route . '"' . $matches[3] . '>' . $matches[4] . '</a>';
+            },
+            $html
+        );
     }
 
     public function attachBase64Img(Email $email, string $domain): Email

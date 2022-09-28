@@ -70,7 +70,7 @@ title:
     totalToSend: Mails à envoyer
     totalError: Mails en erreur
     totalUnsubscribed: Total désinscrits
-    totalLinkOpenned: Total liens ouverts
+    totalLinkOpened: Total liens ouverts
     totalOpened: Taux d'ouverture
     totalSended: Mails envoyés
 

@@ -56,7 +56,7 @@ field:
     toname: To name
     unsubscriptions: Unsubscriptions
     jsonattachement: Attachments
-    totalLinkOpening: Number of links openned
+    totalLinkOpening: Number of links opened
     link: Link
     url: URL
     nbopenings: Opening number
@@ -70,7 +70,7 @@ title:
     totalToSend: Mails to send
     totalError: Mails in error
     totalUnsubscribed: Total unsubscribed
-    totalLinkOpenned: Total links openned
+    totalLinkOpened: Total links opened
     totalOpened: Opening rate
     totalSended: Sended mails
 

@@ -31,14 +31,14 @@ class LinkCrudConfig extends AbstractCrudConfig
         $mail = Field::new('mail', null, [
             'route' => 'lle_hermes_crudit_mail_show',
         ])->setType(DoctrineEntityField::class);
-        $url = Field::new('url');
         $totalOpened = Field::new('totalOpened')->setLabel('field.nbopenings');
+        $url = Field::new('url')->setCssClass('col-12');
 
         if ($key == CrudConfigInterface::INDEX || $key == CrudConfigInterface::SHOW) {
             return [
                 $mail,
-                $url,
-                $totalOpened
+                $totalOpened,
+                $url
             ];
         }
 

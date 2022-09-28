@@ -158,6 +158,10 @@ class Mail
             $openinglinks += $link->getLinkOpenings()->count();
         }
 
+        if ($this->recipients->count() === 0) {
+            return 0;
+        }
+
         return round($openinglinks / $this->recipients->count() * 100, 2);
     }
 
