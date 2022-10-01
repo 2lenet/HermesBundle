@@ -66,10 +66,9 @@ class SenderService
 
         $this->setMailTotalError();
 
-        $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailUnsubscribed();
+        $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
 
-        $recipients = $this->recipientRepository
-            ->findRecipientsSending('ok', 'sending', $limit);
+        $recipients = $this->recipientRepository->findRecipientsSending('ok', 'sending', $limit);
         foreach ($recipients as $recipient) {
             if (!$recipient->getMail() && !$recipient->getCcMail()) {
                 throw new NoMailFoundException($recipient->getId());
@@ -79,24 +78,26 @@ class SenderService
             $template = $mail->getTemplate();
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
-            if ($template->isUnsubscriptions() == true) {
+            if ($template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus(StatusEnum::UNSUBSCRIBED);
-                } else {
-                    if ($this->send($mail, $recipient)) {
-                        $nb++;
-                    } else {
-                        print("error sending to ". $recipient);
-                    }
-                }
-            } else {
-                if ($this->send($mail, $recipient)) {
-                    $nb++;
-                } else {
-                    print("error sending to ". $recipient);
+                    $this->entityManager->persist($recipient);
+                    $this->entityManager->flush();
+
+                    $this->updateMail($mail);
+                    continue;
                 }
             }
+
+            if ($this->send($mail, $recipient)) {
+                $nb++;
+            } else {
+                print("error sending to " . $recipient);
+            }
+
+            $this->updateMail($mail);
         }
+
         return $nb;
     }
 
@@ -125,7 +126,6 @@ class SenderService
 
             $this->entityManager->flush();
 
-            $this->updateMailAndRecipient($mail);
             return true;
         } catch (TransportException $transportException) {
             $recipient->setStatus(StatusEnum::ERROR);
@@ -149,26 +149,30 @@ class SenderService
 
         /** @var string $domain */
         $domain = $this->parameterBag->get('lle_hermes.app_domain');
-
-        // Generate unsubscribe link
         /** @var string $secret */
         $secret = $this->parameterBag->get('lle_hermes.app_secret');
-        $token = md5($recipient->getToEmail() . $secret);
+        $returnPath = $this->parameterBag->get('lle_hermes.bounce_email');
         $context = $this->router->getContext();
         $context->setHost($domain);
         $context->setScheme('https');
-        $link = $this->router->generate(
-            'unsubscribe',
-            ['email' => $recipient->getToEmail(), 'token' => $token],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        );
-        $templater->addData(["UNSUBSCRIBE_LINK" => $link]);
 
-        /** @var string $sender */
-        $returnPath = $this->parameterBag->get('lle_hermes.bounce_email');
+        // Generate unsubscribe link
+        if ($mail->getTemplate()->isUnsubscriptions()) {
+            $token = md5($recipient->getToEmail() . $secret);
+            $link = $this->router->generate(
+                'unsubscribe',
+                ['email' => $recipient->getToEmail(), 'token' => $token],
+                UrlGeneratorInterface::ABSOLUTE_URL
+            );
+            $templater->addData(["UNSUBSCRIBE_LINK" => $link]);
+            $mail->setHtml(str_replace(
+                '{{ UNSUBSCRIBE_LINK }}',
+                $link,
+                $mail->getHtml()
+            ));
+        }
 
         $from = new Address($mail->getTemplate()->getSenderEmail(), $mail->getTemplate()->getSenderName() ?? "");
-
 
         $email = new Email();
 
@@ -201,7 +205,7 @@ class SenderService
             ->replyTo($from)
             ->subject($templater->getSubject())
             ->returnPath($returnPath)
-            ;
+        ;
         if ($templater->getText()) {
             $email->text($templater->getText());
         }
@@ -214,9 +218,8 @@ class SenderService
                 $email->attachFromPath($attachmentsFilePath . $attachment['name']);
             }
         }
-        $email = $this->attachBase64Img($email, $domain);
 
-        return $email;
+        return $this->attachBase64Img($email, $domain);
     }
 
     protected function attachBase64Img(Email $email, string $domain): Email
@@ -240,7 +243,7 @@ class SenderService
         return $email;
     }
 
-    protected function updateMailAndRecipient(Mail $mail): void
+    protected function updateMail(Mail $mail): void
     {
         $destinataireSent = $this->recipientRepository
             ->findBy(['status' => StatusEnum::SENT, 'mail' => $mail]);

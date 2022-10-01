@@ -52,6 +52,7 @@ field:
     jsonattachement: Attachments
 
 title:
+    dashboard: Dashboard
     totalToSend: Mails to send
     totalError: Mails in error
     totalUnsubscribed: Total unsubscribed
@@ -77,3 +78,12 @@ pagination:
     of: "of"
     noItem: "No mails found"
     limit: "Number of mails"
+
+text:
+    confirmUnsubscribtionQuestion: Do you really want to unsubscribe the following email address?
+    confirmUnsubscribtion: Yes, unsubscribe
+    cancelUnsubscribtion: No, cancel
+    errorOccured: "An error has occurred: token disparity"
+    unsubscribtionConfirmed: Unsubscription confirmed, you can close this window
+    unsubscribtionCancelled: Unsubscription cancelled, you can close this window
+    alreadyUnsubscribe: You are already unsubscribed, you can close this window
