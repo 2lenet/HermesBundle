@@ -1,5 +1,3 @@
 {% if value %}
-    {% for recipient in value %}
-        <p>{{ recipient }}</p>
-    {% endfor %}
+    {{ value|length }}
 {% endif %}

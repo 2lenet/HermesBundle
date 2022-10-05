@@ -18,10 +18,14 @@ crud:
             template: Modèle %entity%
             mail: ""
             recipient: Destinataire %entity%
+            link: Lien %entity%
         edit:
             template: Édition modèle %entity%
-    tab:
-        recipients: Destinataires
+
+tab:
+    recipients: Destinataires
+    links: Liens
+    linkOpening: Liens ouverts
 
 export:
     csv: Csv
@@ -32,6 +36,7 @@ field:
     libelle: Libellé
     mail: Mail
     recipients: Destinataires
+    recipient: Destinataire
     'mail:sendingDate': Date d'envoi
     openDate: Date d'ouverture
     opendate: Date d'ouverture
@@ -42,6 +47,7 @@ field:
     sendingDate: Date d'envoi
     sendingdate: Date d'envoi
     status: Statut
+    totalOpened: Taux d'ouverture
     html: HTML
     subject: Sujet
     toEmail: À email
@@ -50,12 +56,21 @@ field:
     toname: À nom
     unsubscriptions: Désinscriptions
     jsonattachement: Pièces jointes
+    totalLinkOpening: Nombre de liens ouverts
+    link: Lien
+    url: URL
+    nbopenings: Nombre d'ouvertures
+    nbopeningsLinks: Nombre d'ouverture de liens
+    linkOpeningRate: Taux d'ouverture de liens
+    firstLinkOpening: Date de première ouverture
+    lastLinkOpening: Date de dernière ouverture
 
 title:
     dashboard: Tableau de bord
     totalToSend: Mails à envoyer
     totalError: Mails en erreur
     totalUnsubscribed: Total désinscrits
+    totalLinkOpened: Total liens ouverts
     totalOpened: Taux d'ouverture
     totalSended: Mails envoyés
 

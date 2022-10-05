@@ -21,6 +21,7 @@ class TemplateType extends AbstractType
         $builder->add('senderEmail', EmailType::class);
         $builder->add('mjml', MjmlType::class);
         $builder->add('text', TextareaType::class);
+        $builder->add('statistics');
     }
 
     public function getName(): string

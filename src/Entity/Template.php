@@ -81,6 +81,11 @@ class Template
      */
     protected bool $unsubscriptions = true;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected bool $statistics = true;
+
     public function __toString(): string
     {
         return sprintf('%s %s', $this->code, $this->getSubject());
@@ -263,6 +268,18 @@ class Template
     public function setUnsubscriptions(bool $unsubscriptions): Template
     {
         $this->unsubscriptions = $unsubscriptions;
+        return $this;
+    }
+
+    public function hasStatistics(): bool
+    {
+        return $this->statistics;
+    }
+
+    public function setStatistics(bool $statistics): Template
+    {
+        $this->statistics = $statistics;
+
         return $this;
     }
 }

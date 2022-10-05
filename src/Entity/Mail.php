@@ -124,15 +124,45 @@ class Mail
      */
     protected Collection $ccRecipients;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\Link", mappedBy="mail", cascade={"persist", "remove"})
+     */
+    protected Collection $links;
+
     public function __construct()
     {
         $this->recipients = new ArrayCollection();
         $this->ccRecipients = new ArrayCollection();
+        $this->links = new ArrayCollection();
     }
 
     public function __toString(): string
     {
         return (string)$this->subject;
+    }
+
+    public function getTotalLinkOpening(): int
+    {
+        $total = 0;
+        foreach ($this->links as $link) {
+            $total += $link->getTotalOpened();
+        }
+
+        return $total;
+    }
+
+    public function getTotalLinkOpeningRate(): float
+    {
+        $openinglinks = 0;
+        foreach ($this->links as $link) {
+            $openinglinks += $link->getLinkOpenings()->count();
+        }
+
+        if ($this->recipients->count() === 0) {
+            return 0;
+        }
+
+        return round($openinglinks / $this->recipients->count() * 100, 2);
     }
 
     /**
@@ -577,5 +607,29 @@ class Mail
                 return $attachement["path"] . $file;
             }
         }
+    }
+
+    public function getLinks(): Collection
+    {
+        return $this->links;
+    }
+
+    public function addLink(Link $link): Mail
+    {
+        if (!$this->links->contains($link)) {
+            $link->setMail($this);
+            $this->links->add($link);
+        }
+
+        return $this;
+    }
+
+    public function removeLink(Link $link): Mail
+    {
+        if ($this->links->contains($link)) {
+            $this->links->removeElement($link);
+        }
+
+        return $this;
     }
 }
