@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,7 +22,12 @@ class TemplateType extends AbstractType
         $builder->add('senderEmail', EmailType::class);
         $builder->add('mjml', MjmlType::class);
         $builder->add('text', TextareaType::class);
-        $builder->add('statistics');
+        $builder->add('unsubscriptions', CheckboxType::class, [
+            'data' => false
+        ]);
+        $builder->add('statistics', CheckboxType::class, [
+            'data' => false
+        ]);
     }
 
     public function getName(): string

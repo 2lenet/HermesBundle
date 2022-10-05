@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\Controller;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Link;
 use Lle\HermesBundle\Entity\LinkOpening;
@@ -32,9 +33,11 @@ class StatisticsController extends AbstractController
             $linkOpening->setRecipient($recipient);
             $linkOpening->setLink($link);
             $linkOpening->setNbOpenings(1);
+            $linkOpening->setCreatedAt(new DateTime());
         } else {
             $nbOpenings = $linkOpening->getNbOpenings() + 1;
             $linkOpening->setNbOpenings($nbOpenings);
+            $linkOpening->setUpdatedAt(new DateTime());
         }
 
         $this->em->persist($linkOpening);

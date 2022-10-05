@@ -10,15 +10,19 @@ use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\HermesBundle\Crudit\Datasource\MailDatasource;
+use Lle\HermesBundle\Entity\Mail;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class MailCrudConfig extends AbstractCrudConfig
 {
+    private RequestStack $requestStack;
     private RecipientCrudConfig $recipientCrudConfig;
     private LinkCrudConfig $linkCrudConfig;
 
-    public function __construct(MailDatasource $datasource, RecipientCrudConfig $recipientCrudConfig, LinkCrudConfig $linkCrudConfig)
+    public function __construct(MailDatasource $datasource, RequestStack $requestStack, RecipientCrudConfig $recipientCrudConfig, LinkCrudConfig $linkCrudConfig)
     {
         $this->datasource = $datasource;
+        $this->requestStack = $requestStack;
         $this->recipientCrudConfig = $recipientCrudConfig;
         $this->linkCrudConfig = $linkCrudConfig;
     }
@@ -46,16 +50,34 @@ class MailCrudConfig extends AbstractCrudConfig
         $attachement = Field::new('jsonAttachement')->setTemplate('@LleHermes/crud/_attachement.html.twig');
 
         if ($key == CrudConfigInterface::SHOW) {
-            return [
+            $fields = [
                 $subject,
                 $sendingDate,
                 $status,
                 $openingRate,
-                $linksOpening,
-                $linkOpeningRate,
                 $html,
                 $attachement,
             ];
+
+            $request = $this->requestStack->getMainRequest();
+            if ($this->getPath(CrudConfigInterface::SHOW)->getRoute() == $request->attributes->get('_route')) {
+                /** @var Mail $mail */
+                $mail = $this->datasource->get($request->attributes->get('id'));
+                if ($mail->getTemplate()->hasStatistics()) {
+                    $fields = [
+                        $subject,
+                        $sendingDate,
+                        $status,
+                        $openingRate,
+                        $linksOpening,
+                        $linkOpeningRate,
+                        $html,
+                        $attachement,
+                    ];
+                }
+            }
+
+            return $fields;
         }
 
         return [
@@ -94,14 +116,29 @@ class MailCrudConfig extends AbstractCrudConfig
 
     public function getTabs(): array
     {
-        return [
+        $tabs = [
             'tab.recipients' => SublistConfig::new('mail', $this->recipientCrudConfig)
                 ->setFields($this->recipientCrudConfig->getSublistFields())
                 ->setActions($this->recipientCrudConfig->getSublistAction()),
-            'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
-                ->setFields($this->linkCrudConfig->getSublistFields())
-                ->setActions($this->linkCrudConfig->getSublistAction())
         ];
+
+        $request = $this->requestStack->getMainRequest();
+        if ($this->getPath(CrudConfigInterface::SHOW)->getRoute() == $request->attributes->get('_route')) {
+            /** @var Mail $mail */
+            $mail = $this->datasource->get($request->attributes->get('id'));
+            if ($mail->getTemplate()->hasStatistics()) {
+                $tabs = [
+                    'tab.recipients' => SublistConfig::new('mail', $this->recipientCrudConfig)
+                        ->setFields($this->recipientCrudConfig->getSublistFields())
+                        ->setActions($this->recipientCrudConfig->getSublistAction()),
+                    'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
+                        ->setFields($this->linkCrudConfig->getSublistFields())
+                        ->setActions($this->linkCrudConfig->getSublistAction())
+                ];
+            }
+        }
+
+        return $tabs;
     }
 
     public function getRootRoute(): string
