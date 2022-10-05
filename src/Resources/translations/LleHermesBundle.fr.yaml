@@ -21,6 +21,10 @@ crud:
             link: Lien %entity%
         edit:
             template: Édition modèle %entity%
+        new:
+            template: Création modèle
+            mail: Création mail
+            recipient: Création destinataire
 
 tab:
     recipients: Destinataires
@@ -55,6 +59,7 @@ field:
     toName: À nom
     toname: À nom
     unsubscriptions: Désinscriptions
+    statistics: Statistiques
     jsonattachement: Pièces jointes
     totalLinkOpening: Nombre de liens ouverts
     link: Lien

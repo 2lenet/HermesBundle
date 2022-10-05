@@ -32,7 +32,8 @@ class TemplateCrudConfig extends AbstractCrudConfig
             ->setTemplate('@LleHermes/crud/_template_html.html.twig')
             ->setCssClass('col-12');
         $unsubscriptions = Field::new('unsubscriptions');
-        // you can return different fields based on the block key
+        $statistics = Field::new('statistics');
+
         if ($key == CrudConfigInterface::INDEX) {
             return [
                 $libelle,
@@ -41,6 +42,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
                 $senderEmail,
                 $code,
                 $unsubscriptions,
+                $statistics
             ];
         }
 
@@ -53,6 +55,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $code,
             $html,
             $unsubscriptions,
+            $statistics
         ];
     }
 
