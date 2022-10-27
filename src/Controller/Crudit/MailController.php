@@ -21,10 +21,12 @@ class MailController extends AbstractCrudController
 {
     use TraitCrudController;
 
-    public function __construct(MailCrudConfig $config, MailRepository $repository)
+    private MailRepository $mailRepository;
+
+    public function __construct(MailCrudConfig $config, MailRepository $mailRepository)
     {
         $this->config = $config;
-        $this->repo = $repository;
+        $this->mailRepository = $mailRepository;
     }
 
     /**
@@ -37,7 +39,7 @@ class MailController extends AbstractCrudController
         $number = (int)$request->get("number", 30);
         $page = (int)$request->get("page", 1);
 
-        $mails = $this->repo->getDashboardMails($page, $number);
+        $mails = $this->mailRepository->getDashboardMails($page, $number);
 
         $total = count($mails);
         $from = $number * ($page - 1) + 1;

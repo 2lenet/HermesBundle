@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Crudit\Config;
 
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
+use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
+use Lle\CruditBundle\Dto\Icon;
+use Lle\CruditBundle\Dto\Path;
 use Lle\HermesBundle\Crudit\Datasource\TemplateDatasource;
 
 class TemplateCrudConfig extends AbstractCrudConfig
@@ -57,6 +60,19 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $unsubscriptions,
             $statistics
         ];
+    }
+
+    public function getItemActions(): array
+    {
+        $actions = parent::getItemActions();
+
+        $actions[] = ItemAction::new(
+            'crud.action.duplicate',
+            new Path('lle_hermes_template_duplicate'),
+            Icon::new('clone')
+        )->setDropdown(true);
+
+        return $actions;
     }
 
     public function getRootRoute(): string

@@ -25,6 +25,8 @@ crud:
             template: Création modèle
             mail: Création mail
             recipient: Création destinataire
+    action:
+        duplicate: Dupliquer
 
 tab:
     recipients: Destinataires
@@ -114,3 +116,6 @@ text:
     unsubscribtionConfirmed: Désinscription confirmée, vous pouvez fermer cette fenêtre
     unsubscribtionCancelled: Désinscription annulée, vous pouvez fermer cette fenêtre
     alreadyUnsubscribe: Vous êtes déjà désinscrit, vous pouvez fermer cette fenêtre
+
+flash:
+    copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
