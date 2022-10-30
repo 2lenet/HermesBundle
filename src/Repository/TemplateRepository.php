@@ -23,4 +23,13 @@ class TemplateRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Template::class);
     }
+
+    public function duplicateTemplate(Template $template, string $code): Template
+    {
+        $copyTemplate = clone $template;
+        $copyTemplate->setLibelle('Copy of ' . $template->getLibelle());
+        $copyTemplate->setCode($code);
+
+        return $copyTemplate;
+    }
 }

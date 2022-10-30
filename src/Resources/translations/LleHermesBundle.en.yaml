@@ -25,6 +25,8 @@ crud:
             template: Create template
             mail: Create mail
             recipient: Create recipient
+    action:
+        duplicate: Duplicate
 
 tab:
     recipients: Recipients
@@ -107,3 +109,6 @@ text:
     unsubscribtionConfirmed: Unsubscription confirmed, you can close this window
     unsubscribtionCancelled: Unsubscription cancelled, you can close this window
     alreadyUnsubscribe: You are already unsubscribed, you can close this window
+
+flash:
+    copyAlreadyExist: A copy of this template already exists, please edit the code of the copy and try again
