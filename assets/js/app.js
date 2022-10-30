@@ -2,7 +2,7 @@ import grapesjs from "grapesjs";
 import grapesjsmjml from "grapesjs-mjml";
 import fr from "grapesjs/locale/fr";
 import mjmlFr from "./locale/fr";
-import mjml2html from 'mjml'
+import mjml2html from "mjml-browser";
 
 let onLoad = (callback) => {
     if (document.readyState !== "loading") {
@@ -39,7 +39,7 @@ onLoad(() => {
 
         function update() {
             let mjml = editor.getHtml(); // the code inside the editor is actually MJML, not HTML
-            // DONT USE THE GRAPEJS HTML CODE IT'S UGLY
+            // DONT USE THE GRAPEJS HTML CODE IT DOESN'T INCLUDE CSS
             input.value = JSON.stringify({
                 mjml: mjml,
                 html: mjml2html(mjml), // computed HTML from MJML
@@ -51,6 +51,12 @@ onLoad(() => {
 
         editor.on("update", () => {
             update();
+        });
+        editor.on("modal:open", () => {
+            const button = document.querySelector('.gjs-btn-prim');
+            if (button) {
+                button.setAttribute("type", "button");
+            }
         });
     });
 });

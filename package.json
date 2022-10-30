@@ -34,5 +34,8 @@
         "grapesjs": "^0.17.29",
         "grapesjs-mjml": "^0.5.8",
         "mjml": "^4.12.0"
+    },
+    "devDependencies": {
+        "file-loader": "^6.2.0"
     }
 }
