@@ -116,6 +116,13 @@ class RecipientCrudConfig extends AbstractCrudConfig
         ];
     }
 
+    public function getDefaultSort(): array
+    {
+        return [
+            ['id', 'ASC']
+        ];
+    }
+
     public function getRootRoute(): string
     {
         return 'lle_hermes_crudit_recipient';
