@@ -19,6 +19,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->getRootNode();
         $children = $rootNode->children();
         $children->scalarNode('root_dir')->isRequired()->end();
+        $children->scalarNode('upload_path')->defaultValue('/upload/images/')->end();
         $children->scalarNode('app_secret')->isRequired()->end();
         $children->scalarNode('app_domain')->isRequired()->end();
         $children->scalarNode('bounce_email')->isRequired()->end();

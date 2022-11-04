@@ -40,8 +40,17 @@ You can configure if you want or not icons in the menu :
 
 ```yaml 
 lle_hermes:
-  menu_icons: false
+    menu_icons: false
 ```
+
+You can configure the path for the images converted from base64. By default, path is `/upload/images/`:
+
+```yaml 
+lle_hermes:
+    upload_path: '/uploads/
+```
+
+Make sure that this repository exists.
 
 
 ### Step 3: Configure locales
