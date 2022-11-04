@@ -36,6 +36,13 @@ lle_hermes:
 ```
 The bounce email is the adress where error emails will be sent
 
+You can configure if you want or not icons in the menu :
+
+```yaml 
+lle_hermes:
+  menu_icons: false
+```
+
 
 ### Step 3: Configure locales
 You must configure locale for Crudit dependency. For that, add the folloxing lines in `config/services.yaml`:
@@ -77,8 +84,8 @@ Then, add the bundle route to the `config/routes.yaml` file of your project:
 
 # ...
 hermes:
-  resource: "@LleHermesBundle/Resources/config/routes.xml"
-  prefix: /hermes
+    resource: "@LleHermesBundle/Resources/config/routes.xml"
+    prefix: /hermes
 ```
 
 ## Notes

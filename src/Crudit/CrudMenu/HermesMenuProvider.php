@@ -6,6 +6,7 @@ use Lle\CruditBundle\Contracts\MenuProviderInterface;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Layout\LinkElement;
 use Lle\CruditBundle\Dto\Path;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * Class HermesMenuProvider
@@ -15,20 +16,29 @@ use Lle\CruditBundle\Dto\Path;
  */
 class HermesMenuProvider implements MenuProviderInterface
 {
+    protected ParameterBagInterface $parameters;
+
+    public function __construct(ParameterBagInterface $parameters)
+    {
+        $this->parameters = $parameters;
+    }
+
     public function getMenuEntry(): iterable
     {
+        $hasIcons = $this->parameters->get('lle_hermes.menu_icons');
+
         /** @var LinkElement $menu */
         $menu = LinkElement::new(
             'menu.lle_hermes',
             Path::new('lle_hermes_dashboard'),
-            Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
+            ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
         )->setRole('ROLE_LLE_HERMES');
 
         $menu->addChild(
             LinkElement::new(
                 'menu.lle_hermes_dashboard',
                 Path::new('lle_hermes_dashboard'),
-                Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
+                ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
                 "ROLE_LLE_HERMES"
             )
         );
@@ -36,7 +46,7 @@ class HermesMenuProvider implements MenuProviderInterface
             LinkElement::new(
                 'menu.lle_hermes_template',
                 Path::new('lle_hermes_crudit_template_index'),
-                Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
+                ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
                 "ROLE_TEMPLATE_INDEX"
             )
         );
@@ -44,7 +54,7 @@ class HermesMenuProvider implements MenuProviderInterface
             LinkElement::new(
                 'menu.lle_hermes_mail',
                 Path::new('lle_hermes_crudit_mail_index'),
-                Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
+                ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
                 "ROLE_MAIL_INDEX"
             )
         );
@@ -52,10 +62,11 @@ class HermesMenuProvider implements MenuProviderInterface
             LinkElement::new(
                 'menu.lle_hermes_recipient',
                 Path::new('lle_hermes_crudit_recipient_index'),
-                Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG),
+                ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
                 "ROLE_RECIPIENT_INDEX"
             )
         );
+
         return [
             $menu
         ];

@@ -28,7 +28,8 @@ class LleHermesExtensionTest extends TestCase
                     'app_domain' => '',
                     'bounce_email' => '',
                     'bounce_pass' => '',
-                    'bounce_host' => ''
+                    'bounce_host' => '',
+                    'menu_icons' => ''
                 ]
             ],
             $containerBuilder
