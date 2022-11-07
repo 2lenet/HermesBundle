@@ -89,14 +89,16 @@ class MailController extends AbstractCrudController
 
     private function deleteAttachements(string $path)
     {
-        $files = array_diff(scandir($path), ['.', '..']);
-        foreach ($files as $file) {
-            if (is_dir($path . '/' . $file)) {
-                $this->deleteAttachements($path . '/' . $file);
-            } else {
-                unlink($path . '/' . $file);
+        if (file_exists($path)) {
+            $files = array_diff(scandir($path), ['.', '..']);
+            foreach ($files as $file) {
+                if (is_dir($path . '/' . $file)) {
+                    $this->deleteAttachements($path . '/' . $file);
+                } else {
+                    unlink($path . '/' . $file);
+                }
             }
+            rmdir($path);
         }
-        rmdir($path);
     }
 }
