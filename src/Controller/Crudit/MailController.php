@@ -9,6 +9,8 @@ use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Repository\MailRepository;
+use Lle\HermesBundle\Service\MailFactory;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +24,13 @@ class MailController extends AbstractCrudController
     use TraitCrudController;
 
     private MailRepository $mailRepository;
+    private ParameterBagInterface $parameterBag;
 
-    public function __construct(MailCrudConfig $config, MailRepository $mailRepository)
+    public function __construct(MailCrudConfig $config, MailRepository $mailRepository, ParameterBagInterface $parameterBag)
     {
         $this->config = $config;
         $this->mailRepository = $mailRepository;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -62,5 +66,39 @@ class MailController extends AbstractCrudController
     public function showAttachement(Mail $mail, string $file)
     {
         return new BinaryFileResponse($mail->getPathOfAttachement($file));
+    }
+
+    /**
+     * @Route("/delete/{id}")
+     */
+    public function delete(Request $request): Response
+    {
+        /** @var Mail $mail */
+        $mail = $this->getResource($request, false);
+
+        $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_DELETE', $mail);
+
+        $attachementsPath = sprintf($this->parameterBag->get('lle_hermes.root_dir') . MailFactory::ATTACHMENTS_DIR, $mail->getId());
+        $this->deleteAttachements($attachementsPath);
+
+        $dataSource = $this->config->getDatasource();
+        $dataSource->delete($dataSource->getIdentifier($mail));
+
+        return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+    }
+
+    private function deleteAttachements(string $path)
+    {
+        if (file_exists($path)) {
+            $files = array_diff(scandir($path), ['.', '..']);
+            foreach ($files as $file) {
+                if (is_dir($path . '/' . $file)) {
+                    $this->deleteAttachements($path . '/' . $file);
+                } else {
+                    unlink($path . '/' . $file);
+                }
+            }
+            rmdir($path);
+        }
     }
 }

@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Lle\HermesBundle\Enum\StatusEnum;
 use Lle\HermesBundle\Repository\MailRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -139,6 +140,18 @@ class Mail
     public function __toString(): string
     {
         return (string)$this->subject;
+    }
+
+    /**
+     * @return string|bool
+     */
+    public function canDelete()
+    {
+        if ($this->status === StatusEnum::SENDING) {
+            return 'crud.canDelete.mail';
+        }
+
+        return true;
     }
 
     public function getTotalLinkOpening(): int
@@ -584,15 +597,6 @@ class Mail
         }
 
         return $this;
-    }
-
-    public function canEdit(): bool
-    {
-        if ($this->status === "draft") {
-            return true;
-        }
-
-        return false;
     }
 
     public function getJsonAttachement(): array

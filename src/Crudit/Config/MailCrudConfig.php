@@ -6,6 +6,8 @@ namespace Lle\HermesBundle\Crudit\Config;
 
 use Lle\CruditBundle\Brick\SublistBrick\SublistConfig;
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
+use Lle\CruditBundle\Dto\Action\DeleteAction;
+use Lle\CruditBundle\Dto\Action\EditAction;
 use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
@@ -98,6 +100,14 @@ class MailCrudConfig extends AbstractCrudConfig
             Icon::new('search')
         )->setCssClass('btn btn-primary btn-sm mr-1');
 
+        $actions[] = DeleteAction::new(
+            'action.delete',
+            $this->getPath(CrudConfigInterface::DELETE),
+            Icon::new('trash-alt')
+        )
+            ->setCssClass('btn btn-danger btn-sm mr-1')
+            ->setModal("@LleCrudit/modal/_confirm_delete.html.twig");
+
         return $actions;
     }
 
@@ -110,6 +120,14 @@ class MailCrudConfig extends AbstractCrudConfig
             $this->getPath(CrudConfigInterface::INDEX),
             Icon::new('list')
         )->setCssClass('btn btn-secondary btn-sm mr-1');
+
+        $actions[] = DeleteAction::new(
+            'action.delete',
+            $this->getPath(CrudConfigInterface::DELETE),
+            Icon::new('trash-alt')
+        )
+            ->setCssClass('btn btn-danger btn-sm mr-1')
+            ->setModal("@LleCrudit/modal/_confirm_delete.html.twig");
 
         return $actions;
     }

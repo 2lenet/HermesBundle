@@ -27,6 +27,8 @@ crud:
             recipient: Create recipient
     action:
         duplicate: Duplicate
+    canDelete:
+        mail: The email is being sent
 
 tab:
     recipients: Recipients

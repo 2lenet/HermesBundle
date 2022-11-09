@@ -27,6 +27,8 @@ crud:
             recipient: Création destinataire
     action:
         duplicate: Dupliquer
+    canDelete:
+        mail: Le mail est en cours d'envoi
 
 tab:
     recipients: Destinataires
