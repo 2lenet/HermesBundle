@@ -158,12 +158,14 @@ class MailBuilderService
             '/src\s*=\s*"data:image\/(png|jpg|jpeg|gif);base64,(.*?)"/i',
             function ($matches) use ($domain) {
                 $content = base64_decode($matches[2]);
-                $filenamePath = md5(time() . uniqid('', true)) . ".jpg";
-                /** @var string $rootDir */
+                $filenamePath = md5(time() . uniqid('', true)) . '.jpg';
                 $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
-                $filename = $rootDir . '/public/upload/images/' . $filenamePath;
+                $uploadPath = $this->parameterBag->get('lle_hermes.upload_path');
+                $filename = $rootDir . '/public' . $uploadPath . $filenamePath;
+
                 file_put_contents($filename, $content);
-                return 'src="https://' . $domain . '/upload/images/' . $filenamePath . '"';
+
+                return 'src="https://' . $domain . $uploadPath . $filenamePath . '"';
             },
             (string)$email->getHtmlBody()
         );

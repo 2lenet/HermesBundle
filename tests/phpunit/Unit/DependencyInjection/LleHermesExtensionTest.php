@@ -24,6 +24,7 @@ class LleHermesExtensionTest extends TestCase
             [
                 'lle_hermes' => [
                     'root_dir' => '',
+                    'upload_path' => '',
                     'app_secret' => '',
                     'app_domain' => '',
                     'bounce_email' => '',
