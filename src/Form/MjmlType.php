@@ -18,7 +18,7 @@ class MjmlType extends AbstractType
 
             /** @var Template $template */
             $template = $event->getForm()->getParent()->getData();
-            $template->setHtml($data["html"]);
+            $template->setHtml($data["html"]['html']);
 
             $event->setData($data["mjml"]);
         });

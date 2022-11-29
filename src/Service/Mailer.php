@@ -73,7 +73,6 @@ class Mailer
             ->findOneBy([
                 "code" => $mail->getTemplate()
             ]);
-
         if (!$template) {
             throw new TemplateNotFoundException($mail->getTemplate());
         }
