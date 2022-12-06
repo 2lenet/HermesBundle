@@ -79,12 +79,12 @@ class Template
     /**
      * @ORM\Column(type="boolean")
      */
-    protected bool $unsubscriptions = true;
+    protected bool $unsubscriptions = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    protected bool $statistics = true;
+    protected bool $statistics = false;
 
     public function __toString(): string
     {
