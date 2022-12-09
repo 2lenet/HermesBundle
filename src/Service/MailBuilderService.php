@@ -52,7 +52,7 @@ class MailBuilderService
         $context->setHost($domain);
         $context->setScheme('https');
 
-        $from = new Address($mail->getTemplate()->getSenderEmail(), $mail->getTemplate()->getSenderName() ?? "");
+        $from = new Address($mail->getTemplate()->getSenderEmail(), $templater->getSenderName() ?? "");
 
         $email = new Email();
 
@@ -78,7 +78,6 @@ class MailBuilderService
         ;
 
         $html = $templater->getHtml();
-
         // Generate unsubscribe link
         if ($mail->getTemplate()->isUnsubscriptions()) {
             $html = $this->generateUnsubscribeLink($html, $recipient);
@@ -91,12 +90,9 @@ class MailBuilderService
             $html = $this->generateStatsLinks($html, $mail, $recipient);
         }
 
-        if ($templater->getText()) {
-            $email->text($templater->getText());
-        }
-        if ($templater->getHtml()) {
-            $email->html($html);
-        }
+        $email->text($templater->getText());
+
+        $email->html($html);
 
         if (count($mail->getAttachement()) > 0) {
             foreach ($mail->getAttachement() as $attachment) {

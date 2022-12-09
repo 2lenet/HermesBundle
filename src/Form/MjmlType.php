@@ -15,7 +15,6 @@ class MjmlType extends AbstractType
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = json_decode($event->getData(), true);
-
             /** @var Template $template */
             $template = $event->getForm()->getParent()->getData();
             $template->setHtml($data["html"]['html']);
