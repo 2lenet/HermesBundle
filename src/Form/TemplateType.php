@@ -23,7 +23,11 @@ class TemplateType extends AbstractType
         $builder->add('senderName', TextType::class);
         $builder->add('senderEmail', EmailType::class);
         $builder->add('mjml', MjmlType::class);
-        $builder->add('text', TextareaType::class);
+        $builder->add('text', TextareaType::class, [
+            'attr' => [
+                'rows' => 20
+            ]
+        ]);
         $builder->add('unsubscriptions', CheckboxType::class, [
             "required" => false,
             "label" => "field.unsubscriptions",

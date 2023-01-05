@@ -29,41 +29,32 @@ class MailTemplater
 
     public function getSubject(): string
     {
-        $this->twig->disableStrictVariables();
-
-        $result = $this->twig
-            ->createTemplate($this->mail->getSubject())
-            ->render($this->data);
-
-        if ($this->twig->isDebug()) {
-            $this->twig->enableStrictVariables();
-        }
-
-        return $result;
+        return $this->render($this->mail->getSubject());
     }
 
     public function getText(): string
     {
-        $this->twig->disableStrictVariables();
-
-        $result = $this->twig
-            ->createTemplate((string)$this->mail->getText())
-            ->render($this->data);
-
-        if ($this->twig->isDebug()) {
-            $this->twig->enableStrictVariables();
-        }
-
-        return $result;
+        return $this->render((string)$this->mail->getText());
     }
 
     public function getHtml(): string
     {
+        return $this->render((string)$this->mail->getHtml());
+    }
+
+    public function getSenderName(): string
+    {
+        return $this->render((string)$this->mail->getTemplate()->getSenderName());
+    }
+
+    private function render(string $string)
+    {
         $this->twig->disableStrictVariables();
 
         $result = $this->twig
-            ->createTemplate((string)$this->mail->getHtml())
+            ->createTemplate(html_entity_decode($string))
             ->render($this->data);
+
 
         if ($this->twig->isDebug()) {
             $this->twig->enableStrictVariables();
