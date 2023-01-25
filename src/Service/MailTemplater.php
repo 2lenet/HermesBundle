@@ -39,7 +39,7 @@ class MailTemplater
 
     public function getHtml(): string
     {
-        return $this->render((string)$this->mail->getHtml());
+        return $this->render((string)$this->mail->getHtml(), false);
     }
 
     public function getSenderName(): string
@@ -47,13 +47,17 @@ class MailTemplater
         return $this->render((string)$this->mail->getTemplate()->getSenderName());
     }
 
-    private function render(string $string)
+    private function render(string $string, bool $decodeHtml = true)
     {
         $this->twig->disableStrictVariables();
 
         $result = $this->twig
-            ->createTemplate(html_entity_decode($string))
+            ->createTemplate($string)
             ->render($this->data);
+
+        if ($decodeHtml) {
+            $result = html_entity_decode($result);
+        }
 
 
         if ($this->twig->isDebug()) {

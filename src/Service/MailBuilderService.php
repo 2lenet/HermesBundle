@@ -73,7 +73,7 @@ class MailBuilderService
         $email
             ->from($from)
             ->replyTo($from)
-            ->subject(html_entity_decode($templater->getSubject()))
+            ->subject($templater->getSubject())
             ->returnPath($returnPath)
         ;
 
