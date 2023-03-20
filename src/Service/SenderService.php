@@ -44,6 +44,7 @@ class SenderService
     public function sendAllMail(int $limit = 10): int
     {
         $nb = 0;
+        $error = false;
         $this->recipientRepository->disableErrors();
 
         $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
@@ -72,10 +73,15 @@ class SenderService
             if ($this->send($mail, $recipient)) {
                 $nb++;
             } else {
+                $error = true;
                 print("error sending to " . $recipient);
             }
 
             $this->updateMail($mail);
+        }
+        if ($error) {
+            $mail->setStatus(StatusEnum::ERROR);
+            $this->entityManager->flush();
         }
 
         return $nb;
