@@ -64,7 +64,7 @@ class Mailer
      * Create and send a mail.
      * @param MailDto $mail Mail object
      */
-    public function send(MailDto $mail, $status = Mail::SENDING_STATUS): void
+    public function send(MailDto $mail, $status = Mail::STATUS_SENDING): void
     {
         $template = $this->em->getRepository(Template::class)
             ->findOneBy([
@@ -76,7 +76,7 @@ class Mailer
 
         $mailObj = $this->mailerFactory->createMailFromDto($mail, $template);
 
-        $mailObj->setStatus(Mail::DRAFT_STATUS);
+        $mailObj->setStatus(Mail::STATUS_DRAFT);
         $this->em->persist($mailObj);
         $this->em->flush();
 

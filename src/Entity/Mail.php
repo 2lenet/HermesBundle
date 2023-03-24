@@ -20,10 +20,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Mail
 {
-    public const DRAFT_STATUS = 'draft';
-    public const SENDING_STATUS = 'sending';
-    public const SENT_STATUS = 'sent';
-    public const CANCELLED_STATUS = 'cancelled';
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_SENDING = 'sending';
+    public const STATUS_SENT = 'sent';
+    public const STATUS_CANCELLED = 'cancelled';
 
     /**
      * @var int
@@ -151,7 +151,7 @@ class Mail
      */
     public function canDelete()
     {
-        if ($this->status === Mail::SENDING_STATUS) {
+        if ($this->status === Mail::STATUS_SENDING) {
             return 'crud.canDelete.mail';
         }
 

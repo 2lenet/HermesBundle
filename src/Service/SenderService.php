@@ -47,7 +47,7 @@ class SenderService
 
         $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
 
-        $recipients = $this->recipientRepository->findRecipientsSending(Recipient::SENDING_STATUS, Mail::SENDING_STATUS, $limit);
+        $recipients = $this->recipientRepository->findRecipientsSending(Recipient::STATUS_SENDING, Mail::STATUS_SENDING, $limit);
         foreach ($recipients as $recipient) {
             if (!$recipient->getMail() && !$recipient->getCcMail()) {
                 throw new NoMailFoundException($recipient->getId());
@@ -59,7 +59,7 @@ class SenderService
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
             if ($template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
-                    $recipient->setStatus(Recipient::UNSUBSCRIBED_STATUS);
+                    $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
                     $this->entityManager->flush();
 
                     $this->updateMail($mail);
@@ -83,7 +83,7 @@ class SenderService
     {
         try {
             $this->mailer->send($this->mailBuilderService->buildMail($mail, $recipient));
-            $recipient->setStatus(Recipient::SENT_STATUS);
+            $recipient->setStatus(Recipient::STATUS_SENT);
             $this->entityManager->persist($recipient);
 
             $mail->setSendingDate(new DateTime());
@@ -93,7 +93,7 @@ class SenderService
 
             return true;
         } catch (TransportException $transportException) {
-            $recipient->setStatus(Recipient::ERROR_STATUS);
+            $recipient->setStatus(Recipient::STATUS_ERROR);
             $this->entityManager->flush();
 
             return false;
@@ -103,22 +103,22 @@ class SenderService
     protected function updateMail(Mail $mail): void
     {
         $destinataireSent = $this->recipientRepository
-            ->findBy(['status' => Recipient::SENT_STATUS, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_SENT, 'mail' => $mail]);
         $mail->setTotalSended(count($destinataireSent));
 
         $unsubscribedMails = $this->recipientRepository
-            ->findBy(['status' => Recipient::UNSUBSCRIBED_STATUS, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_UNSUBSCRIBED, 'mail' => $mail]);
         $mail->setTotalUnsubscribed(count($unsubscribedMails));
 
         $errorMails = $this->recipientRepository
-            ->findBy(['status' => Recipient::ERROR_STATUS, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_ERROR, 'mail' => $mail]);
         $mail->setTotalError(count($errorMails));
 
         $totalRecipientsToSend = $mail->getTotalToSend() - $mail->getTotalUnsubscribed();
         $totalRecipientsSended = $mail->getTotalSended() + $mail->getTotalError();
 
         if ($totalRecipientsSended === $totalRecipientsToSend) {
-            $mail->setStatus(Mail::SENT_STATUS);
+            $mail->setStatus(Mail::STATUS_SENT);
         }
 
         $this->entityManager->flush();

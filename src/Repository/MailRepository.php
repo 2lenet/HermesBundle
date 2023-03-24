@@ -29,7 +29,7 @@ class MailRepository extends ServiceEntityRepository
     public function copyMail(Mail $mail): Mail
     {
         $copyMail = clone $mail;
-        $copyMail->setStatus(Mail::DRAFT_STATUS);
+        $copyMail->setStatus(Mail::STATUS_DRAFT);
         $copyMail->setSendingDate(null);
         $copyMail->setTotalSended(0);
         $copyMail->setTotalOpened(0);
@@ -38,7 +38,7 @@ class MailRepository extends ServiceEntityRepository
 
         foreach ($mail->getRecipients() as $recipient) {
             $cloneRecipient = clone $recipient;
-            $cloneRecipient->setStatus(Mail::DRAFT_STATUS);
+            $cloneRecipient->setStatus(Mail::STATUS_DRAFT);
             $cloneRecipient->setDateOuverture(null);
             $copyMail->addRecipient($cloneRecipient);
         }

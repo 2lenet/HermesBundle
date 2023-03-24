@@ -63,7 +63,7 @@ class RecipientRepository extends ServiceEntityRepository
     {
         $this->createQueryBuilder('e')
             ->update()
-            ->set('e.status', Recipient::UNSUBSCRIBED_STATUS)
+            ->set('e.status', Recipient::STATUS_UNSUBSCRIBED)
             ->join(EmailError::class, 'ee', Join::WITH, 'ee.mail = e.toEmail')
             ->getQuery()->execute();
     }

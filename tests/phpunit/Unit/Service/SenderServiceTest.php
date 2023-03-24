@@ -53,10 +53,10 @@ class SenderServiceTest extends TestCase
             ->method('persist')
             ->withConsecutive(
                 [self::callback(function (Recipient $recipient) {
-                    return Recipient::SENT_STATUS === $recipient->getStatus();
+                    return Recipient::STATUS_SENT === $recipient->getStatus();
                 })],
                 [self::callback(function (Mail $mail) {
-                    return Mail::SENT_STATUS === $mail->getStatus()
+                    return Mail::STATUS_SENT === $mail->getStatus()
                         && 1 === $mail->getTotalSended()
                         && 1 === $mail->getTotalUnsubscribed()
                         && 1 === $mail->getTotalError();
@@ -75,7 +75,7 @@ class SenderServiceTest extends TestCase
         $repo->expects(self::exactly(1))->method('disableErrors');
         $repo->expects(self::exactly(1))
             ->method('findRecipientsSending')
-            ->with(self::equalTo(Recipient::SENDING_STATUS), self::equalTo(Mail::SENDING_STATUS), self::equalTo(10))
+            ->with(self::equalTo(Recipient::STATUS_SENDING), self::equalTo(Mail::STATUS_SENDING), self::equalTo(10))
             ->will(self::returnValue([$recipient]));
 
         $repo->method('findBy')->willReturn([$recipient]);
@@ -107,7 +107,7 @@ class SenderServiceTest extends TestCase
         $mail->setHtml($template->getHtml());
         $mail->setText($template->getText());
         $mail->setTotalToSend(1);
-        $mail->setStatus(Mail::SENDING_STATUS);
+        $mail->setStatus(Mail::STATUS_SENDING);
 
         return $mail;
     }

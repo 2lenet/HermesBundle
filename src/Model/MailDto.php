@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class MailDto
 {
-    public const DRAFT = Mail::DRAFT_STATUS;
-    public const SENDING = Mail::SENDING_STATUS;
+    public const DRAFT = Mail::STATUS_DRAFT;
+    public const SENDING = Mail::STATUS_SENDING;
 
     /**
      * @var int
@@ -71,7 +71,7 @@ class MailDto
      */
     protected $attachments = [];
 
-    protected $status = Mail::SENDING_STATUS;
+    protected $status = Mail::STATUS_SENDING;
 
     /**
      * @var array
