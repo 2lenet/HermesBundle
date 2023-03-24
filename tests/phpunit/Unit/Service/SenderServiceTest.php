@@ -75,7 +75,7 @@ class SenderServiceTest extends TestCase
         $repo->expects(self::exactly(1))->method('disableErrors');
         $repo->expects(self::exactly(1))
             ->method('findRecipientsSending')
-            ->with(self::equalTo('ok'), self::equalTo('sending'), self::equalTo(10))
+            ->with(self::equalTo(Recipient::SENDING_STATUS), self::equalTo(Mail::SENDING_STATUS), self::equalTo(10))
             ->will(self::returnValue([$recipient]));
 
         $repo->method('findBy')->willReturn([$recipient]);

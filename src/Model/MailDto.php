@@ -71,7 +71,7 @@ class MailDto
      */
     protected $attachments = [];
 
-    protected $status = Mail::SENDING;
+    protected $status = Mail::SENDING_STATUS;
 
     /**
      * @var array
