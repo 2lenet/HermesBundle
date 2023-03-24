@@ -2,7 +2,7 @@
 
 namespace Lle\HermesBundle\Model;
 
-use Lle\HermesBundle\Enum\StatusEnum;
+use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Model\ContactDto;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -13,9 +13,8 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class MailDto
 {
-    const SENDING = StatusEnum::SENDING;
-
-    const DRAFT = StatusEnum::DRAFT;
+    public const DRAFT = Mail::DRAFT_STATUS;
+    public const SENDING = Mail::SENDING_STATUS;
 
     /**
      * @var int
@@ -72,7 +71,7 @@ class MailDto
      */
     protected $attachments = [];
 
-    protected $status = StatusEnum::SENDING;
+    protected $status = Mail::SENDING;
 
     /**
      * @var array

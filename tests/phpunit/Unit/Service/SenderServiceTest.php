@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
-use Lle\HermesBundle\Enum\StatusEnum;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
@@ -54,10 +53,10 @@ class SenderServiceTest extends TestCase
             ->method('persist')
             ->withConsecutive(
                 [self::callback(function (Recipient $recipient) {
-                    return StatusEnum::SENT === $recipient->getStatus();
+                    return Recipient::SENT_STATUS === $recipient->getStatus();
                 })],
                 [self::callback(function (Mail $mail) {
-                    return StatusEnum::SENT === $mail->getStatus()
+                    return Mail::SENT_STATUS === $mail->getStatus()
                         && 1 === $mail->getTotalSended()
                         && 1 === $mail->getTotalUnsubscribed()
                         && 1 === $mail->getTotalError();
@@ -108,7 +107,8 @@ class SenderServiceTest extends TestCase
         $mail->setHtml($template->getHtml());
         $mail->setText($template->getText());
         $mail->setTotalToSend(1);
-        $mail->setStatus(StatusEnum::SENDING);
+        $mail->setStatus(Mail::SENDING_STATUS);
+
         return $mail;
     }
 

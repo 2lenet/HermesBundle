@@ -20,6 +20,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Recipient
 {
+    public const SENDING_STATUS = 'sending';
+    public const SENT_STATUS = 'sent';
+    public const CANCELLED_STATUS = 'cancelled';
+    public const UNSUBSCRIBED_STATUS = 'unsubscribed';
+    public const ERROR_STATUS = 'error';
+
     /**
      * @var int
      *

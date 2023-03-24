@@ -23,8 +23,7 @@ class MailFactory
     {
         $mail = new Mail();
         $mail->setTemplate($template);
-        $mail->setStatus($mailDto->getStatus());
-        $mail->setCreatedAt(new \DateTime('now'));
+        $mail->setCreatedAt(new \DateTime());
         $nbDest = 0;
         $destFactory = new DestinataireFactory();
         foreach ($mailDto->getTo() as $contactDto) {
