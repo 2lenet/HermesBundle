@@ -7,3 +7,11 @@ services:
     Lle\HermesBundle\:
         resource: '../../../src/*'
         exclude: '../../../src/{DependencyInjection,Entity,Resources,Enum,LleHermesBundle.php}'
+
+    Lle\HermesBundle\Service\SenderService:
+        arguments:
+            - '@mailer.mailer'
+            - '@doctrine.orm.entity_manager'
+            - '@Lle\HermesBundle\Repository\RecipientRepository'
+            - '@Lle\HermesBundle\Repository\UnsubscribeEmailRepository'
+            - '@Lle\HermesBundle\Service\MailBuilderService'

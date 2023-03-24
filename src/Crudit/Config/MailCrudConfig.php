@@ -11,6 +11,7 @@ use Lle\CruditBundle\Dto\Action\EditAction;
 use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
+use Lle\CruditBundle\Dto\Path;
 use Lle\HermesBundle\Crudit\Datasource\MailDatasource;
 use Lle\HermesBundle\Entity\Mail;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -93,6 +94,14 @@ class MailCrudConfig extends AbstractCrudConfig
     public function getItemActions(): array
     {
         $actions = [];
+
+        $actions[] = ItemAction::new(
+            'action.send',
+            new Path('lle_hermes_crudit_mail_send'),
+            Icon::new('paper-plane')
+        )
+            ->setCssClass('btn btn-success btn-sm mr-1')
+            ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig');
 
         $actions[] = ItemAction::new(
             'action.show',

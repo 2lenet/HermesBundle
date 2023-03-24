@@ -4,6 +4,7 @@ action:
     edit: Modifier
     export: Exporter
     show: Voir
+    send: Envoyer
 
 crudit:
     action: Actions
@@ -27,6 +28,8 @@ crud:
             recipient: Création destinataire
     action:
         duplicate: Dupliquer
+    modal:
+        send_mail: Voulez-vous vraiment envoyer cet email à %nb% destinataires ? Cette action est définitive.
     canDelete:
         mail: Le mail est en cours d'envoi
 
@@ -121,3 +124,4 @@ text:
 
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
+    mail_sended: '%nb% / %nbTotal% mails envoyés'

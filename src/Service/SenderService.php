@@ -40,14 +40,23 @@ class SenderService
         $this->mailBuilderService = $mailBuilderService;
     }
 
-    public function sendAllMail(int $limit = 10): int
+    public function sendAllMails(int $limit = 10): int
     {
-        $nb = 0;
         $this->recipientRepository->disableErrors();
 
-        $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
-
         $recipients = $this->recipientRepository->findRecipientsSending(Recipient::STATUS_SENDING, Mail::STATUS_SENDING, $limit);
+
+        return $this->sendAllRecipients($recipients);
+    }
+
+    /**
+     * @param Recipient[] $recipients
+     */
+    public function sendAllRecipients(array $recipients): int
+    {
+        $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
+        $nb = 0;
+
         foreach ($recipients as $recipient) {
             if (!$recipient->getMail() && !$recipient->getCcMail()) {
                 throw new NoMailFoundException($recipient->getId());
