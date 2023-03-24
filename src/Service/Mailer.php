@@ -3,12 +3,10 @@
 namespace Lle\HermesBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Lle\HermesBundle\Exception\TemplateNotFoundException;
-use Lle\HermesBundle\Model\Mail;
+use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Exception\TemplateNotFoundException;
 use Lle\HermesBundle\Model\MailDto;
-use Lle\HermesBundle\Service\MailFactory;
-
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -64,10 +62,9 @@ class Mailer
 
     /**
      * Create and send a mail.
-     * @param Mail $mail Mail object
-     * @return array
+     * @param MailDto $mail Mail object
      */
-    public function send(MailDto $mail, $status = MailDto::DRAFT)
+    public function send(MailDto $mail, $status = Mail::STATUS_SENDING): void
     {
         $template = $this->em->getRepository(Template::class)
             ->findOneBy([
@@ -78,7 +75,8 @@ class Mailer
         }
 
         $mailObj = $this->mailerFactory->createMailFromDto($mail, $template);
-        $mailObj->setStatus(MailDto::DRAFT);
+
+        $mailObj->setStatus(Mail::STATUS_DRAFT);
         $this->em->persist($mailObj);
         $this->em->flush();
 

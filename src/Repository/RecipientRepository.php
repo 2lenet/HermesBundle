@@ -8,7 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Lle\HermesBundle\Entity\EmailError;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
-use Lle\HermesBundle\Enum\StatusEnum;
 
 /**
  * Class RecipientRepository
@@ -64,7 +63,7 @@ class RecipientRepository extends ServiceEntityRepository
     {
         $this->createQueryBuilder('e')
             ->update()
-            ->set('e.status', StatusEnum::UNSUBSCRIBED)
+            ->set('e.status', Recipient::STATUS_UNSUBSCRIBED)
             ->join(EmailError::class, 'ee', Join::WITH, 'ee.mail = e.toEmail')
             ->getQuery()->execute();
     }

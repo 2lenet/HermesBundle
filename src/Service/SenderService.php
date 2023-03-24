@@ -6,7 +6,6 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
-use Lle\HermesBundle\Enum\StatusEnum;
 use Lle\HermesBundle\Exception\NoMailFoundException;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
@@ -48,7 +47,7 @@ class SenderService
 
         $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
 
-        $recipients = $this->recipientRepository->findRecipientsSending('ok', 'sending', $limit);
+        $recipients = $this->recipientRepository->findRecipientsSending(Recipient::STATUS_SENDING, Mail::STATUS_SENDING, $limit);
         foreach ($recipients as $recipient) {
             if (!$recipient->getMail() && !$recipient->getCcMail()) {
                 throw new NoMailFoundException($recipient->getId());
@@ -60,8 +59,7 @@ class SenderService
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
             if ($template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
-                    $recipient->setStatus(StatusEnum::UNSUBSCRIBED);
-                    $this->entityManager->persist($recipient);
+                    $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
                     $this->entityManager->flush();
 
                     $this->updateMail($mail);
@@ -85,7 +83,7 @@ class SenderService
     {
         try {
             $this->mailer->send($this->mailBuilderService->buildMail($mail, $recipient));
-            $recipient->setStatus(StatusEnum::SENT);
+            $recipient->setStatus(Recipient::STATUS_SENT);
             $this->entityManager->persist($recipient);
 
             $mail->setSendingDate(new DateTime());
@@ -95,7 +93,8 @@ class SenderService
 
             return true;
         } catch (TransportException $transportException) {
-            $recipient->setStatus(StatusEnum::ERROR);
+            $recipient->setStatus(Recipient::STATUS_ERROR);
+            $this->entityManager->flush();
 
             return false;
         }
@@ -104,23 +103,23 @@ class SenderService
     protected function updateMail(Mail $mail): void
     {
         $destinataireSent = $this->recipientRepository
-            ->findBy(['status' => StatusEnum::SENT, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_SENT, 'mail' => $mail]);
         $mail->setTotalSended(count($destinataireSent));
 
         $unsubscribedMails = $this->recipientRepository
-            ->findBy(['status' => StatusEnum::UNSUBSCRIBED, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_UNSUBSCRIBED, 'mail' => $mail]);
         $mail->setTotalUnsubscribed(count($unsubscribedMails));
 
         $errorMails = $this->recipientRepository
-            ->findBy(['status' => StatusEnum::ERROR, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_ERROR, 'mail' => $mail]);
         $mail->setTotalError(count($errorMails));
 
-        $total = $mail->getTotalToSend() - $mail->getTotalUnsubscribed() + $mail->getTotalError();
-        if ($mail->getTotalSended() == $total) {
-            $mail->setStatus(StatusEnum::SENT);
-        }
+        $totalRecipientsToSend = $mail->getTotalToSend() - $mail->getTotalUnsubscribed();
+        $totalRecipientsSended = $mail->getTotalSended() + $mail->getTotalError();
 
-        $this->entityManager->persist($mail);
+        if ($totalRecipientsSended === $totalRecipientsToSend) {
+            $mail->setStatus(Mail::STATUS_SENT);
+        }
 
         $this->entityManager->flush();
     }

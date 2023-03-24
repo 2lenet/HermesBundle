@@ -6,7 +6,6 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Lle\HermesBundle\Enum\StatusEnum;
 use Lle\HermesBundle\Repository\MailRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -21,6 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Mail
 {
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_SENDING = 'sending';
+    public const STATUS_SENT = 'sent';
+    public const STATUS_CANCELLED = 'cancelled';
+
     /**
      * @var int
      *
@@ -147,7 +151,7 @@ class Mail
      */
     public function canDelete()
     {
-        if ($this->status === StatusEnum::SENDING) {
+        if ($this->status === Mail::STATUS_SENDING) {
             return 'crud.canDelete.mail';
         }
 
