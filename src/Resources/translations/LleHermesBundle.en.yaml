@@ -4,6 +4,7 @@ action:
     edit: Edit
     export: Export
     show: Show
+    send: Send
 
 crudit:
     action: Actions
@@ -27,6 +28,8 @@ crud:
             recipient: Create recipient
     action:
         duplicate: Duplicate
+    modal:
+        send_mail: Do you really want to send this email to %nb% recipients? This action is final.
     canDelete:
         mail: The email is being sent
 
@@ -114,3 +117,11 @@ text:
 
 flash:
     copyAlreadyExist: A copy of this template already exists, please edit the code of the copy and try again
+    mail_sent: '%nb% / %nbTotal% mails sent'
+
+modal:
+    action:
+        cancel: Cancel
+        send: Send
+    message:
+        sendTestMail: Send a test mail to

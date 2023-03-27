@@ -48,9 +48,9 @@ class SendCommand extends Command
 
         $nb = $input->getOption('nb');
 
-        $nb_sent = $this->sender->sendAllMail($nb);
+        $nbSent = $this->sender->sendAllMails($nb);
 
-        $io->success("Success $nb_sent mails sent");
+        $io->success("Success $nbSent mails sent");
 
         return 0;
     }

@@ -88,6 +88,9 @@ class Recipient
      */
     protected Collection $linkOpenings;
 
+    /** @ORM\Column(type="boolean") */
+    protected bool $test = false;
+
     public function __construct()
     {
         $this->linkOpenings = new ArrayCollection();
@@ -292,6 +295,18 @@ class Recipient
         if ($this->linkOpenings->contains($linkOpening)) {
             $this->linkOpenings->removeElement($linkOpening);
         }
+
+        return $this;
+    }
+
+    public function isTest(): bool
+    {
+        return $this->test;
+    }
+
+    public function setTest(bool $test): Recipient
+    {
+        $this->test = $test;
 
         return $this;
     }

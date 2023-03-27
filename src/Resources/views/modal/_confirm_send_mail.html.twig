@@ -1,0 +1,16 @@
+{% extends '@LleCrudit/modal/_base_modal.html.twig' %}
+
+{% block content %}
+    <div class="modal-body">
+        {{ 'crud.modal.send_mail'|trans({'%nb%': action.resource.totalToSend}, 'LleHermesBundle') }}
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+            {{ 'crudit.modal.cancel'|trans({}, 'LleCruditBundle') }}
+        </button>
+        <a href="{{ path(action.path.route, params) }}" type="button" class="btn btn-secondary">
+            {{ 'action.send'|trans({}, 'LleHermesBundle') }}
+        </a>
+    </div>
+{% endblock %}

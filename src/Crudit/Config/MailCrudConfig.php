@@ -11,6 +11,7 @@ use Lle\CruditBundle\Dto\Action\EditAction;
 use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
+use Lle\CruditBundle\Dto\Path;
 use Lle\HermesBundle\Crudit\Datasource\MailDatasource;
 use Lle\HermesBundle\Entity\Mail;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -95,6 +96,14 @@ class MailCrudConfig extends AbstractCrudConfig
         $actions = [];
 
         $actions[] = ItemAction::new(
+            'action.send',
+            new Path('lle_hermes_crudit_mail_send'),
+            Icon::new('paper-plane')
+        )
+            ->setCssClass('btn btn-success btn-sm mr-1')
+            ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig');
+
+        $actions[] = ItemAction::new(
             'action.show',
             $this->getPath(CrudConfigInterface::SHOW),
             Icon::new('search')
@@ -107,6 +116,14 @@ class MailCrudConfig extends AbstractCrudConfig
         )
             ->setCssClass('btn btn-danger btn-sm mr-1')
             ->setModal("@LleCrudit/modal/_confirm_delete.html.twig");
+
+        $actions[] = ItemAction::new(
+            'action.sendmailtest',
+            (Path::new('lle_hermes_crudit_mail_send_testmail'))->setRole('ROLE_MAIL_SEND_TESTMAIL'),
+            Icon::new('fas fa-envelope')
+        )
+            ->setCssClass('btn btn-warning btn-sm mr-1')
+            ->setModal('@LleHermes/crud/Mail/_modal_send_testmail.html.twig');
 
         return $actions;
     }
