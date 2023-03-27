@@ -125,3 +125,10 @@ text:
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
     mail_sended: '%nb% / %nbTotal% mails envoyés'
+
+modal:
+    action:
+        cancel: Annuler
+        send: Envoyer
+    message:
+        sendTestMail: Envoyer un mail de test à

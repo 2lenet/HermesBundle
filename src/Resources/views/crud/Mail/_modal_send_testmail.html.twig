@@ -1,0 +1,25 @@
+{% extends '@LleCrudit/modal/_base_modal.html.twig' %}
+
+{% block header %}
+    {{ 'modal.message.sendTestMail'|trans({}, 'LleHermesBundle') }}
+{% endblock %}
+{% block body %}
+    <form
+        id="form_{{ id }}"
+        method="GET"
+        action="{{ path('lle_hermes_crudit_mail_send_testmail', {'id': action.resource.id}) }}"
+    >
+        <div class="mb-3">
+            <label for="email" class="form-label">{{ 'field.mail'|trans({}, 'LleHermesBundle') }}</label>
+            <input type="email" class="form-control" name="email">
+        </div>
+    </form>
+{% endblock %}
+{% block footer %}
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        {{ 'modal.action.cancel'|trans({}, 'LleHermesBundle') }}
+    </button>
+    <button type="submit" class="btn btn-primary" form="form_{{ id }}">
+        {{ 'modal.action.send'|trans({}, 'LleHermesBundle') }}
+    </button>
+{% endblock %}

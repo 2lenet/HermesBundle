@@ -132,4 +132,21 @@ class SenderService
 
         $this->entityManager->flush();
     }
+
+    public function sendRecipient(Recipient $recipient): int
+    {
+        if (!$recipient->getMail() && !$recipient->getCcMail()) {
+            throw new NoMailFoundException($recipient->getId());
+        }
+
+        $mail = $recipient->getMail() ?? $recipient->getCcMail();
+
+        if ($this->send($mail, $recipient)) {
+            return 1;
+        } else {
+            print("error sending to " . $recipient);
+        }
+
+        return 0;
+    }
 }
