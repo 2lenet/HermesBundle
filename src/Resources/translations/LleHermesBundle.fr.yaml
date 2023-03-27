@@ -124,7 +124,7 @@ text:
 
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
-    mail_sended: '%nb% / %nbTotal% mails envoyés'
+    mail_sent: '%nb% / %nbTotal% mails envoyés'
 
 modal:
     action:

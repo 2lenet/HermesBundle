@@ -89,7 +89,7 @@ class MailController extends AbstractCrudController
         $recipients = $mail->getRecipients();
         $nb = $senderService->sendAllRecipients($recipients->toArray());
 
-        $message = $this->translator->trans('flash.mail_sended', ['%nb%' => $nb, '%nbTotal%' => $mail->getTotalToSend()], 'LleHermesBundle');
+        $message = $this->translator->trans('flash.mail_sent', ['%nb%' => $nb, '%nbTotal%' => $mail->getTotalToSend()], 'LleHermesBundle');
         $this->addFlash(FlashBrickResponse::SUCCESS, $message);
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
@@ -160,7 +160,7 @@ class MailController extends AbstractCrudController
 
         $nb = $this->senderService->sendRecipient($recipient);
 
-        $message = $this->translator->trans('flash.mail_sended', ['%nb%' => $nb, '%nbTotal%' => 1], 'LleHermesBundle');
+        $message = $this->translator->trans('flash.mail_sent', ['%nb%' => $nb, '%nbTotal%' => 1], 'LleHermesBundle');
         $this->addFlash(FlashBrickResponse::SUCCESS, $message);
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
