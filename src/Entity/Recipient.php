@@ -304,7 +304,7 @@ class Recipient
         return $this->test;
     }
 
-    public function setTest(bool $test): Mail
+    public function setTest(bool $test): Recipient
     {
         $this->test = $test;
 

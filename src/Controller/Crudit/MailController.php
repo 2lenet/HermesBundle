@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Controller\Crudit;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
@@ -32,13 +33,15 @@ class MailController extends AbstractCrudController
     private ParameterBagInterface $parameterBag;
     private TranslatorInterface $translator;
     private SenderService $senderService;
+    private EntityManagerInterface $em;
 
     public function __construct(
         MailCrudConfig $config,
         MailRepository $mailRepository,
         ParameterBagInterface $parameterBag,
         TranslatorInterface $translator,
-        SenderService $senderService
+        SenderService $senderService,
+        EntityManagerInterface $em
     )
     {
         $this->config = $config;
@@ -46,6 +49,7 @@ class MailController extends AbstractCrudController
         $this->parameterBag = $parameterBag;
         $this->translator = $translator;
         $this->senderService = $senderService;
+        $this->em = $em;
     }
 
     /**
