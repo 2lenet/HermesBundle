@@ -640,4 +640,18 @@ class Mail
 
         return $this;
     }
+
+    public function countRecipients(): int
+    {
+        $recipients = 0;
+
+        /** @var Recipient $recipient */
+        foreach ($this->recipients as $recipient) {
+            if (!$recipient->isTest()) {
+                $recipients++;
+            }
+        }
+
+        return $recipients;
+    }
 }
