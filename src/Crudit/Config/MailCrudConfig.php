@@ -37,7 +37,7 @@ class MailCrudConfig extends AbstractCrudConfig
     public function getFields($key): array
     {
         $subject = Field::new('subject')->setTemplate('@LleHermes/crud/_subject.html.twig');
-        $recipients = Field::new('recipients')->setTemplate('@LleHermes/crud/_recipient.html.twig');
+        $recipients = Field::new('countRecipients');
         $sendingDate = Field::new('sendingDate');
         $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
         $openingRate = Field::new('percentOpened')
@@ -89,6 +89,11 @@ class MailCrudConfig extends AbstractCrudConfig
             $sendingDate,
             $status,
         ];
+    }
+
+    public function getDefaultSort(): array
+    {
+        return [['id', 'DESC']];
     }
 
     public function getItemActions(): array

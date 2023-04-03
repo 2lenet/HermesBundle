@@ -88,15 +88,17 @@ class SenderService
         return $nb;
     }
 
-    protected function send(Mail $mail, Recipient $recipient): bool
+    protected function send(Mail $mail, Recipient $recipient, bool $updateSendingDate = true): bool
     {
         try {
             $this->mailer->send($this->mailBuilderService->buildMail($mail, $recipient));
             $recipient->setStatus(Recipient::STATUS_SENT);
             $this->entityManager->persist($recipient);
 
-            $mail->setSendingDate(new DateTime());
-            $this->entityManager->persist($mail);
+            if ($updateSendingDate) {
+                $mail->setSendingDate(new DateTime());
+                $this->entityManager->persist($mail);
+            }
 
             $this->entityManager->flush();
 
@@ -141,7 +143,7 @@ class SenderService
 
         $mail = $recipient->getMail() ?? $recipient->getCcMail();
 
-        if ($this->send($mail, $recipient)) {
+        if ($this->send($mail, $recipient, false)) {
             return 1;
         } else {
             print("error sending to " . $recipient);
