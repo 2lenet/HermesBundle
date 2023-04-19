@@ -103,7 +103,7 @@ class SenderService
             $this->entityManager->flush();
 
             return true;
-        } catch (TransportException $transportException) {
+        } catch (\Exception $transportException) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
             $this->entityManager->flush();
 
