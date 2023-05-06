@@ -24,6 +24,7 @@ class Mail
     public const STATUS_SENDING = 'sending';
     public const STATUS_SENT = 'sent';
     public const STATUS_CANCELLED = 'cancelled';
+    public const STATUS_ERROR = 'error';
 
     /**
      * @var int

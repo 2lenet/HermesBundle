@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Service;
 
 use DateTime;
+use Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
@@ -10,7 +11,9 @@ use Lle\HermesBundle\Exception\NoMailFoundException;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
 use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Exception\RfcComplianceException;
 
 /**
  * Class SenderService
@@ -103,8 +106,14 @@ class SenderService
             $this->entityManager->flush();
 
             return true;
-        } catch (\Exception $transportException) {
+        } catch (TransportExceptionInterface|RfcComplianceException $exception) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
+            $this->entityManager->flush();
+
+            return false;
+        } catch (Exception $exception) {
+            $recipient->setStatus(Recipient::STATUS_ERROR);
+            $mail->setStatus(Mail::STATUS_ERROR);
             $this->entityManager->flush();
 
             return false;
@@ -130,6 +139,8 @@ class SenderService
 
         if ($totalRecipientsSended === $totalRecipientsToSend) {
             $mail->setStatus(Mail::STATUS_SENT);
+        } else if ($mail->getTotalError() === $totalRecipientsToSend) {
+            $mail->setStatus(Mail::STATUS_ERROR);
         }
 
         $this->entityManager->flush();
