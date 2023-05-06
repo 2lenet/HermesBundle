@@ -59,6 +59,7 @@ field:
     sendingdate: Sending date
     status: status
     totalOpened: Opening rate
+    sendingRate: Sending rate
     html: HTML
     subject: Subject
     toEmail: To email
@@ -114,6 +115,9 @@ text:
     unsubscribtionConfirmed: Unsubscription confirmed, you can close this window
     unsubscribtionCancelled: Unsubscription cancelled, you can close this window
     alreadyUnsubscribe: You are already unsubscribed, you can close this window
+    percentMailSent: '%nb%% sent'
+    percentMailUnsubscribed: '%nb%% unsubscribed'
+    percentMailError: '%nb%% errors'
 
 flash:
     copyAlreadyExist: A copy of this template already exists, please edit the code of the copy and try again

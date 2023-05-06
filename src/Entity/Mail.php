@@ -571,6 +571,24 @@ class Mail
         return round($this->totalOpened / $this->totalToSend * 100, 2);
     }
 
+    public function getPercentError(): float
+    {
+        if (!$this->totalError) {
+            return 0;
+        }
+
+        return round($this->totalError / $this->totalToSend * 100, 2);
+    }
+
+    public function getPercentUnsubscribed(): float
+    {
+        if (!$this->totalUnsubscribed) {
+            return 0;
+        }
+
+        return round($this->totalUnsubscribed / $this->totalToSend * 100, 2);
+    }
+
     /**
      * @return Collection
      */
