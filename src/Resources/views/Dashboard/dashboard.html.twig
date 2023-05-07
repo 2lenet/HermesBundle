@@ -25,58 +25,38 @@
     <div class="row my-2">
         {% for mail in mails %}
             <div class="col-4 mb-3">
-                <div class="card">
-                    <a href="{{ path('lle_hermes_crudit_mail_show', {id: mail.id}) }}">
-                        <div class="card-header bg-primary text-white">
-                            {{ lle_hermes_get_templater(mail).subject }}
-                        </div>
-                    </a>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-6 p-2">
-                                <button class="btn btn-sm position-relative" title="{{ 'title.totalToSend'|trans({}, 'LleHermesBundle') }}">
-                                    <i class="far fa-envelope"></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ mail.totalToSend }}
-                                    </span>
-                                </button>
-                                <button class="btn btn-sm position-relative" title="{{ 'title.totalError'|trans({}, 'LleHermesBundle') }}">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ mail.totalError }}
-                                    </span>
-                                </button>
-                                <button class="btn btn-sm position-relative" title="{{ 'title.totalUnsubscribed'|trans({}, 'LleHermesBundle') }}">
-                                    <i class="fas fa-user-slash"></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ mail.totalUnsubscribed }}
-                                    </span>
-                                </button>
-                                <button class="btn btn-sm position-relative" title="{{ 'title.totalLinkOpened'|trans({}, 'LleHermesBundle') }}">
-                                    <i class="fas fa-link"></i>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ mail.totalLinkOpening }}
-                                    </span>
-                                </button>
-
-                                {% include '@LleHermes/layout/status.html.twig' with {'status': mail.status, 'position': 'end'} %}
+                {% block card_mail %}
+                    <div class="card h-100">
+                        <a href="{{ path('lle_hermes_crudit_mail_show', {id: mail.id}) }}">
+                            <div class="card-header bg-primary text-white">
+                                {{ lle_hermes_get_templater(mail).subject }}
                             </div>
-                            <div class="col-6 p-2">
-                                <div class="progress" title="{{ 'title.totalOpened'|trans({}, 'LleHermesBundle') }}">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ mail.percentOpened }}%"
-                                            aria-valuenow="{{ mail.percentOpened }}" aria-valuemin="0" aria-valuemax="100">
-                                        {{ mail.percentOpened }}%
+                        </a>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6 p-2">
+                                    {% block mail_statistics %}
+                                        {% include '@LleHermes/layout/_mail_statistics.html.twig' with {'mail': mail} %}
+                                    {% endblock %}
+                                    {% include '@LleHermes/layout/status.html.twig' with {'status': mail.status, 'position': 'end'} %}
+                                </div>
+                                <div class="col-6 p-2">
+                                    <div class="progress" title="{{ 'title.totalOpened'|trans({}, 'LleHermesBundle') }}">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ mail.percentOpened }}%"
+                                                aria-valuenow="{{ mail.percentOpened }}" aria-valuemin="0" aria-valuemax="100">
+                                            {{ mail.percentOpened }}%
+                                        </div>
                                     </div>
                                 </div>
+                                {% block percent_rate %}
+                                    <div class="col-12 p-2">
+                                        {% include '@LleHermes/layout/_sending_rate.html.twig' with {'mail': mail} %}
+                                    </div>
+                                {% endblock %}
                             </div>
-                            {% block percent_rate %}
-                                <div class="col-12 p-2">
-                                    {% include '@LleHermes/layout/_sending_rate.html.twig' with {'mail': mail} %}
-                                </div>
-                            {% endblock %}
                         </div>
                     </div>
-                </div>
+                {% endblock %}
             </div>
         {% endfor %}
     </div>

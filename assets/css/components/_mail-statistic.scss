@@ -1,0 +1,22 @@
+.mail-statistic {
+    display: inline-block;
+    text-align: center;
+
+    &__circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 35px;
+        height: 20px;
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+        border: solid 3px var(--bs-body-color);
+        border-bottom: 0;
+    }
+
+    &__number {
+        display: block;
+        margin-top: 0.25rem;
+        font-weight: bold;
+    }
+}
