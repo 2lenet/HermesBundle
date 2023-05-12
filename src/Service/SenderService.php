@@ -106,7 +106,12 @@ class SenderService
             $this->entityManager->flush();
 
             return true;
-        } catch (TransportExceptionInterface|RfcComplianceException $exception) {
+        } catch (TransportExceptionInterface $exception) {
+            $recipient->setStatus(Recipient::STATUS_ERROR);
+            $this->entityManager->flush();
+
+            return false;
+        } catch (RfcComplianceException $exception) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
             $this->entityManager->flush();
 
