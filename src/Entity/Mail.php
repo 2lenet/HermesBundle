@@ -573,7 +573,7 @@ class Mail
 
     public function getPercentError(): float
     {
-        if (!$this->totalError) {
+        if (!$this->totalToSend) {
             return 0;
         }
 
@@ -582,7 +582,7 @@ class Mail
 
     public function getPercentUnsubscribed(): float
     {
-        if (!$this->totalUnsubscribed) {
+        if (!$this->totalToSend) {
             return 0;
         }
 
