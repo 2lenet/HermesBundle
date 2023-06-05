@@ -43,6 +43,9 @@ class MailCrudConfig extends AbstractCrudConfig
         $openingRate = Field::new('percentOpened')
             ->setTemplate('@LleHermes/layout/_percent.html.twig')
             ->setLabel('field.totalOpened');
+        $sendingRate = Field::new('percentSent')
+            ->setTemplate('@LleHermes/layout/_sending_rate.html.twig')
+            ->setLabel('field.sendingRate');
         $linksOpening = Field::new('totalLinkOpening')->setLabel('field.nbopeningsLinks');
         $linkOpeningRate = Field::new('totalLinkOpeningRate')
             ->setTemplate('@LleHermes/layout/_percent.html.twig')
@@ -58,6 +61,7 @@ class MailCrudConfig extends AbstractCrudConfig
                 $sendingDate,
                 $status,
                 $openingRate,
+                $sendingRate,
                 $html,
                 $attachement,
             ];

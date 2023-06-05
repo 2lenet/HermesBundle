@@ -69,15 +69,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 p-2">
-                                <div class="progress" title="{{ 'title.totalSended'|trans({}, 'LleHermesBundle') }}">
-                                    <div class="progress-bar progress-bar-striped {% if mail.totalSended != mail.totalToSend %}progress-bar-animated{% endif %}"
-                                            role="progressbar"
-                                            style="width: {{ mail.percentSent }}%;" aria-valuenow="25" aria-valuemin="0"
-                                            aria-valuemax="100">{{ mail.percent }}%
-                                    </div>
+                            {% block percent_rate %}
+                                <div class="col-12 p-2">
+                                    {% include '@LleHermes/layout/_sending_rate.html.twig' with {'mail': mail} %}
                                 </div>
-                            </div>
+                            {% endblock %}
                         </div>
                     </div>
                 </div>

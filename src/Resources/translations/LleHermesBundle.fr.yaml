@@ -59,6 +59,7 @@ field:
     sendingdate: Date d'envoi
     status: Statut
     totalOpened: Taux d'ouverture
+    sendingRate: Taux d'envoi
     html: HTML
     subject: Sujet
     toEmail: À email
@@ -121,6 +122,9 @@ text:
     unsubscribtionConfirmed: Désinscription confirmée, vous pouvez fermer cette fenêtre
     unsubscribtionCancelled: Désinscription annulée, vous pouvez fermer cette fenêtre
     alreadyUnsubscribe: Vous êtes déjà désinscrit, vous pouvez fermer cette fenêtre
+    percentMailSent: '%nb%% envoyés'
+    percentMailUnsubscribed: '%nb%% désinscrits'
+    percentMailError: '%nb%% erreurs'
 
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
