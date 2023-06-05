@@ -37,6 +37,9 @@ class MailCrudConfig extends AbstractCrudConfig
     public function getFields($key): array
     {
         $subject = Field::new('subject')->setTemplate('@LleHermes/crud/_subject.html.twig');
+        $statistics = Field::new('totalToSend')
+            ->setTemplate('@LleHermes/crud/Mail/_mail_statistics.html.twig')
+            ->setLabel('field.mailStatistics');
         $recipients = Field::new('countRecipients');
         $sendingDate = Field::new('sendingDate');
         $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
@@ -60,6 +63,7 @@ class MailCrudConfig extends AbstractCrudConfig
                 $subject,
                 $sendingDate,
                 $status,
+                $statistics,
                 $openingRate,
                 $sendingRate,
                 $html,

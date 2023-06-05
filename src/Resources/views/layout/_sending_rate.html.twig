@@ -5,7 +5,7 @@
 {% set statusSending = constant('Lle\\HermesBundle\\Entity\\Mail::STATUS_SENDING') %}
 
 <div class="progress">
-    <div class="progress-bar {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
+    <div class="progress-bar fw-bold {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
             role="progressbar"
             style="width: {{ mail.percentSent }}%;" aria-valuenow="{{ mail.percentSent }}"
             aria-valuemin="0" aria-valuemax="100"
@@ -14,7 +14,7 @@
         {{ mail.percentSent }}%
     </div>
 
-    <div class="progress-bar bg-info {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
+    <div class="progress-bar bg-info fw-bold {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
             role="progressbar"
             style="width: {{ mail.percentUnsubscribed }}%;" aria-valuenow="{{ mail.percentUnsubscribed }}"
             aria-valuemin="0" aria-valuemax="100"
@@ -25,7 +25,7 @@
         {% endif %}
     </div>
 
-    <div class="progress-bar bg-danger {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
+    <div class="progress-bar bg-danger fw-bold {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
             role="progressbar"
             style="width: {{ mail.percentError }}%;" aria-valuenow="{{ mail.percentError }}"
             aria-valuemin="0" aria-valuemax="100"

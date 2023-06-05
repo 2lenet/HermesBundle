@@ -60,6 +60,7 @@ field:
     status: Statut
     totalOpened: Taux d'ouverture
     sendingRate: Taux d'envoi
+    mailStatistics: Statistiques du mail
     html: HTML
     subject: Sujet
     toEmail: À email
