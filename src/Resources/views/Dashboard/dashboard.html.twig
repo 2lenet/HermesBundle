@@ -1,14 +1,4 @@
-{% extends "base.html.twig" %}
-
-{% block head_stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/llehermes/app.css') }}" />
-{% endblock %}
-
-{% block head_javascript %}
-    {{ parent() }}
-    <script src="{{ asset('bundles/llehermes/app.js') }}"></script>
-{% endblock %}
+{% extends '@LleHermes/base.html.twig' %}
 
 {% block main %}
     {{ parent() }}
