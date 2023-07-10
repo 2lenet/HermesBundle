@@ -38,7 +38,7 @@ class MailCrudConfig extends AbstractCrudConfig
     {
         $subject = Field::new('subject')->setTemplate('@LleHermes/crud/_subject.html.twig');
         $statistics = Field::new('totalToSend')
-            ->setTemplate('@LleHermes/crud/Mail/_mail_statistics.html.twig')
+            ->setTemplate('@LleHermes/layout/_mail_statistics.html.twig')
             ->setLabel('field.mailStatistics');
         $recipients = Field::new('countRecipients');
         $sendingDate = Field::new('sendingDate');

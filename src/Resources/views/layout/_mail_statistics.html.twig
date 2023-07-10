@@ -1,3 +1,7 @@
+{% if mail is not defined %}
+    {% set mail = resource %}
+{% endif %}
+
 <div class="mail-statistic" title="{{ 'title.totalToSend'|trans({}, 'LleHermesBundle') }}">
     <div class="mail-statistic__circle border-primary">
         <span class="mt-2">
