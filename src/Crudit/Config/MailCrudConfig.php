@@ -79,9 +79,10 @@ class MailCrudConfig extends AbstractCrudConfig
                         $subject,
                         $sendingDate,
                         $status,
+                        $statistics,
                         $openingRate,
-                        $linksOpening,
                         $linkOpeningRate,
+                        $linksOpening,
                         $html,
                         $attachement,
                     ];
