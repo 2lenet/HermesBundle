@@ -125,6 +125,7 @@ text:
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
     mail_sent: '%nb% / %nbTotal% mails envoyés'
+    copy_for_tenants: '%count% templates copiés'
 
 modal:
     action:

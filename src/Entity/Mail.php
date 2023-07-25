@@ -134,6 +134,11 @@ class Mail
      */
     protected Collection $links;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected ?int $tenantId = null;
+
     public function __construct()
     {
         $this->recipients = new ArrayCollection();
@@ -639,5 +644,15 @@ class Mail
         }
 
         return $this;
+    }
+
+    public function getTenantId(): ?int
+    {
+        return $this->tenantId;
+    }
+
+    public function setTenantId(?int $tenantId): void
+    {
+        $this->tenantId = $tenantId;
     }
 }

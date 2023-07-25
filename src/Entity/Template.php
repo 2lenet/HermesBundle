@@ -86,6 +86,11 @@ class Template
      */
     protected bool $statistics = false;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected ?int $tenantId = null;
+
     public function __toString(): string
     {
         return sprintf('%s %s', $this->code, $this->getSubject());
@@ -279,6 +284,18 @@ class Template
     public function setStatistics(bool $statistics): Template
     {
         $this->statistics = $statistics;
+
+        return $this;
+    }
+
+    public function getTenantId(): ?int
+    {
+        return $this->tenantId;
+    }
+
+    public function setTenantId(?int $tenantId): self
+    {
+        $this->tenantId = $tenantId;
 
         return $this;
     }

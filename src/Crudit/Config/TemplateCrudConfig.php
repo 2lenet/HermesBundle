@@ -10,11 +10,13 @@ use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Path;
 use Lle\HermesBundle\Crudit\Datasource\TemplateDatasource;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class TemplateCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
-        TemplateDatasource $datasource
+        TemplateDatasource $datasource,
+        private ParameterBagInterface $parameterBag,
     ) {
         $this->datasource = $datasource;
     }
@@ -71,6 +73,14 @@ class TemplateCrudConfig extends AbstractCrudConfig
             new Path('lle_hermes_template_duplicate'),
             Icon::new('clone')
         )->setDropdown(true);
+
+        if ($this->parameterBag->get('lle_hermes.tenant_class')) {
+            $actions[] = ItemAction::new(
+                'crud.action.copy_for_every_tenant',
+                Path::new('lle_hermes_crudit_template_copyforeverytenant')->setRole('ROLE_HERMES_COPY_FOR_TENANT'),
+                Icon::new('share')
+            )->setDropdown(true);
+        }
 
         return $actions;
     }
