@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -14,6 +18,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class TemplateType extends AbstractType
 {
+    public function __construct(private Security $security, private ParameterBagInterface $parameterBag)
+    {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -38,6 +45,11 @@ class TemplateType extends AbstractType
             "label" => "field.statistics",
             "translation_domain" => "LleHermesBundle"
         ]);
+        if ($this->security->isGranted('ROLE_LLE_HERMES_EDIT_TENANT') && $this->parameterBag->get('lle_hermes.tenant_class')) {
+            $builder->add('tenantId', EntityType::class, [
+                'class' => $this->parameterBag->get('lle_hermes.tenant_class'),
+            ])->setEmptyData(null)->setRequired(false);
+        }
     }
 
     public function getName(): string

@@ -41,6 +41,9 @@ class MailFactory
         $mail->setTotalSended(0);
         $mail->setSubject($mail->getTemplate()->getSubject());
         $mail->setMjml($mail->getTemplate()->getMjml());
+        if ($mailDto->getTenantId()) {
+            $mail->setTenantId($mailDto->getTenantId());
+        }
         if ($mailDto->isSendText()) {
             $mail->setText($mail->getTemplate()->getText());
         }

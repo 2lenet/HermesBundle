@@ -135,7 +135,7 @@ class Mail
     protected Collection $links;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected ?int $tenantId = null;
 

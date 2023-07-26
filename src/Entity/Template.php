@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author 2LE <2le@2le.net>
  *
  * @ORM\Entity(repositoryClass=TemplateRepository::class)
- * @ORM\Table(name="lle_hermes_template")
+ * @ORM\Table(name="lle_hermes_template", indexes={@ORM\Index(columns={"tenant_id"})})
  */
 class Template
 {
@@ -87,7 +87,7 @@ class Template
     protected bool $statistics = false;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected ?int $tenantId = null;
 

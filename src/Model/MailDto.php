@@ -83,6 +83,8 @@ class MailDto
 
     protected bool $sendText = true;
 
+    protected ?int $tenantId = null;
+
     /**
      * @return int
      */
@@ -339,5 +341,21 @@ class MailDto
     public function setSendText(bool $sendText): void
     {
         $this->sendText = $sendText;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getTenantId(): ?int
+    {
+        return $this->tenantId;
+    }
+
+    /**
+     * @param int|null $tenantId
+     */
+    public function setTenantId(?int $tenantId): void
+    {
+        $this->tenantId = $tenantId;
     }
 }

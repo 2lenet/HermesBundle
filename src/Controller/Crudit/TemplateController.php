@@ -13,6 +13,7 @@ use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -59,22 +60,12 @@ class TemplateController extends AbstractCrudController
     /**
      * @Route("/copy-for-every-tenant/{id}", name="lle_hermes_crudit_template_copyforeverytenant", methods={"GET"})
      */
-    public function copyForEveryTenant(Template $template, ParameterBagInterface $parameterBag): Response
+    public function copyForEveryTenant(Template $template, Request $request, ParameterBagInterface $parameterBag): Response
     {
-
+        dd($request);
         $tenantClass = $parameterBag->get('lle_hermes.tenant_class');
         $entities = $this->em->getRepository($tenantClass)->findBy([]);
-        $count = 0;
-        if (array_key_exists(
-                strtolower(@end(explode('\\', $tenantClass))) . '_filter',
-                $this->em->getFilters()->getEnabledFilters()
-            )) {
 
-        }
-        foreach ($this->em->getFilters()->getEnabledFilters() as $filter) {
-            dd($filter->hasParameter());
-        }
-        dd(count($entities));
         foreach ($entities as $entity) {
             $newTemplate = (new Template())
                 ->setTenantId($entity->getId())

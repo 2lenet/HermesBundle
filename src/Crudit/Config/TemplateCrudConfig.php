@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Crudit\Config;
 
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
+use Lle\CruditBundle\Dto\Action\EditAction;
 use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
@@ -38,6 +39,8 @@ class TemplateCrudConfig extends AbstractCrudConfig
             ->setCssClass('col-12');
         $unsubscriptions = Field::new('unsubscriptions');
         $statistics = Field::new('statistics');
+        if ($this->parameterBag->get('lle_hermes.tenant_class')) {
+        }
 
         if ($key == CrudConfigInterface::INDEX) {
             return [
