@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormEvents;
 
 class MjmlType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = json_decode($event->getData(), true);
@@ -23,12 +23,12 @@ class MjmlType extends AbstractType
         });
     }
 
-    public function getParent()
+    public function getParent(): string
     {
         return TextType::class;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return "lle_hermes_mjml";
     }

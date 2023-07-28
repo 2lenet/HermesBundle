@@ -16,7 +16,6 @@ class MailDatasource extends AbstractDoctrineDatasource
     }
 
     /**
-     * @required
      * @param MailFilterSet $filterSet
      */
     public function setFilterset(MailFilterSet $filterSet): void

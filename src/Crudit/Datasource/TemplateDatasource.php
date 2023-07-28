@@ -16,7 +16,6 @@ class TemplateDatasource extends AbstractDoctrineDatasource
     }
 
     /**
-     * @required
      * @param TemplateFilterSet $filterSet
      */
     public function setFilterset(TemplateFilterSet $filterSet): void

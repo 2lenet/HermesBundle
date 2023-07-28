@@ -16,7 +16,6 @@ class RecipientDatasource extends AbstractDoctrineDatasource
     }
 
     /**
-     * @required
      * @param RecipientFilterSet $filterSet
      */
     public function setFilterset(RecipientFilterSet $filterSet): void
