@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Lle\HermesBundle\Model;
-
 
 /**
  * Class Contact
@@ -16,10 +14,7 @@ class ContactDto
      * Contact's general name
      */
     protected $name;
-
     protected $data = [];
-
-
     /**
      * @var string
      * Contact's mail address
@@ -83,6 +78,7 @@ class ContactDto
     public function setData(array $data): ContactDto
     {
         $this->data = $data;
+
         return $this;
     }
 }

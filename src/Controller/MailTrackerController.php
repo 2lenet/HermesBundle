@@ -17,8 +17,11 @@ class MailTrackerController extends AbstractController
     protected ParameterBagInterface $parameterBag;
     protected KernelInterface $kernel;
 
-    public function __construct(EntityManagerInterface $em, ParameterBagInterface $parameterBag, KernelInterface $kernel)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        ParameterBagInterface $parameterBag,
+        KernelInterface $kernel
+    ) {
         $this->em = $em;
         $this->parameterBag = $parameterBag;
         $this->kernel = $kernel;

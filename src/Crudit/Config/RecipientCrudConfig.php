@@ -44,7 +44,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
                 $toEmail,
                 $status,
                 $openDate,
-                $linkOpening
+                $linkOpening,
             ];
         }
 
@@ -103,7 +103,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
             $toEmail,
             $status,
             $openDate,
-            $linkOpening
+            $linkOpening,
         ];
     }
 
@@ -112,14 +112,14 @@ class RecipientCrudConfig extends AbstractCrudConfig
         return [
             'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
                 ->setActions($this->linkCrudConfig->getSublistAction())
-                ->setFields($this->linkCrudConfig->getSublistFields())
+                ->setFields($this->linkCrudConfig->getSublistFields()),
         ];
     }
 
     public function getDefaultSort(): array
     {
         return [
-            ['id', 'ASC']
+            ['id', 'ASC'],
         ];
     }
 

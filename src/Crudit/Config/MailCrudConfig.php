@@ -22,8 +22,12 @@ class MailCrudConfig extends AbstractCrudConfig
     private RecipientCrudConfig $recipientCrudConfig;
     private LinkCrudConfig $linkCrudConfig;
 
-    public function __construct(MailDatasource $datasource, RequestStack $requestStack, RecipientCrudConfig $recipientCrudConfig, LinkCrudConfig $linkCrudConfig)
-    {
+    public function __construct(
+        MailDatasource $datasource,
+        RequestStack $requestStack,
+        RecipientCrudConfig $recipientCrudConfig,
+        LinkCrudConfig $linkCrudConfig
+    ) {
         $this->datasource = $datasource;
         $this->requestStack = $requestStack;
         $this->recipientCrudConfig = $recipientCrudConfig;
@@ -182,7 +186,7 @@ class MailCrudConfig extends AbstractCrudConfig
                         ->setActions($this->recipientCrudConfig->getSublistAction()),
                     'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
                         ->setFields($this->linkCrudConfig->getSublistFields())
-                        ->setActions($this->linkCrudConfig->getSublistAction())
+                        ->setActions($this->linkCrudConfig->getSublistAction()),
                 ];
             }
         }

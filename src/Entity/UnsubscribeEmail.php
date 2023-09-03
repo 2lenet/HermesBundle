@@ -19,7 +19,6 @@ class UnsubscribeEmail
      * @ORM\Column(type="integer")
      */
     private int $id;
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max=255)
@@ -27,7 +26,6 @@ class UnsubscribeEmail
      * @Assert\Email()
      */
     private string $email;
-
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank
@@ -49,6 +47,7 @@ class UnsubscribeEmail
     public function setId(int $id): UnsubscribeEmail
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -67,6 +66,7 @@ class UnsubscribeEmail
     public function setEmail(string $email): UnsubscribeEmail
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -85,6 +85,7 @@ class UnsubscribeEmail
     public function setUnsubscribeDate(DateTime $unsubscribeDate): UnsubscribeEmail
     {
         $this->unsubscribeDate = $unsubscribeDate;
+
         return $this;
     }
 }

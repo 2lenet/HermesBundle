@@ -31,9 +31,12 @@
                                     {% include '@LleHermes/layout/status.html.twig' with {'status': mail.status, 'position': 'end'} %}
                                 </div>
                                 <div class="col-6 p-2">
-                                    <div class="progress" title="{{ 'title.totalOpened'|trans({}, 'LleHermesBundle') }}">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ mail.percentOpened }}%"
-                                                aria-valuenow="{{ mail.percentOpened }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress"
+                                         title="{{ 'title.totalOpened'|trans({}, 'LleHermesBundle') }}">
+                                        <div class="progress-bar bg-success" role="progressbar"
+                                             style="width: {{ mail.percentOpened }}%"
+                                             aria-valuenow="{{ mail.percentOpened }}" aria-valuemin="0"
+                                             aria-valuemax="100">
                                             {{ mail.percentOpened }}%
                                         </div>
                                     </div>

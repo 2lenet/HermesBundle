@@ -16,7 +16,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class Mailer
 {
-    public function __construct(EntityManagerInterface $em, MailFactory $mailerFactory) {
+    public function __construct(EntityManagerInterface $em, MailFactory $mailerFactory)
+    {
         $this->em = $em;
         $this->mailerFactory = $mailerFactory;
     }
@@ -68,7 +69,7 @@ class Mailer
     {
         $template = $this->em->getRepository(Template::class)
             ->findOneBy([
-                "code" => $mail->getTemplate()
+                "code" => $mail->getTemplate(),
             ]);
         if (!$template) {
             throw new TemplateNotFoundException($mail->getTemplate());
@@ -143,6 +144,7 @@ class Mailer
     private function getIdFromHermesUrl(string $url)
     {
         $parts = explode("/", urldecode($url));
+
         return end($parts);
     }
 

@@ -25,7 +25,6 @@ class Mail
     public const STATUS_SENT = 'sent';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_ERROR = 'error';
-
     /**
      * @var int
      *
@@ -34,102 +33,83 @@ class Mail
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
     /**
      * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Template")
      * @Assert\NotBlank
      */
     protected Template $template;
-
     /**
      * @ORM\Column(type="json", nullable=false)
      */
     protected array $data = [];
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
     protected string $status;
-
     /**
      * @ORM\Column(type="integer")
      */
     protected int $totalToSend = 0;
-
     /**
      * @ORM\Column(type="integer")
      */
     protected int $totalSended = 0;
-
     /**
      * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\Recipient", mappedBy="mail", cascade={"persist", "remove"})
      */
     protected Collection $recipients;
-
     /**
      * @ORM\Column(type="string", length=1024)
      * @Assert\NotBlank
      * @Assert\Length(max=1024)
      */
     protected string $subject;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected ?string $mjml = null;
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected ?DateTime $sendingDate = null;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected ?string $text = null;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected ?string $html = null;
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected ?DateTime $createdAt = null;
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected ?DateTime $updatedAt = null;
-
     /**
      * @ORM\Column(type="integer")
      */
     protected int $totalUnsubscribed = 0;
-
     /**
      * @ORM\Column(type="integer")
      */
     protected int $totalError = 0;
-
     /**
      * @ORM\Column(type="json")
      */
     protected array $attachement = [];
-
     /**
      * @ORM\Column(type="integer")
      */
     protected int $totalOpened = 0;
-
     /**
      * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\Recipient", mappedBy="ccMail", cascade={"persist", "remove"})
      */
     protected Collection $ccRecipients;
-
     /**
      * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\Link", mappedBy="mail", cascade={"persist", "remove"})
      */

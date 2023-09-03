@@ -11,7 +11,6 @@ use Symfony\Component\Process\Process;
 class MailFactory
 {
     public const ATTACHMENTS_DIR = "/data/hermes/attachments/mail-%s/";
-
     protected ParameterBagInterface $parameters;
 
     public function __construct(ParameterBagInterface $parameters)

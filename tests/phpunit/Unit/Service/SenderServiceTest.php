@@ -52,16 +52,21 @@ class SenderServiceTest extends TestCase
         $entityManager->expects(self::exactly(2))
             ->method('persist')
             ->withConsecutive(
-                [self::callback(function (Recipient $recipient) {
-                    return Recipient::STATUS_SENT === $recipient->getStatus();
-                })],
-                [self::callback(function (Mail $mail) {
-                    return Mail::STATUS_SENT === $mail->getStatus()
-                        && 1 === $mail->getTotalSended()
-                        && 1 === $mail->getTotalUnsubscribed()
-                        && 1 === $mail->getTotalError();
-                })]
+                [
+                    self::callback(function (Recipient $recipient) {
+                        return Recipient::STATUS_SENT === $recipient->getStatus();
+                    }),
+                ],
+                [
+                    self::callback(function (Mail $mail) {
+                        return Mail::STATUS_SENT === $mail->getStatus()
+                            && 1 === $mail->getTotalSended()
+                            && 1 === $mail->getTotalUnsubscribed()
+                            && 1 === $mail->getTotalError();
+                    }),
+                ]
             );
+
         return $entityManager;
     }
 
@@ -94,6 +99,7 @@ class SenderServiceTest extends TestCase
         $template->setText('template_text');
         $template->setCode('template_code');
         $template->setHtml('template_html');
+
         return $template;
     }
 
@@ -118,6 +124,7 @@ class SenderServiceTest extends TestCase
         $recipient->setId(1);
         $recipient->setMail($mail);
         $recipient->setToEmail('john.doe@test.com');
+
         return $recipient;
     }
 
@@ -127,6 +134,7 @@ class SenderServiceTest extends TestCase
         $repo->expects(self::exactly(1))
             ->method('findEmailsUnsubscribed')
             ->willReturn(['unsubscribe@email.com']);
+
         return $repo;
     }
 
@@ -140,21 +148,26 @@ class SenderServiceTest extends TestCase
             ->method('findByStatus')
             ->with(self::equalTo('sending'))
             ->willReturn([]);
+
         return $repo;
     }
 
     protected function getMockParameterBag(): ParameterBagInterface
     {
         $mock = $this->createMock(ParameterBagInterface::class);
-        $mock->method('get')->will(self::returnCallback(function (string $name) {
-            $value = $name;
-            switch ($name) {
-                case 'lle_hermes.bounce_email':
-                    $value = 'no-reply@test.com';
-                    break;
-            }
-            return $value;
-        }));
+        $mock->method('get')->will(
+            self::returnCallback(function (string $name) {
+                $value = $name;
+                switch ($name) {
+                    case 'lle_hermes.bounce_email':
+                        $value = 'no-reply@test.com';
+                        break;
+                }
+
+                return $value;
+            })
+        );
+
         return $mock;
     }
 
@@ -163,6 +176,7 @@ class SenderServiceTest extends TestCase
         $context = new RequestContext();
         $mock = $this->createMock(RouterInterface::class);
         $mock->method('getContext')->will(self::returnValue($context));
+
         return $mock;
     }
 

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Lle\HermesBundle\Model;
-
 
 interface AttachmentInterface
 {

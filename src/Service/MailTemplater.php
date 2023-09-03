@@ -13,11 +13,8 @@ use Twig\Environment;
 class MailTemplater
 {
     protected Mail $mail;
-
     protected Environment $twig;
-
     protected RouterInterface $router;
-
     protected array $data = [];
 
     public function __construct(Mail $mail, Environment $twig, RouterInterface $router)
@@ -58,7 +55,6 @@ class MailTemplater
         if ($decodeHtml) {
             $result = html_entity_decode($result);
         }
-
 
         if ($this->twig->isDebug()) {
             $this->twig->enableStrictVariables();

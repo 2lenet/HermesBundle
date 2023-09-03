@@ -26,18 +26,15 @@ class EmailError
      * @ORM\Column(type="integer")
      */
     private int $id;
-
     /**
      * @ORM\Column(type="integer")
      */
     private int $nbError = 1;
-
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank
      */
     private DateTime $dateError;
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max=255)
@@ -45,7 +42,6 @@ class EmailError
      * @Assert\NotBlank
      */
     private string $email;
-
     /**
      * @ORM\OneToMany(targetEntity=Lle\HermesBundle\Entity\Error::class, mappedBy="emailError")
      */
@@ -71,6 +67,7 @@ class EmailError
     public function setId(int $id): EmailError
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -89,6 +86,7 @@ class EmailError
     public function setNbError(int $nbError): EmailError
     {
         $this->nbError = $nbError;
+
         return $this;
     }
 
@@ -107,6 +105,7 @@ class EmailError
     public function setDateError(DateTime $dateError): EmailError
     {
         $this->dateError = $dateError;
+
         return $this;
     }
 
@@ -125,6 +124,7 @@ class EmailError
     public function setEmail(string $email): EmailError
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -142,6 +142,7 @@ class EmailError
         if (false === $this->errors->contains($error)) {
             $this->errors->add($error);
         }
+
         return $this;
     }
 
@@ -150,6 +151,7 @@ class EmailError
         if (true === $this->errors->contains($error)) {
             $this->errors->removeElement($error);
         }
+
         return $this;
     }
 }

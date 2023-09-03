@@ -6,10 +6,8 @@ class StringAttachment implements AttachmentInterface
 {
     /** @var string */
     protected $data;
-
     /** @var string */
     protected $name;
-
     /** @var string */
     protected $contentType;
 
@@ -19,7 +17,7 @@ class StringAttachment implements AttachmentInterface
         $this->name = $name;
         $this->contentType = $contentType;
     }
-    
+
     public function getData(): string
     {
         return $this->data;

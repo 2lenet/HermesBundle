@@ -68,7 +68,7 @@ class HermesMenuProvider implements MenuProviderInterface
         );
 
         return [
-            $menu
+            $menu,
         ];
     }
 }

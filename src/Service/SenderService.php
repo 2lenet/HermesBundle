@@ -3,8 +3,8 @@
 namespace Lle\HermesBundle\Service;
 
 use DateTime;
-use Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Exception\NoMailFoundException;
@@ -47,7 +47,11 @@ class SenderService
     {
         $this->recipientRepository->disableErrors();
 
-        $recipients = $this->recipientRepository->findRecipientsSending(Recipient::STATUS_SENDING, Mail::STATUS_SENDING, $limit);
+        $recipients = $this->recipientRepository->findRecipientsSending(
+            Recipient::STATUS_SENDING,
+            Mail::STATUS_SENDING,
+            $limit
+        );
 
         return $this->sendAllRecipients($recipients);
     }
@@ -144,8 +148,10 @@ class SenderService
 
         if ($totalRecipientsSended === $totalRecipientsToSend) {
             $mail->setStatus(Mail::STATUS_SENT);
-        } else if ($mail->getTotalError() === $totalRecipientsToSend) {
-            $mail->setStatus(Mail::STATUS_ERROR);
+        } else {
+            if ($mail->getTotalError() === $totalRecipientsToSend) {
+                $mail->setStatus(Mail::STATUS_ERROR);
+            }
         }
 
         $this->entityManager->flush();

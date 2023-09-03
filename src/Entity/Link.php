@@ -25,20 +25,17 @@ class Link
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected ?int $id;
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
     protected string $url;
-
     /**
      * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail", inversedBy="links", cascade={"persist"})
      * @Assert\NotBlank
      */
     protected Mail $mail;
-
     /**
      * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="link", cascade={"persist", "remove"})
      */
@@ -72,6 +69,7 @@ class Link
     public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 

@@ -3,7 +3,6 @@
 namespace Lle\HermesBundle\Service;
 
 use Lle\HermesBundle\Entity\Recipient;
-use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Model\ContactDto;
 
 class DestinataireFactory

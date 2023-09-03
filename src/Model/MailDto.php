@@ -3,7 +3,6 @@
 namespace Lle\HermesBundle\Model;
 
 use Lle\HermesBundle\Entity\Mail;
-use Lle\HermesBundle\Model\ContactDto;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -15,72 +14,59 @@ class MailDto
 {
     public const DRAFT = Mail::STATUS_DRAFT;
     public const SENDING = Mail::STATUS_SENDING;
-
     /**
      * @var int
      * Mail's identifier. Can be custom
      */
     protected $id;
-
     /**
      * @var string
      * The subject of the mail.
      */
     protected $subject;
-
     /**
      * @var string
      * Content of the mail.
      */
     protected $textContent;
-
     /**
      * @var string
      * Html content of the mail.
      */
     protected $htmlContent;
-
     /**
      * @var ContactDto[]
      * People that should receive the mail.
      */
     protected $to = [];
-
     /**
      * @var ContactDto[
      * People in copy
      */
     protected $cc = [];
-
     /**
      * @var ContactDto
      * The person that sends the mail.
      */
     protected $from;
-
     /**
      * @var string
      * The code of the template to use.
      */
     protected $template;
-
     /**
      * @var AttachmentInterface[]
      * Mail attachments.
      * Be careful about user files though. (@see https://symfony.com/doc/current/controller/upload_file.html)
      */
     protected $attachments = [];
-
     protected $status = Mail::STATUS_SENDING;
-
     /**
      * @var array
      * Data to use for mail template
      */
     protected $data = [];
-
     protected bool $sendHtml = true;
-
     protected bool $sendText = true;
 
     /**
@@ -305,9 +291,9 @@ class MailDto
     public function setStatus(string $status): MailDto
     {
         $this->status = $status;
+
         return $this;
     }
-
 
     /**
      * @return bool

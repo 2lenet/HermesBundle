@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Lle\HermesBundle\Model;
-
 
 class ResourceAttachment implements AttachmentInterface
 {
@@ -10,12 +8,10 @@ class ResourceAttachment implements AttachmentInterface
      * @var string
      */
     protected $path;
-
     /**
      * @var string
      */
     protected $name;
-
     /**
      * @var string
      */

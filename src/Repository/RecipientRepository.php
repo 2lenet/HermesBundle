@@ -52,7 +52,7 @@ class RecipientRepository extends ServiceEntityRepository
         );
         $qb->setParameters([
             'statusDest' => $statusDest,
-            'statusMail' => $statusMail
+            'statusMail' => $statusMail,
         ]);
         $qb->setMaxResults($limit);
 
@@ -89,7 +89,7 @@ class RecipientRepository extends ServiceEntityRepository
 
         $qb->setParameters([
             'mail' => $mail,
-            'status' => $status
+            'status' => $status,
         ]);
 
         $qb->getQuery()->execute();

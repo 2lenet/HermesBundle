@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Lle\HermesBundle\Model;
-
 
 class Base64Attachment implements AttachmentInterface
 {
@@ -10,12 +8,10 @@ class Base64Attachment implements AttachmentInterface
      * @var string
      */
     protected $data;
-
     /**
      * @var string
      */
     protected $name;
-
     /**
      * @var string
      */

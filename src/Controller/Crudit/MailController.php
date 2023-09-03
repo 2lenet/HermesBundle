@@ -42,8 +42,7 @@ class MailController extends AbstractCrudController
         TranslatorInterface $translator,
         SenderService $senderService,
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->config = $config;
         $this->mailRepository = $mailRepository;
         $this->parameterBag = $parameterBag;
@@ -89,7 +88,11 @@ class MailController extends AbstractCrudController
         $recipients = $mail->getRecipients();
         $nb = $senderService->sendAllRecipients($recipients->toArray());
 
-        $message = $this->translator->trans('flash.mail_sent', ['%nb%' => $nb, '%nbTotal%' => $mail->getTotalToSend()], 'LleHermesBundle');
+        $message = $this->translator->trans(
+            'flash.mail_sent',
+            ['%nb%' => $nb, '%nbTotal%' => $mail->getTotalToSend()],
+            'LleHermesBundle'
+        );
         $this->addFlash(FlashBrickResponse::SUCCESS, $message);
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
@@ -113,7 +116,10 @@ class MailController extends AbstractCrudController
 
         $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_DELETE', $mail);
 
-        $attachementsPath = sprintf($this->parameterBag->get('lle_hermes.root_dir') . MailFactory::ATTACHMENTS_DIR, $mail->getId());
+        $attachementsPath = sprintf(
+            $this->parameterBag->get('lle_hermes.root_dir') . MailFactory::ATTACHMENTS_DIR,
+            $mail->getId()
+        );
         $this->deleteAttachements($attachementsPath);
 
         $dataSource = $this->config->getDatasource();

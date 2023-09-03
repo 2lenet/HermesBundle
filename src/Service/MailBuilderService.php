@@ -22,8 +22,12 @@ class MailBuilderService
     private string $secret;
     private EntityManagerInterface $em;
 
-    public function __construct(Environment $twig, RouterInterface $router, ParameterBagInterface $parameterBag, EntityManagerInterface $em)
-    {
+    public function __construct(
+        Environment $twig,
+        RouterInterface $router,
+        ParameterBagInterface $parameterBag,
+        EntityManagerInterface $em
+    ) {
         $this->twig = $twig;
         $this->router = $router;
         $this->parameterBag = $parameterBag;
@@ -38,9 +42,9 @@ class MailBuilderService
         /** @var string $rootDir */
         $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
         $attachmentsFilePath = $rootDir . sprintf(
-            MailFactory::ATTACHMENTS_DIR,
-            $mail->getId()
-        );
+                MailFactory::ATTACHMENTS_DIR,
+                $mail->getId()
+            );
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
@@ -74,8 +78,7 @@ class MailBuilderService
             ->from($from)
             ->replyTo($from)
             ->subject($templater->getSubject())
-            ->returnPath($returnPath)
-        ;
+            ->returnPath($returnPath);
 
         $html = $templater->getHtml();
         // Generate unsubscribe link
@@ -99,6 +102,7 @@ class MailBuilderService
                 $email->attachFromPath($attachmentsFilePath . $attachment['name']);
             }
         }
+
         return $this->attachBase64Img($email, $domain);
     }
 
@@ -120,7 +124,11 @@ class MailBuilderService
 
     private function generateReceiptConfirmationLink(string $html, Recipient $recipient): string
     {
-        $route = $this->router->generate('mail_opened', ['recipient' => $recipient->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $route = $this->router->generate(
+            'mail_opened',
+            ['recipient' => $recipient->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
         return str_replace(
             '</body>',
@@ -140,7 +148,11 @@ class MailBuilderService
                 $this->em->persist($link);
                 $this->em->flush();
 
-                $route = $this->router->generate('statistics', ['recipient' => $recipient->getId(), 'link' => $link->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $route = $this->router->generate(
+                    'statistics',
+                    ['recipient' => $recipient->getId(), 'link' => $link->getId()],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
 
                 return '<a' . $matches[1] . 'href="' . $route . '"' . $matches[3] . '>' . $matches[4] . '</a>';
             },

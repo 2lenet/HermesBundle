@@ -1,8 +1,8 @@
 {% if value %}
     {% for attachement in value %}
         <a
-                href="{{ path('lle_hermes_crudit_mail_show_attachement', {'id': view.resource.id, 'file': attachement["name"]}) }}"
-                target="_blank"
+            href="{{ path('lle_hermes_crudit_mail_show_attachement', {'id': view.resource.id, 'file': attachement["name"]}) }}"
+            target="_blank"
         >
             {{ attachement["name"] }}
         </a> <br>

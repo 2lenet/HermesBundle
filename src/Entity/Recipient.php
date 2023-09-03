@@ -25,7 +25,6 @@ class Recipient
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_UNSUBSCRIBED = 'unsubscribed';
     public const STATUS_ERROR = 'error';
-
     /**
      * @var int
      *
@@ -34,13 +33,11 @@ class Recipient
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     protected ?string $toName = null;
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max=255)
@@ -48,46 +45,38 @@ class Recipient
      * @Assert\NotBlank
      */
     protected string $toEmail;
-
     /**
      * @ORM\Column(type="json")
      */
     protected array $data = [];
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(max=255)
      * @Assert\NotBlank
      */
     protected string $status;
-
     /**
      * @ORM\Column(type="integer")
      */
     protected int $nbRetry = 0;
-
     /**
      * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail", inversedBy="recipients", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected ?Mail $mail = null;
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected ?DateTime $openDate = null;
-
     /**
      * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Mail", inversedBy="ccRecipients", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private ?Mail $ccMail = null;
-
     /**
      * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="recipient", cascade={"persist", "remove"})
      */
     protected Collection $linkOpenings;
-
     /** @ORM\Column(type="boolean") */
     protected bool $test = false;
 
@@ -127,6 +116,7 @@ class Recipient
     public function setId(int $id): Recipient
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -145,6 +135,7 @@ class Recipient
     public function setToName(?string $toName): Recipient
     {
         $this->toName = $toName;
+
         return $this;
     }
 
@@ -163,6 +154,7 @@ class Recipient
     public function setToEmail(string $toEmail): Recipient
     {
         $this->toEmail = $toEmail;
+
         return $this;
     }
 
@@ -181,6 +173,7 @@ class Recipient
     public function setData(array $data): Recipient
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -199,6 +192,7 @@ class Recipient
     public function setStatus(string $status): Recipient
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -217,6 +211,7 @@ class Recipient
     public function setNbRetry(int $nbRetry): Recipient
     {
         $this->nbRetry = $nbRetry;
+
         return $this;
     }
 
@@ -235,6 +230,7 @@ class Recipient
     public function setMail(?Mail $mail): Recipient
     {
         $this->mail = $mail;
+
         return $this;
     }
 
@@ -253,6 +249,7 @@ class Recipient
     public function setOpenDate(?DateTime $openDate): Recipient
     {
         $this->openDate = $openDate;
+
         return $this;
     }
 

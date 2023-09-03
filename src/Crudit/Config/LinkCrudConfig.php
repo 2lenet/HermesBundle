@@ -38,7 +38,7 @@ class LinkCrudConfig extends AbstractCrudConfig
             return [
                 $mail,
                 $totalOpened,
-                $url
+                $url,
             ];
         }
 
@@ -91,7 +91,7 @@ class LinkCrudConfig extends AbstractCrudConfig
 
         return [
             $url,
-            $linkOpenings
+            $linkOpenings,
         ];
     }
 
@@ -99,7 +99,7 @@ class LinkCrudConfig extends AbstractCrudConfig
     {
         return [
             'tab.linkOpening' => SublistConfig::new('link', $this->linkOpeningCrudConfig)
-                ->setFields($this->linkOpeningCrudConfig->getSublistFields())
+                ->setFields($this->linkOpeningCrudConfig->getSublistFields()),
         ];
     }
 

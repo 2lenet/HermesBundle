@@ -19,7 +19,10 @@ class MailFilterSet extends AbstractFilterSet
         return [
             StringFilterType::new('subject'),
             StringFilterType::new('sendingDate'),
-            ChoiceFilterType::new('status', [null, Mail::STATUS_DRAFT, Mail::STATUS_SENDING, Mail::STATUS_SENT, Mail::STATUS_CANCELLED]),
+            ChoiceFilterType::new(
+                'status',
+                [null, Mail::STATUS_DRAFT, Mail::STATUS_SENDING, Mail::STATUS_SENT, Mail::STATUS_CANCELLED]
+            ),
         ];
     }
 }

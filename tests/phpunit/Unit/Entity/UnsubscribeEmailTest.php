@@ -59,7 +59,6 @@ class UnsubscribeEmailTest extends TestCase
             $violations[1]->getMessage()
         );
 
-
         $violations = $validator->validateProperty($entity, 'unsubscribeDate');
         self::assertCount(1, $violations);
         self::assertEquals(

@@ -23,29 +23,24 @@ class LinkOpening
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected ?int $id;
-
     /**
      * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Link", inversedBy="linkOpenings", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected Link $link;
-
     /**
      * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Recipient", inversedBy="linkOpenings", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected Recipient $recipient;
-
     /**
      * @ORM\Column(type="integer")
      */
     protected int $nbOpenings = 0;
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected ?DateTimeInterface $createdAt = null;
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -64,6 +59,7 @@ class LinkOpening
     public function setId(int $id): self
     {
         $this->id = $id;
+
         return $this;
     }
 

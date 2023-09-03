@@ -24,26 +24,22 @@ class Error
      * @ORM\Column(type="integer")
      */
     private int $id;
-
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank
      */
     private DateTime $date;
-
     /**
      * @ORM\Column(type="string", length=1024)
      * @Assert\NotBlank
      * @Assert\Length(max=1024)
      */
     private string $subject;
-
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank
      */
     private string $content;
-
     /**
      * @ORM\ManyToOne(targetEntity=Lle\HermesBundle\Entity\EmailError::class, inversedBy="errors")
      * @ORM\JoinColumn(nullable=false)
@@ -66,6 +62,7 @@ class Error
     public function setId(int $id): Error
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -84,6 +81,7 @@ class Error
     public function setDate(DateTime $date): Error
     {
         $this->date = $date;
+
         return $this;
     }
 
@@ -102,6 +100,7 @@ class Error
     public function setSubject(string $subject): Error
     {
         $this->subject = $subject;
+
         return $this;
     }
 
@@ -120,6 +119,7 @@ class Error
     public function setContent(string $content): Error
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -138,6 +138,7 @@ class Error
     public function setEmailError(EmailError $emailError): Error
     {
         $this->emailError = $emailError;
+
         return $this;
     }
 }

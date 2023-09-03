@@ -45,7 +45,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
                 $senderEmail,
                 $code,
                 $unsubscriptions,
-                $statistics
+                $statistics,
             ];
         }
 
@@ -58,7 +58,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $code,
             $html,
             $unsubscriptions,
-            $statistics
+            $statistics,
         ];
     }
 

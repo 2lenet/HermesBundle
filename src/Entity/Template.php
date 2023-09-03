@@ -25,27 +25,23 @@ class Template
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
     protected string $libelle;
-
     /**
      * @ORM\Column(type="string", length=1024)
      * @Assert\NotBlank
      * @Assert\Length(max=1024)
      */
     protected string $subject;
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     protected ?string $senderName = null;
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
@@ -53,34 +49,28 @@ class Template
      * @Assert\Email
      */
     protected string $senderEmail;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected ?string $mjml = null;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected ?string $text = null;
-
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Length(max=255)
      */
     protected string $code;
-
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected ?string $html = null;
-
     /**
      * @ORM\Column(type="boolean")
      */
     protected bool $unsubscriptions = false;
-
     /**
      * @ORM\Column(type="boolean")
      */
@@ -106,6 +96,7 @@ class Template
     public function setId(int $id): Template
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -124,6 +115,7 @@ class Template
     public function setLibelle(string $libelle): Template
     {
         $this->libelle = $libelle;
+
         return $this;
     }
 
@@ -142,6 +134,7 @@ class Template
     public function setSubject(string $subject): Template
     {
         $this->subject = $subject;
+
         return $this;
     }
 
@@ -160,6 +153,7 @@ class Template
     public function setSenderName(?string $senderName): Template
     {
         $this->senderName = $senderName;
+
         return $this;
     }
 
@@ -178,6 +172,7 @@ class Template
     public function setSenderEmail(string $senderEmail): Template
     {
         $this->senderEmail = $senderEmail;
+
         return $this;
     }
 
@@ -196,6 +191,7 @@ class Template
     public function setMjml(?string $mjml): Template
     {
         $this->mjml = $mjml;
+
         return $this;
     }
 
@@ -214,6 +210,7 @@ class Template
     public function setText(?string $text): Template
     {
         $this->text = $text;
+
         return $this;
     }
 
@@ -232,6 +229,7 @@ class Template
     public function setCode(string $code): Template
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -250,6 +248,7 @@ class Template
     public function setHtml(?string $html): Template
     {
         $this->html = $html;
+
         return $this;
     }
 
@@ -268,6 +267,7 @@ class Template
     public function setUnsubscriptions(bool $unsubscriptions): Template
     {
         $this->unsubscriptions = $unsubscriptions;
+
         return $this;
     }
 

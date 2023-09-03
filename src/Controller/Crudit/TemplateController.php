@@ -25,8 +25,12 @@ class TemplateController extends AbstractCrudController
     private TemplateRepository $templateRepository;
     private TranslatorInterface $translator;
 
-    public function __construct(TemplateCrudConfig $config, EntityManagerInterface $em, TemplateRepository $templateRepository, TranslatorInterface $translator)
-    {
+    public function __construct(
+        TemplateCrudConfig $config,
+        EntityManagerInterface $em,
+        TemplateRepository $templateRepository,
+        TranslatorInterface $translator
+    ) {
         $this->config = $config;
         $this->em = $em;
         $this->templateRepository = $templateRepository;

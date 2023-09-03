@@ -12,7 +12,6 @@ use Twig\TwigFunction;
 class HermesExtension extends AbstractExtension
 {
     private Environment $twig;
-
     private RouterInterface $router;
 
     public function __construct(Environment $twig, RouterInterface $router)

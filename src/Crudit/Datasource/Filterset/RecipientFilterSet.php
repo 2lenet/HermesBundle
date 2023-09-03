@@ -8,7 +8,6 @@ use Lle\CruditBundle\Datasource\AbstractFilterSet;
 use Lle\CruditBundle\Filter\FilterType\DateFilterType;
 use Lle\CruditBundle\Filter\FilterType\EntityFilterType;
 use Lle\CruditBundle\Filter\FilterType\StringFilterType;
-use Lle\HermesBundle\Entity\Mail;
 
 class RecipientFilterSet extends AbstractFilterSet
 {
@@ -22,7 +21,7 @@ class RecipientFilterSet extends AbstractFilterSet
             StringFilterType::new('toEmail'),
             StringFilterType::new('status'),
             DateFilterType::new('mail:sendingDate'),
-            DateFilterType::new('openDate')
+            DateFilterType::new('openDate'),
         ];
     }
 }
