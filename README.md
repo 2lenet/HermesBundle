@@ -65,6 +65,12 @@ parameters:
     default_locale: 'xx'
 ```
 
+### Step 4: Add cron
+
+:warning: Don't forget to add the cron if you want your emails to be sent.
+
+`* * * * * root cd /var/www/html/  && php bin/console lle:hermes:send`
+
 Applications that don't use Symfony Flex
 ----------------------------------------
 
@@ -103,6 +109,12 @@ hermes:
     prefix: /hermes
 ```
 
+### Step 4: Add cron
+
+:warning: Don't forget to add the cron if you want your emails to be sent.
+
+`* * * * * root cd /var/www/html/  && php bin/console lle:hermes:send`
+
 ## Notes
 
 ### Messenger
@@ -110,7 +122,3 @@ hermes:
 If you have Messenger installed and use default configuration, the mails will be asynchronous and sent in a queue. You
 either need to uninstall Messenger (DoctrineMessenger is installed by default on Symfony projects) or configure
 Hermès/Messenger differently.
-
-### CRON
-
-Hermès sends mails with a command. You need to create a CRON if you want your mails to be sent automatically.
