@@ -132,15 +132,15 @@ class SenderService
     protected function updateMail(Mail $mail): void
     {
         $destinataireSent = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_SENT, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_SENT, 'mail' => $mail, 'test' => false]);
         $mail->setTotalSended(count($destinataireSent));
 
         $unsubscribedMails = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_UNSUBSCRIBED, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_UNSUBSCRIBED, 'mail' => $mail, 'test' => false]);
         $mail->setTotalUnsubscribed(count($unsubscribedMails));
 
         $errorMails = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_ERROR, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_ERROR, 'mail' => $mail, 'test' => false]);
         $mail->setTotalError(count($errorMails));
 
         $totalRecipientsToSend = $mail->getTotalToSend() - $mail->getTotalUnsubscribed();
