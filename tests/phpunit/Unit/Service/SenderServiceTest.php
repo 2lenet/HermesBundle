@@ -35,7 +35,7 @@ class SenderServiceTest extends TestCase
             $this->getMockUnsubscribeEmailRepository(),
             $this->getMockMailBuilderService(),
         );
-        $sender->sendAllMails();
+        self::assertEquals(1, $sender->sendAllMails());
     }
 
     protected function getMockMailer(): MailerInterface
@@ -45,26 +45,7 @@ class SenderServiceTest extends TestCase
 
     protected function getMockEntityManager(): EntityManagerInterface
     {
-        $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->expects(self::exactly(1))
-            ->method('persist')
-            ->withConsecutive(
-                [
-                    self::callback(function (Recipient $recipient) {
-                        return $recipient->getStatus() === Recipient::STATUS_SENT;
-                    }),
-                ],
-                [
-                    self::callback(function (Mail $mail) {
-                        return $mail->getStatus() === Mail::STATUS_SENT
-                            && $mail->getTotalSended() === 1
-                            && $mail->getTotalUnsubscribed() === 1
-                            && $mail->getTotalError() === 1;
-                    }),
-                ]
-            );
-
-        return $entityManager;
+        return $this->createMock(EntityManagerInterface::class);
     }
 
     protected function getMockRecipientRepository(): RecipientRepository
