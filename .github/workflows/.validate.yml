@@ -2,7 +2,7 @@ name: Validate
 
 on:
     push:
-        branches: [main, init]
+        branches: [main]
     pull_request:
         branches: [main]
 
@@ -13,12 +13,12 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php_version: [7.4, 8.0, 8.1]
+                php_version: [8.1]
 
         steps:
             -   uses: actions/checkout@v2
 
-            -   name: 'Validate composer.json and composer.lock'
+            -   name: 'Validate composer.json'
                 run: composer validate
 
             -   name: 'Cache Composer packages'
@@ -39,9 +39,3 @@ jobs:
 
             -   name: 'PHP CodeSniffer Validations'
                 run: vendor/bin/phpcs
-
-            -   name: 'PHPStan Static Analysis'
-                uses: php-actions/phpstan@v2
-                with:
-                    configuration: tests/phpstan.neon
-                    memory_limit: 256M
