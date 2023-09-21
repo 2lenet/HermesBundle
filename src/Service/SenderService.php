@@ -104,7 +104,6 @@ class SenderService
 
             if ($updateSendingDate) {
                 $mail->setSendingDate(new DateTime());
-                $this->entityManager->persist($mail);
             }
 
             $this->entityManager->flush();

@@ -40,7 +40,7 @@ class SendCommand extends Command
         if (!$this->lock()) {
             $output->writeln('The command is already running in another process');
 
-            return 0;
+            return Command::FAILURE;
         }
 
         $io = new SymfonyStyle($input, $output);
@@ -51,6 +51,6 @@ class SendCommand extends Command
 
         $io->success("Success $nbSent mails sent");
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

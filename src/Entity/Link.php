@@ -105,7 +105,7 @@ class Link
     public function addLinkOpening(LinkOpening $linkOpening): self
     {
         if (!$this->linkOpenings->contains($linkOpening)) {
-            $linkOpening->setRecipient($this);
+            $linkOpening->setLink($this);
             $this->linkOpenings->add($linkOpening);
         }
 
