@@ -29,7 +29,7 @@ class EmailError
     /**
      * @ORM\Column(type="integer")
      */
-    private int $nbError = 1;
+    private int $nbError = 0;
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank
@@ -146,7 +146,7 @@ class EmailError
         return $this;
     }
 
-    public function removeErrror(Error $error): EmailError
+    public function removeError(Error $error): EmailError
     {
         if (true === $this->errors->contains($error)) {
             $this->errors->removeElement($error);

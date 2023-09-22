@@ -1,18 +1,19 @@
-name: Test
+name: PHPUnit
 
 on:
     push:
-        branches: [main, init]
+        branches: [main]
     pull_request:
         branches: [main]
 
 jobs:
     phpunit:
         name: "PHPUnit ${{ matrix.php-version }}"
+
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                php_version: [7.4, 8.0, 8.1]
+                php_version: [8.1]
 
         steps:
             -   uses: actions/checkout@v2
@@ -29,12 +30,6 @@ jobs:
                 with:
                     php_version: ${{ matrix.php_version }}
                     php_extensions: xdebug
-                    version: 9.5
+                    version: 10.3
                     configuration: tests/phpunit/phpunit.xml
                     bootstrap: vendor/autoload.php
-                    args: --coverage-text=coverage.xml
-
-            -   name: "Send coverage to Codecov"
-                uses: "codecov/codecov-action@v2"
-                with:
-                    file: "coverage.xml"

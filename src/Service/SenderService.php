@@ -100,11 +100,9 @@ class SenderService
         try {
             $this->mailer->send($this->mailBuilderService->buildMail($mail, $recipient));
             $recipient->setStatus(Recipient::STATUS_SENT);
-            $this->entityManager->persist($recipient);
 
             if ($updateSendingDate) {
                 $mail->setSendingDate(new DateTime());
-                $this->entityManager->persist($mail);
             }
 
             $this->entityManager->flush();

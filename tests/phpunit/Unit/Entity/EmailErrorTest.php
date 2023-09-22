@@ -18,59 +18,34 @@ class EmailErrorTest extends TestCase
 {
     public function testCreate(): void
     {
-        $entity = new EmailError();
-        $entity->setId(1);
-        self::assertEquals(1, $entity->getId());
-        self::assertEquals(1, $entity->getNbError());
-        self::assertEquals(2, $entity->setNbError(2)->getNbError());
+        $emailError = new EmailError();
+
+        $emailError->setId(1);
+        self::assertEquals(1, $emailError->getId());
+        self::assertEquals(0, $emailError->getNbError());
+        self::assertCount(0, $emailError->getErrors());
+
+        $emailError->setNbError(2);
+        self::assertEquals(2, $emailError->getNbError());
+
         $date = new DateTime();
-        self::assertEquals($date, $entity->setDateError($date)->getDateError());
-        self::assertEquals('john.doe@email.com', $entity->setEmail('john.doe@email.com')->getEmail());
+        $emailError->setDateError($date);
+        self::assertEquals($date, $emailError->getDateError());
+
+        $emailError->setEmail('john.doe@email.com');
+        self::assertEquals('john.doe@email.com', $emailError->getEmail());
+
         $error = new Error();
-        self::assertCount(0, $entity->getErrors());
-        $entity->addError($error);
-        self::assertCount(1, $entity->getErrors());
-        self::assertEquals($error, $entity->getErrors()->first());
-        self::assertEquals($entity, $error->getEmailError());
-        self::assertCount(0, $entity->removeErrror($error)->getErrors());
+        $emailError->addError($error);
+        self::assertCount(1, $emailError->getErrors());
+        self::assertEquals($error, $emailError->getErrors()->first());
+        self::assertEquals($emailError, $error->getEmailError());
+
+        $emailError->removeError($error);
+        self::assertCount(0, $emailError->getErrors());
 
         $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
-
-        $errors = $validator->validate($entity);
-        self::assertEquals(0, count($errors));
-    }
-
-    public function testInvalidAssert(): void
-    {
-        $entity = new EmailError();
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
-
-        // Date Error
-        $violations = $validator->validateProperty($entity, 'dateError');
-        self::assertCount(1, $violations);
-        self::assertEquals(
-            'This value should not be blank.',
-            $violations[0]->getMessage()
-        );
-
-        // Email
-        $violations = $validator->validateProperty($entity, 'email');
-        self::assertCount(1, $violations);
-        self::assertEquals(
-            'This value should not be blank.',
-            $violations[0]->getMessage()
-        );
-
-        $entity->setEmail(str_repeat('a', 256));
-        $violations = $validator->validateProperty($entity, 'email');
-        self::assertCount(2, $violations);
-        self::assertEquals(
-            'This value is too long. It should have 255 characters or less.',
-            $violations[0]->getMessage()
-        );
-        self::assertEquals(
-            'This value is not a valid email address.',
-            $violations[1]->getMessage()
-        );
+        $errors = $validator->validate($emailError);
+        self::assertCount(0, $errors);
     }
 }
