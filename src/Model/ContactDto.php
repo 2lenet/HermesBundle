@@ -10,16 +10,14 @@ namespace Lle\HermesBundle\Model;
 class ContactDto
 {
     /**
-     * @var string
      * Contact's general name
      */
-    protected $name;
-    protected $data = [];
+    protected string $name;
+    protected array $data = [];
     /**
-     * @var string
      * Contact's mail address
      */
-    protected $address;
+    protected string $address;
 
     public function __construct(string $name, string $address)
     {
@@ -27,17 +25,11 @@ class ContactDto
         $this->address = $address;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -45,39 +37,26 @@ class ContactDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getAddress(): string
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param string $address
-     */
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
     public function getData(): array
     {
         return $this->data;
     }
 
-    /**
-     * @param array $data
-     * @return ContactDto
-     */
-    public function setData(array $data): ContactDto
+    public function setData(array $data): self
     {
         $this->data = $data;
+
+        return $this;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

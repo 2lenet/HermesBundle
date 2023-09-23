@@ -596,7 +596,7 @@ class Mail
     public function removeCcRecipient(Recipient $ccRecipient): Mail
     {
         if ($this->ccRecipients->contains($ccRecipient)) {
-            $this->ccRecipient->removeElement($ccRecipient);
+            $this->ccRecipients->removeElement($ccRecipient);
         }
 
         return $this;
@@ -604,16 +604,20 @@ class Mail
 
     public function getJsonAttachement(): array
     {
-        return json_decode(json_encode($this->attachement), true);
+        $json = json_encode($this->attachement);
+
+        return $json ? json_decode($json, true) : [];
     }
 
-    public function getPathOfAttachement(string $file): string
+    public function getPathOfAttachement(string $file): ?string
     {
         foreach ($this->getJsonAttachement() as $attachement) {
             if ($attachement["name"] === $file) {
                 return $attachement["path"] . $file;
             }
         }
+
+        return null;
     }
 
     public function getLinks(): Collection

@@ -81,7 +81,7 @@ class MailController extends AbstractCrudController
     /**
      * @Route("/send/{id}", name="lle_hermes_crudit_mail_send", methods={"GET"})
      */
-    public function send(Mail $mail, SenderService $senderService)
+    public function send(Mail $mail, SenderService $senderService): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_MAIL_SEND');
 
@@ -101,9 +101,14 @@ class MailController extends AbstractCrudController
     /**
      * @Route("/show/{id}/{file}", name="lle_hermes_crudit_mail_show_attachement", methods={"GET"})
      */
-    public function showAttachement(Mail $mail, string $file)
+    public function showAttachement(Mail $mail, string $file): ?BinaryFileResponse
     {
-        return new BinaryFileResponse($mail->getPathOfAttachement($file));
+        $path = $mail->getPathOfAttachement($file);
+        if (!$path) {
+            return null;
+        }
+
+        return new BinaryFileResponse($path);
     }
 
     /**
@@ -116,8 +121,10 @@ class MailController extends AbstractCrudController
 
         $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_DELETE', $mail);
 
+        /** @var string $rootDir */
+        $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
         $attachementsPath = sprintf(
-            $this->parameterBag->get('lle_hermes.root_dir') . MailFactory::ATTACHMENTS_DIR,
+            $rootDir . MailFactory::ATTACHMENTS_DIR,
             $mail->getId()
         );
         $this->deleteAttachements($attachementsPath);
@@ -128,19 +135,24 @@ class MailController extends AbstractCrudController
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
 
-    private function deleteAttachements(string $path)
+    private function deleteAttachements(string $path): bool
     {
         if (file_exists($path)) {
-            $files = array_diff(scandir($path), ['.', '..']);
+            /** @var array $files */
+            $files = scandir($path);
+            $files = array_diff($files, ['.', '..']);
             foreach ($files as $file) {
                 if (is_dir($path . '/' . $file)) {
-                    $this->deleteAttachements($path . '/' . $file);
+                    return $this->deleteAttachements($path . '/' . $file);
                 } else {
-                    unlink($path . '/' . $file);
+                    return unlink($path . '/' . $file);
                 }
             }
-            rmdir($path);
+
+            return rmdir($path);
         }
+
+        return false;
     }
 
     /**
@@ -151,6 +163,11 @@ class MailController extends AbstractCrudController
         $this->denyAccessUnlessGranted('ROLE_MAIL_SEND_TESTMAIL');
 
         $email = $request->query->get('email');
+        if (!$email) {
+            $this->addFlash(FlashBrickResponse::SUCCESS, 'flash.no_email');
+
+            return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        }
 
         $recipient = new Recipient();
         $recipient

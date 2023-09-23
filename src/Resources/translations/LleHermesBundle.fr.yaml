@@ -130,6 +130,7 @@ text:
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
     mail_sent: '%nb% / %nbTotal% mails envoyés'
+    no_email: Aucune adresse email n'a été renseignée
 
 modal:
     action:

@@ -46,12 +46,7 @@ class LinkOpening
      */
     protected ?DateTimeInterface $updatedAt = null;
 
-    public function __toString(): string
-    {
-        return $this->url;
-    }
-
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

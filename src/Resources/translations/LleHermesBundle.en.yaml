@@ -123,6 +123,7 @@ text:
 flash:
     copyAlreadyExist: A copy of this template already exists, please edit the code of the copy and try again
     mail_sent: '%nb% / %nbTotal% mails sent'
+    no_email: No email address has been filled in
 
 modal:
     action:

@@ -59,7 +59,7 @@ class SenderServiceTest extends TestCase
         $repository->expects(self::exactly(1))
             ->method('findRecipientsSending')
             ->with(self::equalTo(Recipient::STATUS_SENDING), self::equalTo(Mail::STATUS_SENDING), self::equalTo(10))
-            ->will(self::returnValue([$recipient]));
+            ->willReturn([$recipient]);
 
         $repository->method('findBy')->willReturn([$recipient]);
 

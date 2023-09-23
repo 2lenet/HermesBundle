@@ -44,7 +44,7 @@ class MailTemplater
         return $this->render((string)$this->mail->getTemplate()->getSenderName());
     }
 
-    private function render(string $string, bool $decodeHtml = true)
+    private function render(string $string, bool $decodeHtml = true): string
     {
         $this->twig->disableStrictVariables();
 

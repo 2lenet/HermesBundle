@@ -34,12 +34,11 @@ class LleHermesExtension extends Extension
 
         // Load Hermes' form types
         if ($container->hasParameter("twig.form.resources")) {
+            /** @var array $twigFormResources */
+            $twigFormResources = $container->getParameter('twig.form.resources');
             $container->setParameter(
                 "twig.form.resources",
-                array_merge(
-                    ["@LleHermes/form/custom_types.html.twig"],
-                    $container->getParameter("twig.form.resources")
-                )
+                array_merge(['@LleHermes/form/custom_types.html.twig'], $twigFormResources)
             );
         }
     }

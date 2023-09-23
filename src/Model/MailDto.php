@@ -15,71 +15,58 @@ class MailDto
     public const DRAFT = Mail::STATUS_DRAFT;
     public const SENDING = Mail::STATUS_SENDING;
     /**
-     * @var int
      * Mail's identifier. Can be custom
      */
-    protected $id;
+    protected ?int $id;
     /**
-     * @var string
      * The subject of the mail.
      */
-    protected $subject;
+    protected string $subject;
     /**
-     * @var string
      * Content of the mail.
      */
-    protected $textContent;
+    protected string $textContent;
     /**
-     * @var string
      * Html content of the mail.
      */
-    protected $htmlContent;
+    protected string $htmlContent;
     /**
      * @var ContactDto[]
      * People that should receive the mail.
      */
-    protected $to = [];
+    protected array $to = [];
     /**
-     * @var ContactDto[
+     * @var ContactDto[]
      * People in copy
      */
-    protected $cc = [];
+    protected array $cc = [];
     /**
-     * @var ContactDto
      * The person that sends the mail.
      */
-    protected $from;
+    protected ContactDto $from;
     /**
-     * @var string
      * The code of the template to use.
      */
-    protected $template;
+    protected string $template;
     /**
      * @var AttachmentInterface[]
      * Mail attachments.
      * Be careful about user files though. (@see https://symfony.com/doc/current/controller/upload_file.html)
      */
-    protected $attachments = [];
-    protected $status = Mail::STATUS_SENDING;
+    protected array $attachments = [];
+    protected string $status = Mail::STATUS_SENDING;
     /**
-     * @var array
      * Data to use for mail template
      */
-    protected $data = [];
+    protected array $data = [];
     protected bool $sendHtml = true;
     protected bool $sendText = true;
 
-    /**
-     * @return int
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
     public function setId(?int $id): self
     {
         $this->id = $id;
@@ -87,54 +74,36 @@ class MailDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSubject(): ?string
+    public function getSubject(): string
     {
         return $this->subject;
     }
 
-    /**
-     * @param string $subject
-     */
-    public function setSubject(?string $subject): self
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTextContent(): ?string
+    public function getTextContent(): string
     {
         return $this->textContent;
     }
 
-    /**
-     * @param string $textContent
-     */
-    public function setTextContent(?string $textContent): self
+    public function setTextContent(string $textContent): self
     {
         $this->textContent = $textContent;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getHtmlContent(): ?string
+    public function getHtmlContent(): string
     {
         return $this->htmlContent;
     }
 
-    /**
-     * @param string $htmlContent
-     */
-    public function setHtmlContent(?string $htmlContent): self
+    public function setHtmlContent(string $htmlContent): self
     {
         $this->htmlContent = $htmlContent;
 
@@ -144,7 +113,7 @@ class MailDto
     /**
      * @return ContactDto[]
      */
-    public function getTo(): ?array
+    public function getTo(): array
     {
         return $this->to;
     }
@@ -152,17 +121,14 @@ class MailDto
     /**
      * @param ContactDto[] $to
      */
-    public function setTo(?array $to): self
+    public function setTo(array $to): self
     {
         $this->to = $to;
 
         return $this;
     }
 
-    /**
-     * @param ContactDto $to
-     */
-    public function addTo(?ContactDto $to): self
+    public function addTo(ContactDto $to): self
     {
         $this->to[] = $to;
 
@@ -172,7 +138,7 @@ class MailDto
     /**
      * @return ContactDto[]
      */
-    public function getCc(): ?array
+    public function getCc(): array
     {
         return $this->cc;
     }
@@ -180,53 +146,38 @@ class MailDto
     /**
      * @param ContactDto[] $cc
      */
-    public function setCc(?array $cc): self
+    public function setCc(array $cc): self
     {
         $this->cc = $cc;
 
         return $this;
     }
 
-    /**
-     * @param ContactDto $cc
-     */
-    public function addCc(?ContactDto $cc): self
+    public function addCc(ContactDto $cc): self
     {
         $this->cc[] = $cc;
 
         return $this;
     }
 
-    /**
-     * @return ContactDto
-     */
-    public function getFrom(): ?ContactDto
+    public function getFrom(): ContactDto
     {
         return $this->from;
     }
 
-    /**
-     * @param ContactDto $from
-     */
-    public function setFrom(?ContactDto $from): self
+    public function setFrom(ContactDto $from): self
     {
         $this->from = $from;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getTemplate(): ?string
+    public function getTemplate(): string
     {
         return $this->template;
     }
 
-    /**
-     * @param string $template
-     */
-    public function setTemplate(?string $template): self
+    public function setTemplate(string $template): self
     {
         $this->template = $template;
 
@@ -236,7 +187,7 @@ class MailDto
     /**
      * @return AttachmentInterface[]
      */
-    public function getAttachments(): ?array
+    public function getAttachments(): array
     {
         return $this->attachments;
     }
@@ -244,7 +195,7 @@ class MailDto
     /**
      * @param AttachmentInterface[] $attachments
      */
-    public function setAttachments(?array $attachments): self
+    public function setAttachments(array $attachments): self
     {
         $this->attachments = $attachments;
 
@@ -258,17 +209,11 @@ class MailDto
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getData(): array
     {
         return $this->data;
     }
 
-    /**
-     * @param array $data
-     */
     public function setData(array $data): self
     {
         $this->data = $data;
@@ -276,52 +221,33 @@ class MailDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-    /**
-     * @param string $status
-     * @return MailDto
-     */
-    public function setStatus(string $status): MailDto
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isSendHtml(): bool
     {
         return $this->sendHtml;
     }
 
-    /**
-     * @param bool $sendHtml
-     */
     public function setSendHtml(bool $sendHtml): void
     {
         $this->sendHtml = $sendHtml;
     }
 
-    /**
-     * @return bool
-     */
     public function isSendText(): bool
     {
         return $this->sendText;
     }
 
-    /**
-     * @param bool $sendText
-     */
     public function setSendText(bool $sendText): void
     {
         $this->sendText = $sendText;
