@@ -58,6 +58,7 @@ class SenderService
 
     /**
      * @param Recipient[] $recipients
+     * @throws NoMailFoundException
      */
     public function sendAllRecipients(array $recipients): int
     {
@@ -65,11 +66,11 @@ class SenderService
         $nb = 0;
 
         foreach ($recipients as $recipient) {
-            if (!$recipient->getMail() && !$recipient->getCcMail()) {
+            $mail = $recipient->getMail() ?? $recipient->getCcMail();
+            if (!$mail) {
                 throw new NoMailFoundException($recipient->getId());
             }
 
-            $mail = $recipient->getMail() ?? $recipient->getCcMail();
             $template = $mail->getTemplate();
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
@@ -157,11 +158,10 @@ class SenderService
 
     public function sendRecipient(Recipient $recipient): int
     {
-        if (!$recipient->getMail() && !$recipient->getCcMail()) {
+        $mail = $recipient->getMail() ?? $recipient->getCcMail();
+        if (!$mail) {
             throw new NoMailFoundException($recipient->getId());
         }
-
-        $mail = $recipient->getMail() ?? $recipient->getCcMail();
 
         if ($this->send($mail, $recipient, false)) {
             return 1;

@@ -17,7 +17,10 @@ class UnsubscribeController extends AbstractController
     public function __construct(EntityManagerInterface $em, ParameterBagInterface $parameterBag)
     {
         $this->em = $em;
-        $this->secret = $parameterBag->get('lle_hermes.app_secret');
+
+        /** @var string $secret */
+        $secret = $parameterBag->get('lle_hermes.app_secret');
+        $this->secret = $secret;
     }
 
     /**

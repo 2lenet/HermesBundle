@@ -28,13 +28,19 @@ class MailBuilderService
         ParameterBagInterface $parameterBag,
         EntityManagerInterface $em
     ) {
+        /** @var string $secret */
+        $secret = $parameterBag->get('lle_hermes.app_secret');
+
         $this->twig = $twig;
         $this->router = $router;
         $this->parameterBag = $parameterBag;
-        $this->secret = $parameterBag->get('lle_hermes.app_secret');
+        $this->secret = $secret;
         $this->em = $em;
     }
 
+    /**
+     * @throws NoRecipientException
+     */
     public function buildMail(Mail $mail, Recipient $recipient): Email
     {
         $templater = new MailTemplater($mail, $this->twig, $this->router);
@@ -51,12 +57,13 @@ class MailBuilderService
 
         /** @var string $domain */
         $domain = $this->parameterBag->get('lle_hermes.app_domain');
+        /** @var string $returnPath */
         $returnPath = $this->parameterBag->get('lle_hermes.bounce_email');
         $context = $this->router->getContext();
         $context->setHost($domain);
         $context->setScheme('https');
 
-        $from = new Address($mail->getTemplate()->getSenderEmail(), $templater->getSenderName() ?? "");
+        $from = new Address($mail->getTemplate()->getSenderEmail(), $templater->getSenderName());
 
         $email = new Email();
 
@@ -137,7 +144,7 @@ class MailBuilderService
         );
     }
 
-    private function generateStatsLinks(string $html, Mail $mail, Recipient $recipient): string
+    private function generateStatsLinks(string $html, Mail $mail, Recipient $recipient): ?string
     {
         return preg_replace_callback(
             '/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/s',
@@ -167,7 +174,9 @@ class MailBuilderService
             function ($matches) use ($domain) {
                 $content = base64_decode($matches[2]);
                 $filename = md5($matches[2]) . '.jpg';
+                /** @var string $rootDir */
                 $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
+                /** @var string $uploadPath */
                 $uploadPath = $this->parameterBag->get('lle_hermes.upload_path');
 
                 $filenamePath = $rootDir . '/public' . $uploadPath . $filename;
