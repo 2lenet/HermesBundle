@@ -74,7 +74,10 @@ class Recipient
      */
     private ?Mail $ccMail = null;
     /**
-     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="recipient", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="recipient", cascade={
+     *     "persist",
+     *     "remove"
+     * })
      */
     protected Collection $linkOpenings;
     /** @ORM\Column(type="boolean") */

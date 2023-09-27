@@ -75,7 +75,8 @@ class MailCrudConfig extends AbstractCrudConfig
             ];
 
             $request = $this->requestStack->getMainRequest();
-            if ($request && $this->getPath(CrudConfigInterface::SHOW)->getRoute() == $request->attributes->get('_route')) {
+            $route = $this->getPath(CrudConfigInterface::SHOW)->getRoute();
+            if ($request && $route == $request->attributes->get('_route')) {
                 /** @var Mail $mail */
                 $mail = $this->datasource->get($request->attributes->get('id'));
                 if ($mail->getTemplate()->hasStatistics()) {
@@ -176,7 +177,8 @@ class MailCrudConfig extends AbstractCrudConfig
         ];
 
         $request = $this->requestStack->getMainRequest();
-        if ($request && $this->getPath(CrudConfigInterface::SHOW)->getRoute() == $request->attributes->get('_route')) {
+        $route = $this->getPath(CrudConfigInterface::SHOW)->getRoute();
+        if ($request && $route == $request->attributes->get('_route')) {
             /** @var Mail $mail */
             $mail = $this->datasource->get($request->attributes->get('id'));
             if ($mail->getTemplate()->hasStatistics()) {

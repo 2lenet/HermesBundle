@@ -37,7 +37,10 @@ class Link
      */
     protected Mail $mail;
     /**
-     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="link", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\LinkOpening", mappedBy="link", cascade={
+     *     "persist",
+     *     "remove"
+     * })
      */
     protected Collection $linkOpenings;
 
