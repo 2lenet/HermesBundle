@@ -14,52 +14,65 @@ class MailDto
 {
     public const DRAFT = Mail::STATUS_DRAFT;
     public const SENDING = Mail::STATUS_SENDING;
+
     /**
      * Mail's identifier. Can be custom
      */
-    protected ?int $id;
+    protected ?int $id = null;
+
     /**
      * The subject of the mail.
      */
     protected string $subject;
+
     /**
      * Content of the mail.
      */
     protected string $textContent;
+
     /**
      * Html content of the mail.
      */
     protected string $htmlContent;
+
     /**
      * @var ContactDto[]
      * People that should receive the mail.
      */
     protected array $to = [];
+
     /**
      * @var ContactDto[]
      * People in copy
      */
     protected array $cc = [];
+
     /**
      * The person that sends the mail.
      */
     protected ContactDto $from;
+
     /**
      * The code of the template to use.
      */
     protected string $template;
+
     /**
      * @var AttachmentInterface[]
      * Mail attachments.
      * Be careful about user files though. (@see https://symfony.com/doc/current/controller/upload_file.html)
      */
     protected array $attachments = [];
+
     protected string $status = Mail::STATUS_SENDING;
+
     /**
      * Data to use for mail template
      */
     protected array $data = [];
+
     protected bool $sendHtml = true;
+
     protected bool $sendText = true;
 
     public function getId(): ?int

@@ -13,18 +13,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Class SendCommand
  * @package Lle\HermesBundle\Command
- *
  */
 class SendCommand extends Command
 {
     use LockableTrait;
 
     protected static $defaultName = 'lle:hermes:send';
-    private SenderService $sender;
 
-    public function __construct(SenderService $sender)
+    public function __construct(protected readonly SenderService $sender)
     {
-        $this->sender = $sender;
         parent::__construct();
     }
 

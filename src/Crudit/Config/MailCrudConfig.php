@@ -18,20 +18,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class MailCrudConfig extends AbstractCrudConfig
 {
-    private RequestStack $requestStack;
-    private RecipientCrudConfig $recipientCrudConfig;
-    private LinkCrudConfig $linkCrudConfig;
-
     public function __construct(
         MailDatasource $datasource,
-        RequestStack $requestStack,
-        RecipientCrudConfig $recipientCrudConfig,
-        LinkCrudConfig $linkCrudConfig
+        protected readonly RequestStack $requestStack,
+        protected readonly RecipientCrudConfig $recipientCrudConfig,
+        protected readonly LinkCrudConfig $linkCrudConfig,
     ) {
         $this->datasource = $datasource;
-        $this->requestStack = $requestStack;
-        $this->recipientCrudConfig = $recipientCrudConfig;
-        $this->linkCrudConfig = $linkCrudConfig;
     }
 
     /**

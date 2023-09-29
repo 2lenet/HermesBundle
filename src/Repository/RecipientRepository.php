@@ -28,9 +28,6 @@ class RecipientRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $statusDest
-     * @param string $statusMail
-     * @param int $limit
      * @return Recipient[]
      */
     public function findRecipientsSending(string $statusDest, string $statusMail, int $limit): array

@@ -11,9 +11,6 @@ use Lle\HermesBundle\Entity\Mail;
 
 class MailFilterSet extends AbstractFilterSet
 {
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return [

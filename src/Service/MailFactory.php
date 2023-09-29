@@ -12,13 +12,11 @@ use Symfony\Component\Process\Process;
 class MailFactory
 {
     public const ATTACHMENTS_DIR = "/data/hermes/attachments/mail-%s/";
-    protected ParameterBagInterface $parameters;
-    protected DestinataireFactory $destinataireFactory;
 
-    public function __construct(ParameterBagInterface $parameters, DestinataireFactory $destinataireFactory)
-    {
-        $this->parameters = $parameters;
-        $this->destinataireFactory = $destinataireFactory;
+    public function __construct(
+        protected readonly ParameterBagInterface $parameters,
+        protected readonly DestinataireFactory $destinataireFactory,
+    ) {
     }
 
     public function createMailFromDto(MailDto $mailDto, Template $template): Mail

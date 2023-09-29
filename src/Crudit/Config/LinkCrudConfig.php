@@ -14,12 +14,11 @@ use Lle\HermesBundle\Crudit\Datasource\LinkDatasource;
 
 class LinkCrudConfig extends AbstractCrudConfig
 {
-    private LinkOpeningCrudConfig $linkOpeningCrudConfig;
-
-    public function __construct(LinkDatasource $datasource, LinkOpeningCrudConfig $linkOpeningCrudConfig)
-    {
+    public function __construct(
+        LinkDatasource $datasource,
+        protected readonly LinkOpeningCrudConfig $linkOpeningCrudConfig,
+    ) {
         $this->datasource = $datasource;
-        $this->linkOpeningCrudConfig = $linkOpeningCrudConfig;
     }
 
     /**

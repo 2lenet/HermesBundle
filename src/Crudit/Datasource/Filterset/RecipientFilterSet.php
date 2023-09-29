@@ -13,9 +13,6 @@ use Lle\HermesBundle\Entity\Recipient;
 
 class RecipientFilterSet extends AbstractFilterSet
 {
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return [

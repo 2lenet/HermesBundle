@@ -11,42 +11,34 @@ use Lle\HermesBundle\Repository\LinkOpeningRepository;
  * @package Lle\HermesBundle\Entity
  *
  * @author 2LE <2le@2le.net>
- *
- * @ORM\Entity(repositoryClass=LinkOpeningRepository::class)
- * @ORM\Table(name="lle_hermes_link_opening")
  */
+#[ORM\Entity(repositoryClass: LinkOpeningRepository::class)]
+#[ORM\Table(name: 'lle_hermes_link_opening')]
 class LinkOpening
 {
-    /**
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected ?int $id;
-    /**
-     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Link", inversedBy="linkOpenings", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
+
+    #[ORM\ManyToOne(targetEntity: Link::class, inversedBy: 'linkOpenings', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
     protected Link $link;
-    /**
-     * @ORM\ManyToOne(targetEntity="Lle\HermesBundle\Entity\Recipient", inversedBy="linkOpenings", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
-     */
+
+    #[ORM\ManyToOne(targetEntity: Recipient::class, inversedBy: 'linkOpenings', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
     protected Recipient $recipient;
-    /**
-     * @ORM\Column(type="integer")
-     */
+
+    #[ORM\Column(type: 'integer')]
     protected int $nbOpenings = 0;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $createdAt = null;
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $updatedAt = null;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }

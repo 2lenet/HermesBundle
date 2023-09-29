@@ -7,6 +7,7 @@ namespace Lle\HermesBundle\Crudit\Datasource;
 use Lle\CruditBundle\Datasource\AbstractDoctrineDatasource;
 use Lle\HermesBundle\Crudit\Datasource\Filterset\TemplateFilterSet;
 use Lle\HermesBundle\Entity\Template;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class TemplateDatasource extends AbstractDoctrineDatasource
 {
@@ -15,10 +16,7 @@ class TemplateDatasource extends AbstractDoctrineDatasource
         return Template::class;
     }
 
-    /**
-     * @required
-     * @param TemplateFilterSet $filterSet
-     */
+    #[Required]
     public function setFilterset(TemplateFilterSet $filterSet): void
     {
         $this->filterset = $filterSet;

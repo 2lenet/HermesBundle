@@ -29,11 +29,11 @@ class SenderServiceTest extends TestCase
     public function testSendAllMails(): void
     {
         $sender = new SenderService(
-            $this->getMockMailer(),
             $this->getMockEntityManager(),
+            $this->getMockMailer(),
+            $this->getMockMailBuilderService(),
             $this->getMockRecipientRepository(),
             $this->getMockUnsubscribeEmailRepository(),
-            $this->getMockMailBuilderService(),
         );
         self::assertEquals(1, $sender->sendAllMails());
     }

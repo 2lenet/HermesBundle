@@ -16,26 +16,17 @@ use Twig\Environment;
 
 class MailBuilderService
 {
-    private Environment $twig;
-    private RouterInterface $router;
-    private ParameterBagInterface $parameterBag;
-    private string $secret;
-    private EntityManagerInterface $em;
+    protected readonly string $secret;
 
     public function __construct(
-        Environment $twig,
-        RouterInterface $router,
-        ParameterBagInterface $parameterBag,
-        EntityManagerInterface $em
+        protected readonly EntityManagerInterface $em,
+        protected readonly ParameterBagInterface $parameters,
+        protected readonly RouterInterface $router,
+        protected readonly Environment $twig,
     ) {
         /** @var string $secret */
-        $secret = $parameterBag->get('lle_hermes.app_secret');
-
-        $this->twig = $twig;
-        $this->router = $router;
-        $this->parameterBag = $parameterBag;
+        $secret = $parameters->get('lle_hermes.app_secret');
         $this->secret = $secret;
-        $this->em = $em;
     }
 
     /**
@@ -46,16 +37,16 @@ class MailBuilderService
         $templater = new MailTemplater($mail, $this->twig, $this->router);
 
         /** @var string $rootDir */
-        $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
+        $rootDir = $this->parameters->get('lle_hermes.root_dir');
         $attachmentsFilePath = $rootDir . sprintf(MailFactory::ATTACHMENTS_DIR, $mail->getId());
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
 
         /** @var string $domain */
-        $domain = $this->parameterBag->get('lle_hermes.app_domain');
+        $domain = $this->parameters->get('lle_hermes.app_domain');
         /** @var string $returnPath */
-        $returnPath = $this->parameterBag->get('lle_hermes.bounce_email');
+        $returnPath = $this->parameters->get('lle_hermes.bounce_email');
         $context = $this->router->getContext();
         $context->setHost($domain);
         $context->setScheme('https');
@@ -172,9 +163,9 @@ class MailBuilderService
                 $content = base64_decode($matches[2]);
                 $filename = md5($matches[2]) . '.jpg';
                 /** @var string $rootDir */
-                $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
+                $rootDir = $this->parameters->get('lle_hermes.root_dir');
                 /** @var string $uploadPath */
-                $uploadPath = $this->parameterBag->get('lle_hermes.upload_path');
+                $uploadPath = $this->parameters->get('lle_hermes.upload_path');
 
                 $filenamePath = $rootDir . '/public' . $uploadPath . $filename;
                 if (!file_exists($filenamePath)) {

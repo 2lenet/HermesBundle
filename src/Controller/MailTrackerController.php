@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -15,23 +14,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MailTrackerController extends AbstractController
 {
-    protected EntityManagerInterface $em;
-    protected ParameterBagInterface $parameterBag;
-    protected KernelInterface $kernel;
-
     public function __construct(
-        EntityManagerInterface $em,
-        ParameterBagInterface $parameterBag,
-        KernelInterface $kernel
+        protected readonly EntityManagerInterface $em,
+        protected readonly KernelInterface $kernel,
     ) {
-        $this->em = $em;
-        $this->parameterBag = $parameterBag;
-        $this->kernel = $kernel;
     }
 
-    /**
-     * @Route("/mailOpened/{recipient}", name="mail_opened")
-     */
+    #[Route('/mailOpened/{recipient}', name: 'mail_opened', methods: ['GET'])]
     public function mailOpened(Recipient $recipient): BinaryFileResponse
     {
         $recipient->setOpenDate(new DateTime());

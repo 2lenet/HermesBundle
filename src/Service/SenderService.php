@@ -23,24 +23,13 @@ use Symfony\Component\Mime\Exception\RfcComplianceException;
  */
 class SenderService
 {
-    private MailerInterface $mailer;
-    private EntityManagerInterface $entityManager;
-    private RecipientRepository $recipientRepository;
-    private UnsubscribeEmailRepository $unsubscribeEmailRepository;
-    private MailBuilderService $mailBuilderService;
-
     public function __construct(
-        MailerInterface $mailer,
-        EntityManagerInterface $entityManager,
-        RecipientRepository $recipientRepository,
-        UnsubscribeEmailRepository $unsubscribeEmailRepository,
-        MailBuilderService $mailBuilderService
+        protected readonly EntityManagerInterface $em,
+        protected readonly MailerInterface $mailer,
+        protected readonly MailBuilderService $mailBuilderService,
+        protected readonly RecipientRepository $recipientRepository,
+        protected readonly UnsubscribeEmailRepository $unsubscribeEmailRepository,
     ) {
-        $this->mailer = $mailer;
-        $this->entityManager = $entityManager;
-        $this->recipientRepository = $recipientRepository;
-        $this->unsubscribeEmailRepository = $unsubscribeEmailRepository;
-        $this->mailBuilderService = $mailBuilderService;
     }
 
     public function sendAllMails(int $limit = 10): int
@@ -77,7 +66,7 @@ class SenderService
             if ($template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
-                    $this->entityManager->flush();
+                    $this->em->flush();
 
                     $this->updateMail($mail);
                     continue;
@@ -106,23 +95,18 @@ class SenderService
                 $mail->setSendingDate(new DateTime());
             }
 
-            $this->entityManager->flush();
+            $this->em->flush();
 
             return true;
-        } catch (TransportExceptionInterface $exception) {
+        } catch (TransportExceptionInterface | RfcComplianceException) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
-            $this->entityManager->flush();
+            $this->em->flush();
 
             return false;
-        } catch (RfcComplianceException $exception) {
-            $recipient->setStatus(Recipient::STATUS_ERROR);
-            $this->entityManager->flush();
-
-            return false;
-        } catch (Exception $exception) {
+        } catch (Exception) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
             $mail->setStatus(Mail::STATUS_ERROR);
-            $this->entityManager->flush();
+            $this->em->flush();
 
             return false;
         }
@@ -153,7 +137,7 @@ class SenderService
             }
         }
 
-        $this->entityManager->flush();
+        $this->em->flush();
     }
 
     public function sendRecipient(Recipient $recipient): int

@@ -9,20 +9,16 @@ namespace Lle\HermesBundle\Model;
  */
 class ContactDto
 {
-    /**
-     * Contact's general name
-     */
-    protected string $name;
     protected array $data = [];
-    /**
-     * Contact's mail address
-     */
-    protected string $address;
 
-    public function __construct(string $name, string $address)
-    {
-        $this->name = $name;
-        $this->address = $address;
+    /**
+     * @param $name Contact's general name
+     * @param string $address Contact's mail address
+     */
+    public function __construct(
+        protected string $name,
+        protected string $address,
+    ) {
     }
 
     public function getName(): string
