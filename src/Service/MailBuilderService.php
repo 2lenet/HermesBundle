@@ -38,10 +38,7 @@ class MailBuilderService
 
         /** @var string $rootDir */
         $rootDir = $this->parameters->get('lle_hermes.root_dir');
-        $attachmentsFilePath = $rootDir . sprintf(
-            MailFactory::ATTACHMENTS_DIR,
-            $mail->getId()
-        );
+        $attachmentsFilePath = $rootDir . sprintf(MailFactory::ATTACHMENTS_DIR, $mail->getId());
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
