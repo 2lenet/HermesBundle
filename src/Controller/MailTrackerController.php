@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\Controller;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
@@ -22,7 +23,7 @@ class MailTrackerController extends AbstractController
     #[Route('/mailOpened/{recipient}', name: 'mail_opened', methods: ['GET'])]
     public function mailOpened(Recipient $recipient): BinaryFileResponse
     {
-        $recipient->setOpenDate(new \DateTime());
+        $recipient->setOpenDate(new DateTime());
         $this->em->persist($recipient);
         $this->em->flush();
 

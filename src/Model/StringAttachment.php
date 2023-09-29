@@ -4,12 +4,11 @@ namespace Lle\HermesBundle\Model;
 
 class StringAttachment implements AttachmentInterface
 {
-    /** @var string */
-    protected $data;
-    /** @var string */
-    protected $name;
-    /** @var string */
-    protected $contentType;
+    protected string $data;
+
+    protected string $name;
+
+    protected string $contentType;
 
     public function __construct(string $data, string $name, string $contentType)
     {
@@ -18,7 +17,7 @@ class StringAttachment implements AttachmentInterface
         $this->contentType = $contentType;
     }
 
-    public function getData(): string
+    public function getData(): ?string
     {
         return $this->data;
     }

@@ -4,18 +4,11 @@ namespace Lle\HermesBundle\Model;
 
 class Base64Attachment implements AttachmentInterface
 {
-    /**
-     * @var string
-     */
-    protected $data;
-    /**
-     * @var string
-     */
-    protected $name;
-    /**
-     * @var string
-     */
-    protected $contentType;
+    protected string $data;
+
+    protected string $name;
+
+    protected string $contentType;
 
     public function __construct(string $base64, string $name, string $contentType)
     {
@@ -27,7 +20,7 @@ class Base64Attachment implements AttachmentInterface
     /**
      * @inheritdoc
      */
-    public function getData(): string
+    public function getData(): ?string
     {
         return base64_decode($this->data);
     }
