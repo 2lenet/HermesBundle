@@ -14,32 +14,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/template")
- */
+#[Route('/template')]
 class TemplateController extends AbstractCrudController
 {
     use TraitCrudController;
 
-    private EntityManagerInterface $em;
-    private TemplateRepository $templateRepository;
-    private TranslatorInterface $translator;
-
     public function __construct(
         TemplateCrudConfig $config,
-        EntityManagerInterface $em,
-        TemplateRepository $templateRepository,
-        TranslatorInterface $translator
+        protected readonly EntityManagerInterface $em,
+        protected readonly TemplateRepository $templateRepository,
+        protected readonly TranslatorInterface $translator,
     ) {
         $this->config = $config;
-        $this->em = $em;
-        $this->templateRepository = $templateRepository;
-        $this->translator = $translator;
     }
 
-    /**
-     * @Route("/duplicate/{id}", name="lle_hermes_template_duplicate", methods={"GET"})
-     */
+    #[Route('/duplicate/{id}', name: 'lle_hermes_template_duplicate', methods: ['GET'])]
     public function duplicate(Template $template): Response
     {
         $this->denyAccessUnlessGranted('ROLE_LLE_HERMES');

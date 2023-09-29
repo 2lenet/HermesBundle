@@ -14,37 +14,30 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package Lle\HermesBundle\Entity
  *
  * @author 2LE <2le@2le.net>
- *
- * @ORM\Entity(repositoryClass=EmailErrorRepository::class)
- * @ORM\Table(name="lle_hermes_email_error")
  */
+#[ORM\Entity(repositoryClass: EmailErrorRepository::class)]
+#[ORM\Table(name: 'lle_hermes_email_error')]
 class EmailError
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private int $nbError = 1;
-    /**
-     * @ORM\Column(type="datetime")
-     * @Assert\NotBlank
-     */
+
+    #[ORM\Column(type: 'integer')]
+    private int $nbError = 0;
+
+    #[ORM\Column(type: 'datetime')]
+    #[Assert\NotBlank]
     private DateTime $dateError;
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Length(max=255)
-     * @Assert\Email
-     * @Assert\NotBlank
-     */
+
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Email]
+    #[Assert\NotBlank]
     private string $email;
-    /**
-     * @ORM\OneToMany(targetEntity=Lle\HermesBundle\Entity\Error::class, mappedBy="emailError")
-     */
+
+    #[ORM\OneToMany(targetEntity: Error::class, mappedBy: 'emailError')]
     private Collection $errors;
 
     public function __construct()
@@ -52,18 +45,11 @@ class EmailError
         $this->errors = new ArrayCollection();
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     * @return EmailError
-     */
     public function setId(int $id): EmailError
     {
         $this->id = $id;
@@ -71,18 +57,11 @@ class EmailError
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getNbError(): int
     {
         return $this->nbError;
     }
 
-    /**
-     * @param int $nbError
-     * @return EmailError
-     */
     public function setNbError(int $nbError): EmailError
     {
         $this->nbError = $nbError;
@@ -90,18 +69,11 @@ class EmailError
         return $this;
     }
 
-    /**
-     * @return DateTime
-     */
     public function getDateError(): DateTime
     {
         return $this->dateError;
     }
 
-    /**
-     * @param DateTime $dateError
-     * @return EmailError
-     */
     public function setDateError(DateTime $dateError): EmailError
     {
         $this->dateError = $dateError;
@@ -109,18 +81,11 @@ class EmailError
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     * @return EmailError
-     */
     public function setEmail(string $email): EmailError
     {
         $this->email = $email;
@@ -128,10 +93,7 @@ class EmailError
         return $this;
     }
 
-    /**
-     * @return ArrayCollection|Collection
-     */
-    public function getErrors()
+    public function getErrors(): Collection
     {
         return $this->errors;
     }
@@ -146,7 +108,7 @@ class EmailError
         return $this;
     }
 
-    public function removeErrror(Error $error): EmailError
+    public function removeError(Error $error): EmailError
     {
         if (true === $this->errors->contains($error)) {
             $this->errors->removeElement($error);

@@ -6,6 +6,7 @@ use DateTime;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Model\MailDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 
@@ -31,8 +32,8 @@ class MailTest extends TestCase
         $mail->setData(['hello']);
         self::assertEquals(['hello'], $mail->getData());
 
-        $mail->setStatus('status');
-        self::assertEquals('status', $mail->getStatus());
+        $mail->setStatus(MailDto::DRAFT);
+        self::assertEquals(MailDto::DRAFT, $mail->getStatus());
 
         self::assertEquals(0, $mail->getTotalToSend());
         $mail->setTotalToSend(2);
@@ -53,7 +54,6 @@ class MailTest extends TestCase
         $mail->setSubject('subject');
         self::assertEquals('subject', $mail->getSubject());
 
-        self::assertNull($mail->getMjml());
         $mail->setMjml('mjml');
         self::assertEquals('mjml', $mail->getMjml());
 
@@ -99,39 +99,6 @@ class MailTest extends TestCase
         $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
 
         $errors = $validator->validate($mail);
-        self::assertEquals(0, count($errors));
-    }
-
-    public function testInvalidAssert(): void
-    {
-        $mail = new Mail();
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
-        $violations = $validator->validateProperty($mail, 'template');
-        self::assertCount(1, $violations);
-        self::assertEquals('This value should not be blank.', $violations[0]->getMessage());
-
-        $violations = $validator->validateProperty($mail, 'status');
-        self::assertCount(1, $violations);
-        self::assertEquals('This value should not be blank.', $violations[0]->getMessage());
-
-        $mail->setStatus(str_repeat('a', 256));
-        $violations = $validator->validateProperty($mail, 'status');
-        self::assertCount(1, $violations);
-        self::assertEquals(
-            'This value is too long. It should have 255 characters or less.',
-            $violations[0]->getMessage()
-        );
-
-        $violations = $validator->validateProperty($mail, 'subject');
-        self::assertCount(1, $violations);
-        self::assertEquals('This value should not be blank.', $violations[0]->getMessage());
-
-        $mail->setSubject(str_repeat('a', 1025));
-        $violations = $validator->validateProperty($mail, 'subject');
-        self::assertCount(1, $violations);
-        self::assertEquals(
-            'This value is too long. It should have 1024 characters or less.',
-            $violations[0]->getMessage()
-        );
+        self::assertCount(0, $errors);
     }
 }

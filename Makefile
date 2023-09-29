@@ -1,5 +1,5 @@
 test:
-	./vendor/bin/phpunit tests/ -v --coverage-clover phpunit.coverage.xml --log-junit phpunit.report.xml
+	./vendor/bin/phpunit tests/ --coverage-clover phpunit.coverage.xml --log-junit phpunit.report.xml
 
 lint:
 	./vendor/bin/phpcs

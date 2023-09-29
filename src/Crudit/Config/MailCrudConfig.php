@@ -18,20 +18,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class MailCrudConfig extends AbstractCrudConfig
 {
-    private RequestStack $requestStack;
-    private RecipientCrudConfig $recipientCrudConfig;
-    private LinkCrudConfig $linkCrudConfig;
-
     public function __construct(
         MailDatasource $datasource,
-        RequestStack $requestStack,
-        RecipientCrudConfig $recipientCrudConfig,
-        LinkCrudConfig $linkCrudConfig
+        protected readonly RequestStack $requestStack,
+        protected readonly RecipientCrudConfig $recipientCrudConfig,
+        protected readonly LinkCrudConfig $linkCrudConfig,
     ) {
         $this->datasource = $datasource;
-        $this->requestStack = $requestStack;
-        $this->recipientCrudConfig = $recipientCrudConfig;
-        $this->linkCrudConfig = $linkCrudConfig;
     }
 
     /**
@@ -75,7 +68,8 @@ class MailCrudConfig extends AbstractCrudConfig
             ];
 
             $request = $this->requestStack->getMainRequest();
-            if ($this->getPath(CrudConfigInterface::SHOW)->getRoute() == $request->attributes->get('_route')) {
+            $route = $this->getPath(CrudConfigInterface::SHOW)->getRoute();
+            if ($request && $route == $request->attributes->get('_route')) {
                 /** @var Mail $mail */
                 $mail = $this->datasource->get($request->attributes->get('id'));
                 if ($mail->getTemplate()->hasStatistics()) {
@@ -176,7 +170,8 @@ class MailCrudConfig extends AbstractCrudConfig
         ];
 
         $request = $this->requestStack->getMainRequest();
-        if ($this->getPath(CrudConfigInterface::SHOW)->getRoute() == $request->attributes->get('_route')) {
+        $route = $this->getPath(CrudConfigInterface::SHOW)->getRoute();
+        if ($request && $route == $request->attributes->get('_route')) {
             /** @var Mail $mail */
             $mail = $this->datasource->get($request->attributes->get('id'));
             if ($mail->getTemplate()->hasStatistics()) {

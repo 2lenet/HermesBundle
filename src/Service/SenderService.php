@@ -23,24 +23,13 @@ use Symfony\Component\Mime\Exception\RfcComplianceException;
  */
 class SenderService
 {
-    private MailerInterface $mailer;
-    private EntityManagerInterface $entityManager;
-    private RecipientRepository $recipientRepository;
-    private UnsubscribeEmailRepository $unsubscribeEmailRepository;
-    private MailBuilderService $mailBuilderService;
-
     public function __construct(
-        MailerInterface $mailer,
-        EntityManagerInterface $entityManager,
-        RecipientRepository $recipientRepository,
-        UnsubscribeEmailRepository $unsubscribeEmailRepository,
-        MailBuilderService $mailBuilderService
+        protected readonly EntityManagerInterface $em,
+        protected readonly MailerInterface $mailer,
+        protected readonly MailBuilderService $mailBuilderService,
+        protected readonly RecipientRepository $recipientRepository,
+        protected readonly UnsubscribeEmailRepository $unsubscribeEmailRepository,
     ) {
-        $this->mailer = $mailer;
-        $this->entityManager = $entityManager;
-        $this->recipientRepository = $recipientRepository;
-        $this->unsubscribeEmailRepository = $unsubscribeEmailRepository;
-        $this->mailBuilderService = $mailBuilderService;
     }
 
     public function sendAllMails(int $limit = 10): int
@@ -58,6 +47,7 @@ class SenderService
 
     /**
      * @param Recipient[] $recipients
+     * @throws NoMailFoundException
      */
     public function sendAllRecipients(array $recipients): int
     {
@@ -65,18 +55,18 @@ class SenderService
         $nb = 0;
 
         foreach ($recipients as $recipient) {
-            if (!$recipient->getMail() && !$recipient->getCcMail()) {
+            $mail = $recipient->getMail() ?? $recipient->getCcMail();
+            if (!$mail) {
                 throw new NoMailFoundException($recipient->getId());
             }
 
-            $mail = $recipient->getMail() ?? $recipient->getCcMail();
             $template = $mail->getTemplate();
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
             if ($template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
-                    $this->entityManager->flush();
+                    $this->em->flush();
 
                     $this->updateMail($mail);
                     continue;
@@ -100,30 +90,23 @@ class SenderService
         try {
             $this->mailer->send($this->mailBuilderService->buildMail($mail, $recipient));
             $recipient->setStatus(Recipient::STATUS_SENT);
-            $this->entityManager->persist($recipient);
 
             if ($updateSendingDate) {
                 $mail->setSendingDate(new DateTime());
-                $this->entityManager->persist($mail);
             }
 
-            $this->entityManager->flush();
+            $this->em->flush();
 
             return true;
-        } catch (TransportExceptionInterface $exception) {
+        } catch (TransportExceptionInterface | RfcComplianceException) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
-            $this->entityManager->flush();
+            $this->em->flush();
 
             return false;
-        } catch (RfcComplianceException $exception) {
-            $recipient->setStatus(Recipient::STATUS_ERROR);
-            $this->entityManager->flush();
-
-            return false;
-        } catch (Exception $exception) {
+        } catch (Exception) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
             $mail->setStatus(Mail::STATUS_ERROR);
-            $this->entityManager->flush();
+            $this->em->flush();
 
             return false;
         }
@@ -132,15 +115,15 @@ class SenderService
     protected function updateMail(Mail $mail): void
     {
         $destinataireSent = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_SENT, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_SENT, 'mail' => $mail, 'test' => false]);
         $mail->setTotalSended(count($destinataireSent));
 
         $unsubscribedMails = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_UNSUBSCRIBED, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_UNSUBSCRIBED, 'mail' => $mail, 'test' => false]);
         $mail->setTotalUnsubscribed(count($unsubscribedMails));
 
         $errorMails = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_ERROR, 'mail' => $mail]);
+            ->findBy(['status' => Recipient::STATUS_ERROR, 'mail' => $mail, 'test' => false]);
         $mail->setTotalError(count($errorMails));
 
         $totalRecipientsToSend = $mail->getTotalToSend() - $mail->getTotalUnsubscribed();
@@ -154,16 +137,15 @@ class SenderService
             }
         }
 
-        $this->entityManager->flush();
+        $this->em->flush();
     }
 
     public function sendRecipient(Recipient $recipient): int
     {
-        if (!$recipient->getMail() && !$recipient->getCcMail()) {
+        $mail = $recipient->getMail() ?? $recipient->getCcMail();
+        if (!$mail) {
             throw new NoMailFoundException($recipient->getId());
         }
-
-        $mail = $recipient->getMail() ?? $recipient->getCcMail();
 
         if ($this->send($mail, $recipient, false)) {
             return 1;

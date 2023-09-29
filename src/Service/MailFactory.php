@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Service;
 
 use Lle\HermesBundle\Entity\Mail;
+use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Model\MailDto;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -11,30 +12,31 @@ use Symfony\Component\Process\Process;
 class MailFactory
 {
     public const ATTACHMENTS_DIR = "/data/hermes/attachments/mail-%s/";
-    protected ParameterBagInterface $parameters;
 
-    public function __construct(ParameterBagInterface $parameters)
-    {
-        $this->parameters = $parameters;
+    public function __construct(
+        protected readonly ParameterBagInterface $parameters,
+        protected readonly DestinataireFactory $destinataireFactory,
+    ) {
     }
 
-    public function createMailFromDto(MailDto $mailDto, $template): ?Mail
+    public function createMailFromDto(MailDto $mailDto, Template $template): Mail
     {
         $mail = new Mail();
         $mail->setTemplate($template);
         $mail->setCreatedAt(new \DateTime());
+
         $nbDest = 0;
-        $destFactory = new DestinataireFactory();
         foreach ($mailDto->getTo() as $contactDto) {
-            $dest = $destFactory->createDestinataireFromData($contactDto);
+            $dest = $this->destinataireFactory->createDestinataireFromData($contactDto);
             $mail->addRecipient($dest);
             $nbDest++;
         }
         foreach ($mailDto->getCc() as $ccDto) {
-            $dest = $destFactory->createDestinataireFromData($ccDto);
+            $dest = $this->destinataireFactory->createDestinataireFromData($ccDto);
             $mail->addCcRecipient($dest);
             $nbDest++;
         }
+
         $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
@@ -50,7 +52,7 @@ class MailFactory
         return $mail;
     }
 
-    public function updateHtml(Mail $mail)
+    public function updateHtml(Mail $mail): Mail
     {
         $twig = '';
         try {
@@ -74,8 +76,11 @@ class MailFactory
     {
         $attachmentsArray = [];
 
+        /** @var string $rootPath */
+        $rootPath = $this->parameters->get('lle_hermes.root_dir');
+
         foreach ($mailDto->getAttachments() as $attachment) {
-            $path = sprintf($this->parameters->get("lle_hermes.root_dir") . self::ATTACHMENTS_DIR, $mail->getId());
+            $path = sprintf($rootPath . self::ATTACHMENTS_DIR, $mail->getId());
 
             if (!is_dir($path)) {
                 mkdir($path, 0777, true);

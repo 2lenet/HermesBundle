@@ -22,38 +22,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @Route("/mail")
- */
+#[Route('/mail')]
 class MailController extends AbstractCrudController
 {
     use TraitCrudController;
 
-    private MailRepository $mailRepository;
-    private ParameterBagInterface $parameterBag;
-    private TranslatorInterface $translator;
-    private SenderService $senderService;
-    private EntityManagerInterface $em;
-
     public function __construct(
         MailCrudConfig $config,
-        MailRepository $mailRepository,
-        ParameterBagInterface $parameterBag,
-        TranslatorInterface $translator,
-        SenderService $senderService,
-        EntityManagerInterface $em
+        protected readonly EntityManagerInterface $em,
+        protected readonly MailRepository $mailRepository,
+        protected readonly ParameterBagInterface $parameters,
+        protected readonly TranslatorInterface $translator,
+        protected readonly SenderService $senderService,
     ) {
         $this->config = $config;
-        $this->mailRepository = $mailRepository;
-        $this->parameterBag = $parameterBag;
-        $this->translator = $translator;
-        $this->senderService = $senderService;
-        $this->em = $em;
     }
 
-    /**
-     * @Route("/dashboard", name="lle_hermes_dashboard", methods={"GET"})
-     */
+    #[Route('/dashboard', name: 'lle_hermes_dashboard', methods: ['GET'])]
     public function dashboard(Request $request): Response
     {
         $this->denyAccessUnlessGranted("ROLE_LLE_HERMES");
@@ -78,10 +63,8 @@ class MailController extends AbstractCrudController
         ]);
     }
 
-    /**
-     * @Route("/send/{id}", name="lle_hermes_crudit_mail_send", methods={"GET"})
-     */
-    public function send(Mail $mail, SenderService $senderService)
+    #[Route('/send/{id}', name: 'lle_hermes_crudit_mail_send', methods: ['GET'])]
+    public function send(Mail $mail, SenderService $senderService): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_MAIL_SEND');
 
@@ -98,17 +81,18 @@ class MailController extends AbstractCrudController
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
 
-    /**
-     * @Route("/show/{id}/{file}", name="lle_hermes_crudit_mail_show_attachement", methods={"GET"})
-     */
-    public function showAttachement(Mail $mail, string $file)
+    #[Route('/show/{id}/{file}', name: 'lle_hermes_crudit_mail_show_attachement', methods: ['GET'])]
+    public function showAttachement(Mail $mail, string $file): ?BinaryFileResponse
     {
-        return new BinaryFileResponse($mail->getPathOfAttachement($file));
+        $path = $mail->getPathOfAttachement($file);
+        if (!$path) {
+            return null;
+        }
+
+        return new BinaryFileResponse($path);
     }
 
-    /**
-     * @Route("/delete/{id}")
-     */
+    #[Route('/delete/{id}')]
     public function delete(Request $request): Response
     {
         /** @var Mail $mail */
@@ -116,8 +100,10 @@ class MailController extends AbstractCrudController
 
         $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_DELETE', $mail);
 
+        /** @var string $rootDir */
+        $rootDir = $this->parameters->get('lle_hermes.root_dir');
         $attachementsPath = sprintf(
-            $this->parameterBag->get('lle_hermes.root_dir') . MailFactory::ATTACHMENTS_DIR,
+            $rootDir . MailFactory::ATTACHMENTS_DIR,
             $mail->getId()
         );
         $this->deleteAttachements($attachementsPath);
@@ -128,29 +114,37 @@ class MailController extends AbstractCrudController
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
 
-    private function deleteAttachements(string $path)
+    private function deleteAttachements(string $path): bool
     {
         if (file_exists($path)) {
-            $files = array_diff(scandir($path), ['.', '..']);
+            /** @var array $files */
+            $files = scandir($path);
+            $files = array_diff($files, ['.', '..']);
             foreach ($files as $file) {
                 if (is_dir($path . '/' . $file)) {
-                    $this->deleteAttachements($path . '/' . $file);
+                    return $this->deleteAttachements($path . '/' . $file);
                 } else {
-                    unlink($path . '/' . $file);
+                    return unlink($path . '/' . $file);
                 }
             }
-            rmdir($path);
+
+            return rmdir($path);
         }
+
+        return false;
     }
 
-    /**
-     * @Route("/send_testmail/{id}", name="lle_hermes_crudit_mail_send_testmail")
-     */
+    #[Route('/send_testmail/{id}', name: 'lle_hermes_crudit_mail_send_testmail', methods: ['GET'])]
     public function sendTestMail(Mail $mail, Request $request): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_MAIL_SEND_TESTMAIL');
 
         $email = $request->query->get('email');
+        if (!$email) {
+            $this->addFlash(FlashBrickResponse::SUCCESS, 'flash.no_email');
+
+            return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        }
 
         $recipient = new Recipient();
         $recipient

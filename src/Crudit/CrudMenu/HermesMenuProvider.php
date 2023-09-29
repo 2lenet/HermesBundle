@@ -16,11 +16,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class HermesMenuProvider implements MenuProviderInterface
 {
-    protected ParameterBagInterface $parameters;
-
-    public function __construct(ParameterBagInterface $parameters)
-    {
-        $this->parameters = $parameters;
+    public function __construct(
+        protected readonly ParameterBagInterface $parameters,
+    ) {
     }
 
     public function getMenuEntry(): iterable

@@ -11,9 +11,6 @@ use Lle\CruditBundle\Filter\FilterType\StringFilterType;
 
 class RecipientFilterSet extends AbstractFilterSet
 {
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return [

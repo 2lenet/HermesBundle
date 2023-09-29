@@ -28,9 +28,6 @@ class RecipientRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $statusDest
-     * @param string $statusMail
-     * @param int $limit
      * @return Recipient[]
      */
     public function findRecipientsSending(string $statusDest, string $statusMail, int $limit): array
@@ -80,34 +77,15 @@ class RecipientRepository extends ServiceEntityRepository
         $qb->getQuery()->execute();*/
     }
 
-    public function updateStatus(Mail $mail, string $status): void
+    public function countOpenRecipients(Mail $mail): int
     {
-        $qb = $this->_em->createQueryBuilder()
-            ->update(Recipient::class, 'e')
-            ->set('e.status', ':status');
-        $qb->where($qb->expr()->eq('e.mail', ':mail'));
+        $result = $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where('r.mail = :mail')
+            ->setParameter('mail', $mail)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $qb->setParameters([
-            'mail' => $mail,
-            'status' => $status,
-        ]);
-
-        $qb->getQuery()->execute();
-    }
-
-    public function countOpenRecipient(Mail $mail): int
-    {
-        $qb = $this->createQueryBuilder('entity')
-            ->select('COUNT(entity.id)');
-
-        $qb->where(
-            $qb->expr()->andX(
-                $qb->expr()->isNotNull('entity.mail'),
-                $qb->expr()->eq('entity.mail', ':mail')
-            )
-        );
-        $qb->setParameter('mail', $mail);
-
-        return $qb->getQuery()->getSingleScalarResult();
+        return (int)$result;
     }
 }

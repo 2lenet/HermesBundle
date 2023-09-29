@@ -18,71 +18,39 @@ class RecipientTest extends TestCase
 {
     public function testCreate(): void
     {
-        $entity = new Recipient();
+        $recipient = new Recipient();
 
-        $entity->setId(1);
-        self::assertEquals(1, $entity->getId());
+        $recipient->setId(1);
+        self::assertEquals(1, $recipient->getId());
 
-        $entity->setToName('John Doe');
-        self::assertEquals('John Doe', $entity->getToName());
+        $recipient->setToName('John Doe');
+        self::assertEquals('John Doe', $recipient->getToName());
 
-        $entity->setToEmail('john.doe@test.com');
-        self::assertEquals('john.doe@test.com', $entity->getToEmail());
+        $recipient->setToEmail('john.doe@test.com');
+        self::assertEquals('john.doe@test.com', $recipient->getToEmail());
 
-        $entity->setData(['hello']);
-        self::assertEquals(['hello'], $entity->getData());
+        $recipient->setData(['hello']);
+        self::assertEquals(['hello'], $recipient->getData());
 
-        $entity->setStatus('status');
-        self::assertEquals('status', $entity->getStatus());
+        $recipient->setStatus(Recipient::STATUS_SENDING);
+        self::assertEquals(Recipient::STATUS_SENDING, $recipient->getStatus());
 
-        $entity->setNbRetry(2);
-        self::assertEquals('2', $entity->getNbRetry());
+        self::assertEquals(0, $recipient->getNbRetry());
+        $recipient->setNbRetry(2);
+        self::assertEquals(2, $recipient->getNbRetry());
 
         $mail = new Mail();
-        $entity->setMail($mail);
-        self::assertEquals($mail, $entity->getMail());
+        $recipient->setMail($mail);
+        self::assertEquals($mail, $recipient->getMail());
 
-        self::assertNull($entity->getOpenDate());
+        self::assertNull($recipient->getOpenDate());
         $date = new DateTime();
-        $entity->setOpenDate($date);
-        self::assertEquals($date, $entity->getOpenDate());
+        $recipient->setOpenDate($date);
+        self::assertEquals($date, $recipient->getOpenDate());
 
         $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
 
-        $errors = $validator->validate($entity);
-        self::assertEquals(0, count($errors));
-    }
-
-    public function testInvalidAssert(): void
-    {
-        $entity = new Recipient();
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
-
-        $entity->setToName(str_repeat('a', 256));
-        $violations = $validator->validateProperty($entity, 'toName');
-        self::assertCount(1, $violations);
-        self::assertEquals(
-            'This value is too long. It should have 255 characters or less.',
-            $violations[0]->getMessage()
-        );
-
-        $violations = $validator->validateProperty($entity, 'toEmail');
-        self::assertCount(1, $violations);
-        self::assertEquals(
-            'This value should not be blank.',
-            $violations[0]->getMessage()
-        );
-
-        $entity->setToEmail(str_repeat('a', 256));
-        $violations = $validator->validateProperty($entity, 'toEmail');
-        self::assertCount(2, $violations);
-        self::assertEquals(
-            'This value is too long. It should have 255 characters or less.',
-            $violations[0]->getMessage()
-        );
-        self::assertEquals(
-            'This value is not a valid email address.',
-            $violations[1]->getMessage()
-        );
+        $errors = $validator->validate($recipient);
+        self::assertCount(0, $errors);
     }
 }

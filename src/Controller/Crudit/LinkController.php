@@ -9,9 +9,7 @@ use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\LinkCrudConfig;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/link")
- */
+#[Route('/link')]
 class LinkController extends AbstractCrudController
 {
     use TraitCrudController;
