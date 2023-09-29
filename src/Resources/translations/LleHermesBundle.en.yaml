@@ -1,4 +1,5 @@
 action:
+    list: Go back
     add: Add
     delete: Delete
     edit: Edit
@@ -48,6 +49,7 @@ field:
     mail: Mail
     recipients: Recipients
     recipient: Recipient
+    countrecipients: Number of recipients
     'mail:sendingDate': Sending date
     openDate: Open date
     opendate: Open date
@@ -62,6 +64,7 @@ field:
     sendingRate: Sending rate
     mailStatistics: Mail statistics
     html: HTML
+    text: Text
     subject: Subject
     toEmail: To email
     toemail: To email
@@ -91,6 +94,14 @@ title:
     totalLinkOpened: Total links opened
     totalOpened: Opening rate
     totalSended: Sended mails
+
+status:
+    error: Error
+    draft: Draft
+    sending: Sending
+    sent: Sent
+    unsubscribed: Unsubscribed
+    cancelled: Cancelled
 
 menu:
     lle_hermes:

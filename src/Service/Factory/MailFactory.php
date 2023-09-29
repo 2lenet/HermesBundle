@@ -1,6 +1,6 @@
 <?php
 
-namespace Lle\HermesBundle\Service;
+namespace Lle\HermesBundle\Service\Factory;
 
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Template;
@@ -14,7 +14,7 @@ class MailFactory
 
     public function __construct(
         protected readonly ParameterBagInterface $parameters,
-        protected readonly DestinataireFactory $destinataireFactory,
+        protected readonly RecipientFactory $recipientFactory,
     ) {
     }
 
@@ -26,7 +26,7 @@ class MailFactory
 
         $nbDest = 0;
         foreach ($mailDto->getTo() as $contactDto) {
-            $dest = $this->destinataireFactory->createDestinataireFromData($contactDto);
+            $dest = $this->recipientFactory->createRecipientFromDto($contactDto);
             $mail->addRecipient($dest);
             $nbDest++;
         }
