@@ -1,3 +1,0 @@
-/*! grapesjs - 0.17.29 */
-
-/*! grapesjs-mjml - 0.5.8 */

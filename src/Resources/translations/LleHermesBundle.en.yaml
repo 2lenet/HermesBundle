@@ -78,6 +78,10 @@ field:
     linkOpeningRate: Link opening rate
     firstLinkOpening: First opening date
     lastLinkOpening: Last opening date
+    group:
+        template_informations: Informations
+        template_content: Content
+        template_options: Options
 
 title:
     dashboard: Dashboard

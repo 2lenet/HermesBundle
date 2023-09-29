@@ -1,14 +1,9 @@
 {
-    "entrypoints": {
-        "app": {
-            "js": [
-                "./app.js"
-            ]
-        },
-        "style": {
-            "css": [
-                "./style.css"
-            ]
-        }
+  "entrypoints": {
+    "style": {
+      "css": [
+        "./style.css"
+      ]
     }
+  }
 }

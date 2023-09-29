@@ -78,6 +78,10 @@ field:
     linkOpeningRate: Taux d'ouverture de liens
     firstLinkOpening: Date de première ouverture
     lastLinkOpening: Date de dernière ouverture
+    group:
+        template_informations: Informations
+        template_content: Contenu
+        template_options: Options
 
 title:
     dashboard: Tableau de bord

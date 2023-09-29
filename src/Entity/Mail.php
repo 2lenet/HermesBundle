@@ -56,9 +56,6 @@ class Mail
     #[Assert\Length(max: 1024)]
     protected string $subject;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    protected ?string $mjml = null;
-
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTime $sendingDate = null;
 
@@ -313,18 +310,6 @@ class Mail
     public function setSubject(string $subject): Mail
     {
         $this->subject = $subject;
-
-        return $this;
-    }
-
-    public function getMjml(): ?string
-    {
-        return $this->mjml;
-    }
-
-    public function setMjml(?string $mjml): Mail
-    {
-        $this->mjml = $mjml;
 
         return $this;
     }

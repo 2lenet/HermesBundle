@@ -31,15 +31,5 @@ class LleHermesExtension extends Extension
         $container->setParameter('lle_hermes.bounce_pass', $processedConfig['bounce_pass']);
         $container->setParameter('lle_hermes.bounce_host', $processedConfig['bounce_host']);
         $container->setParameter('lle_hermes.menu_icons', $processedConfig['menu_icons']);
-
-        // Load Hermes' form types
-        if ($container->hasParameter("twig.form.resources")) {
-            /** @var array $twigFormResources */
-            $twigFormResources = $container->getParameter('twig.form.resources');
-            $container->setParameter(
-                "twig.form.resources",
-                array_merge(['@LleHermes/form/custom_types.html.twig'], $twigFormResources)
-            );
-        }
     }
 }
