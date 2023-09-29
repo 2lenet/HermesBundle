@@ -28,7 +28,6 @@
         "symfony/lock": "^6.0",
         "symfony/mailer": "^6.0",
         "symfony/orm-pack": "*",
-        "symfony/process": "^6.0",
         "symfony/twig-bundle": "^6.0",
         "symfony/yaml": "^6.0",
         "twig/twig": "^3.4"

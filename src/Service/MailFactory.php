@@ -7,7 +7,6 @@ use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Model\MailDto;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 class MailFactory
 {
@@ -41,33 +40,12 @@ class MailFactory
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
         $mail->setSubject($mail->getTemplate()->getSubject());
-        $mail->setMjml($mail->getTemplate()->getMjml());
         if ($mailDto->isSendText()) {
             $mail->setText($mail->getTemplate()->getText());
         }
         if ($mailDto->isSendHtml()) {
             $mail->setHtml($mail->getTemplate()->getHtml());
         }
-
-        return $mail;
-    }
-
-    public function updateHtml(Mail $mail): Mail
-    {
-        $twig = '';
-        try {
-            $process = new Process([__DIR__ . '/../../node_modules/.bin/mjml', '-i']);
-            $process->setInput($mail->getMjml());
-            $out = $process->run();
-            if (!$process->isSuccessful()) {
-                throw new ProcessFailedException($process);
-            }
-            $twig = $process->getOutput();
-        } catch (ProcessFailedException $exception) {
-            echo $exception->getMessage();
-            die();
-        }
-        $mail->setHtml($twig);
 
         return $mail;
     }

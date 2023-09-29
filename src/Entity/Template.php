@@ -42,9 +42,6 @@ class Template
     protected string $senderEmail;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    protected ?string $mjml = null;
-
-    #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $text = null;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -122,18 +119,6 @@ class Template
     public function setSenderEmail(string $senderEmail): Template
     {
         $this->senderEmail = $senderEmail;
-
-        return $this;
-    }
-
-    public function getMjml(): ?string
-    {
-        return $this->mjml;
-    }
-
-    public function setMjml(?string $mjml): Template
-    {
-        $this->mjml = $mjml;
 
         return $this;
     }

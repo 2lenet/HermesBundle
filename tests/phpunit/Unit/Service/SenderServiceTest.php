@@ -88,7 +88,6 @@ class SenderServiceTest extends TestCase
         $template->setLibelle('template_libelle');
         $template->setSubject('template_subject');
         $template->setSenderEmail('no-reply@email.com');
-        $template->setMjml('template_mjml');
         $template->setText('template_text');
         $template->setCode('template_code');
         $template->setHtml('template_html');
@@ -102,7 +101,6 @@ class SenderServiceTest extends TestCase
         $mail->setId(1);
         $mail->setTemplate($template);
         $mail->setSubject($template->getSubject());
-        $mail->setMjml($template->getMjml());
         $mail->setHtml($template->getHtml());
         $mail->setText($template->getText());
         $mail->setTotalToSend(1);

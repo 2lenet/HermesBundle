@@ -33,9 +33,6 @@ class TemplateTest extends TestCase
         $template->setSenderEmail('john.doe@email.com');
         self::assertEquals('john.doe@email.com', $template->getSenderEmail());
 
-        $template->setMjml('mjml');
-        self::assertEquals('mjml', $template->getMjml());
-
         $template->setText('text');
         self::assertEquals('text', $template->getText());
 

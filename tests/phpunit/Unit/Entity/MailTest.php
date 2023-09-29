@@ -54,9 +54,6 @@ class MailTest extends TestCase
         $mail->setSubject('subject');
         self::assertEquals('subject', $mail->getSubject());
 
-        $mail->setMjml('mjml');
-        self::assertEquals('mjml', $mail->getMjml());
-
         self::assertNull($mail->getText());
         $mail->setText('text');
         self::assertEquals('text', $mail->getText());
