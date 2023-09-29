@@ -17,7 +17,11 @@ class Mailer
     protected MailFactory $mailFactory;
     protected TemplateRepository $templateRepository;
 
-    public function __construct(EntityManagerInterface $em, MailFactory $mailFactory, TemplateRepository $templateRepository) {
+    public function __construct(
+        EntityManagerInterface $em,
+        MailFactory $mailFactory,
+        TemplateRepository $templateRepository
+    ) {
         $this->em = $em;
         $this->mailFactory = $mailFactory;
         $this->templateRepository = $templateRepository;

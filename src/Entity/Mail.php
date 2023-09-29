@@ -107,7 +107,10 @@ class Mail
      */
     protected int $totalOpened = 0;
     /**
-     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\Recipient", mappedBy="ccMail", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Lle\HermesBundle\Entity\Recipient", mappedBy="ccMail", cascade={
+     *     "persist",
+     *     "remove"
+     * })
      */
     protected Collection $ccRecipients;
     /**
