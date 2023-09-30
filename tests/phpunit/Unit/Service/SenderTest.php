@@ -8,8 +8,8 @@ use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
-use Lle\HermesBundle\Service\MailBuilderService;
-use Lle\HermesBundle\Service\SenderService;
+use Lle\HermesBundle\Service\MailBuilder;
+use Lle\HermesBundle\Service\Sender;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -19,19 +19,19 @@ use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 
 /**
- * Class SenderServiceTest
+ * Class SenderTest
  * @package phpunit\Unit\Service
  *
  * @author 2LE <2le@2le.net>
  */
-class SenderServiceTest extends TestCase
+class SenderTest extends TestCase
 {
     public function testSendAllMails(): void
     {
-        $sender = new SenderService(
+        $sender = new Sender(
             $this->getMockEntityManager(),
             $this->getMockMailer(),
-            $this->getMockMailBuilderService(),
+            $this->getMockMailBuilder(),
             $this->getMockRecipientRepository(),
             $this->getMockUnsubscribeEmailRepository(),
         );
@@ -75,9 +75,9 @@ class SenderServiceTest extends TestCase
         return $repository;
     }
 
-    protected function getMockMailBuilderService(): MailBuilderService
+    protected function getMockMailBuilder(): MailBuilder
     {
-        return $this->createMock(MailBuilderService::class);
+        return $this->createMock(MailBuilder::class);
     }
 
     protected function getTemplate(): Template

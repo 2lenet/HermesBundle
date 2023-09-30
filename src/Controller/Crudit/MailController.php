@@ -13,7 +13,7 @@ use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Service\Factory\MailFactory;
-use Lle\HermesBundle\Service\SenderService;
+use Lle\HermesBundle\Service\Sender;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,7 +33,7 @@ class MailController extends AbstractCrudController
         protected readonly MailRepository $mailRepository,
         protected readonly ParameterBagInterface $parameters,
         protected readonly TranslatorInterface $translator,
-        protected readonly SenderService $senderService,
+        protected readonly Sender $sender,
     ) {
         $this->config = $config;
     }
@@ -64,12 +64,12 @@ class MailController extends AbstractCrudController
     }
 
     #[Route('/send/{id}', name: 'lle_hermes_crudit_mail_send', methods: ['GET'])]
-    public function send(Mail $mail, SenderService $senderService): RedirectResponse
+    public function send(Mail $mail): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_MAIL_SEND');
 
         $recipients = $mail->getRecipients();
-        $nb = $senderService->sendAllRecipients($recipients->toArray());
+        $nb = $this->sender->sendAllRecipients($recipients->toArray());
 
         $message = $this->translator->trans(
             'flash.mail_sent',
@@ -155,7 +155,7 @@ class MailController extends AbstractCrudController
         $this->em->persist($recipient);
         $this->em->flush();
 
-        $nb = $this->senderService->sendRecipient($recipient);
+        $nb = $this->sender->sendRecipient($recipient);
 
         $message = $this->translator->trans('flash.mail_sent', ['%nb%' => $nb, '%nbTotal%' => 1], 'LleHermesBundle');
         $this->addFlash(FlashBrickResponse::SUCCESS, $message);

@@ -16,17 +16,17 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
 
 /**
- * Class SenderService
+ * Class Sender
  * @package Lle\HermesBundle\Service
  *
  * @author 2LE <2le@2le.net>
  */
-class SenderService
+class Sender
 {
     public function __construct(
         protected readonly EntityManagerInterface $em,
         protected readonly MailerInterface $mailer,
-        protected readonly MailBuilderService $mailBuilderService,
+        protected readonly MailBuilder $mailBuilder,
         protected readonly RecipientRepository $recipientRepository,
         protected readonly UnsubscribeEmailRepository $unsubscribeEmailRepository,
     ) {
@@ -84,7 +84,7 @@ class SenderService
     protected function send(Mail $mail, Recipient $recipient, bool $updateSendingDate = true): bool
     {
         try {
-            $this->mailer->send($this->mailBuilderService->buildMail($mail, $recipient));
+            $this->mailer->send($this->mailBuilder->buildMail($mail, $recipient));
             $recipient->setStatus(Recipient::STATUS_SENT);
 
             if ($updateSendingDate) {
