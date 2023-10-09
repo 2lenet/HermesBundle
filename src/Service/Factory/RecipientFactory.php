@@ -1,13 +1,13 @@
 <?php
 
-namespace Lle\HermesBundle\Service;
+namespace Lle\HermesBundle\Service\Factory;
 
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Model\ContactDto;
 
-class DestinataireFactory
+class RecipientFactory
 {
-    public function createDestinataireFromData(ContactDto $contactDto): Recipient
+    public function createRecipientFromDto(ContactDto $contactDto): Recipient
     {
         $recipient = new Recipient();
         $recipient->setToEmail($contactDto->getAddress());

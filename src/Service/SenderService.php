@@ -34,8 +34,6 @@ class SenderService
 
     public function sendAllMails(int $limit = 10): int
     {
-        $this->recipientRepository->disableErrors();
-
         $recipients = $this->recipientRepository->findRecipientsSending(
             Recipient::STATUS_SENDING,
             Mail::STATUS_SENDING,
@@ -66,9 +64,7 @@ class SenderService
             if ($template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
-                    $this->em->flush();
 
-                    $this->updateMail($mail);
                     continue;
                 }
             }
@@ -95,18 +91,14 @@ class SenderService
                 $mail->setSendingDate(new DateTime());
             }
 
-            $this->em->flush();
-
             return true;
         } catch (TransportExceptionInterface | RfcComplianceException) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
-            $this->em->flush();
 
             return false;
         } catch (Exception) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
             $mail->setStatus(Mail::STATUS_ERROR);
-            $this->em->flush();
 
             return false;
         }
@@ -114,9 +106,11 @@ class SenderService
 
     protected function updateMail(Mail $mail): void
     {
-        $destinataireSent = $this->recipientRepository
+        $this->em->flush();
+
+        $recipientsSent = $this->recipientRepository
             ->findBy(['status' => Recipient::STATUS_SENT, 'mail' => $mail, 'test' => false]);
-        $mail->setTotalSended(count($destinataireSent));
+        $mail->setTotalSended(count($recipientsSent));
 
         $unsubscribedMails = $this->recipientRepository
             ->findBy(['status' => Recipient::STATUS_UNSUBSCRIBED, 'mail' => $mail, 'test' => false]);

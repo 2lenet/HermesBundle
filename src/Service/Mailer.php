@@ -7,6 +7,7 @@ use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Service\Factory\MailFactory;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;

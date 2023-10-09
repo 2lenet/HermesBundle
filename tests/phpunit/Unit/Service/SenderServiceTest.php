@@ -55,7 +55,6 @@ class SenderServiceTest extends TestCase
         $recipient = $this->getRecipient($mail);
 
         $repository = $this->createMock(RecipientRepository::class);
-        $repository->expects(self::exactly(1))->method('disableErrors');
         $repository->expects(self::exactly(1))
             ->method('findRecipientsSending')
             ->with(self::equalTo(Recipient::STATUS_SENDING), self::equalTo(Mail::STATUS_SENDING), self::equalTo(10))

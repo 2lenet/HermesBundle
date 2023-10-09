@@ -12,7 +12,7 @@ use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Repository\MailRepository;
-use Lle\HermesBundle\Service\MailFactory;
+use Lle\HermesBundle\Service\Factory\MailFactory;
 use Lle\HermesBundle\Service\SenderService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -102,10 +102,7 @@ class MailController extends AbstractCrudController
 
         /** @var string $rootDir */
         $rootDir = $this->parameters->get('lle_hermes.root_dir');
-        $attachementsPath = sprintf(
-            $rootDir . MailFactory::ATTACHMENTS_DIR,
-            $mail->getId()
-        );
+        $attachementsPath = sprintf($rootDir . MailFactory::ATTACHMENTS_DIR, $mail->getId());
         $this->deleteAttachements($attachementsPath);
 
         $dataSource = $this->config->getDatasource();

@@ -30,30 +30,18 @@ class RecipientRepository extends ServiceEntityRepository
     /**
      * @return Recipient[]
      */
-    public function findRecipientsSending(string $statusDest, string $statusMail, int $limit): array
+    public function findRecipientsSending(string $recipientStatus, string $mailStatus, int $limit): array
     {
-        $qb = $this->createQueryBuilder('entity')
-            ->leftJoin('entity.mail', 'mail')
-            ->leftJoin('entity.ccMail', 'ccMail');
-        $qb->where(
-            $qb->expr()->andX(
-                $qb->expr()->eq('entity.status', ':statusDest'),
-                $qb->expr()->eq('mail.status', ':statusMail')
-            )
-        );
-        $qb->orWhere(
-            $qb->expr()->andX(
-                $qb->expr()->eq('entity.status', ':statusDest'),
-                $qb->expr()->eq('ccMail.status', ':statusMail')
-            )
-        );
-        $qb->setParameters([
-            'statusDest' => $statusDest,
-            'statusMail' => $statusMail,
-        ]);
-        $qb->setMaxResults($limit);
-
-        return $qb->getQuery()->execute();
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.mail', 'm')
+            ->leftJoin('r.ccMail', 'cc')
+            ->where('r.status = :status_r AND m.status = :status_m')
+            ->orWhere('r.status = :status_r AND cc.status = :status_m')
+            ->setParameter('status_r', $recipientStatus)
+            ->setParameter('status_m', $mailStatus)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 
     public function disableUnsubscribed(): void
@@ -63,18 +51,6 @@ class RecipientRepository extends ServiceEntityRepository
             ->set('e.status', Recipient::STATUS_UNSUBSCRIBED)
             ->join(EmailError::class, 'ee', Join::WITH, 'ee.mail = e.toEmail')
             ->getQuery()->execute();
-    }
-
-    public function disableErrors(): void
-    {
-        /*$qb = $this->createQueryBuilder('e')
-            ->update()
-            ->set('e.status', "'error'")
-            ->join(EmailError::class, 'ee', Join::WITH, 'ee.mail = e.toEmail');
-        $qb->where(
-            $qb->expr()->gte('ee.nbError', 3)
-        );
-        $qb->getQuery()->execute();*/
     }
 
     public function countOpenRecipients(Mail $mail): int
