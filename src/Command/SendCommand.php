@@ -2,7 +2,7 @@
 
 namespace Lle\HermesBundle\Command;
 
-use Lle\HermesBundle\Service\SenderService;
+use Lle\HermesBundle\Service\Sender;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,7 +20,7 @@ class SendCommand extends Command
 
     protected static $defaultName = 'lle:hermes:send';
 
-    public function __construct(protected readonly SenderService $sender)
+    public function __construct(protected readonly Sender $sender)
     {
         parent::__construct();
     }

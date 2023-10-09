@@ -8,10 +8,10 @@ services:
         resource: '../../../src/*'
         exclude: '../../../src/{DependencyInjection,Entity,Resources,Enum,LleHermesBundle.php}'
 
-    Lle\HermesBundle\Service\SenderService:
+    Lle\HermesBundle\Service\Sender:
         arguments:
             - '@mailer.mailer'
             - '@doctrine.orm.entity_manager'
+            - '@Lle\HermesBundle\Service\MailBuilder'
             - '@Lle\HermesBundle\Repository\RecipientRepository'
             - '@Lle\HermesBundle\Repository\UnsubscribeEmailRepository'
-            - '@Lle\HermesBundle\Service\MailBuilderService'

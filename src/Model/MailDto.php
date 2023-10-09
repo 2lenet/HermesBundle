@@ -16,24 +16,9 @@ class MailDto
     public const SENDING = Mail::STATUS_SENDING;
 
     /**
-     * Mail's identifier. Can be custom
-     */
-    protected ?int $id = null;
-
-    /**
      * The subject of the mail.
      */
     protected string $subject;
-
-    /**
-     * Content of the mail.
-     */
-    protected string $textContent;
-
-    /**
-     * Html content of the mail.
-     */
-    protected string $htmlContent;
 
     /**
      * @var ContactDto[]
@@ -75,18 +60,6 @@ class MailDto
 
     protected bool $sendText = true;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function setId(?int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
     public function getSubject(): string
     {
         return $this->subject;
@@ -95,30 +68,6 @@ class MailDto
     public function setSubject(string $subject): self
     {
         $this->subject = $subject;
-
-        return $this;
-    }
-
-    public function getTextContent(): string
-    {
-        return $this->textContent;
-    }
-
-    public function setTextContent(string $textContent): self
-    {
-        $this->textContent = $textContent;
-
-        return $this;
-    }
-
-    public function getHtmlContent(): string
-    {
-        return $this->htmlContent;
-    }
-
-    public function setHtmlContent(string $htmlContent): self
-    {
-        $this->htmlContent = $htmlContent;
 
         return $this;
     }
