@@ -10,8 +10,8 @@ services:
 
     Lle\HermesBundle\Service\Sender:
         arguments:
-            - '@mailer.mailer'
             - '@doctrine.orm.entity_manager'
+            - '@mailer.mailer'
             - '@Lle\HermesBundle\Service\MailBuilder'
             - '@Lle\HermesBundle\Repository\RecipientRepository'
             - '@Lle\HermesBundle\Repository\UnsubscribeEmailRepository'
