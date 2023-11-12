@@ -22,10 +22,9 @@ class Mailer
     }
 
     /**
-     * Create and send a mail.
      * @throws TemplateNotFoundException
      */
-    public function send(MailDto $mail, string $status = Mail::STATUS_SENDING): void
+    public function create(MailDto $mail, string $status = Mail::STATUS_SENDING): void
     {
         $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate()]);
         if (!$template) {
@@ -44,5 +43,13 @@ class Mailer
         $mailObj->setStatus($status);
         $this->em->persist($mailObj);
         $this->em->flush();
+    }
+
+    /**
+     * @deprecated Use create() method instead
+     */
+    public function send(MailDto $mail, string $status = Mail::STATUS_SENDING): void
+    {
+        $this->create($mail, $status);
     }
 }
