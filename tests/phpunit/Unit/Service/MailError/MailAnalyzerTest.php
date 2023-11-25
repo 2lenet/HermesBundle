@@ -7,6 +7,8 @@ use PHPUnit\Framework\TestCase;
 
 class MailAnalyzerTest extends TestCase
 {
+    private MailAnalyzer $analyzer;
+
     public function setUp(): void
     {
         parent::setUp();

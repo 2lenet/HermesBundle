@@ -15,16 +15,20 @@ class MailRecoverer
     protected readonly string $port;
     protected readonly string $user;
     protected readonly string $password;
-    protected readonly Pop3Manager $mailServerManager;
+    protected Pop3Manager $mailServerManager;
 
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly MailAnalyzer $mailAnalyzer,
         ParameterBagInterface $parameters
     ) {
+        /** @var string $host */
         $host = $parameters->get('lle_hermes.bounce_host');
+        /** @var string $port */
         $port = $parameters->get('lle_hermes.bounce_port');
+        /** @var string $user */
         $user = $parameters->get('lle_hermes.bounce_user');
+        /** @var string $password */
         $password = $parameters->get('lle_hermes.bounce_password');
 
         $this->host = $host;
@@ -55,7 +59,7 @@ class MailRecoverer
         return $nbRecovered;
     }
 
-    protected function recoverMail(stdClass $mail)
+    protected function recoverMail(stdClass $mail): bool
     {
         if (!$this->mailAnalyzer->isErrorMail($mail->subject)) {
             return false;
@@ -73,7 +77,7 @@ class MailRecoverer
         return true;
     }
 
-    protected function saveError(string $to, string $subject, string $mailBody): void
+    protected function saveError(string $to, string $subject, ?string $mailBody = null): void
     {
         $emailError = $this->em->getRepository(EmailError::class)->findOneBy(['email' => $to]);
 

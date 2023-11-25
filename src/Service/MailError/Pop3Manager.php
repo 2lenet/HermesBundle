@@ -8,7 +8,7 @@ class Pop3Manager
 {
     public const DEFAULT_FOLDER = 'INBOX';
 
-    protected readonly Connection $imap;
+    protected Connection $imap;
 
     public function __construct(
         protected readonly string $host,
@@ -65,7 +65,7 @@ class Pop3Manager
 
     public function deleteMail(int $uid): bool
     {
-        return imap_delete($this->imap, $uid, FT_UID);
+        return imap_delete($this->imap, (string)$uid, FT_UID);
     }
 
     protected function getMailBoxInfos(string $folder = self::DEFAULT_FOLDER, bool $ssl = false): string
