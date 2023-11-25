@@ -2,7 +2,6 @@
 
 namespace Lle\HermesBundle\Entity;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -27,10 +26,6 @@ class EmailError
     #[ORM\Column(type: 'integer')]
     private int $nbError = 0;
 
-    #[ORM\Column(type: 'datetime')]
-    #[Assert\NotBlank]
-    private DateTime $dateError;
-
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
@@ -43,6 +38,13 @@ class EmailError
     public function __construct()
     {
         $this->errors = new ArrayCollection();
+    }
+
+    public function incrementNbError(): EmailError
+    {
+        $this->nbError++;
+
+        return $this;
     }
 
     public function getId(): int
@@ -65,18 +67,6 @@ class EmailError
     public function setNbError(int $nbError): EmailError
     {
         $this->nbError = $nbError;
-
-        return $this;
-    }
-
-    public function getDateError(): DateTime
-    {
-        return $this->dateError;
-    }
-
-    public function setDateError(DateTime $dateError): EmailError
-    {
-        $this->dateError = $dateError;
 
         return $this;
     }
