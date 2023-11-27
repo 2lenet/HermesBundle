@@ -4,6 +4,7 @@ namespace Lle\HermesBundle\Service\MailError;
 
 class MailAnalyzer
 {
+    // @codingStandardsIgnoreStart
     public const REGEX_LIST = [
         '/5\.1\.0 Address rejected .*/',
         '/.* Mailbox currently suspended - Please contact correspondent directly/',
@@ -59,6 +60,7 @@ class MailAnalyzer
         '/We would love to have gotten this email to .*/',
         '/Undelivered Mail Returned to Sender/'
     ];
+    // @codingStandardsIgnoreEnd
 
     public function isErrorMail(string $subject): bool
     {
