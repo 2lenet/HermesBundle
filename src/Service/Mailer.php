@@ -5,7 +5,7 @@ namespace Lle\HermesBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
-use Lle\HermesBundle\Interface\MultiTenantInterface;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Lle\HermesBundle\Service\Factory\MailFactory;

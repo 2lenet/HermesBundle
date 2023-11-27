@@ -11,7 +11,7 @@ use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
-use Lle\HermesBundle\Interface\MultiTenantInterface;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Service\Factory\MailFactory;
 use Lle\HermesBundle\Service\Sender;

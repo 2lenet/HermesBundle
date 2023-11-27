@@ -4,7 +4,7 @@ namespace Lle\HermesBundle\Service\Factory;
 
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Template;
-use Lle\HermesBundle\Interface\MultiTenantInterface;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Model\MailDto;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

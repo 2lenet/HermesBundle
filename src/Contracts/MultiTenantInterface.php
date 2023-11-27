@@ -1,6 +1,6 @@
 <?php
 
-namespace Lle\HermesBundle\Interface;
+namespace Lle\HermesBundle\Contracts;
 
 interface MultiTenantInterface
 {
