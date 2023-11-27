@@ -24,7 +24,7 @@ class EmailErrorRepository extends ServiceEntityRepository
         parent::__construct($registry, EmailError::class);
     }
 
-    public function findEmailsInError(int $limit): array
+    public function findEmailsInError(?int $limit = 3): array
     {
         return $this->createQueryBuilder('emailError')
             ->select('emailError.email as email')
