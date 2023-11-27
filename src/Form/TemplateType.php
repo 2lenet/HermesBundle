@@ -62,6 +62,10 @@ class TemplateType extends AbstractType
                 "required" => false,
                 "label" => "field.statistics",
                 "translation_domain" => "LleHermesBundle",
+            ])
+            ->add('sendToErrors', CheckboxType::class, [
+                'required' => false,
+                'label' => 'field.sendtoerrors',
             ]);
     }
 

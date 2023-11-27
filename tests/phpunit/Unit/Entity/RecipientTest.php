@@ -35,10 +35,6 @@ class RecipientTest extends TestCase
         $recipient->setStatus(Recipient::STATUS_SENDING);
         self::assertEquals(Recipient::STATUS_SENDING, $recipient->getStatus());
 
-        self::assertEquals(0, $recipient->getNbRetry());
-        $recipient->setNbRetry(2);
-        self::assertEquals(2, $recipient->getNbRetry());
-
         $mail = new Mail();
         $recipient->setMail($mail);
         self::assertEquals($mail, $recipient->getMail());

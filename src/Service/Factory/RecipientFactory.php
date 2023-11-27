@@ -14,7 +14,6 @@ class RecipientFactory
         $recipient->setToName($contactDto->getName());
         $recipient->setData($contactDto->getData());
         $recipient->setStatus(Recipient::STATUS_SENDING);
-        $recipient->setNbRetry(0);
 
         return $recipient;
     }

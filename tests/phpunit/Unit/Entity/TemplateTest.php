@@ -46,6 +46,14 @@ class TemplateTest extends TestCase
         $template->setUnsubscriptions(true);
         self::assertTrue($template->isUnsubscriptions());
 
+        self::assertFalse($template->hasStatistics());
+        $template->setStatistics(true);
+        self::assertTrue($template->hasStatistics());
+
+        self::assertFalse($template->hasSendToErrors());
+        $template->setSendToErrors(true);
+        self::assertTrue($template->hasSendToErrors());
+
         $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
 
         $errors = $validator->validate($template);

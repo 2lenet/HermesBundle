@@ -32,5 +32,6 @@ class LleHermesExtension extends Extension
         $container->setParameter('lle_hermes.bounce_user', $processedConfig['bounce_user']);
         $container->setParameter('lle_hermes.bounce_password', $processedConfig['bounce_password']);
         $container->setParameter('lle_hermes.menu_icons', $processedConfig['menu_icons']);
+        $container->setParameter('lle_hermes.recipient_error_retry', $processedConfig['recipient_error_retry']);
     }
 }

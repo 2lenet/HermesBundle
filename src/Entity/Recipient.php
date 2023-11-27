@@ -48,9 +48,6 @@ class Recipient
     #[Assert\NotBlank]
     protected string $status;
 
-    #[ORM\Column(type: 'integer')]
-    protected int $nbRetry = 0;
-
     #[ORM\ManyToOne(targetEntity: Mail::class, inversedBy: 'recipients', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     protected ?Mail $mail = null;
@@ -145,18 +142,6 @@ class Recipient
     public function setStatus(string $status): Recipient
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getNbRetry(): int
-    {
-        return $this->nbRetry;
-    }
-
-    public function setNbRetry(int $nbRetry): Recipient
-    {
-        $this->nbRetry = $nbRetry;
 
         return $this;
     }

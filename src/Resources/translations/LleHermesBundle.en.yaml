@@ -76,6 +76,7 @@ field:
     toname: To name
     unsubscriptions: Unsubscriptions
     statistics: Statistics
+    sendtoerrors: Send to email addresses in error
     jsonattachement: Attachments
     totalLinkOpening: Number of links opened
     link: Link

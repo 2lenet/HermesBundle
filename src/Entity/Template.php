@@ -58,6 +58,9 @@ class Template
     #[ORM\Column(type: 'boolean')]
     protected bool $statistics = false;
 
+    #[ORM\Column(type: 'boolean')]
+    protected bool $sendToErrors = false;
+
     public function __toString(): string
     {
         return sprintf('%s %s', $this->code, $this->getSubject());
@@ -179,6 +182,18 @@ class Template
     public function setStatistics(bool $statistics): Template
     {
         $this->statistics = $statistics;
+
+        return $this;
+    }
+
+    public function hasSendToErrors(): bool
+    {
+        return $this->sendToErrors;
+    }
+
+    public function setSendToErrors(bool $sendToErrors): Template
+    {
+        $this->sendToErrors = $sendToErrors;
 
         return $this;
     }
