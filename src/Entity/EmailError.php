@@ -40,6 +40,11 @@ class EmailError
         $this->errors = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->email;
+    }
+
     public function incrementNbError(): EmailError
     {
         $this->nbError++;

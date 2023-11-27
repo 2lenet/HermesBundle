@@ -13,14 +13,17 @@ crudit:
 crud:
     title:
         list:
-            template: Template
-            mail: Mail
-            recipient: Recipient
+            template: Templates
+            mail: Mails
+            recipient: Recipients
+            emailerror: Error emails
         show:
             template: Template %entity%
             mail: ""
             recipient: Recipient %entity%
             link: Link %entity%
+            emailerror: Error email %entity%
+            error: Error %entity%
         edit:
             template: Edit template %entity%
         new:
@@ -38,6 +41,7 @@ tab:
     recipients: Recipients
     links: Links
     linkOpening: Opened links
+    errors: Errors
 
 export:
     csv: Csv
@@ -85,6 +89,10 @@ field:
         template_informations: Informations
         template_content: Content
         template_options: Options
+    email: Email
+    nberror: Number of errors
+    date: Date
+    content: Content
 
 title:
     dashboard: Dashboard
