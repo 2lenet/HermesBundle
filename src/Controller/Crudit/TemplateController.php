@@ -54,6 +54,7 @@ class TemplateController extends AbstractCrudController
     #[Route('/copy-for-tenant/{id}', name:'lle_hermes_crudit_template_copyfortenant', methods:['GET'])]
     public function copyForTenant(Template $template, Request $request, ParameterBagInterface $parameterBag): Response
     {
+        /** @var class-string $tenantClass */
         $tenantClass = $parameterBag->get('lle_hermes.tenant_class');
         /** @var MultiTenantInterface $user */
         $user = $this->getUser();
