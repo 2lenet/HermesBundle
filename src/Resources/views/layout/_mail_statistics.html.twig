@@ -1,0 +1,39 @@
+{% if mail is not defined %}
+    {% set mail = resource %}
+{% endif %}
+
+<div class="mail-statistic" title="{{ 'title.totalToSend'|trans({}, 'LleHermesBundle') }}">
+    <div class="mail-statistic__circle border-primary">
+        <span class="mt-2">
+            <i class="far fa-envelope fa-sm"></i>
+        </span>
+    </div>
+    <span class="mail-statistic__number text-primary">{{ mail.totalToSend }}</span>
+</div>
+
+<div class="mail-statistic" title="{{ 'title.totalError'|trans({}, 'LleHermesBundle') }}">
+    <div class="mail-statistic__circle border-danger">
+        <span class="mt-2">
+            <i class="fas fa-exclamation-triangle fa-sm"></i>
+        </span>
+    </div>
+    <span class="mail-statistic__number text-danger">{{ mail.totalError }}</span>
+</div>
+
+<div class="mail-statistic" title="{{ 'title.totalUnsubscribed'|trans({}, 'LleHermesBundle') }}">
+    <div class="mail-statistic__circle border-info">
+        <span class="mt-2">
+            <i class="fas fa-user-slash fa-sm"></i>
+        </span>
+    </div>
+    <span class="mail-statistic__number text-info">{{ mail.totalUnsubscribed }}</span>
+</div>
+
+<div class="mail-statistic" title="{{ 'title.totalLinkOpened'|trans({}, 'LleHermesBundle') }}">
+    <div class="mail-statistic__circle">
+        <span class="mt-2">
+            <i class="fas fa-link fa-sm"></i>
+        </span>
+    </div>
+    <span class="mail-statistic__number">{{ mail.totalLinkOpening }}</span>
+</div>

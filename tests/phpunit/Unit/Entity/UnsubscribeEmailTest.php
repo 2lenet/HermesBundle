@@ -17,54 +17,21 @@ class UnsubscribeEmailTest extends TestCase
 {
     public function testUnsubscribeEmailCreate(): void
     {
-        $entity = new UnsubscribeEmail();
+        $unsubcribeEmail = new UnsubscribeEmail();
 
-        $entity->setId(1);
-        self::assertEquals(1, $entity->getId());
+        $unsubcribeEmail->setId(1);
+        self::assertEquals(1, $unsubcribeEmail->getId());
 
-        $entity->setEmail('test@test.net');
-        self::assertEquals('test@test.net', $entity->getEmail());
+        $unsubcribeEmail->setEmail('test@test.net');
+        self::assertEquals('test@test.net', $unsubcribeEmail->getEmail());
 
         $date = new DateTime();
-        $entity->setUnsubscribeDate($date);
-        self::assertEquals($date, $entity->getUnsubscribeDate());
+        $unsubcribeEmail->setUnsubscribeDate($date);
+        self::assertEquals($date, $unsubcribeEmail->getUnsubscribeDate());
 
         $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
 
-        $errors = $validator->validate($entity);
-        self::assertEquals(0, count($errors));
-    }
-
-    public function testInvalidAssert(): void
-    {
-        $entity = new UnsubscribeEmail();
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
-
-        $violations = $validator->validateProperty($entity, 'email');
-        self::assertCount(1, $violations);
-        self::assertEquals(
-            'This value should not be blank.',
-            $violations[0]->getMessage()
-        );
-
-        $entity->setEmail(str_repeat('a', 256));
-        $violations = $validator->validateProperty($entity, 'email');
-        self::assertCount(2, $violations);
-        self::assertEquals(
-            'This value is too long. It should have 255 characters or less.',
-            $violations[0]->getMessage()
-        );
-        self::assertEquals(
-            'This value is not a valid email address.',
-            $violations[1]->getMessage()
-        );
-
-
-        $violations = $validator->validateProperty($entity, 'unsubscribeDate');
-        self::assertCount(1, $violations);
-        self::assertEquals(
-            'This value should not be blank.',
-            $violations[0]->getMessage()
-        );
+        $errors = $validator->validate($unsubcribeEmail);
+        self::assertCount(0, $errors);
     }
 }

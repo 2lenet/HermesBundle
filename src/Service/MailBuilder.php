@@ -7,6 +7,7 @@ use Lle\HermesBundle\Entity\Link;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Exception\NoRecipientException;
+use Lle\HermesBundle\Service\Factory\MailFactory;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -14,45 +15,44 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
-class MailBuilderService
+class MailBuilder
 {
-    private Environment $twig;
-    private RouterInterface $router;
-    private ParameterBagInterface $parameterBag;
-    private string $secret;
-    private EntityManagerInterface $em;
+    protected readonly string $secret;
 
-    public function __construct(Environment $twig, RouterInterface $router, ParameterBagInterface $parameterBag, EntityManagerInterface $em)
-    {
-        $this->twig = $twig;
-        $this->router = $router;
-        $this->parameterBag = $parameterBag;
-        $this->secret = $parameterBag->get('lle_hermes.app_secret');
-        $this->em = $em;
+    public function __construct(
+        protected readonly EntityManagerInterface $em,
+        protected readonly ParameterBagInterface $parameters,
+        protected readonly RouterInterface $router,
+        protected readonly Environment $twig,
+    ) {
+        /** @var string $secret */
+        $secret = $parameters->get('lle_hermes.app_secret');
+        $this->secret = $secret;
     }
 
+    /**
+     * @throws NoRecipientException
+     */
     public function buildMail(Mail $mail, Recipient $recipient): Email
     {
         $templater = new MailTemplater($mail, $this->twig, $this->router);
 
         /** @var string $rootDir */
-        $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
-        $attachmentsFilePath = $rootDir . sprintf(
-            MailFactory::ATTACHMENTS_DIR,
-            $mail->getId()
-        );
+        $rootDir = $this->parameters->get('lle_hermes.root_dir');
+        $attachmentsFilePath = $rootDir . sprintf(MailFactory::ATTACHMENTS_DIR, $mail->getId());
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
 
         /** @var string $domain */
-        $domain = $this->parameterBag->get('lle_hermes.app_domain');
-        $returnPath = $this->parameterBag->get('lle_hermes.bounce_email');
+        $domain = $this->parameters->get('lle_hermes.app_domain');
+        /** @var string $returnPath */
+        $returnPath = $this->parameters->get('lle_hermes.bounce_email');
         $context = $this->router->getContext();
         $context->setHost($domain);
         $context->setScheme('https');
 
-        $from = new Address($mail->getTemplate()->getSenderEmail(), $templater->getSenderName() ?? "");
+        $from = new Address($mail->getTemplate()->getSenderEmail(), $templater->getSenderName());
 
         $email = new Email();
 
@@ -74,8 +74,7 @@ class MailBuilderService
             ->from($from)
             ->replyTo($from)
             ->subject($templater->getSubject())
-            ->returnPath($returnPath)
-        ;
+            ->returnPath($returnPath);
 
         $html = $templater->getHtml();
         // Generate unsubscribe link
@@ -99,6 +98,7 @@ class MailBuilderService
                 $email->attachFromPath($attachmentsFilePath . $attachment['name']);
             }
         }
+
         return $this->attachBase64Img($email, $domain);
     }
 
@@ -120,7 +120,11 @@ class MailBuilderService
 
     private function generateReceiptConfirmationLink(string $html, Recipient $recipient): string
     {
-        $route = $this->router->generate('mail_opened', ['recipient' => $recipient->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $route = $this->router->generate(
+            'mail_opened',
+            ['recipient' => $recipient->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
         return str_replace(
             '</body>',
@@ -129,7 +133,7 @@ class MailBuilderService
         );
     }
 
-    private function generateStatsLinks(string $html, Mail $mail, Recipient $recipient): string
+    private function generateStatsLinks(string $html, Mail $mail, Recipient $recipient): ?string
     {
         return preg_replace_callback(
             '/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/s',
@@ -140,7 +144,11 @@ class MailBuilderService
                 $this->em->persist($link);
                 $this->em->flush();
 
-                $route = $this->router->generate('statistics', ['recipient' => $recipient->getId(), 'link' => $link->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $route = $this->router->generate(
+                    'statistics',
+                    ['recipient' => $recipient->getId(), 'link' => $link->getId()],
+                    UrlGeneratorInterface::ABSOLUTE_URL
+                );
 
                 return '<a' . $matches[1] . 'href="' . $route . '"' . $matches[3] . '>' . $matches[4] . '</a>';
             },
@@ -155,8 +163,10 @@ class MailBuilderService
             function ($matches) use ($domain) {
                 $content = base64_decode($matches[2]);
                 $filename = md5($matches[2]) . '.jpg';
-                $rootDir = $this->parameterBag->get('lle_hermes.root_dir');
-                $uploadPath = $this->parameterBag->get('lle_hermes.upload_path');
+                /** @var string $rootDir */
+                $rootDir = $this->parameters->get('lle_hermes.root_dir');
+                /** @var string $uploadPath */
+                $uploadPath = $this->parameters->get('lle_hermes.upload_path');
 
                 $filenamePath = $rootDir . '/public' . $uploadPath . $filename;
                 if (!file_exists($filenamePath)) {

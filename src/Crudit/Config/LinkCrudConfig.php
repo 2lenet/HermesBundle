@@ -14,12 +14,11 @@ use Lle\HermesBundle\Crudit\Datasource\LinkDatasource;
 
 class LinkCrudConfig extends AbstractCrudConfig
 {
-    private LinkOpeningCrudConfig $linkOpeningCrudConfig;
-
-    public function __construct(LinkDatasource $datasource, LinkOpeningCrudConfig $linkOpeningCrudConfig)
-    {
+    public function __construct(
+        LinkDatasource $datasource,
+        protected readonly LinkOpeningCrudConfig $linkOpeningCrudConfig,
+    ) {
         $this->datasource = $datasource;
-        $this->linkOpeningCrudConfig = $linkOpeningCrudConfig;
     }
 
     /**
@@ -38,7 +37,7 @@ class LinkCrudConfig extends AbstractCrudConfig
             return [
                 $mail,
                 $totalOpened,
-                $url
+                $url,
             ];
         }
 
@@ -91,7 +90,7 @@ class LinkCrudConfig extends AbstractCrudConfig
 
         return [
             $url,
-            $linkOpenings
+            $linkOpenings,
         ];
     }
 
@@ -99,7 +98,7 @@ class LinkCrudConfig extends AbstractCrudConfig
     {
         return [
             'tab.linkOpening' => SublistConfig::new('link', $this->linkOpeningCrudConfig)
-                ->setFields($this->linkOpeningCrudConfig->getSublistFields())
+                ->setFields($this->linkOpeningCrudConfig->getSublistFields()),
         ];
     }
 

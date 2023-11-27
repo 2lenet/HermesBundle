@@ -1,4 +1,5 @@
 action:
+    list: Go back
     add: Add
     delete: Delete
     edit: Edit
@@ -15,6 +16,7 @@ crud:
             template: Template
             mail: Mail
             recipient: Recipient
+            personalizedtemplate: Personalized templates
         show:
             template: Template %entity%
             mail: ""
@@ -28,6 +30,7 @@ crud:
             recipient: Create recipient
     action:
         duplicate: Duplicate
+        copy_for_tenant: Copy for personalization
     modal:
         send_mail: Do you really want to send this email to %nb% recipients? This action is final.
     canDelete:
@@ -48,6 +51,7 @@ field:
     mail: Mail
     recipients: Recipients
     recipient: Recipient
+    countrecipients: Number of recipients
     'mail:sendingDate': Sending date
     openDate: Open date
     opendate: Open date
@@ -59,7 +63,10 @@ field:
     sendingdate: Sending date
     status: status
     totalOpened: Opening rate
+    sendingRate: Sending rate
+    mailStatistics: Mail statistics
     html: HTML
+    text: Text
     subject: Subject
     toEmail: To email
     toemail: To email
@@ -76,6 +83,10 @@ field:
     linkOpeningRate: Link opening rate
     firstLinkOpening: First opening date
     lastLinkOpening: Last opening date
+    group:
+        template_informations: Informations
+        template_content: Content
+        template_options: Options
 
 title:
     dashboard: Dashboard
@@ -85,6 +96,14 @@ title:
     totalLinkOpened: Total links opened
     totalOpened: Opening rate
     totalSended: Sended mails
+
+status:
+    error: Error
+    draft: Draft
+    sending: Sending
+    sent: Sent
+    unsubscribed: Unsubscribed
+    cancelled: Cancelled
 
 menu:
     lle_hermes:
@@ -114,12 +133,15 @@ text:
     unsubscribtionConfirmed: Unsubscription confirmed, you can close this window
     unsubscribtionCancelled: Unsubscription cancelled, you can close this window
     alreadyUnsubscribe: You are already unsubscribed, you can close this window
+    percentMailSent: '%nb%% sent'
+    percentMailUnsubscribed: '%nb%% unsubscribed'
+    percentMailError: '%nb%% errors'
 
 flash:
     copyAlreadyExist: A copy of this template already exists, please edit the code of the copy and try again
     mail_sent: '%nb% / %nbTotal% mails sent'
     copy_for_tenants: '%count% copied templates'
-
+    no_email: No email address has been filled in
 
 modal:
     action:

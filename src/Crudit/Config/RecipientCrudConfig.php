@@ -14,12 +14,11 @@ use Lle\HermesBundle\Crudit\Datasource\RecipientDatasource;
 
 class RecipientCrudConfig extends AbstractCrudConfig
 {
-    private LinkCrudConfig $linkCrudConfig;
-
-    public function __construct(RecipientDatasource $datasource, LinkCrudConfig $linkCrudConfig)
-    {
+    public function __construct(
+        RecipientDatasource $datasource,
+        protected readonly LinkCrudConfig $linkCrudConfig,
+    ) {
         $this->datasource = $datasource;
-        $this->linkCrudConfig = $linkCrudConfig;
     }
 
     /**
@@ -44,48 +43,44 @@ class RecipientCrudConfig extends AbstractCrudConfig
                 $toEmail,
                 $status,
                 $openDate,
-                $linkOpening
+                $linkOpening,
             ];
         }
 
         return [];
     }
 
+    public function getListActions(): array
+    {
+        $actions = parent::getListActions();
+        unset($actions[CrudConfigInterface::ACTION_ADD]);
+
+        return $actions;
+    }
+
     public function getItemActions(): array
     {
-        $actions = [];
-
-        $actions[] = ItemAction::new(
-            'action.show',
-            $this->getPath(CrudConfigInterface::SHOW),
-            Icon::new('search')
-        )->setCssClass('btn btn-primary btn-sm mr-1');
+        $actions = parent::getItemActions();
+        unset($actions[CrudConfigInterface::ACTION_EDIT]);
+        unset($actions[CrudConfigInterface::ACTION_DELETE]);
 
         return $actions;
     }
 
     public function getShowActions(): array
     {
-        $actions = [];
-
-        $actions[] = ItemAction::new(
-            'action.list',
-            $this->getPath(CrudConfigInterface::INDEX),
-            Icon::new('list')
-        )->setCssClass('btn btn-secondary btn-sm mr-1');
+        $actions = parent::getShowActions();
+        unset($actions[CrudConfigInterface::ACTION_EDIT]);
+        unset($actions[CrudConfigInterface::ACTION_DELETE]);
 
         return $actions;
     }
 
     public function getSublistAction(): array
     {
-        $actions = [];
-
-        $actions[] = ItemAction::new(
-            'action.show',
-            $this->getPath(CrudConfigInterface::SHOW),
-            Icon::new('search')
-        )->setCssClass('btn btn-primary btn-sm mr-1');
+        $actions = parent::getItemActions();
+        unset($actions[CrudConfigInterface::ACTION_EDIT]);
+        unset($actions[CrudConfigInterface::ACTION_DELETE]);
 
         return $actions;
     }
@@ -103,7 +98,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
             $toEmail,
             $status,
             $openDate,
-            $linkOpening
+            $linkOpening,
         ];
     }
 
@@ -112,14 +107,14 @@ class RecipientCrudConfig extends AbstractCrudConfig
         return [
             'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
                 ->setActions($this->linkCrudConfig->getSublistAction())
-                ->setFields($this->linkCrudConfig->getSublistFields())
+                ->setFields($this->linkCrudConfig->getSublistFields()),
         ];
     }
 
     public function getDefaultSort(): array
     {
         return [
-            ['id', 'ASC']
+            ['id', 'ASC'],
         ];
     }
 

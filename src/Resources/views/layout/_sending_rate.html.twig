@@ -1,0 +1,41 @@
+{% if mail is not defined %}
+    {% set mail = view.resource %}
+{% endif %}
+
+{% set statusSending = constant('Lle\\HermesBundle\\Entity\\Mail::STATUS_SENDING') %}
+
+<div class="progress">
+    <div
+        class="progress-bar fw-bold {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
+        role="progressbar"
+        style="width: {{ mail.percentSent }}%;" aria-valuenow="{{ mail.percentSent }}"
+        aria-valuemin="0" aria-valuemax="100"
+        title="{{ 'text.percentMailSent'|trans({'%nb%': mail.percentSent}, 'LleHermesBundle') }}"
+    >
+        {{ mail.percentSent }}%
+    </div>
+
+    <div
+        class="progress-bar bg-info fw-bold {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
+        role="progressbar"
+        style="width: {{ mail.percentUnsubscribed }}%;" aria-valuenow="{{ mail.percentUnsubscribed }}"
+        aria-valuemin="0" aria-valuemax="100"
+        title="{{ 'text.percentMailUnsubscribed'|trans({'%nb%': mail.percentUnsubscribed}, 'LleHermesBundle') }}"
+    >
+        {% if mail.percentUnsubscribed == 100 %}
+            {{ mail.percentUnsubscribed }}%
+        {% endif %}
+    </div>
+
+    <div
+        class="progress-bar bg-danger fw-bold {% if mail.status == statusSending %}progress-bar-striped progress-bar-animated{% endif %}"
+        role="progressbar"
+        style="width: {{ mail.percentError }}%;" aria-valuenow="{{ mail.percentError }}"
+        aria-valuemin="0" aria-valuemax="100"
+        title="{{ 'text.percentMailError'|trans({'%nb%': mail.percentError}, 'LleHermesBundle') }}"
+    >
+        {% if mail.percentError == 100 %}
+            {{ mail.percentError }}%
+        {% endif %}
+    </div>
+</div>

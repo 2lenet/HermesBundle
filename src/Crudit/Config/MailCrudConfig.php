@@ -18,16 +18,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class MailCrudConfig extends AbstractCrudConfig
 {
-    private RequestStack $requestStack;
-    private RecipientCrudConfig $recipientCrudConfig;
-    private LinkCrudConfig $linkCrudConfig;
-
-    public function __construct(MailDatasource $datasource, RequestStack $requestStack, RecipientCrudConfig $recipientCrudConfig, LinkCrudConfig $linkCrudConfig)
-    {
+    public function __construct(
+        MailDatasource $datasource,
+        protected readonly RequestStack $requestStack,
+        protected readonly RecipientCrudConfig $recipientCrudConfig,
+        protected readonly LinkCrudConfig $linkCrudConfig,
+    ) {
         $this->datasource = $datasource;
-        $this->requestStack = $requestStack;
-        $this->recipientCrudConfig = $recipientCrudConfig;
-        $this->linkCrudConfig = $linkCrudConfig;
     }
 
     /**
@@ -37,12 +34,18 @@ class MailCrudConfig extends AbstractCrudConfig
     public function getFields($key): array
     {
         $subject = Field::new('subject')->setTemplate('@LleHermes/crud/_subject.html.twig');
-        $recipients = Field::new('recipients')->setTemplate('@LleHermes/crud/_recipient.html.twig');
+        $statistics = Field::new('totalToSend')
+            ->setTemplate('@LleHermes/layout/_mail_statistics.html.twig')
+            ->setLabel('field.mailStatistics');
+        $recipients = Field::new('countRecipients');
         $sendingDate = Field::new('sendingDate');
         $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
         $openingRate = Field::new('percentOpened')
             ->setTemplate('@LleHermes/layout/_percent.html.twig')
             ->setLabel('field.totalOpened');
+        $sendingRate = Field::new('percentSent')
+            ->setTemplate('@LleHermes/layout/_sending_rate.html.twig')
+            ->setLabel('field.sendingRate');
         $linksOpening = Field::new('totalLinkOpening')->setLabel('field.nbopeningsLinks');
         $linkOpeningRate = Field::new('totalLinkOpeningRate')
             ->setTemplate('@LleHermes/layout/_percent.html.twig')
@@ -57,13 +60,16 @@ class MailCrudConfig extends AbstractCrudConfig
                 $subject,
                 $sendingDate,
                 $status,
+                $statistics,
                 $openingRate,
+                $sendingRate,
                 $html,
                 $attachement,
             ];
 
             $request = $this->requestStack->getMainRequest();
-            if ($this->getPath(CrudConfigInterface::SHOW)->getRoute() == $request->attributes->get('_route')) {
+            $route = $this->getPath(CrudConfigInterface::SHOW)->getRoute();
+            if ($request && $route == $request->attributes->get('_route')) {
                 /** @var Mail $mail */
                 $mail = $this->datasource->get($request->attributes->get('id'));
                 if ($mail->getTemplate()->hasStatistics()) {
@@ -71,9 +77,10 @@ class MailCrudConfig extends AbstractCrudConfig
                         $subject,
                         $sendingDate,
                         $status,
+                        $statistics,
                         $openingRate,
-                        $linksOpening,
                         $linkOpeningRate,
+                        $linksOpening,
                         $html,
                         $attachement,
                     ];
@@ -91,31 +98,31 @@ class MailCrudConfig extends AbstractCrudConfig
         ];
     }
 
+    public function getDefaultSort(): array
+    {
+        return [['id', 'DESC']];
+    }
+
+    public function getListActions(): array
+    {
+        $actions = parent::getListActions();
+        unset($actions[CrudConfigInterface::ACTION_ADD]);
+
+        return $actions;
+    }
+
     public function getItemActions(): array
     {
-        $actions = [];
+        $actions = parent::getItemActions();
+        unset($actions[CrudConfigInterface::ACTION_EDIT]);
 
-        $actions[] = ItemAction::new(
+        array_unshift($actions, ItemAction::new(
             'action.send',
             new Path('lle_hermes_crudit_mail_send'),
             Icon::new('paper-plane')
         )
             ->setCssClass('btn btn-success btn-sm mr-1')
-            ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig');
-
-        $actions[] = ItemAction::new(
-            'action.show',
-            $this->getPath(CrudConfigInterface::SHOW),
-            Icon::new('search')
-        )->setCssClass('btn btn-primary btn-sm mr-1');
-
-        $actions[] = DeleteAction::new(
-            'action.delete',
-            $this->getPath(CrudConfigInterface::DELETE),
-            Icon::new('trash-alt')
-        )
-            ->setCssClass('btn btn-danger btn-sm mr-1')
-            ->setModal("@LleCrudit/modal/_confirm_delete.html.twig");
+            ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig'));
 
         $actions[] = ItemAction::new(
             'action.sendmailtest',
@@ -130,21 +137,8 @@ class MailCrudConfig extends AbstractCrudConfig
 
     public function getShowActions(): array
     {
-        $actions = [];
-
-        $actions[] = ItemAction::new(
-            'action.list',
-            $this->getPath(CrudConfigInterface::INDEX),
-            Icon::new('list')
-        )->setCssClass('btn btn-secondary btn-sm mr-1');
-
-        $actions[] = DeleteAction::new(
-            'action.delete',
-            $this->getPath(CrudConfigInterface::DELETE),
-            Icon::new('trash-alt')
-        )
-            ->setCssClass('btn btn-danger btn-sm mr-1')
-            ->setModal("@LleCrudit/modal/_confirm_delete.html.twig");
+        $actions = parent::getShowActions();
+        unset($actions[CrudConfigInterface::ACTION_EDIT]);
 
         return $actions;
     }
@@ -158,7 +152,8 @@ class MailCrudConfig extends AbstractCrudConfig
         ];
 
         $request = $this->requestStack->getMainRequest();
-        if ($this->getPath(CrudConfigInterface::SHOW)->getRoute() == $request->attributes->get('_route')) {
+        $route = $this->getPath(CrudConfigInterface::SHOW)->getRoute();
+        if ($request && $route == $request->attributes->get('_route')) {
             /** @var Mail $mail */
             $mail = $this->datasource->get($request->attributes->get('id'));
             if ($mail->getTemplate()->hasStatistics()) {
@@ -168,7 +163,7 @@ class MailCrudConfig extends AbstractCrudConfig
                         ->setActions($this->recipientCrudConfig->getSublistAction()),
                     'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
                         ->setFields($this->linkCrudConfig->getSublistFields())
-                        ->setActions($this->linkCrudConfig->getSublistAction())
+                        ->setActions($this->linkCrudConfig->getSublistAction()),
                 ];
             }
         }

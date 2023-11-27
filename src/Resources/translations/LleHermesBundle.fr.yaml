@@ -1,4 +1,5 @@
 action:
+    list: Retour
     add: Ajouter
     delete: Supprimer
     edit: Modifier
@@ -15,6 +16,7 @@ crud:
             template: Template
             mail: Mail
             recipient: Destinataire
+            personalizedtemplate: Templates personnalisés
         show:
             template: Modèle %entity%
             mail: ""
@@ -28,6 +30,7 @@ crud:
             recipient: Création destinataire
     action:
         duplicate: Dupliquer
+        copy_for_tenant: Copier pour personnalier
     modal:
         send_mail: Voulez-vous vraiment envoyer cet email à %nb% destinataires ? Cette action est définitive.
     canDelete:
@@ -48,6 +51,7 @@ field:
     mail: Mail
     recipients: Destinataires
     recipient: Destinataire
+    countrecipients: Nombre de destinataires
     'mail:sendingDate': Date d'envoi
     openDate: Date d'ouverture
     opendate: Date d'ouverture
@@ -59,7 +63,10 @@ field:
     sendingdate: Date d'envoi
     status: Statut
     totalOpened: Taux d'ouverture
+    sendingRate: Taux d'envoi
+    mailStatistics: Statistiques du mail
     html: HTML
+    text: Texte
     subject: Sujet
     toEmail: À email
     toemail: À email
@@ -76,6 +83,10 @@ field:
     linkOpeningRate: Taux d'ouverture de liens
     firstLinkOpening: Date de première ouverture
     lastLinkOpening: Date de dernière ouverture
+    group:
+        template_informations: Informations
+        template_content: Contenu
+        template_options: Options
 
 title:
     dashboard: Tableau de bord
@@ -92,6 +103,7 @@ status:
     sending: En cours
     sent: Envoyé
     unsubscribed: Désinscrit
+    cancelled: Annulé
 
 menu:
     lle_hermes:
@@ -121,11 +133,15 @@ text:
     unsubscribtionConfirmed: Désinscription confirmée, vous pouvez fermer cette fenêtre
     unsubscribtionCancelled: Désinscription annulée, vous pouvez fermer cette fenêtre
     alreadyUnsubscribe: Vous êtes déjà désinscrit, vous pouvez fermer cette fenêtre
+    percentMailSent: '%nb%% envoyés'
+    percentMailUnsubscribed: '%nb%% désinscrits'
+    percentMailError: '%nb%% erreurs'
 
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
     mail_sent: '%nb% / %nbTotal% mails envoyés'
     copy_for_tenants: '%count% templates copiés'
+    no_email: Aucune adresse email n'a été renseignée
 
 modal:
     action:

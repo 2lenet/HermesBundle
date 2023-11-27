@@ -1,25 +1,14 @@
 <?php
 
-
 namespace Lle\HermesBundle\Model;
-
 
 class ResourceAttachment implements AttachmentInterface
 {
-    /**
-     * @var string
-     */
-    protected $path;
+    protected string $path;
 
-    /**
-     * @var string
-     */
-    protected $name;
+    protected string $name;
 
-    /**
-     * @var string
-     */
-    protected $contentType;
+    protected string $contentType;
 
     public function __construct(string $path, string $name, string $contentType)
     {
@@ -31,9 +20,11 @@ class ResourceAttachment implements AttachmentInterface
     /**
      * @inheritdoc
      */
-    public function getData(): string
+    public function getData(): ?string
     {
-        return file_get_contents($this->path);
+        $data = file_get_contents($this->path);
+
+        return $data ?: null;
     }
 
     /**

@@ -57,7 +57,7 @@ class LinkOpeningCrudConfig extends AbstractCrudConfig
     {
         $link = Field::new('link');
         $recipient = Field::new('recipient', null, [
-            'route' => 'lle_hermes_crudit_recipient_show'
+            'route' => 'lle_hermes_crudit_recipient_show',
         ]);
         $nbOpening = Field::new('nbOpenings');
         $createdAt = Field::new('createdAt')->setLabel('field.firstLinkOpening');
@@ -68,7 +68,7 @@ class LinkOpeningCrudConfig extends AbstractCrudConfig
             $recipient,
             $nbOpening,
             $createdAt,
-            $updatedAt
+            $updatedAt,
         ];
     }
 

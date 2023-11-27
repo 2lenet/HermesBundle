@@ -9,9 +9,6 @@ use Lle\CruditBundle\Filter\FilterType\StringFilterType;
 
 class TemplateFilterSet extends AbstractFilterSet
 {
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return [

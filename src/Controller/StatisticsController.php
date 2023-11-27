@@ -13,16 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StatisticsController extends AbstractController
 {
-    private EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
+    public function __construct(
+        protected readonly EntityManagerInterface $em,
+    ) {
     }
 
-    /**
-     * @Route("/statistics/{recipient}/{link}", name="statistics")
-     */
+    #[Route('/statistics/{recipient}/{link}', name: 'statistics', methods: ['GET'])]
     public function statistics(Recipient $recipient, Link $link): RedirectResponse
     {
         $linkOpeningRepository = $this->em->getRepository(LinkOpening::class);

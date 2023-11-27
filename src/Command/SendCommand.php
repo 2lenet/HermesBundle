@@ -2,7 +2,7 @@
 
 namespace Lle\HermesBundle\Command;
 
-use Lle\HermesBundle\Service\SenderService;
+use Lle\HermesBundle\Service\Sender;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,18 +14,14 @@ use Symfony\Component\Console\Attribute\AsCommand;
 /**
  * Class SendCommand
  * @package Lle\HermesBundle\Command
- *
  */
 #[AsCommand(name: 'lle:hermes:send')]
 class SendCommand extends Command
 {
     use LockableTrait;
 
-    private SenderService $sender;
-
-    public function __construct(SenderService $sender)
+    public function __construct(protected readonly Sender $sender)
     {
-        $this->sender = $sender;
         parent::__construct();
     }
 
@@ -41,7 +37,7 @@ class SendCommand extends Command
         if (!$this->lock()) {
             $output->writeln('The command is already running in another process');
 
-            return 0;
+            return Command::FAILURE;
         }
 
         $io = new SymfonyStyle($input, $output);
@@ -52,6 +48,6 @@ class SendCommand extends Command
 
         $io->success("Success $nbSent mails sent");
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

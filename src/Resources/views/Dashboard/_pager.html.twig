@@ -18,20 +18,20 @@
             {% if page > 1 %}
                 <li class="page-item">
                     <a
-                            class="page-link"
-                            href="{{ path('lle_hermes_dashboard', {'page': 1}) }}"
-                            title="{{ 'pagination.firstPage'|trans({}, 'LleHermesBundle') }}"
-                            aria-label="{{ 'pagination.first'|trans({}, 'LleHermesBundle') }}">
+                        class="page-link"
+                        href="{{ path('lle_hermes_dashboard', {'page': 1}) }}"
+                        title="{{ 'pagination.firstPage'|trans({}, 'LleHermesBundle') }}"
+                        aria-label="{{ 'pagination.first'|trans({}, 'LleHermesBundle') }}">
                         <i class="fa fa-angle-double-left"></i>
                     </a>
                 </li>
 
                 <li class="page-item">
                     <a
-                            class="page-link"
-                            href="{{ path('lle_hermes_dashboard', {'page': page - 1}) }}"
-                            title="{{ 'pagination.previousPage'|trans({}, 'LleHermesBundle') }}"
-                            aria-label="{{ 'pagination.previous'|trans({}, 'LleHermesBundle') }}">
+                        class="page-link"
+                        href="{{ path('lle_hermes_dashboard', {'page': page - 1}) }}"
+                        title="{{ 'pagination.previousPage'|trans({}, 'LleHermesBundle') }}"
+                        aria-label="{{ 'pagination.previous'|trans({}, 'LleHermesBundle') }}">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 </li>
@@ -42,9 +42,9 @@
                 {% for p in range(max(1, page - 2), min(total_pages, page + 2)) %}
                     <li class="page-item {% if page == p %}active{% endif %}">
                         <a
-                                class="page-link"
-                                href="{{ path('lle_hermes_dashboard', {'page': p}) }}"
-                                title="{{ 'pagination.goToPage'|trans({'%nb%': p}, 'LleHermesBundle') }}">{{ p }}
+                            class="page-link"
+                            href="{{ path('lle_hermes_dashboard', {'page': p}) }}"
+                            title="{{ 'pagination.goToPage'|trans({'%nb%': p}, 'LleHermesBundle') }}">{{ p }}
                         </a>
                     </li>
                 {% endfor %}
@@ -54,19 +54,19 @@
             {% if page < total_pages %}
                 <li class="page-item">
                     <a
-                            class="page-link"
-                            href="{{ path('lle_hermes_dashboard', {'page': page + 1}) }}"
-                            title="{{ 'pagination.nextPage'|trans({}, 'LleHermesBundle') }}"
-                            aria-label="{{ 'pagination.next'|trans({}, 'LleHermesBundle') }}">
+                        class="page-link"
+                        href="{{ path('lle_hermes_dashboard', {'page': page + 1}) }}"
+                        title="{{ 'pagination.nextPage'|trans({}, 'LleHermesBundle') }}"
+                        aria-label="{{ 'pagination.next'|trans({}, 'LleHermesBundle') }}">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 </li>
                 <li class="page-item">
                     <a
-                            class="page-link"
-                            href="{{ path('lle_hermes_dashboard', {'page': total_pages}) }}"
-                            title="{{ 'pagination.lastPage'|trans({}, 'LleHermesBundle') }}"
-                            aria-label="{{ 'pagination.last'|trans({}, 'LleHermesBundle') }}">
+                        class="page-link"
+                        href="{{ path('lle_hermes_dashboard', {'page': total_pages}) }}"
+                        title="{{ 'pagination.lastPage'|trans({}, 'LleHermesBundle') }}"
+                        aria-label="{{ 'pagination.last'|trans({}, 'LleHermesBundle') }}">
                         <i class="fa fa-angle-double-right"></i>
                     </a>
                 </li>

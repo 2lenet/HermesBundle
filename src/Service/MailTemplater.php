@@ -12,19 +12,10 @@ use Twig\Environment;
  */
 class MailTemplater
 {
-    protected Mail $mail;
-
-    protected Environment $twig;
-
-    protected RouterInterface $router;
-
     protected array $data = [];
 
-    public function __construct(Mail $mail, Environment $twig, RouterInterface $router)
+    public function __construct(protected Mail $mail, protected Environment $twig, protected RouterInterface $router)
     {
-        $this->mail = $mail;
-        $this->twig = $twig;
-        $this->router = $router;
     }
 
     public function getSubject(): string
@@ -47,7 +38,7 @@ class MailTemplater
         return $this->render((string)$this->mail->getTemplate()->getSenderName());
     }
 
-    private function render(string $string, bool $decodeHtml = true)
+    private function render(string $string, bool $decodeHtml = true): string
     {
         $this->twig->disableStrictVariables();
 
@@ -58,7 +49,6 @@ class MailTemplater
         if ($decodeHtml) {
             $result = html_entity_decode($result);
         }
-
 
         if ($this->twig->isDebug()) {
             $this->twig->enableStrictVariables();

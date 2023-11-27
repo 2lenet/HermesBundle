@@ -28,35 +28,20 @@ class RecipientRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $statusDest
-     * @param string $statusMail
-     * @param int $limit
      * @return Recipient[]
      */
-    public function findRecipientsSending(string $statusDest, string $statusMail, int $limit): array
+    public function findRecipientsSending(string $recipientStatus, string $mailStatus, int $limit): array
     {
-        $qb = $this->createQueryBuilder('entity')
-            ->leftJoin('entity.mail', 'mail')
-            ->leftJoin('entity.ccMail', 'ccMail');
-        $qb->where(
-            $qb->expr()->andX(
-                $qb->expr()->eq('entity.status', ':statusDest'),
-                $qb->expr()->eq('mail.status', ':statusMail')
-            )
-        );
-        $qb->orWhere(
-            $qb->expr()->andX(
-                $qb->expr()->eq('entity.status', ':statusDest'),
-                $qb->expr()->eq('ccMail.status', ':statusMail')
-            )
-        );
-        $qb->setParameters([
-            'statusDest' => $statusDest,
-            'statusMail' => $statusMail
-        ]);
-        $qb->setMaxResults($limit);
-
-        return $qb->getQuery()->execute();
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.mail', 'm')
+            ->leftJoin('r.ccMail', 'cc')
+            ->where('r.status = :status_r AND m.status = :status_m')
+            ->orWhere('r.status = :status_r AND cc.status = :status_m')
+            ->setParameter('status_r', $recipientStatus)
+            ->setParameter('status_m', $mailStatus)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 
     public function disableUnsubscribed(): void
@@ -68,46 +53,15 @@ class RecipientRepository extends ServiceEntityRepository
             ->getQuery()->execute();
     }
 
-    public function disableErrors(): void
+    public function countOpenRecipients(Mail $mail): int
     {
-        /*$qb = $this->createQueryBuilder('e')
-            ->update()
-            ->set('e.status', "'error'")
-            ->join(EmailError::class, 'ee', Join::WITH, 'ee.mail = e.toEmail');
-        $qb->where(
-            $qb->expr()->gte('ee.nbError', 3)
-        );
-        $qb->getQuery()->execute();*/
-    }
+        $result = $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where('r.mail = :mail')
+            ->setParameter('mail', $mail)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-    public function updateStatus(Mail $mail, string $status): void
-    {
-        $qb = $this->_em->createQueryBuilder()
-            ->update(Recipient::class, 'e')
-            ->set('e.status', ':status');
-        $qb->where($qb->expr()->eq('e.mail', ':mail'));
-
-        $qb->setParameters([
-            'mail' => $mail,
-            'status' => $status
-        ]);
-
-        $qb->getQuery()->execute();
-    }
-
-    public function countOpenRecipient(Mail $mail): int
-    {
-        $qb = $this->createQueryBuilder('entity')
-            ->select('COUNT(entity.id)');
-
-        $qb->where(
-            $qb->expr()->andX(
-                $qb->expr()->isNotNull('entity.mail'),
-                $qb->expr()->eq('entity.mail', ':mail')
-            )
-        );
-        $qb->setParameter('mail', $mail);
-
-        return $qb->getQuery()->getSingleScalarResult();
+        return (int)$result;
     }
 }

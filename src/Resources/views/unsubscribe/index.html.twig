@@ -10,8 +10,10 @@
         </p>
 
         <p>
-            <a href="{{ path('confirm_unsubscribe', {'email': email, 'token': token}) }}" class="btn btn-primary">{{ 'text.confirmUnsubscribtion'|trans({}, 'LleHermesBundle') }}</a>
-            <a href="{{ path('cancel_unsubscribe', {'email': email, 'token': token}) }}" class="btn btn-primary">{{ 'text.cancelUnsubscribtion'|trans({}, 'LleHermesBundle') }}</a>
+            <a href="{{ path('confirm_unsubscribe', {'email': email, 'token': token}) }}"
+               class="btn btn-primary">{{ 'text.confirmUnsubscribtion'|trans({}, 'LleHermesBundle') }}</a>
+            <a href="{{ path('cancel_unsubscribe', {'email': email, 'token': token}) }}"
+               class="btn btn-primary">{{ 'text.cancelUnsubscribtion'|trans({}, 'LleHermesBundle') }}</a>
         </p>
     </div>
 {% endblock %}

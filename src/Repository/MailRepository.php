@@ -57,10 +57,15 @@ class MailRepository extends ServiceEntityRepository
         $qb->getQuery()->execute();
     }
 
-    public function getDashboardMails(int $page = 1, int $number = 30): Paginator
+    public function getDashboardMails(int $page = 1, int $number = 30, ?int $tenantId = null): Paginator
     {
         $qb = $this->createQueryBuilder("m")
             ->orderBy("m.id", "DESC");
+
+        if ($tenantId) {
+            $qb->andWhere('m.tenantId = :id')
+                ->setParameter('id', $tenantId);
+        }
 
         $paginator = new Paginator($qb);
         $paginator

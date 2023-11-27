@@ -50,7 +50,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
                 $senderEmail,
                 $code,
                 $unsubscriptions,
-                $statistics
+                $statistics,
             ];
         }
 
@@ -63,7 +63,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $code,
             $html,
             $unsubscriptions,
-            $statistics
+            $statistics,
         ];
     }
 
@@ -73,14 +73,14 @@ class TemplateCrudConfig extends AbstractCrudConfig
 
         $actions[] = ItemAction::new(
             'crud.action.duplicate',
-            new Path('lle_hermes_template_duplicate'),
+            Path::new('lle_hermes_template_duplicate')->setRole('ROLE_HERMES_DUPLICATE_TEMPLATE'),
             Icon::new('clone')
         )->setDropdown(true);
 
         if ($this->parameterBag->get('lle_hermes.tenant_class')) {
             $actions[] = ItemAction::new(
-                'crud.action.copy_for_every_tenant',
-                Path::new('lle_hermes_crudit_template_copyforeverytenant')->setRole('ROLE_HERMES_COPY_FOR_TENANT'),
+                'crud.action.copy_for_tenant',
+                Path::new('lle_hermes_crudit_template_copyfortenant')->setRole('ROLE_HERMES_COPY_FOR_TENANT'),
                 Icon::new('share')
             )->setDropdown(true);
         }

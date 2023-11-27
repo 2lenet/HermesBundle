@@ -9,9 +9,7 @@ use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\RecipientCrudConfig;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/recipient")
- */
+#[Route('/recipient')]
 class RecipientController extends AbstractCrudController
 {
     use TraitCrudController;

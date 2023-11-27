@@ -11,23 +11,16 @@ use Twig\TwigFunction;
 
 class HermesExtension extends AbstractExtension
 {
-    private Environment $twig;
-
-    private RouterInterface $router;
-
-    public function __construct(Environment $twig, RouterInterface $router)
-    {
-        $this->twig = $twig;
-        $this->router = $router;
+    public function __construct(
+        protected readonly Environment $twig,
+        protected readonly RouterInterface $router,
+    ) {
     }
 
-    /**
-     * @return array
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new TwigFunction("lle_hermes_get_templater", [$this, "getTemplater"]),
+            new TwigFunction("lle_hermes_get_templater", $this->getTemplater(...)),
         ];
     }
 
