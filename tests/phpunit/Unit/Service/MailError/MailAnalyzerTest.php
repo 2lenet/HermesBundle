@@ -16,14 +16,14 @@ class MailAnalyzerTest extends TestCase
         $this->analyzer = new MailAnalyzer();
     }
 
-    function testIsErrorMail(): void
+    public function testIsErrorMail(): void
     {
         $subject = 'Undelivered Mail Returned to Sender';
 
         self::assertTrue($this->analyzer->isErrorMail($subject));
     }
 
-    function testIsErrorMailNotOk(): void
+    public function testIsErrorMailNotOk(): void
     {
         $subject = 'Newsletter';
 
