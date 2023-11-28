@@ -16,13 +16,10 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PersonalizedTemplateCrudConfig extends TemplateCrudConfig
 {
-//    private ParameterBagInterface $parameterBag;
-
     public function __construct(
         PersonalizedTemplateDatasource $datasource,
         ParameterBagInterface $parameterBag,
     ) {
-//        parent::__construct($datasource, $parameterBag);
         $this->datasource = $datasource;
         $this->parameterBag = $parameterBag;
     }
