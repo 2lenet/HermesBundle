@@ -39,8 +39,6 @@ class TemplateCrudConfig extends AbstractCrudConfig
             ->setCssClass('col-12');
         $unsubscriptions = Field::new('unsubscriptions');
         $statistics = Field::new('statistics');
-        if ($this->parameterBag->get('lle_hermes.tenant_class')) {
-        }
 
         if ($key == CrudConfigInterface::INDEX) {
             return [

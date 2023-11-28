@@ -29,19 +29,17 @@ class PersonalizedTemplateCrudConfig extends AbstractCrudConfig
      */
     public function getFields($key): array
     {
-        $libelle = Field::new('libelle');
         $subject = Field::new('subject');
-        $senderName = Field::new('senderName');
+        $libelle = Field::new('libelle');
         $senderEmail = Field::new('senderEmail');
-        $text = Field::new('text');
+        $senderName = Field::new('senderName');
         $code = Field::new('code');
+        $text = Field::new('text');
+        $unsubscriptions = Field::new('unsubscriptions');
         $html = Field::new('html')
             ->setTemplate('@LleHermes/crud/_template_html.html.twig')
             ->setCssClass('col-12');
-        $unsubscriptions = Field::new('unsubscriptions');
         $statistics = Field::new('statistics');
-        if ($this->parameterBag->get('lle_hermes.tenant_class')) {
-        }
 
         if ($key == CrudConfigInterface::INDEX) {
             return [

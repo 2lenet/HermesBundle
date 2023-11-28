@@ -26,7 +26,7 @@ class TemplateDatasource extends AbstractDoctrineDatasource
 
     public function buildQueryBuilder(?DatasourceParams $requestParams): QueryBuilder
     {
-        $qb=  parent::buildQueryBuilder($requestParams);
+        $qb = parent::buildQueryBuilder($requestParams);
         $qb->andWhere('root.tenantId IS NULL');
 
         return $qb;

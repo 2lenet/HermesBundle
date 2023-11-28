@@ -59,7 +59,7 @@ class TemplateController extends AbstractCrudController
         /** @var MultiTenantInterface $user */
         $user = $this->getUser();
         $entity = $this->em->getRepository($tenantClass)->findOneBy(['id' => $user->getTenantId()]);
-        if (!$entity) {
+        if (!$entity || !method_exists($entity, 'getId')) {
             $this->addFlash('danger', 'flash.no_entity_found');
             return $this->redirectToRoute('lle_hermes_crudit_template_index');
         }
