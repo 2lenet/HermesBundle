@@ -14,56 +14,17 @@ use Lle\HermesBundle\Crudit\Datasource\PersonalizedTemplateDatasource;
 use Lle\HermesBundle\Crudit\Datasource\TemplateDatasource;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class PersonalizedTemplateCrudConfig extends AbstractCrudConfig
+class PersonalizedTemplateCrudConfig extends TemplateCrudConfig
 {
+//    private ParameterBagInterface $parameterBag;
+
     public function __construct(
         PersonalizedTemplateDatasource $datasource,
-        private ParameterBagInterface $parameterBag,
+        ParameterBagInterface $parameterBag,
     ) {
+//        parent::__construct($datasource, $parameterBag);
         $this->datasource = $datasource;
-    }
-
-    /**
-     * @param string $key
-     * @return Field[]
-     */
-    public function getFields($key): array
-    {
-        $subject = Field::new('subject');
-        $libelle = Field::new('libelle');
-        $senderEmail = Field::new('senderEmail');
-        $senderName = Field::new('senderName');
-        $code = Field::new('code');
-        $text = Field::new('text');
-        $unsubscriptions = Field::new('unsubscriptions');
-        $html = Field::new('html')
-            ->setTemplate('@LleHermes/crud/_template_html.html.twig')
-            ->setCssClass('col-12');
-        $statistics = Field::new('statistics');
-
-        if ($key == CrudConfigInterface::INDEX) {
-            return [
-                $libelle,
-                $subject,
-                $senderName,
-                $senderEmail,
-                $code,
-                $unsubscriptions,
-                $statistics,
-            ];
-        }
-
-        return [
-            $libelle,
-            $subject,
-            $senderName,
-            $senderEmail,
-            $text,
-            $code,
-            $html,
-            $unsubscriptions,
-            $statistics,
-        ];
+        $this->parameterBag = $parameterBag;
     }
 
     public function getRootRoute(): string

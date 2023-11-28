@@ -15,11 +15,14 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class TemplateCrudConfig extends AbstractCrudConfig
 {
+    protected ParameterBagInterface $parameterBag;
+
     public function __construct(
         TemplateDatasource $datasource,
-        private ParameterBagInterface $parameterBag,
+        ParameterBagInterface $parameterBag,
     ) {
         $this->datasource = $datasource;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
