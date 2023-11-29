@@ -45,7 +45,10 @@ class TemplateController extends AbstractCrudController
             $this->em->persist($copyTemplate);
             $this->em->flush();
         } else {
-            $this->addFlash(FlashBrickResponse::ERROR, $this->translator->trans('flash.copyAlreadyExist', [], 'LleHermesBundle'));
+            $this->addFlash(
+                FlashBrickResponse::ERROR,
+                $this->translator->trans('flash.copyAlreadyExist', [], 'LleHermesBundle')
+            );
         }
 
         return $this->redirectToRoute('lle_hermes_crudit_template_index');
