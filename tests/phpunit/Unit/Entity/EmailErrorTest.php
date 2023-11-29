@@ -44,7 +44,7 @@ class EmailErrorTest extends TestCase
         $emailError->removeError($error);
         self::assertCount(0, $emailError->getErrors());
 
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
         $errors = $validator->validate($emailError);
         self::assertCount(0, $errors);
     }

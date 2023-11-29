@@ -31,9 +31,9 @@ class MultiTenantService
         return $user->getTenantId();
     }
 
-    public function getTenantClass(): string
+    public function getTenantClass(): ?string
     {
-        /** @var class-string $class */
+        /** @var ?class-string $class */
         $class = $this->parameterBag->get('lle_hermes.tenant_class');
 
         return $class;

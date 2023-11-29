@@ -36,7 +36,7 @@ class ErrorTest extends TestCase
         $error->setEmailError($emailError);
         self::assertEquals($emailError, $error->getEmailError());
 
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
 
         $errors = $validator->validate($error);
         self::assertCount(0, $errors);

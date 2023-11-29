@@ -38,7 +38,7 @@ class LinkTest extends TestCase
         $link->removeLinkOpening($linkOpening);
         self::assertCount(0, $link->getLinkOpenings());
 
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
         $errors = $validator->validate($link);
         self::assertCount(0, $errors);
     }
