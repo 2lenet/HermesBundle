@@ -61,7 +61,7 @@ class TemplateController extends AbstractCrudController
     {
         $tenantClass = $this->multiTenantService->getTenantClass();
         $tenantId = $this->multiTenantService->getTenantId();
-        $entity = $this->em->find($tenantClass, $tenantId);
+        $entity = $this->em->getRepository($tenantClass)->find($tenantId);
         if (!$entity || !method_exists($entity, 'getId')) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.no_entity_found');
 
