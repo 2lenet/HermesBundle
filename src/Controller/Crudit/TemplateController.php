@@ -12,6 +12,7 @@ use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Service\MultiTenantService;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +29,7 @@ class TemplateController extends AbstractCrudController
         protected readonly EntityManagerInterface $em,
         protected readonly TemplateRepository $templateRepository,
         protected readonly TranslatorInterface $translator,
-        protected readonly ParameterBagInterface $parameterBag,
+        protected readonly MultiTenantService $multiTenantService,
     ) {
         $this->config = $config;
     }
@@ -58,11 +59,8 @@ class TemplateController extends AbstractCrudController
     #[Route('/copy-for-tenant/{id}', name:'lle_hermes_crudit_template_copyfortenant', methods:['GET'])]
     public function copyForTenant(Template $template, Request $request): Response
     {
-        /** @var class-string $tenantClass */
-        $tenantClass = $this->parameterBag->get('lle_hermes.tenant_class');
-        /** @var MultiTenantInterface $user */
-        $user = $this->getUser();
-        $entity = $this->em->getRepository($tenantClass)->findOneBy(['id' => $user->getTenantId()]);
+        $tenantId = $this->multiTenantService->getTenantId();
+        $entity = $this->em->find($tenantClass, $tenantId);
         if (!$entity || !method_exists($entity, 'getId')) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.no_entity_found');
 
@@ -75,8 +73,7 @@ class TemplateController extends AbstractCrudController
 
         $this->em->persist($newTemplate);
         $this->em->flush();
-        $message = $this->translator->trans('flash.copy_for_tenants');
-        $this->addFlash(FlashBrickResponse::SUCCESS, $message);
+        $this->addFlash(FlashBrickResponse::SUCCESS, 'flash.copy_for_tenants');
 
         return $this->redirectToRoute('lle_hermes_crudit_personalizedtemplate_index');
     }
