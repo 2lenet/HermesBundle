@@ -15,6 +15,7 @@ use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Service\AttachementService;
 use Lle\HermesBundle\Service\Factory\MailFactory;
+use Lle\HermesBundle\Service\MultiTenantService;
 use Lle\HermesBundle\Service\Sender;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -36,6 +37,7 @@ class MailController extends AbstractCrudController
         protected readonly ParameterBagInterface $parameters,
         protected readonly TranslatorInterface $translator,
         protected readonly Sender $sender,
+        protected readonly MultiTenantService $multiTenantService,
     ) {
         $this->config = $config;
     }
@@ -49,10 +51,8 @@ class MailController extends AbstractCrudController
         $page = (int)$request->get("page", 1);
 
         $tenantId = null;
-        if ($this->parameters->get('lle_hermes.tenant_class')) {
-            /** @var MultiTenantInterface $user */
-            $user = $this->getUser();
-            $tenantId = $user->getTenantId();
+        if ($this->multiTenantService->isMultiTenantEnable()) {
+            $tenantId = $this->multiTenantService->getTenantId();
         }
 
         $mails = $this->mailRepository->getDashboardMails($page, $number, $tenantId);

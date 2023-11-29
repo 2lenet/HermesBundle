@@ -28,6 +28,7 @@ class TemplateController extends AbstractCrudController
         protected readonly EntityManagerInterface $em,
         protected readonly TemplateRepository $templateRepository,
         protected readonly TranslatorInterface $translator,
+        protected readonly ParameterBagInterface $parameterBag,
     ) {
         $this->config = $config;
     }
@@ -44,7 +45,7 @@ class TemplateController extends AbstractCrudController
             $this->em->persist($copyTemplate);
             $this->em->flush();
         } else {
-            $this->addFlash('danger', $this->translator->trans('flash.copyAlreadyExist', [], 'LleHermesBundle'));
+            $this->addFlash(FlashBrickResponse::ERROR, $this->translator->trans('flash.copyAlreadyExist', [], 'LleHermesBundle'));
         }
 
         return $this->redirectToRoute('lle_hermes_crudit_template_index');
@@ -52,34 +53,27 @@ class TemplateController extends AbstractCrudController
 
 
     #[Route('/copy-for-tenant/{id}', name:'lle_hermes_crudit_template_copyfortenant', methods:['GET'])]
-    public function copyForTenant(Template $template, Request $request, ParameterBagInterface $parameterBag): Response
+    public function copyForTenant(Template $template, Request $request): Response
     {
         /** @var class-string $tenantClass */
-        $tenantClass = $parameterBag->get('lle_hermes.tenant_class');
+        $tenantClass = $this->parameterBag->get('lle_hermes.tenant_class');
         /** @var MultiTenantInterface $user */
         $user = $this->getUser();
         $entity = $this->em->getRepository($tenantClass)->findOneBy(['id' => $user->getTenantId()]);
         if (!$entity || !method_exists($entity, 'getId')) {
-            $this->addFlash('danger', 'flash.no_entity_found');
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.no_entity_found');
+
             return $this->redirectToRoute('lle_hermes_crudit_template_index');
         }
 
-        $newTemplate = (new Template())
+        $newTemplate = $this->templateRepository->duplicateTemplate($template, $template->getCode())
             ->setTenantId($entity->getId())
-            ->setCode($template->getCode())
-            ->setHtml($template->getHtml())
-            ->setSubject($template->getSubject())
-            ->setText($template->getText())
-            ->setUnsubscriptions($template->isUnsubscriptions())
-            ->setStatistics($template->hasStatistics())
-            ->setSenderName($template->getSenderName())
-            ->setSenderEmail($template->getSenderEmail())
             ->setLibelle($template->getLibelle());
 
         $this->em->persist($newTemplate);
         $this->em->flush();
         $message = $this->translator->trans('flash.copy_for_tenants');
-        $this->addFlash('success', $message);
+        $this->addFlash(FlashBrickResponse::SUCCESS, $message);
 
         return $this->redirectToRoute('lle_hermes_crudit_personalizedtemplate_index');
     }

@@ -19,9 +19,6 @@ class PersonalizedTemplateController extends AbstractCrudController
 
     public function __construct(
         PersonalizedTemplateCrudConfig $config,
-        protected readonly EntityManagerInterface $em,
-        protected readonly TemplateRepository $templateRepository,
-        protected readonly TranslatorInterface $translator,
     ) {
         $this->config = $config;
     }
