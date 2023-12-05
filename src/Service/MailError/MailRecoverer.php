@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\EmailError;
 use Lle\HermesBundle\Entity\Error;
+use Lle\HermesBundle\Exception\ImapLoginException;
 use stdClass;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -37,12 +38,12 @@ class MailRecoverer
         $this->password = $password;
     }
 
-    public function recoverAll(int $limit = 50, string $folder = Pop3Manager::DEFAULT_FOLDER, bool $ssl = false): ?int
+    public function recoverAll(int $limit = 50, string $folder = Pop3Manager::DEFAULT_FOLDER, bool $ssl = false): int
     {
         $this->mailServerManager = new Pop3Manager($this->host, $this->port, $this->user, $this->password);
 
         if (!$this->mailServerManager->login()) {
-            return null;
+            throw new ImapLoginException();
         }
 
         $mails = $this->mailServerManager->getMails($limit);
