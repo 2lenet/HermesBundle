@@ -10,6 +10,7 @@ use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Service\Factory\MailFactory;
 use Lle\HermesBundle\Service\Factory\RecipientFactory;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
@@ -27,8 +28,9 @@ class MailFactoryTest extends TestCase
         parent::setUp();
 
         $parameterBag = $this->createMock(ParameterBagInterface::class);
+        $security = $this->createMock(Security::class);
         $recipientFactory = new RecipientFactory();
-        $this->mailFactory = new MailFactory($parameterBag, $recipientFactory);
+        $this->mailFactory = new MailFactory($parameterBag, $recipientFactory, $parameterBag, $security);
     }
 
     public function testCreateMailFromDto(): void

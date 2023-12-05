@@ -11,8 +11,11 @@ use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\MailRepository;
+use Lle\HermesBundle\Service\AttachementService;
 use Lle\HermesBundle\Service\Factory\MailFactory;
+use Lle\HermesBundle\Service\MultiTenantService;
 use Lle\HermesBundle\Service\Sender;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -34,6 +37,7 @@ class MailController extends AbstractCrudController
         protected readonly ParameterBagInterface $parameters,
         protected readonly TranslatorInterface $translator,
         protected readonly Sender $sender,
+        protected readonly MultiTenantService $multiTenantService,
     ) {
         $this->config = $config;
     }
@@ -46,7 +50,12 @@ class MailController extends AbstractCrudController
         $number = (int)$request->get("number", 30);
         $page = (int)$request->get("page", 1);
 
-        $mails = $this->mailRepository->getDashboardMails($page, $number);
+        $tenantId = null;
+        if ($this->multiTenantService->isMultiTenantEnable()) {
+            $tenantId = $this->multiTenantService->getTenantId();
+        }
+
+        $mails = $this->mailRepository->getDashboardMails($page, $number, $tenantId);
 
         $total = count($mails);
         $from = $number * ($page - 1) + 1;
@@ -93,7 +102,7 @@ class MailController extends AbstractCrudController
     }
 
     #[Route('/delete/{id}')]
-    public function delete(Request $request): Response
+    public function delete(Request $request, AttachementService $attachementService): Response
     {
         /** @var Mail $mail */
         $mail = $this->getResource($request, false);
@@ -103,32 +112,12 @@ class MailController extends AbstractCrudController
         /** @var string $rootDir */
         $rootDir = $this->parameters->get('lle_hermes.root_dir');
         $attachementsPath = sprintf($rootDir . MailFactory::ATTACHMENTS_DIR, $mail->getId());
-        $this->deleteAttachements($attachementsPath);
+        $attachementService->deleteAttachements($attachementsPath);
 
         $dataSource = $this->config->getDatasource();
         $dataSource->delete($dataSource->getIdentifier($mail));
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
-    }
-
-    private function deleteAttachements(string $path): bool
-    {
-        if (file_exists($path)) {
-            /** @var array $files */
-            $files = scandir($path);
-            $files = array_diff($files, ['.', '..']);
-            foreach ($files as $file) {
-                if (is_dir($path . '/' . $file)) {
-                    return $this->deleteAttachements($path . '/' . $file);
-                } else {
-                    return unlink($path . '/' . $file);
-                }
-            }
-
-            return rmdir($path);
-        }
-
-        return false;
     }
 
     #[Route('/send_testmail/{id}', name: 'lle_hermes_crudit_mail_send_testmail', methods: ['GET'])]

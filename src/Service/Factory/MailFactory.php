@@ -4,9 +4,13 @@ namespace Lle\HermesBundle\Service\Factory;
 
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Model\MailDto;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+
+use function Symfony\Component\Translation\t;
 
 class MailFactory
 {
@@ -15,6 +19,8 @@ class MailFactory
     public function __construct(
         protected readonly ParameterBagInterface $parameters,
         protected readonly RecipientFactory $recipientFactory,
+        protected readonly ParameterBagInterface $parameterBag,
+        protected readonly Security $security,
     ) {
     }
 
@@ -40,6 +46,18 @@ class MailFactory
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
         $mail->setSubject($mail->getTemplate()->getSubject());
+
+        if ($this->parameterBag->get('lle_hermes.tenant_class')) {
+            if ($mailDto->getTenantId()) {
+                $tenantId = $mailDto->getTenantId();
+            } else {
+                /** @var MultiTenantInterface $user */
+                $user = $this->security->getUser();
+                $tenantId = $user->getTenantId();
+            }
+            $mail->setTenantId($tenantId);
+        }
+
         if ($mailDto->isSendText()) {
             $mail->setText($mail->getTemplate()->getText());
         }
