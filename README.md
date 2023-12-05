@@ -122,3 +122,104 @@ hermes:
 If you have Messenger installed and use default configuration, the mails will be asynchronous and sent in a queue. You
 either need to uninstall Messenger (DoctrineMessenger is installed by default on Symfony projects) or configure
 Hermès/Messenger differently.
+
+## Multi tenant
+### Configuration
+You can enable the multi tenant mode by adding the FCQN in `tenant_class` line in the configuration file.
+In the following exemple we need to separate emails by Establishment :
+```yaml
+# config/pakage/lle_hermes.yaml
+lle_hermes:
+...
+tenant_class: App\Entity\Establishment
+
+```
+In your project you need to configure a doctrine filter : (repalce establishment with your entity)
+
+```php
+// src/Doctrine/EstablishmentFilter.php
+<?php
+
+namespace App\Doctrine;
+
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Query\Filter\SQLFilter;
+use Lle\HermesBundle\Entity\Mail;
+use Lle\HermesBundle\Entity\Recipient;
+use Lle\HermesBundle\Entity\Template;
+
+class EstablishmentFilter extends SQLFilter
+{
+    public function addFilterConstraint(ClassMetadata $targetEntity, $targetTableAlias): string
+    {
+        $class = $targetEntity->getReflectionClass()->getName();
+
+        if (!in_array($class, [Mail::class, Template::class, Recipient::class]))
+        {
+            return "";
+        }
+
+        $establishmentId = $this->getParameter("establishmentId");
+
+        switch ($class) {
+            case Mail::class:
+                $sql = sprintf("%s.tenant_id = %s", $targetTableAlias, $establishmentId);
+                break;
+            case Template::class:
+                $sql = sprintf(
+                "%s.tenant_id = %s OR %s.tenant_id IS NULL",
+                $targetTableAlias,
+                $establishmentId,
+                $targetTableAlias
+                );
+                break;
+            case Recipient::class:
+                $sql = sprintf(
+                    "%s.mail_id IN (
+                    SELECT lle_hermes_recipient.mail_id FROM lle_hermes_recipient
+                    INNER JOIN lle_hermes_mail ON lle_hermes_recipient.mail_id = lle_hermes_mail.id
+                    WHERE lle_hermes_mail.tenant_id = %s
+                    )",
+                    $targetTableAlias,
+                    $establishmentId
+                );
+                break;
+            default:
+                $sql = sprintf(
+                    "%s.establishment_id = %s",
+                    $targetTableAlias,
+                    $establishmentId
+                );
+        }
+
+        return $sql;
+    }
+}
+
+```
+
+In your user entity add the `MultiTenantInterface` with the method `getTenantId` :
+
+```php
+<?php
+
+namespace App\Entity;
+
+...
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
+
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User implements MultiTenantInterface
+{
+
+...
+
+    public function getTenantId(): int
+    {
+        return $this->getCurrentEstablishment()->getId();
+    }
+}
+
+```
+
+Now the dashboard, mail and recipient sections are filtred by establishment.

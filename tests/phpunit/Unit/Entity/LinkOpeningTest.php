@@ -46,7 +46,7 @@ class LinkOpeningTest extends TestCase
         $linkOpening->setUpdatedAt($updatedAt);
         self::assertEquals($updatedAt, $linkOpening->getUpdatedAt());
 
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
         $errors = $validator->validate($linkOpening);
         self::assertCount(0, $errors);
     }

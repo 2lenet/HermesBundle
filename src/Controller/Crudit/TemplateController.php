@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Controller\Crudit;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Service\MultiTenantService;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -24,6 +29,7 @@ class TemplateController extends AbstractCrudController
         protected readonly EntityManagerInterface $em,
         protected readonly TemplateRepository $templateRepository,
         protected readonly TranslatorInterface $translator,
+        protected readonly MultiTenantService $multiTenantService,
     ) {
         $this->config = $config;
     }
@@ -40,9 +46,37 @@ class TemplateController extends AbstractCrudController
             $this->em->persist($copyTemplate);
             $this->em->flush();
         } else {
-            $this->addFlash('danger', $this->translator->trans('flash.copyAlreadyExist', [], 'LleHermesBundle'));
+            $this->addFlash(
+                FlashBrickResponse::ERROR,
+                $this->translator->trans('flash.copyAlreadyExist', [], 'LleHermesBundle')
+            );
         }
 
         return $this->redirectToRoute('lle_hermes_crudit_template_index');
+    }
+
+
+    #[Route('/copy-for-tenant/{id}', name:'lle_hermes_crudit_template_copyfortenant', methods:['GET'])]
+    public function copyForTenant(Template $template, Request $request): Response
+    {
+        /** @var class-string $tenantClass */
+        $tenantClass = $this->multiTenantService->getTenantClass();
+        $tenantId = $this->multiTenantService->getTenantId();
+        $entity = $this->em->getRepository($tenantClass)->find($tenantId);
+        if (!$entity || !method_exists($entity, 'getId')) {
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.no_entity_found');
+
+            return $this->redirectToRoute('lle_hermes_crudit_template_index');
+        }
+
+        $newTemplate = $this->templateRepository->duplicateTemplate($template, $template->getCode())
+            ->setTenantId($entity->getId())
+            ->setLibelle($template->getLibelle());
+
+        $this->em->persist($newTemplate);
+        $this->em->flush();
+        $this->addFlash(FlashBrickResponse::SUCCESS, 'flash.copy_for_tenants');
+
+        return $this->redirectToRoute('lle_hermes_crudit_personalizedtemplate_index');
     }
 }

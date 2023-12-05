@@ -29,7 +29,7 @@ class UnsubscribeEmailTest extends TestCase
         $unsubcribeEmail->setUnsubscribeDate($date);
         self::assertEquals($date, $unsubcribeEmail->getUnsubscribeDate());
 
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
 
         $errors = $validator->validate($unsubcribeEmail);
         self::assertCount(0, $errors);

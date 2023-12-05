@@ -11,7 +11,7 @@ use Lle\HermesBundle\Crudit\Datasource\Filterset\TemplateFilterSet;
 use Lle\HermesBundle\Entity\Template;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class TemplateDatasource extends AbstractDoctrineDatasource
+class PersonalizedTemplateDatasource extends AbstractDoctrineDatasource
 {
     public function getClassName(): string
     {
@@ -27,7 +27,7 @@ class TemplateDatasource extends AbstractDoctrineDatasource
     public function buildQueryBuilder(?DatasourceParams $requestParams): QueryBuilder
     {
         $qb = parent::buildQueryBuilder($requestParams);
-        $qb->andWhere('root.tenantId IS NULL');
+        $qb->andWhere('root.tenantId IS NOT NULL');
 
         return $qb;
     }

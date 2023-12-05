@@ -5,12 +5,12 @@ namespace Lle\HermesBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Lle\HermesBundle\Service\Factory\MailFactory;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class Mailer
 {
@@ -18,16 +18,26 @@ class Mailer
         protected readonly EntityManagerInterface $em,
         protected readonly MailFactory $mailFactory,
         protected readonly TemplateRepository $templateRepository,
+        protected readonly ParameterBagInterface $parameterBag,
+        protected readonly Security $security,
     ) {
     }
 
     /**
-     * Create and send a mail.
      * @throws TemplateNotFoundException
      */
-    public function send(MailDto $mail, string $status = Mail::STATUS_SENDING): void
+    public function create(MailDto $mail, string $status = Mail::STATUS_SENDING): void
     {
-        $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate()]);
+        $template = null;
+        if ($this->parameterBag->get('lle_hermes.tenant_class')) {
+            /** @var MultiTenantInterface $user */
+            $user = $this->security->getUser();
+            $tenantId = $user->getTenantId();
+            $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate(), 'tenantId' => $tenantId]);
+        }
+        if (!$template) {
+            $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate()]);
+        }
         if (!$template) {
             throw new TemplateNotFoundException($mail->getTemplate());
         }
@@ -44,5 +54,13 @@ class Mailer
         $mailObj->setStatus($status);
         $this->em->persist($mailObj);
         $this->em->flush();
+    }
+
+    /**
+     * @deprecated Use create() method instead
+     */
+    public function send(MailDto $mail, string $status = Mail::STATUS_SENDING): void
+    {
+        $this->create($mail, $status);
     }
 }
