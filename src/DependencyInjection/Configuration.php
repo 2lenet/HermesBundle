@@ -22,9 +22,10 @@ class Configuration implements ConfigurationInterface
         $children->scalarNode('upload_path')->defaultValue('/upload/images/')->end();
         $children->scalarNode('app_secret')->isRequired()->end();
         $children->scalarNode('app_domain')->isRequired()->end();
-        $children->scalarNode('bounce_email')->isRequired()->end();
-        $children->scalarNode('bounce_pass')->isRequired()->end();
         $children->scalarNode('bounce_host')->isRequired()->end();
+        $children->scalarNode('bounce_port')->isRequired()->end();
+        $children->scalarNode('bounce_user')->isRequired()->end();
+        $children->scalarNode('bounce_password')->isRequired()->end();
         $children->scalarNode('menu_icons')->defaultTrue()->end();
         $children->scalarNode('tenant_class')->defaultNull()->end();
 

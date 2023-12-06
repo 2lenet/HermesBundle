@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^8.0",
+        "ext-imap": "*",
         "2lenet/crudit-bundle": "*",
         "doctrine/collections": "^1.0",
         "doctrine/common": "^2.13 || ^3.0",

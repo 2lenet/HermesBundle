@@ -15,3 +15,9 @@ services:
             - '@Lle\HermesBundle\Service\MailBuilder'
             - '@Lle\HermesBundle\Repository\RecipientRepository'
             - '@Lle\HermesBundle\Repository\UnsubscribeEmailRepository'
+
+    Lle\HermesBundle\Service\MailError\MailRecoverer:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@Lle\HermesBundle\Service\MailError\MailAnalyzer'
+            - '@parameter_bag'

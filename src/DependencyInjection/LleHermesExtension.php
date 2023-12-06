@@ -27,9 +27,10 @@ class LleHermesExtension extends Extension
         $container->setParameter('lle_hermes.upload_path', $processedConfig['upload_path']);
         $container->setParameter('lle_hermes.app_secret', $processedConfig['app_secret']);
         $container->setParameter('lle_hermes.app_domain', $processedConfig['app_domain']);
-        $container->setParameter('lle_hermes.bounce_email', $processedConfig['bounce_email']);
-        $container->setParameter('lle_hermes.bounce_pass', $processedConfig['bounce_pass']);
         $container->setParameter('lle_hermes.bounce_host', $processedConfig['bounce_host']);
+        $container->setParameter('lle_hermes.bounce_port', $processedConfig['bounce_port']);
+        $container->setParameter('lle_hermes.bounce_user', $processedConfig['bounce_user']);
+        $container->setParameter('lle_hermes.bounce_password', $processedConfig['bounce_password']);
         $container->setParameter('lle_hermes.menu_icons', $processedConfig['menu_icons']);
         $container->setParameter('lle_hermes.tenant_class', $processedConfig['tenant_class']);
     }

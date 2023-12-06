@@ -31,9 +31,8 @@ class Error
     #[Assert\Length(max: 1024)]
     private string $subject;
 
-    #[ORM\Column(type: 'text')]
-    #[Assert\NotBlank]
-    private string $content;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $content = null;
 
     #[ORM\ManyToOne(targetEntity: EmailError::class, inversedBy: 'errors')]
     #[ORM\JoinColumn(nullable: false)]
@@ -76,12 +75,12 @@ class Error
         return $this;
     }
 
-    public function getContent(): string
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    public function setContent(string $content): Error
+    public function setContent(?string $content): Error
     {
         $this->content = $content;
 

@@ -28,10 +28,6 @@ class EmailErrorTest extends TestCase
         $emailError->setNbError(2);
         self::assertEquals(2, $emailError->getNbError());
 
-        $date = new DateTime();
-        $emailError->setDateError($date);
-        self::assertEquals($date, $emailError->getDateError());
-
         $emailError->setEmail('john.doe@email.com');
         self::assertEquals('john.doe@email.com', $emailError->getEmail());
 
