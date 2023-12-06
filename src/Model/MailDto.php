@@ -60,6 +60,8 @@ class MailDto
 
     protected bool $sendText = true;
 
+    protected ?int $tenantId = null;
+
     public function getSubject(): string
     {
         return $this->subject;
@@ -213,5 +215,15 @@ class MailDto
     public function setSendText(bool $sendText): void
     {
         $this->sendText = $sendText;
+    }
+
+    public function getTenantId(): ?int
+    {
+        return $this->tenantId;
+    }
+
+    public function setTenantId(?int $tenantId): void
+    {
+        $this->tenantId = $tenantId;
     }
 }

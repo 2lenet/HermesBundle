@@ -48,7 +48,7 @@ class RecipientTest extends TestCase
         $recipient->setOpenDate($date);
         self::assertEquals($date, $recipient->getOpenDate());
 
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
 
         $errors = $validator->validate($recipient);
         self::assertCount(0, $errors);

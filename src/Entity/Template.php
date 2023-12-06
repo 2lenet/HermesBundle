@@ -6,14 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class Template
- * @package Lle\HermesBundle\Entity
- *
- * @author 2LE <2le@2le.net>
- */
 #[ORM\Entity(repositoryClass: TemplateRepository::class)]
-#[ORM\Table(name: 'lle_hermes_template')]
+#[ORM\Table(name: 'lle_hermes_template', indexes: [new ORM\Index(name: "idx_tenant", columns: ["tenant_id"])])]
 class Template
 {
     #[ORM\Column(type: 'integer')]
@@ -57,6 +51,9 @@ class Template
 
     #[ORM\Column(type: 'boolean')]
     protected bool $statistics = false;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    protected ?int $tenantId = null;
 
     public function __toString(): string
     {
@@ -179,6 +176,18 @@ class Template
     public function setStatistics(bool $statistics): Template
     {
         $this->statistics = $statistics;
+
+        return $this;
+    }
+
+    public function getTenantId(): ?int
+    {
+        return $this->tenantId;
+    }
+
+    public function setTenantId(?int $tenantId): self
+    {
+        $this->tenantId = $tenantId;
 
         return $this;
     }
