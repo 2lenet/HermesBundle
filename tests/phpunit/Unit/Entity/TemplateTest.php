@@ -53,8 +53,7 @@ class TemplateTest extends TestCase
         self::assertFalse($template->hasSendToErrors());
         $template->setSendToErrors(true);
         self::assertTrue($template->hasSendToErrors());
-
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
 
         $errors = $validator->validate($template);
         self::assertCount(0, $errors);

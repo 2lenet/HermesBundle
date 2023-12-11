@@ -47,7 +47,7 @@ class MailBuilder
         /** @var string $domain */
         $domain = $this->parameters->get('lle_hermes.app_domain');
         /** @var string $returnPath */
-        $returnPath = $this->parameters->get('lle_hermes.bounce_email');
+        $returnPath = $this->parameters->get('lle_hermes.bounce_user');
         $context = $this->router->getContext();
         $context->setHost($domain);
         $context->setScheme('https');

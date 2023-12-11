@@ -9,12 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\MailRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class Mail
- * @package Lle\HermesBundle\Entity
- *
- * @author 2LE <2le@2le.net>
- */
 #[ORM\Entity(repositoryClass: MailRepository::class)]
 #[ORM\Table(name: 'lle_hermes_mail')]
 class Mail
@@ -88,6 +82,9 @@ class Mail
 
     #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'mail', cascade: ['persist', 'remove'])]
     protected Collection $links;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    protected ?int $tenantId = null;
 
     public function __construct()
     {
@@ -466,5 +463,15 @@ class Mail
         }
 
         return $this;
+    }
+
+    public function getTenantId(): ?int
+    {
+        return $this->tenantId;
+    }
+
+    public function setTenantId(?int $tenantId): void
+    {
+        $this->tenantId = $tenantId;
     }
 }

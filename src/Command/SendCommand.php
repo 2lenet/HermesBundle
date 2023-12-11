@@ -9,16 +9,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
  * Class SendCommand
  * @package Lle\HermesBundle\Command
  */
+#[AsCommand(name: 'lle:hermes:send')]
 class SendCommand extends Command
 {
     use LockableTrait;
-
-    protected static $defaultName = 'lle:hermes:send';
 
     public function __construct(protected readonly Sender $sender)
     {

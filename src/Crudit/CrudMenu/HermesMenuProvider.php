@@ -48,6 +48,16 @@ class HermesMenuProvider implements MenuProviderInterface
                 "ROLE_TEMPLATE_INDEX"
             )
         );
+        if ($this->parameters->get('lle_hermes.tenant_class')) {
+            $menu->addChild(
+                LinkElement::new(
+                    'menu.lle_hermes_personlized_template',
+                    Path::new('lle_hermes_crudit_personalizedtemplate_index'),
+                    ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
+                    "ROLE_TEMPLATE_INDEX"
+                )
+            );
+        }
         $menu->addChild(
             LinkElement::new(
                 'menu.lle_hermes_mail',

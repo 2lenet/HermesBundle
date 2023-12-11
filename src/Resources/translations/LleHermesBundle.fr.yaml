@@ -16,6 +16,7 @@ crud:
             template: Templates
             mail: Mails
             recipient: Destinataires
+            personalizedtemplate: Templates personnalisés
             emailerror: Emails en erreur
         show:
             template: Modèle %entity%
@@ -32,6 +33,7 @@ crud:
             recipient: Création destinataire
     action:
         duplicate: Dupliquer
+        copy_for_tenant: Copier pour personnalier
     modal:
         send_mail: Voulez-vous vraiment envoyer cet email à %nb% destinataires ? Cette action est définitive.
     canDelete:
@@ -147,6 +149,7 @@ text:
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
     mail_sent: '%nb% / %nbTotal% mails envoyés'
+    copy_for_tenants: '%count% templates copiés'
     no_email: Aucune adresse email n'a été renseignée
 
 modal:

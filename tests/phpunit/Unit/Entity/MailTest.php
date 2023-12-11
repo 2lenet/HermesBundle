@@ -93,7 +93,7 @@ class MailTest extends TestCase
         $mail->setTotalOpened(2);
         self::assertEquals(2, $mail->getTotalOpened());
 
-        $validator = Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator();
+        $validator = Validation::createValidatorBuilder()->getValidator();
 
         $errors = $validator->validate($mail);
         self::assertCount(0, $errors);
