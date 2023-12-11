@@ -39,6 +39,11 @@ class Error
     #[Assert\NotBlank]
     private EmailError $emailError;
 
+    public function __toString(): string
+    {
+        return $this->subject;
+    }
+
     public function getId(): int
     {
         return $this->id;

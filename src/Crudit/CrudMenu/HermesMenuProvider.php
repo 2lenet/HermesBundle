@@ -74,6 +74,14 @@ class HermesMenuProvider implements MenuProviderInterface
                 "ROLE_RECIPIENT_INDEX"
             )
         );
+        $menu->addChild(
+            LinkElement::new(
+                'menu.lle_hermes_emailerror',
+                Path::new('lle_hermes_crudit_emailerror_index'),
+                ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
+                "ROLE_EMAILERROR_INDEX"
+            )
+        );
 
         return [
             $menu,

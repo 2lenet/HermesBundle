@@ -13,15 +13,18 @@ crudit:
 crud:
     title:
         list:
-            template: Template
-            mail: Mail
-            recipient: Destinataire
+            template: Templates
+            mail: Mails
+            recipient: Destinataires
             personalizedtemplate: Templates personnalisés
+            emailerror: Emails en erreur
         show:
             template: Modèle %entity%
             mail: ""
             recipient: Destinataire %entity%
             link: Lien %entity%
+            emailerror: Email en erreur %entity%
+            error: Erreur %entity%
         edit:
             template: Édition modèle %entity%
         new:
@@ -40,6 +43,7 @@ tab:
     recipients: Destinataires
     links: Liens
     linkOpening: Liens ouverts
+    errors: Erreurs
 
 export:
     csv: Csv
@@ -87,6 +91,10 @@ field:
         template_informations: Informations
         template_content: Contenu
         template_options: Options
+    email: Email
+    nberror: Nombre d'erreurs
+    date: Date
+    content: Contenu
 
 title:
     dashboard: Tableau de bord
