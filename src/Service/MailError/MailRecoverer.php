@@ -69,8 +69,9 @@ class MailRecoverer
             return false;
         }
 
-        $to = $this->getToEmail($mail->to);
         $mailBody = $this->mailServerManager->getMailContent($mail->uid);
+        $to = $this->getToEmail($mailBody);
+
         $this->saveError($to, $mail->subject, $mailBody);
 
         $this->mailServerManager->deleteMail($mail->uid);
@@ -100,13 +101,12 @@ class MailRecoverer
         $this->em->flush();
     }
 
-    protected function getToEmail(string $to): string
+    protected function getToEmail(string $mailBody): string
     {
-        $arrayTo = explode('<', $to);
-        if (!array_key_exists(1, $arrayTo)) {
-            return rtrim($to, '>');
-        }
+        $mailBodyArray = preg_split('/\r\n/', $mailBody);
+        $emailLineArray = preg_grep('#^Original-Recipient:#', $mailBodyArray);
+        $emailLine = implode(',', $emailLineArray);
 
-        return rtrim($arrayTo[1], '>');
+        return substr($emailLine, strpos($emailLine, ';') + 1, strlen($emailLine));
     }
 }
