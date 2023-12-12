@@ -8,8 +8,10 @@ use Exception;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Exception\NoMailFoundException;
+use Lle\HermesBundle\Repository\EmailErrorRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -25,8 +27,10 @@ class Sender
 {
     public function __construct(
         protected readonly EntityManagerInterface $em,
+        protected readonly EmailErrorRepository $emailErrorRepository,
         protected readonly MailerInterface $mailer,
         protected readonly MailBuilder $mailBuilder,
+        protected readonly ParameterBagInterface $parameters,
         protected readonly RecipientRepository $recipientRepository,
         protected readonly UnsubscribeEmailRepository $unsubscribeEmailRepository,
     ) {
@@ -50,6 +54,9 @@ class Sender
     public function sendAllRecipients(array $recipients): int
     {
         $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
+        /** @var int $maxNbRetry */
+        $maxNbRetry = $this->parameters->get('lle_hermes.recipient_error_retry');
+        $errorArray = $this->emailErrorRepository->findEmailsInError($maxNbRetry);
         $nb = 0;
 
         foreach ($recipients as $recipient) {
@@ -64,6 +71,16 @@ class Sender
             if ($template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
+                    $this->updateMail($mail);
+
+                    continue;
+                }
+            }
+
+            if (!$template->hasSendToErrors()) {
+                if (in_array($recipient->getToEmail(), array_column($errorArray, 'email'))) {
+                    $recipient->setStatus(Recipient::STATUS_ERROR);
+                    $this->updateMail($mail);
 
                     continue;
                 }

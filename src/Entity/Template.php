@@ -52,6 +52,9 @@ class Template
     #[ORM\Column(type: 'boolean')]
     protected bool $statistics = false;
 
+    #[ORM\Column(type: 'boolean')]
+    protected bool $sendToErrors = false;
+
     #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $tenantId = null;
 
@@ -176,6 +179,18 @@ class Template
     public function setStatistics(bool $statistics): Template
     {
         $this->statistics = $statistics;
+
+        return $this;
+    }
+
+    public function hasSendToErrors(): bool
+    {
+        return $this->sendToErrors;
+    }
+
+    public function setSendToErrors(bool $sendToErrors): Template
+    {
+        $this->sendToErrors = $sendToErrors;
 
         return $this;
     }

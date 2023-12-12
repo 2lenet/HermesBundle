@@ -36,7 +36,6 @@ class RecipientFactoryTest extends TestCase
         self::assertEquals('to', $recipient->getToName());
         self::assertEquals(['data'], $recipient->getData());
         self::assertEquals(Recipient::STATUS_SENDING, $recipient->getStatus());
-        self::assertEquals(0, $recipient->getNbRetry());
         self::assertNull($recipient->getMail());
         self::assertNull($recipient->getOpenDate());
         self::assertNull($recipient->getCcMail());

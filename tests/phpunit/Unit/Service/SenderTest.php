@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Repository\EmailErrorRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
 use Lle\HermesBundle\Service\MailBuilder;
@@ -30,8 +31,10 @@ class SenderTest extends TestCase
     {
         $sender = new Sender(
             $this->getMockEntityManager(),
+            $this->getMockEmailErrorRepository(),
             $this->getMockMailer(),
             $this->getMockMailBuilder(),
+            $this->getMockParameterBag(),
             $this->getMockRecipientRepository(),
             $this->getMockUnsubscribeEmailRepository(),
         );
@@ -43,9 +46,21 @@ class SenderTest extends TestCase
         return $this->createMock(MailerInterface::class);
     }
 
+    protected function getMockEmailErrorRepository(): EmailErrorRepository
+    {
+        $repository = $this->createMock(EmailErrorRepository::class);
+
+        return $repository;
+    }
+
     protected function getMockEntityManager(): EntityManagerInterface
     {
         return $this->createMock(EntityManagerInterface::class);
+    }
+
+    protected function getMockParameterBag(): ParameterBagInterface
+    {
+        return $this->createMock(ParameterBagInterface::class);
     }
 
     protected function getMockRecipientRepository(): RecipientRepository

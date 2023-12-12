@@ -11,8 +11,10 @@ services:
     Lle\HermesBundle\Service\Sender:
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@Lle\HermesBundle\Repository\EmailErrorRepository'
             - '@mailer.mailer'
             - '@Lle\HermesBundle\Service\MailBuilder'
+            - '@parameter_bag'
             - '@Lle\HermesBundle\Repository\RecipientRepository'
             - '@Lle\HermesBundle\Repository\UnsubscribeEmailRepository'
 

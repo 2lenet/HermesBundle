@@ -78,6 +78,7 @@ field:
     toname: À nom
     unsubscriptions: Désinscriptions
     statistics: Statistiques
+    sendtoerrors: Envoyer aux adresses email en erreur
     jsonattachement: Pièces jointes
     totalLinkOpening: Nombre de liens ouverts
     link: Lien

@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
         $children->scalarNode('bounce_user')->isRequired()->end();
         $children->scalarNode('bounce_password')->isRequired()->end();
         $children->scalarNode('menu_icons')->defaultTrue()->end();
+        $children->scalarNode('recipient_error_retry')->defaultValue(3)->end();
         $children->scalarNode('tenant_class')->defaultNull()->end();
 
         return $treeBuilder;
