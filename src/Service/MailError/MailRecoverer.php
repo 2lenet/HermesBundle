@@ -65,12 +65,19 @@ class MailRecoverer
         if (!$this->mailAnalyzer->isErrorMail($mail->subject)) {
             return false;
         }
-        if (!isset($mail->to) || !isset($mail->subject)) {
+        if (!isset($mail->uid) || !isset($mail->subject)) {
             return false;
         }
 
         $mailBody = $this->mailServerManager->getMailContent($mail->uid);
+        if (!$mailBody) {
+            return false;
+        }
+
         $to = $this->getToEmail($mailBody);
+        if (!$to) {
+            return false;
+        }
 
         $this->saveError($to, $mail->subject, $mailBody);
 
@@ -101,10 +108,18 @@ class MailRecoverer
         $this->em->flush();
     }
 
-    protected function getToEmail(string $mailBody): string
+    protected function getToEmail(string $mailBody): ?string
     {
         $mailBodyArray = preg_split('/\r\n/', $mailBody);
+        if (!$mailBodyArray) {
+            return null;
+        }
+
         $emailLineArray = preg_grep('#^Original-Recipient:#', $mailBodyArray);
+        if (!$emailLineArray) {
+            return null;
+        }
+
         $emailLine = implode(',', $emailLineArray);
 
         return substr($emailLine, strpos($emailLine, ';') + 1, strlen($emailLine));
