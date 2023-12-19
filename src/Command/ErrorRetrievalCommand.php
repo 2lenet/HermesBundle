@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Command;
 
 use Lle\HermesBundle\Service\MailError\MailRecoverer;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\LockableTrait;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,11 +11,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'lle:hermes:recover-errors')]
 class ErrorRetrievalCommand extends Command
 {
     use LockableTrait;
-
-    protected static $defaultName = 'lle:hermes:recover-errors';
 
     public function __construct(protected readonly MailRecoverer $mailRecoverer)
     {

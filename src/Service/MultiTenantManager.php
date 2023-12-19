@@ -24,7 +24,7 @@ class MultiTenantManager
         return false;
     }
 
-    public function getTenantId(): int
+    public function getTenantId(): ?int
     {
         /** @var MultiTenantInterface $user */
         $user = $this->security->getUser();
