@@ -30,7 +30,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/mail')]
 class MailController extends AbstractCrudController
 {
-    use TraitCrudController;
+    use TraitCrudController {
+        TraitCrudController::show as traitShow;
+        TraitCrudController::delete as traitDelete;
+    }
 
     public function __construct(
         MailCrudConfig $config,
@@ -112,23 +115,13 @@ class MailController extends AbstractCrudController
     #[Route('/show/{id}')]
     public function show(Request $request, Mail $mail): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_SHOW', $mail);
-
         if (!$this->multiTenantManager->isOwner($mail)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
 
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
 
-        /** @var BrickBuilder $brickBuilder */
-        $brickBuilder = $this->getBrickBuilder();
-        $views = $brickBuilder->build($this->config, CrudConfigInterface::SHOW);
-        $response = $this->render('@LleCrudit/crud/index.html.twig', ['views' => $views]);
-
-        /** @var BrickResponseCollector $brickResponseCollector */
-        $brickResponseCollector = $this->getBrickResponseCollector();
-
-        return $brickResponseCollector->handle($request, $response);
+        return $this->traitShow($request, $mail);
     }
 
     #[Route('/delete/{id}')]
@@ -136,8 +129,6 @@ class MailController extends AbstractCrudController
     {
         /** @var Mail $mail */
         $mail = $this->getResource($request, false);
-
-        $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_DELETE', $mail);
 
         if (!$this->multiTenantManager->isOwner($mail)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
@@ -150,10 +141,7 @@ class MailController extends AbstractCrudController
         $attachementsPath = sprintf($rootDir . MailFactory::ATTACHMENTS_DIR, $mail->getId());
         $attachementService->deleteAttachements($attachementsPath);
 
-        $dataSource = $this->config->getDatasource();
-        $dataSource->delete($dataSource->getIdentifier($mail));
-
-        return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        return $this->traitDelete($request);
     }
 
     #[Route('/send_testmail/{id}', name: 'lle_hermes_crudit_mail_send_testmail', methods: ['GET'])]

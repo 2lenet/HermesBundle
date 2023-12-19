@@ -20,7 +20,9 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/recipient')]
 class RecipientController extends AbstractCrudController
 {
-    use TraitCrudController;
+    use TraitCrudController {
+        TraitCrudController::show as traitShow;
+    }
 
     public function __construct(
         RecipientCrudConfig $config,
@@ -32,24 +34,12 @@ class RecipientController extends AbstractCrudController
     #[Route('/show/{id}')]
     public function show(Request $request, Recipient $recipient): Response
     {
-        $resource = $this->getResource($request, false);
-
-        $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_SHOW', $recipient);
-
         if (!$this->multiTenantManager->isOwner($recipient)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.recipient');
 
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
 
-        /** @var BrickBuilder $brickBuilder */
-        $brickBuilder = $this->getBrickBuilder();
-        $views = $brickBuilder->build($this->config, CrudConfigInterface::SHOW);
-        $response = $this->render('@LleCrudit/crud/index.html.twig', ['views' => $views]);
-
-        /** @var BrickResponseCollector $brickResponseCollector */
-        $brickResponseCollector = $this->getBrickResponseCollector();
-
-        return $brickResponseCollector->handle($request, $response);
+        return $this->traitShow($request, $recipient);
     }
 }
