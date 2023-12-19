@@ -24,6 +24,16 @@ class PersonalizedTemplateCrudConfig extends TemplateCrudConfig
         $this->parameterBag = $parameterBag;
     }
 
+    public function getItemActions(): array
+    {
+        $actions = parent::getItemActions();
+
+        unset($actions[TemplateCrudConfig::ACTION_DUPLICATE]);
+        unset($actions[TemplateCrudConfig::ACTION_COPY_FOR_TENANT]);
+
+        return $actions;
+    }
+
     public function getRootRoute(): string
     {
         return 'lle_hermes_crudit_personalizedtemplate';

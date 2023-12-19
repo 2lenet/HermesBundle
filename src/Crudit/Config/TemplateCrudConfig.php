@@ -15,6 +15,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class TemplateCrudConfig extends AbstractCrudConfig
 {
+    public const ACTION_DUPLICATE = 'duplicate';
+    public const ACTION_COPY_FOR_TENANT = 'copy_for_tenant';
+
     protected ParameterBagInterface $parameterBag;
 
     public function __construct(
@@ -72,14 +75,14 @@ class TemplateCrudConfig extends AbstractCrudConfig
     {
         $actions = parent::getItemActions();
 
-        $actions[] = ItemAction::new(
+        $actions[self::ACTION_DUPLICATE] = ItemAction::new(
             'crud.action.duplicate',
             Path::new('lle_hermes_template_duplicate')->setRole('ROLE_HERMES_DUPLICATE_TEMPLATE'),
             Icon::new('clone')
         )->setDropdown(true);
 
         if ($this->parameterBag->get('lle_hermes.tenant_class')) {
-            $actions[] = ItemAction::new(
+            $actions[self::ACTION_COPY_FOR_TENANT] = ItemAction::new(
                 'crud.action.copy_for_tenant',
                 Path::new('lle_hermes_crudit_template_copyfortenant')->setRole('ROLE_HERMES_COPY_FOR_TENANT'),
                 Icon::new('share')
