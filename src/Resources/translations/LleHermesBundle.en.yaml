@@ -151,6 +151,9 @@ flash:
     mail_sent: '%nb% / %nbTotal% mails sent'
     copy_for_tenants: '%count% copied templates'
     no_email: No email address has been filled in
+    not_owner:
+        email: No mail found
+        recipient: No destinataire found
 
 modal:
     action:

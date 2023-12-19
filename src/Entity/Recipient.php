@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: RecipientRepository::class)]
 #[ORM\Table(name: 'lle_hermes_recipient')]
-class Recipient
+class Recipient implements MultiTenantInterface
 {
     public const STATUS_SENDING = 'sending';
     public const STATUS_SENT = 'sent';
@@ -64,6 +65,9 @@ class Recipient
 
     #[ORM\Column(type: 'boolean')]
     protected bool $test = false;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    protected ?int $tenantId = null;
 
     public function __construct()
     {
@@ -214,6 +218,18 @@ class Recipient
     public function setTest(bool $test): Recipient
     {
         $this->test = $test;
+
+        return $this;
+    }
+
+    public function getTenantId(): ?int
+    {
+        return $this->tenantId;
+    }
+
+    public function setTenantId(?int $tenantId): self
+    {
+        $this->tenantId = $tenantId;
 
         return $this;
     }

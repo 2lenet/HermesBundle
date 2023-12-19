@@ -4,5 +4,5 @@ namespace Lle\HermesBundle\Contracts;
 
 interface MultiTenantInterface
 {
-    public function getTenantId(): int;
+    public function getTenantId(): ?int;
 }

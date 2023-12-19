@@ -6,16 +6,16 @@ namespace Lle\HermesBundle\Controller\Crudit;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
+use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
-use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Service\AttachementService;
 use Lle\HermesBundle\Service\Factory\MailFactory;
-use Lle\HermesBundle\Service\MultiTenantService;
+use Lle\HermesBundle\Service\MultiTenantManager;
 use Lle\HermesBundle\Service\Sender;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -37,7 +37,7 @@ class MailController extends AbstractCrudController
         protected readonly ParameterBagInterface $parameters,
         protected readonly TranslatorInterface $translator,
         protected readonly Sender $sender,
-        protected readonly MultiTenantService $multiTenantService,
+        protected readonly MultiTenantManager $multiTenantManager,
     ) {
         $this->config = $config;
     }
@@ -51,8 +51,8 @@ class MailController extends AbstractCrudController
         $page = (int)$request->get("page", 1);
 
         $tenantId = null;
-        if ($this->multiTenantService->isMultiTenantEnable()) {
-            $tenantId = $this->multiTenantService->getTenantId();
+        if ($this->multiTenantManager->isMultiTenantEnabled()) {
+            $tenantId = $this->multiTenantManager->getTenantId();
         }
 
         $mails = $this->mailRepository->getDashboardMails($page, $number, $tenantId);
@@ -76,6 +76,12 @@ class MailController extends AbstractCrudController
     public function send(Mail $mail): RedirectResponse
     {
         $this->denyAccessUnlessGranted('ROLE_MAIL_SEND');
+
+        if (!$this->multiTenantManager->isOwner($mail)) {
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
+
+            return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        }
 
         $recipients = $mail->getRecipients();
         $nb = $this->sender->sendAllRecipients($recipients->toArray());
@@ -101,13 +107,36 @@ class MailController extends AbstractCrudController
         return new BinaryFileResponse($path);
     }
 
+    #[Route('/show/{id}')]
+    public function show(Request $request, Mail $mail): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_SHOW', $mail);
+
+        if (!$this->multiTenantManager->isOwner($mail)) {
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
+
+            return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        }
+
+        $views = $this->getBrickBuilder()->build($this->config, CrudConfigInterface::SHOW);
+        $response = $this->render('@LleCrudit/crud/index.html.twig', ['views' => $views]);
+
+        return $this->getBrickResponseCollector()->handle($request, $response);
+    }
+
     #[Route('/delete/{id}')]
-    public function delete(Request $request, AttachementService $attachementService): Response
+    public function delete(Request $request, AttachementService $attachementService): RedirectResponse
     {
         /** @var Mail $mail */
         $mail = $this->getResource($request, false);
 
         $this->denyAccessUnlessGranted('ROLE_' . $this->config->getName() . '_DELETE', $mail);
+
+        if (!$this->multiTenantManager->isOwner($mail)) {
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
+
+            return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        }
 
         /** @var string $rootDir */
         $rootDir = $this->parameters->get('lle_hermes.root_dir');
@@ -125,9 +154,15 @@ class MailController extends AbstractCrudController
     {
         $this->denyAccessUnlessGranted('ROLE_MAIL_SEND_TESTMAIL');
 
+        if (!$this->multiTenantManager->isOwner($mail)) {
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
+
+            return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        }
+
         $email = $request->query->get('email');
         if (!$email) {
-            $this->addFlash(FlashBrickResponse::SUCCESS, 'flash.no_email');
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.no_email');
 
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
