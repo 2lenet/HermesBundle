@@ -125,7 +125,7 @@ class MailController extends AbstractCrudController
     }
 
     #[Route('/delete/{id}')]
-    public function delete(Request $request, AttachementService $attachementService): RedirectResponse
+    public function delete(Request $request, AttachementService $attachementService): Response
     {
         /** @var Mail $mail */
         $mail = $this->getResource($request, false);
