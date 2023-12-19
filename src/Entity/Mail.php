@@ -6,12 +6,13 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\MailRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MailRepository::class)]
 #[ORM\Table(name: 'lle_hermes_mail')]
-class Mail
+class Mail implements MultiTenantInterface
 {
     public const STATUS_DRAFT = 'draft';
     public const STATUS_SENDING = 'sending';

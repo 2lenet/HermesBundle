@@ -17,6 +17,7 @@ class Mailer
     public function __construct(
         protected readonly EntityManagerInterface $em,
         protected readonly MailFactory $mailFactory,
+        protected readonly MultiTenantManager $multiTenantManager,
         protected readonly TemplateRepository $templateRepository,
         protected readonly ParameterBagInterface $parameterBag,
         protected readonly Security $security,
@@ -29,14 +30,13 @@ class Mailer
     public function create(MailDto $mail, string $status = Mail::STATUS_SENDING): void
     {
         $template = null;
-        if ($this->parameterBag->get('lle_hermes.tenant_class')) {
-            /** @var MultiTenantInterface $user */
-            $user = $this->security->getUser();
-            $tenantId = $user->getTenantId();
+        if ($this->multiTenantManager->isMultiTenantEnabled()) {
+            $tenantId = $this->multiTenantManager->getTenantId();
             $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate(), 'tenantId' => $tenantId]);
         }
+
         if (!$template) {
-            $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate()]);
+            $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate(), 'tenantId' => null]);
         }
         if (!$template) {
             throw new TemplateNotFoundException($mail->getTemplate());

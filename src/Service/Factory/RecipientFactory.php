@@ -7,13 +7,14 @@ use Lle\HermesBundle\Model\ContactDto;
 
 class RecipientFactory
 {
-    public function createRecipientFromDto(ContactDto $contactDto): Recipient
+    public function createRecipientFromDto(ContactDto $contactDto, ?int $tenantId = null): Recipient
     {
         $recipient = new Recipient();
         $recipient->setToEmail($contactDto->getAddress());
         $recipient->setToName($contactDto->getName());
         $recipient->setData($contactDto->getData());
         $recipient->setStatus(Recipient::STATUS_SENDING);
+        $recipient->setTenantId($tenantId);
 
         return $recipient;
     }

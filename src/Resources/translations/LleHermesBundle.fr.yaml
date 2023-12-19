@@ -151,6 +151,9 @@ flash:
     mail_sent: '%nb% / %nbTotal% mails envoyés'
     copy_for_tenants: '%count% templates copiés'
     no_email: Aucune adresse email n'a été renseignée
+    not_owner:
+        email: Aucun mail trouvé
+        recipient: Aucun destinataire trouvé
 
 modal:
     action:

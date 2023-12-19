@@ -3,12 +3,13 @@
 namespace Lle\HermesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TemplateRepository::class)]
 #[ORM\Table(name: 'lle_hermes_template', indexes: [new ORM\Index(name: "idx_tenant", columns: ["tenant_id"])])]
-class Template
+class Template implements MultiTenantInterface
 {
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]

@@ -12,7 +12,7 @@ use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\TemplateRepository;
-use Lle\HermesBundle\Service\MultiTenantService;
+use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +29,7 @@ class TemplateController extends AbstractCrudController
         protected readonly EntityManagerInterface $em,
         protected readonly TemplateRepository $templateRepository,
         protected readonly TranslatorInterface $translator,
-        protected readonly MultiTenantService $multiTenantService,
+        protected readonly MultiTenantManager $multiTenantManager,
     ) {
         $this->config = $config;
     }
@@ -60,8 +60,8 @@ class TemplateController extends AbstractCrudController
     public function copyForTenant(Template $template, Request $request): Response
     {
         /** @var class-string $tenantClass */
-        $tenantClass = $this->multiTenantService->getTenantClass();
-        $tenantId = $this->multiTenantService->getTenantId();
+        $tenantClass = $this->multiTenantManager->getTenantClass();
+        $tenantId = $this->multiTenantManager->getTenantId();
         $entity = $this->em->getRepository($tenantClass)->find($tenantId);
         if (!$entity || !method_exists($entity, 'getId')) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.no_entity_found');
