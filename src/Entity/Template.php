@@ -47,13 +47,13 @@ class Template implements MultiTenantInterface
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $html = null;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     protected bool $unsubscriptions = false;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     protected bool $statistics = false;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     protected bool $sendToErrors = false;
 
     #[ORM\Column(type: 'integer', nullable: true)]
