@@ -26,10 +26,10 @@ class MultiTenantManager
 
     public function getTenantId(): ?int
     {
-        /** @var MultiTenantInterface $user */
+        /** @var ?MultiTenantInterface $user */
         $user = $this->security->getUser();
 
-        return $user->getTenantId();
+        return $user?->getTenantId();
     }
 
     public function getTenantClass(): ?string
