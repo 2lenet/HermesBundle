@@ -39,7 +39,9 @@ class MailFactory
                 $tenantId = $this->multiTenantManager->getTenantId();
             }
         }
-        $mail->setTenantId($tenantId);
+        if ($tenantId) {
+            $mail->setTenantId($tenantId);
+        }
 
         $nbDest = 0;
         foreach ($mailDto->getTo() as $contactDto) {
