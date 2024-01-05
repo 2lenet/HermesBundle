@@ -58,6 +58,7 @@ class RecipientRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
             ->where('r.mail = :mail')
+            ->andWhere('r.openDate IS NOT NULL')
             ->setParameter('mail', $mail)
             ->getQuery()
             ->getSingleScalarResult();
