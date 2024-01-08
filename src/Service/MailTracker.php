@@ -25,14 +25,12 @@ class MailTracker
     public function updateTotalOpened(Recipient $recipient): int
     {
         $recipient->setOpenDate(new DateTime());
-        $this->em->persist($recipient);
 
         /** @var Mail $mail */
         $mail = $recipient->getMail();
         $recipientsOpen = $this->recipientRepository->countOpenRecipients($mail);
 
         $mail->setTotalOpened($recipientsOpen);
-        $this->em->persist($recipient);
         $this->em->flush();
 
         return $mail->getTotalOpened();
