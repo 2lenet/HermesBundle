@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Form;
 
+use Lle\CruditBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -19,7 +20,7 @@ class PersonalizedTemplateType extends AbstractType
             'inherit_data' => true,
         ])
             ->add('subject', TextType::class)
-            ->add('html', TextareaType::class, [
+            ->add('html', CKEditorType::class, [
                 'attr' => [
                     'rows' => 20,
                 ],
