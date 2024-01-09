@@ -46,17 +46,6 @@ class MailRepository extends ServiceEntityRepository
         return $copyMail;
     }
 
-    public function updateTotalOpened(Mail $mail, int $countDestinatairesOpen): void
-    {
-        $qb = $this->_em->createQueryBuilder()
-            ->update(Mail::class, 'entity')
-            ->set('entity.totalOpened', $countDestinatairesOpen)
-            ->where('entity.id = :mail')
-            ->setParameter('mail', $mail->getId());
-
-        $qb->getQuery()->execute();
-    }
-
     public function getDashboardMails(int $page = 1, int $number = 30, ?int $tenantId = null): Paginator
     {
         $qb = $this->createQueryBuilder("m")
