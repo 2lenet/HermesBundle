@@ -19,8 +19,8 @@ $mail->addTo(new ContactDto($user->getFullName(), $user->getEmail()));
 
 ## Add data to the mail
 
-As your template can contains variables, you can pass data to your mail or your recipient.
-Data from both can be used by the templates. If your template defines three variables : `user.firstname`, `user.lastname` and `url`, you must set this three data to your mail (in MailDto or in ContactDto).
+As your template can contain variables, you can pass data to your mail or your recipient.
+Data from both can be used by the templates. If your template defines three variables : `user.firstname`, `user.lastname` and `url`, you must pass those to your DTO's data.
 
 ```php
 $mail = new MailDto();

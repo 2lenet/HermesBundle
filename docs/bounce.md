@@ -4,10 +4,10 @@ This bundle includes an error management.
 
 ## Principle
 
-If a mail can't be delivered into a mailbox for some reasons, this mail bounce and will be deposit in `bounce_user` mailbox.
+If a mail can't be delivered into a mailbox for some reason, this mail is sent back to the bounce server in the `bounce_user` mailbox.
 A command will recover mails in this mailbox, check that it's an error email, and save it in database.
 
-When a mail is send, if the template defines it, the mail will not be send to the recipient if the email adress has already 3 errors. This number of retry can be configured.
+When a mail is sent, if the template defines it, the mail will not be sent to the recipient if the email address has already 3 errors. This number of retries can be configured.
 
 ## Configuration
 

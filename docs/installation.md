@@ -10,7 +10,7 @@ Execute the following command to add the bundle to the dependencies of your proj
 composer require 2lenet/hermes-bundle
 ```
 
-If your application doesn't use Symfony Flex, refer to this following instructions : [Installations steps without flex](no-flex.md).
+If your application doesn't use Symfony Flex, refer to this following instructions : [Installation steps without flex](no-flex.md).
 
 ## Database schema
 
@@ -36,14 +36,14 @@ If you want your emails to be sent automatically, you must add a cron to run the
 * * * * * root cd /var/www/html/ && php bin/console lle:hermes:send
 ```
 
-If you want errors to be recover automatically, you must add a cron to run the command:
+If you want errors to be recovered automatically, you must add a cron to run the command:
 ```cronexp
 * * * * * root cd /var/www/html/ && php bin/console lle:hermes:recover-errors
 ```
 
 ## Permissions
 
-Each screen and action have it's own role.
+HermesBundle depends on [Crudit Bundle](https://github.com/2lenet/CruditBundle), if you use it, make sure that each screen and action have their own role.
 Make sure you've set the correct permissions in the [Crudit](https://github.com/2lenet/CruditBundle) backend for this bundle!
 
 ## Additional configuration

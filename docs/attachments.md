@@ -3,11 +3,11 @@
 The following is showing an example how you can use HermesBundle to add attachments to mails.
 
 The bundle has 3 types of attachments:
-* Base64: for base64 encoded images
+* Base64: for base64 encoded files
 * Resource: for files
 * String: for file content
 
-The attachments will be created as new files in `/data/hermes/attachments/mail-<ID>` directory.
+The attachments will be created as new files in `./data/hermes/attachments/mail-<ID>` directory.
 
 ## Create attachment
 

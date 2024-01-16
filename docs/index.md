@@ -7,7 +7,7 @@ It depends on [Symfony Mailer](https://github.com/symfony/mailer).
 ## Installation
 
 - [Installation](installation.md)
-- [Installations steps without flex](no-flex.md)
+- [Installation steps without flex](no-flex.md)
 - [Configuration](configuration.md)
 
 ## Usage
