@@ -1,6 +1,6 @@
 <?php
 
-namespace phpunit\Unit\Entity;
+namespace App\Tests\Entity;
 
 use DateTime;
 use Lle\HermesBundle\Entity\UnsubscribeEmail;

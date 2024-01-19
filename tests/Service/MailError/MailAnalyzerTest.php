@@ -1,6 +1,6 @@
 <?php
 
-namespace phpunit\Unit\Service\MailError;
+namespace App\Tests\Service\MailError;
 
 use Lle\HermesBundle\Service\MailError\MailAnalyzer;
 use PHPUnit\Framework\TestCase;

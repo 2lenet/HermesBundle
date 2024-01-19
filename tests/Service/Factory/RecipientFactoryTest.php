@@ -1,6 +1,6 @@
 <?php
 
-namespace phpunit\Unit\Service\Factory;
+namespace App\Tests\Service\Factory;
 
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Model\ContactDto;

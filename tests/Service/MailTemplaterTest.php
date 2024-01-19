@@ -1,6 +1,6 @@
 <?php
 
-namespace phpunit\Unit\Service;
+namespace App\Tests\Service;
 
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Template;
