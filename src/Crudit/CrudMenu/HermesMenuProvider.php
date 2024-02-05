@@ -45,7 +45,7 @@ class HermesMenuProvider implements MenuProviderInterface
                 'menu.lle_hermes_template',
                 Path::new('lle_hermes_crudit_template_index'),
                 ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
-                "ROLE_TEMPLATE_INDEX"
+                "ROLE_HERMES_TEMPLATE_INDEX"
             )
         );
         if ($this->parameters->get('lle_hermes.tenant_class')) {
@@ -54,7 +54,7 @@ class HermesMenuProvider implements MenuProviderInterface
                     'menu.lle_hermes_personlized_template',
                     Path::new('lle_hermes_crudit_personalizedtemplate_index'),
                     ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
-                    "ROLE_TEMPLATE_INDEX"
+                    "ROLE_HERMES_TEMPLATE_INDEX"
                 )
             );
         }
@@ -63,7 +63,7 @@ class HermesMenuProvider implements MenuProviderInterface
                 'menu.lle_hermes_mail',
                 Path::new('lle_hermes_crudit_mail_index'),
                 ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
-                "ROLE_MAIL_INDEX"
+                "ROLE_HERMES_MAIL_INDEX"
             )
         );
         $menu->addChild(
@@ -71,7 +71,7 @@ class HermesMenuProvider implements MenuProviderInterface
                 'menu.lle_hermes_recipient',
                 Path::new('lle_hermes_crudit_recipient_index'),
                 ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
-                "ROLE_RECIPIENT_INDEX"
+                "ROLE_HERMES_RECIPIENT_INDEX"
             )
         );
         $menu->addChild(
@@ -79,7 +79,7 @@ class HermesMenuProvider implements MenuProviderInterface
                 'menu.lle_hermes_emailerror',
                 Path::new('lle_hermes_crudit_emailerror_index'),
                 ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
-                "ROLE_EMAILERROR_INDEX"
+                "ROLE_HERMES_EMAILERROR_INDEX"
             )
         );
 

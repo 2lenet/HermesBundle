@@ -20,7 +20,10 @@ class RecipientCrudConfig extends AbstractCrudConfig
     ) {
         $this->datasource = $datasource;
     }
-
+    function getName(): ?string
+    {
+        return "HERMES_RECIPIENT";
+    }
     /**
      * @param string $key
      * @return Field[]

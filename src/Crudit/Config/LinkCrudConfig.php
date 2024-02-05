@@ -20,7 +20,10 @@ class LinkCrudConfig extends AbstractCrudConfig
     ) {
         $this->datasource = $datasource;
     }
-
+    function getName(): ?string
+    {
+        return "HERMES_LINK";
+    }
     /**
      * @param string $key
      * @return Field[]

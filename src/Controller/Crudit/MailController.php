@@ -80,7 +80,7 @@ class MailController extends AbstractCrudController
     #[Route('/send/{id}', name: 'lle_hermes_crudit_mail_send', methods: ['GET'])]
     public function send(Mail $mail): RedirectResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_MAIL_SEND');
+        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_SEND');
 
         if (!$this->multiTenantManager->isOwner($mail)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
@@ -147,7 +147,7 @@ class MailController extends AbstractCrudController
     #[Route('/send_testmail/{id}', name: 'lle_hermes_crudit_mail_send_testmail', methods: ['GET'])]
     public function sendTestMail(Mail $mail, Request $request): RedirectResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_MAIL_SEND_TESTMAIL');
+        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_SEND_TESTMAIL');
 
         if (!$this->multiTenantManager->isOwner($mail)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');

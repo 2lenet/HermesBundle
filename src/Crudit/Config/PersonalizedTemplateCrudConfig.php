@@ -23,7 +23,10 @@ class PersonalizedTemplateCrudConfig extends TemplateCrudConfig
         $this->datasource = $datasource;
         $this->parameterBag = $parameterBag;
     }
-
+    function getName(): ?string
+    {
+        return "HERMES_PERSONALIZED_TEMPLATE";
+    }
     public function getItemActions(): array
     {
         $actions = parent::getItemActions();

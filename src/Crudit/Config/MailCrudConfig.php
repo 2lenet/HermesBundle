@@ -126,7 +126,7 @@ class MailCrudConfig extends AbstractCrudConfig
 
         $actions[] = ItemAction::new(
             'action.sendmailtest',
-            (Path::new('lle_hermes_crudit_mail_send_testmail'))->setRole('ROLE_MAIL_SEND_TESTMAIL'),
+            (Path::new('lle_hermes_crudit_mail_send_testmail'))->setRole('ROLE_HERMES_MAIL_SEND_TESTMAIL'),
             Icon::new('fas fa-envelope')
         )
             ->setCssClass('btn btn-warning btn-sm mr-1')
