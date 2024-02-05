@@ -37,7 +37,7 @@ class TemplateController extends AbstractCrudController
     #[Route('/duplicate/{id}', name: 'lle_hermes_template_duplicate', methods: ['GET'])]
     public function duplicate(Template $template): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_LLE_HERMES');
+        $this->denyAccessUnlessGranted('ROLE_HERMES_TEMPLATE_DUPLICATE');
 
         $code = $template->getCode() . '_COPY';
 

@@ -30,14 +30,14 @@ class HermesMenuProvider implements MenuProviderInterface
             'menu.lle_hermes',
             Path::new('lle_hermes_dashboard'),
             ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
-        )->setRole('ROLE_LLE_HERMES');
+        )->setRole('ROLE_HERMES_DASHBOARD');
 
         $menu->addChild(
             LinkElement::new(
                 'menu.lle_hermes_dashboard',
                 Path::new('lle_hermes_dashboard'),
                 ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
-                "ROLE_LLE_HERMES"
+                "ROLE_HERMES_DASHBOARD"
             )
         );
         $menu->addChild(

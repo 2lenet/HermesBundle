@@ -50,7 +50,7 @@ class MailController extends AbstractCrudController
     #[Route('/dashboard', name: 'lle_hermes_dashboard', methods: ['GET'])]
     public function dashboard(Request $request): Response
     {
-        $this->denyAccessUnlessGranted("ROLE_LLE_HERMES");
+        $this->denyAccessUnlessGranted("ROLE_HERMES_DASHBOARD");
 
         $number = (int)$request->get("number", 30);
         $page = (int)$request->get("page", 1);

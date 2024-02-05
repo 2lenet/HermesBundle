@@ -82,7 +82,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
 
         $actions[self::ACTION_DUPLICATE] = ItemAction::new(
             'crud.action.duplicate',
-            Path::new('lle_hermes_template_duplicate')->setRole('ROLE_HERMES_DUPLICATE_TEMPLATE'),
+            Path::new('lle_hermes_template_duplicate')->setRole('ROLE_HERMES_TEMPLACE_DUPLICATE'),
             Icon::new('clone')
         )->setDropdown(true);
 
