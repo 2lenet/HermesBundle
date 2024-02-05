@@ -1,6 +1,6 @@
 <?php
 
-namespace phpunit\Unit\Command;
+namespace App\Tests\Command;
 
 use Lle\HermesBundle\Command\SendCommand;
 use Lle\HermesBundle\Service\Sender;

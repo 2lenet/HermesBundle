@@ -1,6 +1,6 @@
 <?php
 
-namespace phpunit\Unit\Entity;
+namespace App\Tests\Entity;
 
 use Lle\HermesBundle\Entity\Link;
 use Lle\HermesBundle\Entity\LinkOpening;

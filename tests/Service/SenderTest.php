@@ -1,6 +1,6 @@
 <?php
 
-namespace phpunit\Unit\Service;
+namespace App\Tests\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
