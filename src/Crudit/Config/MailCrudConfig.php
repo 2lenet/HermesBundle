@@ -27,6 +27,11 @@ class MailCrudConfig extends AbstractCrudConfig
         $this->datasource = $datasource;
     }
 
+    public function getName(): ?string
+    {
+        return "HERMES_MAIL";
+    }
+
     /**
      * @param string $key
      * @return Field[]

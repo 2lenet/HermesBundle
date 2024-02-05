@@ -28,7 +28,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
         $this->parameterBag = $parameterBag;
     }
 
-    function getName(): ?string
+    public function getName(): ?string
     {
         return "HERMES_TEMPLATE";
     }
