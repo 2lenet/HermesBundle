@@ -67,6 +67,10 @@ class TemplateType extends AbstractType
             ->add('sendToErrors', CheckboxType::class, [
                 'required' => false,
                 'label' => 'field.sendtoerrors',
+            ])
+            ->add('customBounceEmail', TextType::class, [
+                'required' => false,
+                'label' => 'field.custombounceemail',
             ]);
     }
 

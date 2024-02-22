@@ -50,6 +50,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             ->setCssClass('col-12');
         $unsubscriptions = Field::new('unsubscriptions');
         $statistics = Field::new('statistics');
+        $customBounceEmail = Field::new('customBounceEmail');
 
         if ($key == CrudConfigInterface::INDEX) {
             return [
@@ -73,6 +74,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $html,
             $unsubscriptions,
             $statistics,
+            $customBounceEmail,
         ];
     }
 
@@ -82,16 +84,20 @@ class TemplateCrudConfig extends AbstractCrudConfig
 
         $actions[self::ACTION_DUPLICATE] = ItemAction::new(
             'crud.action.duplicate',
-            Path::new('lle_hermes_template_duplicate')->setRole('ROLE_HERMES_TEMPLACE_DUPLICATE'),
+            Path::new('lle_hermes_template_duplicate'),
             Icon::new('clone')
-        )->setDropdown(true);
+        )
+            ->setRole('ROLE_HERMES_TEMPLACE_DUPLICATE')
+            ->setDropdown(true);
 
         if ($this->parameterBag->get('lle_hermes.tenant_class')) {
             $actions[self::ACTION_COPY_FOR_TENANT] = ItemAction::new(
                 'crud.action.copy_for_tenant',
-                Path::new('lle_hermes_crudit_template_copyfortenant')->setRole('ROLE_HERMES_COPY_FOR_TENANT'),
+                Path::new('lle_hermes_crudit_template_copyfortenant'),
                 Icon::new('share')
-            )->setDropdown(true);
+            )
+                ->setRole('ROLE_HERMES_COPY_FOR_TENANT')
+                ->setDropdown(true);
         }
 
         return $actions;

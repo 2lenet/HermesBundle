@@ -131,9 +131,10 @@ class MailCrudConfig extends AbstractCrudConfig
 
         $actions[] = ItemAction::new(
             'action.sendmailtest',
-            (Path::new('lle_hermes_crudit_mail_send_testmail'))->setRole('ROLE_HERMES_MAIL_SEND_TESTMAIL'),
+            (Path::new('lle_hermes_crudit_mail_send_testmail')),
             Icon::new('fas fa-envelope')
         )
+            ->setRole('ROLE_HERMES_MAIL_SEND_TESTMAIL')
             ->setCssClass('btn btn-warning btn-sm mr-1')
             ->setModal('@LleHermes/crud/Mail/_modal_send_testmail.html.twig');
 
