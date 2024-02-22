@@ -9,13 +9,14 @@ use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Service\MailBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
 
 class MailBuilderTest extends TestCase
 {
-    public function testCustomBounceEmail()
+    public function testCustomBounceEmail(): void
     {
         $template = new Template();
         $template
@@ -57,6 +58,9 @@ class MailBuilderTest extends TestCase
 
         $email = $builder->buildMail($mail, $recipient);
 
-        $this->assertEquals('bounce@2le.net', $email->getReturnPath()->getAddress());
+        /** @var Address $returnPath */
+        $returnPath = $email->getReturnPath();
+
+        $this->assertEquals('bounce@2le.net', $returnPath->getAddress());
     }
 }
