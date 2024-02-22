@@ -96,6 +96,7 @@ field:
     nberror: Nombre d'erreurs
     date: Date
     content: Contenu
+    custombounceemail: E-mail bounce personnalisé
 
 title:
     dashboard: Tableau de bord
