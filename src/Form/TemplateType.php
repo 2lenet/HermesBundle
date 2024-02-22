@@ -70,7 +70,7 @@ class TemplateType extends AbstractType
             ])
             ->add('customBounceEmail', TextType::class, [
                 'required' => false,
-                'label' => 'field.custom_bounce_email',
+                'label' => 'field.custombounceemail',
             ]);
     }
 
