@@ -50,6 +50,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             ->setCssClass('col-12');
         $unsubscriptions = Field::new('unsubscriptions');
         $statistics = Field::new('statistics');
+        $customBounceEmail = Field::new('customBounceEmail');
 
         if ($key == CrudConfigInterface::INDEX) {
             return [
@@ -73,6 +74,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $html,
             $unsubscriptions,
             $statistics,
+            $customBounceEmail,
         ];
     }
 

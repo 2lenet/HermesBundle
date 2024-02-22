@@ -59,6 +59,10 @@ class Template implements MultiTenantInterface
     #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $tenantId = null;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Email]
+    protected ?string $customBounceEmail = null;
+
     public function __toString(): string
     {
         return sprintf('%s %s', $this->code, $this->getSubject());
@@ -204,6 +208,18 @@ class Template implements MultiTenantInterface
     public function setTenantId(?int $tenantId): self
     {
         $this->tenantId = $tenantId;
+
+        return $this;
+    }
+
+    public function getCustomBounceEmail(): ?string
+    {
+        return $this->customBounceEmail;
+    }
+
+    public function setCustomBounceEmail(?string $customBounceEmail): self
+    {
+        $this->customBounceEmail = $customBounceEmail;
 
         return $this;
     }
