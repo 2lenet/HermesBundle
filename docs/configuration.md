@@ -11,6 +11,7 @@ LLE_HERMES_BOUNCE_PORT=110
 LLE_HERMES_BOUNCE_USER=user@bounce.com
 LLE_HERMES_BOUNCE_PASSWORD=pass
 ```
+Don't put any protocol in the app_domain.
 
 ## Locales
 

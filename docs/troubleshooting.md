@@ -20,7 +20,9 @@ See : [Commands](commands.md "Send mails in queue").
 
 2. Do you have a lot a mails in queue ?
 
-If you have a cron, you can juste wait and your mail will bu sent, or you can increase the number of mails by batch :
+If you have a cron, just wait for your mail to be sent. 
+You can increase the numbers of mails per batch with `--nb=`
+
 ```bash
 bin/console lle:hermes:send --nb=1000
 ```
