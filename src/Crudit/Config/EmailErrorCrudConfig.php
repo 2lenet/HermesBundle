@@ -43,7 +43,6 @@ class EmailErrorCrudConfig extends AbstractCrudConfig
     public function getItemActions(): array
     {
         $actions = parent::getItemActions();
-
         unset($actions[CrudConfigInterface::ACTION_EDIT]);
 
         return $actions;
@@ -52,7 +51,6 @@ class EmailErrorCrudConfig extends AbstractCrudConfig
     public function getShowActions(): array
     {
         $actions = parent::getShowActions();
-
         unset($actions[CrudConfigInterface::ACTION_EDIT]);
 
         return $actions;

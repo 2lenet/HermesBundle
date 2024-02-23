@@ -126,6 +126,7 @@ class MailCrudConfig extends AbstractCrudConfig
             new Path('lle_hermes_crudit_mail_send'),
             Icon::new('paper-plane')
         )
+            ->setRole('ROLE_HERMES_MAIL_SEND')
             ->setCssClass('btn btn-success btn-sm mr-1')
             ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig'));
 
@@ -134,7 +135,7 @@ class MailCrudConfig extends AbstractCrudConfig
             (Path::new('lle_hermes_crudit_mail_send_testmail')),
             Icon::new('fas fa-envelope')
         )
-            ->setRole('ROLE_HERMES_MAIL_SEND_TESTMAIL')
+            ->setRole('ROLE_HERMES_MAIL_SENDTESTMAIL')
             ->setCssClass('btn btn-warning btn-sm mr-1')
             ->setModal('@LleHermes/crud/Mail/_modal_send_testmail.html.twig');
 

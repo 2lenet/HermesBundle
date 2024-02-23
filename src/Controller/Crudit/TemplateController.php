@@ -59,6 +59,8 @@ class TemplateController extends AbstractCrudController
     #[Route('/copy-for-tenant/{id}', name:'lle_hermes_crudit_template_copyfortenant', methods:['GET'])]
     public function copyForTenant(Template $template, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_HERMES_TEMPLATE_COPYFORTENANT');
+
         /** @var class-string $tenantClass */
         $tenantClass = $this->multiTenantManager->getTenantClass();
         $tenantId = $this->multiTenantManager->getTenantId();
