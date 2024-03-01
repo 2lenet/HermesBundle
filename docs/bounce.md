@@ -15,12 +15,15 @@ Add the configuration to the `config/packages/lle_hermes.yaml` file of your proj
 
 ```yaml
 lle_hermes:
-    bounce_host: host.bounce.com
-    bounce_port: 110
-    bounce_user: user@bounce.com
-    bounce_password: pass
+    bounce_host: '%env(LLE_HERMES_BOUNCE_HOST)%'
+    bounce_port: '%env(LLE_HERMES_BOUNCE_PORT)%'
+    bounce_user: '%env(LLE_HERMES_BOUNCE_USER)%'
+    bounce_password: '%env(LLE_HERMES_BOUNCE_PASSWORD)%'
     recipient_error_retry: 3
 ```
+To properly configure the .env variables, See : [Configuration](configuration.md "Environment variables").
+
+You need to have **php-imap** on your project for Hermes to work.
 
 ## Ignore errors
 
