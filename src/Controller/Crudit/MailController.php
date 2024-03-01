@@ -104,6 +104,8 @@ class MailController extends AbstractCrudController
     #[Route('/show/{id}/{file}', name: 'lle_hermes_crudit_mail_show_attachement', methods: ['GET'])]
     public function showAttachement(Mail $mail, string $file): ?BinaryFileResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_SHOW');
+
         $path = $mail->getPathOfAttachement($file);
         if (!$path) {
             return null;
@@ -115,6 +117,8 @@ class MailController extends AbstractCrudController
     #[Route('/show/{id}')]
     public function show(Request $request, Mail $mail): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_SHOW');
+
         if (!$this->multiTenantManager->isOwner($mail)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
 
@@ -127,6 +131,8 @@ class MailController extends AbstractCrudController
     #[Route('/delete/{id}')]
     public function delete(Request $request, AttachementService $attachementService): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_DELETE');
+
         /** @var Mail $mail */
         $mail = $this->getResource($request, false);
 
@@ -147,7 +153,7 @@ class MailController extends AbstractCrudController
     #[Route('/send_testmail/{id}', name: 'lle_hermes_crudit_mail_send_testmail', methods: ['GET'])]
     public function sendTestMail(Mail $mail, Request $request): RedirectResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_SEND_TESTMAIL');
+        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_SENDTESTMAIL');
 
         if (!$this->multiTenantManager->isOwner($mail)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');

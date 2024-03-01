@@ -34,6 +34,8 @@ class RecipientController extends AbstractCrudController
     #[Route('/show/{id}')]
     public function show(Request $request, Recipient $recipient): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_HERMES_RECIPIENT_SHOW');
+
         if (!$this->multiTenantManager->isOwner($recipient)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.recipient');
 

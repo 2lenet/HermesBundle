@@ -49,39 +49,27 @@ class LinkCrudConfig extends AbstractCrudConfig
 
     public function getItemActions(): array
     {
-        $actions = [];
-
-        $actions[] = ItemAction::new(
-            'action.show',
-            $this->getPath(CrudConfigInterface::SHOW),
-            Icon::new('search')
-        )->setCssClass('btn btn-primary btn-sm mr-1');
+        $actions = parent::getItemActions();
+        unset($actions[CrudConfigInterface::ACTION_EDIT]);
+        unset($actions[CrudConfigInterface::ACTION_DELETE]);
 
         return $actions;
     }
 
     public function getShowActions(): array
     {
-        $actions = [];
-
-        $actions[] = ItemAction::new(
-            'action.list',
-            $this->getPath(CrudConfigInterface::INDEX),
-            Icon::new('list')
-        )->setCssClass('btn btn-secondary btn-sm mr-1');
+        $actions = parent::getShowActions();
+        unset($actions[CrudConfigInterface::ACTION_EDIT]);
+        unset($actions[CrudConfigInterface::ACTION_DELETE]);
 
         return $actions;
     }
 
     public function getSublistAction(): array
     {
-        $actions = [];
-
-        $actions[] = ItemAction::new(
-            'action.show',
-            $this->getPath(CrudConfigInterface::SHOW),
-            Icon::new('search')
-        )->setCssClass('btn btn-primary btn-sm mr-1');
+        $actions = parent::getItemActions();
+        unset($actions[CrudConfigInterface::ACTION_EDIT]);
+        unset($actions[CrudConfigInterface::ACTION_DELETE]);
 
         return $actions;
     }

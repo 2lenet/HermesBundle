@@ -13,24 +13,22 @@ crudit:
 crud:
     title:
         list:
-            template: Templates
-            mail: Mails
-            recipient: Recipients
-            personalizedtemplate: Personalized templates
-            emailerror: Error emails
+            hermes_template: Templates
+            hermes_mail: Mails
+            hermes_recipient: Recipients
+            hermes_personalizedtemplate: Personalized templates
+            hermes_emailerror: Error emails
         show:
-            template: Template %entity%
-            mail: ""
-            recipient: Recipient %entity%
-            link: Link %entity%
-            emailerror: Error email %entity%
-            error: Error %entity%
+            hermes_template: Template %entity%
+            hermes_mail: Mail %entity%
+            hermes_recipient: Recipient %entity%
+            hermes_link: Link %entity%
+            hermes_emailerror: Error email %entity%
+            hermes_error: Error %entity%
         edit:
-            template: Edit template %entity%
+            hermes_template: Edit template %entity%
         new:
-            template: Create template
-            mail: Create mail
-            recipient: Create recipient
+            hermes_template: Create template
     action:
         duplicate: Duplicate
         copy_for_tenant: Copy for personalization

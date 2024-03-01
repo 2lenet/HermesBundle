@@ -87,7 +87,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             Path::new('lle_hermes_template_duplicate'),
             Icon::new('clone')
         )
-            ->setRole('ROLE_HERMES_TEMPLACE_DUPLICATE')
+            ->setRole('ROLE_HERMES_TEMPLATE_DUPLICATE')
             ->setDropdown(true);
 
         if ($this->parameterBag->get('lle_hermes.tenant_class')) {
@@ -96,7 +96,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
                 Path::new('lle_hermes_crudit_template_copyfortenant'),
                 Icon::new('share')
             )
-                ->setRole('ROLE_HERMES_COPY_FOR_TENANT')
+                ->setRole('ROLE_HERMES_TEMPLATE_COPYFORTENANT')
                 ->setDropdown(true);
         }
 
