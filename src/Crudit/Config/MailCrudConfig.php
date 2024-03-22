@@ -42,7 +42,7 @@ class MailCrudConfig extends AbstractCrudConfig
         $statistics = Field::new('totalToSend')
             ->setTemplate('@LleHermes/layout/_mail_statistics.html.twig')
             ->setLabel('field.mailStatistics');
-        $recipients = Field::new('countRecipients');
+        $recipients = Field::new('countRecipients')->setSortable(false);
         $sendingDate = Field::new('sendingDate');
         $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
         $openingRate = Field::new('percentOpened')
