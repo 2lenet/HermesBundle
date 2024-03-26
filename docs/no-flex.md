@@ -28,6 +28,18 @@ hermes:
     prefix: /hermes
 ```
 
+You need to add these routes to the `config/package/security.yaml` file for tracking, statistics and unsubscribtion to work:
+
+```yaml
+# config/package/security.yaml
+
+security:
+    access_control:
+        - { path: ^/hermes/mailOpened, roles: PUBLIC_ACCESS }
+        - { path: ^/hermes/statistics, roles: PUBLIC_ACCESS }
+        - { path: ^/hermes/unsubscribe, roles: PUBLIC_ACCESS }
+```
+
 ## Add bundle configuration
 
 Add the configuration to the `config/packages/lle_hermes.yaml` file of your project:
