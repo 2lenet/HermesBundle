@@ -1,11 +1,10 @@
 <?php
 
-namespace Lle\HermesBundle\Model;
+namespace Lle\HermesBundle\Dto;
 
 use Lle\HermesBundle\Contracts\AttachmentInterface;
 
-/** @deprecated use Lle\HermesBundle\Dto\Base64AttachmentDto instead */
-class Base64Attachment implements AttachmentInterface
+class Base64AttachmentDto implements AttachmentInterface
 {
     protected string $data;
 

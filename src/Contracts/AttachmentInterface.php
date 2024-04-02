@@ -1,8 +1,7 @@
 <?php
 
-namespace Lle\HermesBundle\Model;
+namespace Lle\HermesBundle\Contracts;
 
-/** @deprecated use Lle\HermesBundle\Contracts\AttachmentInterface instead */
 interface AttachmentInterface
 {
     /**

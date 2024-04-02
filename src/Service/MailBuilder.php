@@ -7,7 +7,6 @@ use Lle\HermesBundle\Entity\Link;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Exception\NoRecipientException;
-use Lle\HermesBundle\Service\Factory\MailFactory;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -36,10 +35,6 @@ class MailBuilder
     public function buildMail(Mail $mail, Recipient $recipient): Email
     {
         $templater = new MailTemplater($mail, $this->twig, $this->router);
-
-        /** @var string $rootDir */
-        $rootDir = $this->parameters->get('lle_hermes.root_dir');
-        $attachmentsFilePath = $rootDir . sprintf(MailFactory::ATTACHMENTS_DIR, $mail->getId());
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
@@ -99,7 +94,7 @@ class MailBuilder
 
         if (count($mail->getAttachement()) > 0) {
             foreach ($mail->getAttachement() as $attachment) {
-                $email->attachFromPath($attachmentsFilePath . $attachment['name']);
+                $email->attachFromPath($attachment['path'] . $attachment['name']);
             }
         }
 

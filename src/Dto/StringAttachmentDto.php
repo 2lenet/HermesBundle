@@ -1,11 +1,10 @@
 <?php
 
-namespace Lle\HermesBundle\Model;
+namespace Lle\HermesBundle\Dto;
 
 use Lle\HermesBundle\Contracts\AttachmentInterface;
 
-/** @deprecated use Lle\HermesBundle\Dto\Base64AttachmentDto instead */
-class Base64Attachment implements AttachmentInterface
+class StringAttachmentDto implements AttachmentInterface
 {
     protected string $data;
 
@@ -13,32 +12,23 @@ class Base64Attachment implements AttachmentInterface
 
     protected string $contentType;
 
-    public function __construct(string $base64, string $name, string $contentType)
+    public function __construct(string $data, string $name, string $contentType)
     {
-        $this->data = $base64;
+        $this->data = $data;
         $this->name = $name;
         $this->contentType = $contentType;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getData(): ?string
     {
-        return base64_decode($this->data);
+        return $this->data;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getContentType(): string
     {
         return $this->contentType;

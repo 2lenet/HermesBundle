@@ -24,6 +24,7 @@ class LleHermesExtension extends Extension
         $processedConfig = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('lle_hermes.root_dir', $processedConfig['root_dir']);
+        $container->setParameter('lle_hermes.attachment_path', $processedConfig['attachment_path']);
         $container->setParameter('lle_hermes.upload_path', $processedConfig['upload_path']);
         $container->setParameter('lle_hermes.app_secret', $processedConfig['app_secret']);
         $container->setParameter('lle_hermes.app_domain', $processedConfig['app_domain']);
