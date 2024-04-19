@@ -55,7 +55,7 @@ class AttachmentServiceTest extends TestCase
         ];
 
         self::assertEquals($expected, $mail->getAttachement());
-        self::assertTrue(file_exists( __DIR__ . '/../data/attachments/mail-1/'));
+        self::assertTrue(file_exists(__DIR__ . '/../data/attachments/mail-1/'));
     }
 
     public function testDeleteAttachments(): void
@@ -64,10 +64,10 @@ class AttachmentServiceTest extends TestCase
         $mail = $this->createMail(2);
 
         $this->attachmentService->saveAttachments($mailDto, $mail);
-        self::assertTrue(file_exists( __DIR__ . '/../data/attachments/mail-2/'));
+        self::assertTrue(file_exists(__DIR__ . '/../data/attachments/mail-2/'));
 
         $this->attachmentService->deleteAttachements($mail);
-        self::assertFalse(file_exists( __DIR__ . '/../data/attachments/mail-2/'));
+        self::assertFalse(file_exists(__DIR__ . '/../data/attachments/mail-2/'));
     }
 
     protected function createMailDto(): MailDto
