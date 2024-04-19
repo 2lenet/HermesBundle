@@ -56,4 +56,4 @@ lle_hermes:
     upload_path: '/data/attachments/
 ```
 
-Make sure that repositories exist and that they have the correct rights !
+Make sure that those repositories exist and have the correct rights !

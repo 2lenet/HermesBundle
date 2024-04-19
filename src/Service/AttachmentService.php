@@ -14,7 +14,6 @@ class AttachmentService
     public const ATTACHMENTS_DIR = 'mail-%s/';
 
     protected string $attachmentsPath;
-    protected array $attachments = [];
     protected string $rootDir;
 
     public function __construct(ParameterBagInterface $parameters)
@@ -30,11 +29,13 @@ class AttachmentService
 
     public function saveAttachments(MailDto $mailDto, Mail $mail): Mail
     {
+        $attachments = [];
+
         foreach ($mailDto->getAttachments() as $attachment) {
-            $this->saveAttachment($attachment, $mail);
+            $attachments[] = $this->saveAttachment($attachment, $mail);
         }
 
-        $mail->setAttachement($this->attachments);
+        $mail->setAttachement($attachments);
 
         return $mail;
     }
@@ -45,7 +46,7 @@ class AttachmentService
         $this->delete($path);
     }
 
-    protected function saveAttachment(AttachmentInterface $attachment, Mail $mail): void
+    protected function saveAttachment(AttachmentInterface $attachment, Mail $mail): array
     {
         $path = $this->getAttachmentPath($mail);
         if (!is_dir($path)) {
@@ -54,7 +55,7 @@ class AttachmentService
 
         $this->createAttachmentFile($attachment, $path);
 
-        $this->attachments[] = [
+        return [
             'path' => $path,
             'name' => $attachment->getName(),
             'content-type' => $attachment->getContentType(),
@@ -81,7 +82,7 @@ class AttachmentService
         return $path;
     }
 
-    protected function delete(string $path): bool
+    public function delete(string $path): bool
     {
         if (file_exists($path)) {
             /** @var array $files */
