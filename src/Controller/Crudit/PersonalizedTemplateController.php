@@ -7,7 +7,7 @@ namespace Lle\HermesBundle\Controller\Crudit;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\PersonalizedTemplateCrudConfig;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/template/custom')]
 class PersonalizedTemplateController extends AbstractCrudController

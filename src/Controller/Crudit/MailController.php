@@ -6,9 +6,6 @@ namespace Lle\HermesBundle\Controller\Crudit;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
-use Lle\CruditBundle\Brick\BrickResponseCollector;
-use Lle\CruditBundle\Builder\BrickBuilder;
-use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
@@ -16,15 +13,13 @@ use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Service\AttachmentService;
-use Lle\HermesBundle\Service\Factory\MailFactory;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Lle\HermesBundle\Service\Sender;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/mail')]
@@ -40,7 +35,6 @@ class MailController extends AbstractCrudController
         protected AttachmentService $attachmentService,
         protected readonly EntityManagerInterface $em,
         protected readonly MailRepository $mailRepository,
-        protected readonly ParameterBagInterface $parameters,
         protected readonly TranslatorInterface $translator,
         protected readonly Sender $sender,
         protected readonly MultiTenantManager $multiTenantManager,

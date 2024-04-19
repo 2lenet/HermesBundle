@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Controller\Crudit;
 
 use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
-use Lle\CruditBundle\Brick\BrickResponseCollector;
-use Lle\CruditBundle\Builder\BrickBuilder;
-use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\RecipientCrudConfig;
@@ -15,7 +12,7 @@ use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/recipient')]
 class RecipientController extends AbstractCrudController
