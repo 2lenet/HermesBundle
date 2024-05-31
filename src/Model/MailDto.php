@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\Model;
 
+use Lle\HermesBundle\Contracts\AttachmentInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Symfony\Component\HttpFoundation\File\File;
 

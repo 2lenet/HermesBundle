@@ -6,25 +6,20 @@ namespace Lle\HermesBundle\Controller\Crudit;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
-use Lle\CruditBundle\Brick\BrickResponseCollector;
-use Lle\CruditBundle\Builder\BrickBuilder;
-use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Repository\MailRepository;
-use Lle\HermesBundle\Service\AttachementService;
-use Lle\HermesBundle\Service\Factory\MailFactory;
+use Lle\HermesBundle\Service\AttachmentService;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Lle\HermesBundle\Service\Sender;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/mail')]
@@ -37,9 +32,9 @@ class MailController extends AbstractCrudController
 
     public function __construct(
         MailCrudConfig $config,
+        protected AttachmentService $attachmentService,
         protected readonly EntityManagerInterface $em,
         protected readonly MailRepository $mailRepository,
-        protected readonly ParameterBagInterface $parameters,
         protected readonly TranslatorInterface $translator,
         protected readonly Sender $sender,
         protected readonly MultiTenantManager $multiTenantManager,
@@ -129,7 +124,7 @@ class MailController extends AbstractCrudController
     }
 
     #[Route('/delete/{id}')]
-    public function delete(Request $request, AttachementService $attachementService): Response
+    public function delete(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_DELETE');
 
@@ -142,10 +137,7 @@ class MailController extends AbstractCrudController
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
 
-        /** @var string $rootDir */
-        $rootDir = $this->parameters->get('lle_hermes.root_dir');
-        $attachementsPath = sprintf($rootDir . MailFactory::ATTACHMENTS_DIR, $mail->getId());
-        $attachementService->deleteAttachements($attachementsPath);
+        $this->attachmentService->deleteAttachements($mail);
 
         return $this->traitDelete($request);
     }

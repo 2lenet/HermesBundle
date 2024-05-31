@@ -15,8 +15,6 @@ use function Symfony\Component\Translation\t;
 
 class MailFactory
 {
-    public const ATTACHMENTS_DIR = "/data/hermes/attachments/mail-%s/";
-
     public function __construct(
         protected readonly multiTenantManager $multiTenantManager,
         protected readonly ParameterBagInterface $parameters,
@@ -68,30 +66,5 @@ class MailFactory
         }
 
         return $mail;
-    }
-
-    public function saveAttachments(MailDto $mailDto, Mail $mail): void
-    {
-        $attachmentsArray = [];
-
-        /** @var string $rootPath */
-        $rootPath = $this->parameters->get('lle_hermes.root_dir');
-
-        foreach ($mailDto->getAttachments() as $attachment) {
-            $path = sprintf($rootPath . self::ATTACHMENTS_DIR, $mail->getId());
-
-            if (!is_dir($path)) {
-                mkdir($path, 0777, true);
-            }
-
-            file_put_contents($path . $attachment->getName(), $attachment->getData());
-            $attachmentsArray[] = [
-                "path" => $path,
-                "name" => $attachment->getName(),
-                "content-type" => $attachment->getContentType(),
-            ];
-        }
-
-        $mail->setAttachement($attachmentsArray);
     }
 }
