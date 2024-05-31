@@ -23,6 +23,7 @@
         "doctrine/common": "^2.13 || ^3.0",
         "doctrine/event-manager": "^1.0",
         "doctrine/persistence": "^2.0 || ^3.0",
+        "friendsofsymfony/ckeditor-bundle": "^2.5",
         "symfony/validator": "^6.0",
         "symfony/dependency-injection": "^6.0",
         "symfony/framework-bundle": "^6.0",
