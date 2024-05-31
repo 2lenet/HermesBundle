@@ -2,6 +2,9 @@
 
 namespace Lle\HermesBundle\Model;
 
+use Lle\HermesBundle\Contracts\AttachmentInterface;
+
+/** @deprecated use Lle\HermesBundle\Dto\ResourceAttachmentDto instead */
 class ResourceAttachment implements AttachmentInterface
 {
     protected string $path;

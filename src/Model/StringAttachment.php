@@ -2,6 +2,9 @@
 
 namespace Lle\HermesBundle\Model;
 
+use Lle\HermesBundle\Contracts\AttachmentInterface;
+
+/** @deprecated use Lle\HermesBundle\Dto\StringAttachmentDto instead */
 class StringAttachment implements AttachmentInterface
 {
     protected string $data;

@@ -15,7 +15,7 @@ use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Repository\MailRepository;
-use Lle\HermesBundle\Service\AttachementService;
+use Lle\HermesBundle\Service\AttachmentService;
 use Lle\HermesBundle\Service\Factory\MailFactory;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Lle\HermesBundle\Service\Sender;
@@ -37,6 +37,7 @@ class MailController extends AbstractCrudController
 
     public function __construct(
         MailCrudConfig $config,
+        protected AttachmentService $attachmentService,
         protected readonly EntityManagerInterface $em,
         protected readonly MailRepository $mailRepository,
         protected readonly ParameterBagInterface $parameters,
@@ -129,7 +130,7 @@ class MailController extends AbstractCrudController
     }
 
     #[Route('/delete/{id}')]
-    public function delete(Request $request, AttachementService $attachementService): Response
+    public function delete(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_DELETE');
 
@@ -142,10 +143,7 @@ class MailController extends AbstractCrudController
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
 
-        /** @var string $rootDir */
-        $rootDir = $this->parameters->get('lle_hermes.root_dir');
-        $attachementsPath = sprintf($rootDir . MailFactory::ATTACHMENTS_DIR, $mail->getId());
-        $attachementService->deleteAttachements($attachementsPath);
+        $this->attachmentService->deleteAttachements($mail);
 
         return $this->traitDelete($request);
     }

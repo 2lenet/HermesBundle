@@ -5,22 +5,19 @@ namespace Lle\HermesBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
-use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Service\AttachmentService;
 use Lle\HermesBundle\Service\Factory\MailFactory;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class Mailer
 {
     public function __construct(
-        protected readonly EntityManagerInterface $em,
-        protected readonly MailFactory $mailFactory,
-        protected readonly MultiTenantManager $multiTenantManager,
-        protected readonly TemplateRepository $templateRepository,
-        protected readonly ParameterBagInterface $parameterBag,
-        protected readonly Security $security,
+        protected AttachmentService $attachmentService,
+        protected EntityManagerInterface $em,
+        protected MailFactory $mailFactory,
+        protected MultiTenantManager $multiTenantManager,
+        protected TemplateRepository $templateRepository,
     ) {
     }
 
@@ -48,7 +45,7 @@ class Mailer
         $this->em->persist($mailObj);
         $this->em->flush();
 
-        $this->mailFactory->saveAttachments($mail, $mailObj);
+        $this->attachmentService->saveAttachments($mail, $mailObj);
         // set status AFTER because we need the mail ID for attachments
         // and we don't want Hermès to send a mail without its attachments
         $mailObj->setStatus($status);

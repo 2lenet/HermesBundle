@@ -36,6 +36,8 @@ lle_hermes:
 
 ## File storage
 
+### Images converted from base64
+
 You can configure the path for the images converted from base64. By default, path is `/upload/images/`:
 
 ```yaml
@@ -44,4 +46,14 @@ lle_hermes:
     upload_path: '/uploads/
 ```
 
-Make sure that this repository exists and that it has the correct rights !
+### Attachments
+
+You can configure the path for the attachments. By default, path is `/data/hermes/attachments/`:
+
+```yaml
+# config/packages/lle_hermes.yaml
+lle_hermes:
+    upload_path: '/data/attachments/
+```
+
+Make sure that those repositories exist and have the correct rights !
