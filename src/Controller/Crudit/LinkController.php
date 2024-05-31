@@ -7,7 +7,7 @@ namespace Lle\HermesBundle\Controller\Crudit;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\LinkCrudConfig;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/link')]
 class LinkController extends AbstractCrudController
