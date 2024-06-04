@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MailRepository::class)]
 #[ORM\Table(name: 'lle_hermes_mail')]
+#[ORM\Index(name: 'tenant_id_idx', columns: ['tenant_id'])]
 class Mail implements MultiTenantInterface
 {
     public const STATUS_DRAFT = 'draft';

@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Entity(repositoryClass: RecipientRepository::class)]
 #[ORM\Table(name: 'lle_hermes_recipient')]
+#[ORM\Index(name: 'tenant_id_idx', columns: ['tenant_id'])]
 class Recipient implements MultiTenantInterface
 {
     public const STATUS_SENDING = 'sending';
