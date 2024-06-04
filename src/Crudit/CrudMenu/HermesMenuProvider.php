@@ -51,7 +51,7 @@ class HermesMenuProvider implements MenuProviderInterface
         if ($this->parameters->get('lle_hermes.tenant_class')) {
             $menu->addChild(
                 LinkElement::new(
-                    'menu.lle_hermes_personlized_template',
+                    'menu.lle_hermes_personalized_template',
                     Path::new('lle_hermes_crudit_personalizedtemplate_index'),
                     ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
                     "ROLE_HERMES_TEMPLATE_INDEX"

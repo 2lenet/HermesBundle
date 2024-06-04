@@ -8,7 +8,8 @@ use Lle\HermesBundle\Repository\TemplateRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TemplateRepository::class)]
-#[ORM\Table(name: 'lle_hermes_template', indexes: [new ORM\Index(name: "idx_tenant", columns: ["tenant_id"])])]
+#[ORM\Table(name: 'lle_hermes_template')]
+#[ORM\Index(name: 'tenant_id_idx', columns: ['tenant_id'])]
 class Template implements MultiTenantInterface
 {
     #[ORM\Column(type: 'integer')]
