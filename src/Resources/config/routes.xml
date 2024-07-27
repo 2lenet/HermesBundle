@@ -8,4 +8,10 @@
             type="attribute"
             trailing-slash-on-root="false"
     />
+
+    <import resource="../../Controller/Api/V1"
+            type="attribute"
+            trailing-slash-on-root="false"
+            prefix="/api/v1"
+    />
 </routes>

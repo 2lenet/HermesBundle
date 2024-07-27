@@ -18,6 +18,7 @@ It depends on [Symfony Mailer](https://github.com/symfony/mailer).
 - [Enable multitenant](multitenant.md)
 - [Errors management](bounce.md)
 - [List of available commands](commands.md)
+- [APIs](api.md)
 
 ## Troubleshooting
 
