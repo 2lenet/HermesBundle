@@ -24,11 +24,13 @@ class Mailer
     /**
      * @throws TemplateNotFoundException
      */
-    public function create(MailDto $mail, string $status = Mail::STATUS_SENDING): void
+    public function create(MailDto $mail, string $status = Mail::STATUS_SENDING, $tenantId = null): void
     {
         $template = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {
-            $tenantId = $this->multiTenantManager->getTenantId();
+            if (!$tenantId) {
+                $tenantId = $this->multiTenantManager->getTenantId();
+            }
             $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate(), 'tenantId' => $tenantId]);
         }
 
