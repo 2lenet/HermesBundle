@@ -24,7 +24,7 @@ class Mailer
     /**
      * @throws TemplateNotFoundException
      */
-    public function create(MailDto $mail, string $status = Mail::STATUS_SENDING, $tenantId = null): void
+    public function create(MailDto $mail, string $status = Mail::STATUS_SENDING, int $tenantId = null): void
     {
         $template = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {
