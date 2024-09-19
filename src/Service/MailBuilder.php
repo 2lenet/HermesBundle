@@ -38,6 +38,9 @@ class MailBuilder
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
+        if ($mail->getTemplate()->isUnsubscriptions()) {
+            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
+        }
 
         /** @var string $domain */
         $domain = $this->parameters->get('lle_hermes.app_domain');
@@ -76,10 +79,6 @@ class MailBuilder
             ->returnPath($returnPath);
 
         $html = $templater->getHtml();
-        // Generate unsubscribe link
-        if ($mail->getTemplate()->isUnsubscriptions()) {
-            $html = $this->generateUnsubscribeLink($html, $recipient);
-        }
 
         // Generate confirmation of receipt link
         $html = $this->generateReceiptConfirmationLink($html, $recipient);
@@ -101,7 +100,7 @@ class MailBuilder
         return $this->attachBase64Img($email, $domain);
     }
 
-    private function generateUnsubscribeLink(string $html, Recipient $recipient): string
+    private function getUnsubscribeLink(Recipient $recipient): string
     {
         $token = md5($recipient->getToEmail() . $this->secret);
         $link = $this->router->generate(
@@ -110,11 +109,7 @@ class MailBuilder
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 
-        return str_replace(
-            '{{ UNSUBSCRIBE_LINK }}',
-            $link,
-            $html
-        );
+        return $link;
     }
 
     private function generateReceiptConfirmationLink(string $html, Recipient $recipient): string
