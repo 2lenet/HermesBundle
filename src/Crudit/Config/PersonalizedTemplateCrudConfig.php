@@ -24,7 +24,7 @@ class PersonalizedTemplateCrudConfig extends TemplateCrudConfig
         $this->parameterBag = $parameterBag;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return 'HERMES_PERSONALIZED_TEMPLATE';
     }
