@@ -14,7 +14,6 @@ class ErrorCrudConfig extends AbstractCrudConfig
     {
         $this->datasource = $datasource;
     }
-    public function getName(): ?string
 
     public function getName(): string
     {
