@@ -17,7 +17,8 @@ crud:
             hermes_mail: Mails
             hermes_recipient: Destinataires
             hermes_personalizedtemplate: Templates personnalisés
-            hermes_emailerror: Emails en erreur
+            hermes_email_error: Emails en erreur
+            hermes_unsubscribe_email: Désinscrits
         show:
             hermes_template: Modèle %entity%
             hermes_mail: Mail %entity%
@@ -25,6 +26,7 @@ crud:
             hermes_link: Lien %entity%
             hermes_emailerror: Email en erreur %entity%
             hermes_error: Erreur %entity%
+            hermes_unsubscribe_email: Désinscrit %entity%
         edit:
             hermes_template: Édition modèle %entity%
         new:
@@ -86,6 +88,7 @@ field:
     linkOpeningRate: Taux d'ouverture de liens
     firstLinkOpening: Date de première ouverture
     lastLinkOpening: Date de dernière ouverture
+    unsubscribedate: Date de désinscription
     group:
         template_informations: Informations
         template_content: Contenu
