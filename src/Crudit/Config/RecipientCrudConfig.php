@@ -96,7 +96,9 @@ class RecipientCrudConfig extends AbstractCrudConfig
         $toEmail = Field::new('toEmail');
         $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
         $openDate = Field::new('openDate');
-        $linkOpening = Field::new('totalLinkOpening')->setLabel('field.nbopeningsLinks');
+        $linkOpening = Field::new('totalLinkOpening')
+            ->setLabel('field.nbopeningsLinks')
+            ->setSortable(false);
 
         return [
             $toName,

@@ -80,7 +80,9 @@ class LinkCrudConfig extends AbstractCrudConfig
     public function getSublistFields(): array
     {
         $url = Field::new('url');
-        $linkOpenings = Field::new('totalOpened')->setLabel('field.nbopenings');
+        $linkOpenings = Field::new('totalOpened')
+            ->setLabel('field.nbopenings')
+            ->setSortable(false);
 
         return [
             $url,
