@@ -13,14 +13,16 @@ class EmailErrorCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
         EmailErrorDatasource $datasource,
-        protected readonly ErrorCrudConfig $errorCrudConfig,
+        protected ErrorCrudConfig $errorCrudConfig,
     ) {
         $this->datasource = $datasource;
     }
-    public function getName(): ?string
+
+    public function getName(): string
     {
-        return "HERMES_EMAIL_ERROR";
+        return 'HERMES_EMAIL_ERROR';
     }
+
     /**
      * @param string $key
      * @return Field[]

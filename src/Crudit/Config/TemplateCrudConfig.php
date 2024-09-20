@@ -18,19 +18,16 @@ class TemplateCrudConfig extends AbstractCrudConfig
     public const ACTION_DUPLICATE = 'duplicate';
     public const ACTION_COPY_FOR_TENANT = 'copy_for_tenant';
 
-    protected ParameterBagInterface $parameterBag;
-
     public function __construct(
         TemplateDatasource $datasource,
-        ParameterBagInterface $parameterBag,
+        protected ParameterBagInterface $parameterBag,
     ) {
         $this->datasource = $datasource;
-        $this->parameterBag = $parameterBag;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
-        return "HERMES_TEMPLATE";
+        return 'HERMES_TEMPLATE';
     }
 
     /**

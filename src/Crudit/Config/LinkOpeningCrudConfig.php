@@ -17,10 +17,12 @@ class LinkOpeningCrudConfig extends AbstractCrudConfig
     {
         $this->datasource = $datasource;
     }
-    public function getName(): ?string
+
+    public function getName(): string
     {
-        return "HERMES_LINK_OPENING";
+        return 'HERMES_LINK_OPENING';
     }
+
     /**
      * @param string $key
      * @return Field[]
