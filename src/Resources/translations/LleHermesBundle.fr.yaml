@@ -55,7 +55,7 @@ field:
     mail: Mail
     recipients: Destinataires
     recipient: Destinataire
-    countrecipients: Nombre de destinataires
+    countrecipients: Nb dests
     'mail:sendingDate': Date d'envoi
     openDate: Date d'ouverture
     opendate: Date d'ouverture
@@ -64,6 +64,7 @@ field:
     senderName: Nom de l'expéditeur
     sendername: Nom de l'expéditeur
     sendingDate: Date d'envoi
+    sendatdate: Programmé à
     sendingdate: Date d'envoi
     status: Statut
     totalOpened: Taux d'ouverture

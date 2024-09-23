@@ -44,6 +44,7 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setLabel('field.mailStatistics');
         $recipients = Field::new('countRecipients')->setSortable(false);
         $sendingDate = Field::new('sendingDate');
+        $sendAtDate = Field::new('sendAtDate');
         $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
         $openingRate = Field::new('percentOpened')
             ->setTemplate('@LleHermes/layout/_percent.html.twig')
@@ -64,6 +65,7 @@ class MailCrudConfig extends AbstractCrudConfig
             $fields = [
                 $subject,
                 $sendingDate,
+                $sendAtDate,
                 $status,
                 $statistics,
                 $openingRate,
@@ -98,6 +100,7 @@ class MailCrudConfig extends AbstractCrudConfig
         return [
             $subject,
             $recipients,
+            $sendAtDate,
             $sendingDate,
             $status,
         ];
