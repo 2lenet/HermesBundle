@@ -22,16 +22,16 @@ class TemplateType extends AbstractType
             'inherit_data' => true,
         ])
             ->add('libelle', TextType::class, [
-                'attr' => ['class' => 'col-md-6']
+                'attr' => ['class' => 'col-md-6'],
             ])
             ->add('code', TextType::class, [
-                'attr' => ['class' => 'col-md-6']
+                'attr' => ['class' => 'col-md-6'],
             ])
             ->add('senderName', TextType::class, [
-                'attr' => ['class' => 'col-md-6']
+                'attr' => ['class' => 'col-md-6'],
             ])
             ->add('senderEmail', EmailType::class, [
-                'attr' => ['class' => 'col-md-6']
+                'attr' => ['class' => 'col-md-6'],
             ]);
 
         $builder->add('groupContent', GroupType::class, [
@@ -40,7 +40,7 @@ class TemplateType extends AbstractType
         ])
             ->add('subject', TextType::class)
             ->add('html', CKEditorType::class, [
-                'config' => ['toolbar' => 'full'],
+                'config' => ['toolbar' => 'full', "fullpage" => true, "allowedContent" => true, "versionCheck"=> false],
                 'label' => false,
                 'attr' => [
                     'rows' => 20,
