@@ -14,10 +14,12 @@ class ErrorCrudConfig extends AbstractCrudConfig
     {
         $this->datasource = $datasource;
     }
-    public function getName(): ?string
+
+    public function getName(): string
     {
-        return "HERMES_ERROR";
+        return 'HERMES_ERROR';
     }
+
     /**
      * @param string $key
      * @return Field[]

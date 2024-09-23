@@ -20,16 +20,16 @@ class MailCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
         MailDatasource $datasource,
-        protected readonly RequestStack $requestStack,
-        protected readonly RecipientCrudConfig $recipientCrudConfig,
-        protected readonly LinkCrudConfig $linkCrudConfig,
+        protected RequestStack $requestStack,
+        protected RecipientCrudConfig $recipientCrudConfig,
+        protected LinkCrudConfig $linkCrudConfig,
     ) {
         $this->datasource = $datasource;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
-        return "HERMES_MAIL";
+        return 'HERMES_MAIL';
     }
 
     /**

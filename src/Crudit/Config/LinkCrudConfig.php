@@ -16,14 +16,16 @@ class LinkCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
         LinkDatasource $datasource,
-        protected readonly LinkOpeningCrudConfig $linkOpeningCrudConfig,
+        protected LinkOpeningCrudConfig $linkOpeningCrudConfig,
     ) {
         $this->datasource = $datasource;
     }
-    public function getName(): ?string
+
+    public function getName(): string
     {
-        return "HERMES_LINK";
+        return 'HERMES_LINK';
     }
+
     /**
      * @param string $key
      * @return Field[]

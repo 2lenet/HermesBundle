@@ -16,14 +16,16 @@ class RecipientCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
         RecipientDatasource $datasource,
-        protected readonly LinkCrudConfig $linkCrudConfig,
+        protected LinkCrudConfig $linkCrudConfig,
     ) {
         $this->datasource = $datasource;
     }
-    public function getName(): ?string
+
+    public function getName(): string
     {
-        return "HERMES_RECIPIENT";
+        return 'HERMES_RECIPIENT';
     }
+
     /**
      * @param string $key
      * @return Field[]
