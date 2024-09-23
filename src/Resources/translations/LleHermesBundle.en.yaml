@@ -18,13 +18,15 @@ crud:
             hermes_recipient: Recipients
             hermes_personalizedtemplate: Personalized templates
             hermes_emailerror: Error emails
+            hermes_unsubscribe_email: Unsubscribed
         show:
             hermes_template: Template %entity%
             hermes_mail: Mail %entity%
             hermes_recipient: Recipient %entity%
             hermes_link: Link %entity%
-            hermes_emailerror: Error email %entity%
+            hermes_email_error: Error email %entity%
             hermes_error: Error %entity%
+            hermes_unsubscribe_email: Unsubscribed %entity%
         edit:
             hermes_template: Edit template %entity%
         new:
@@ -86,6 +88,7 @@ field:
     linkOpeningRate: Link opening rate
     firstLinkOpening: First opening date
     lastLinkOpening: Last opening date
+    unsubscribedate: Unsubscription date
     group:
         template_informations: Informations
         template_content: Content
