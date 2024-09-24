@@ -25,8 +25,9 @@ class Mail implements MultiTenantInterface
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
     #[ORM\ManyToOne(targetEntity: Template::class)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     #[Assert\NotBlank]
-    protected Template $template;
+    protected ?Template $template;
     #[ORM\Column(type: 'json', nullable: false)]
     protected array $data = [];
     #[ORM\Column(type: 'string', length: 255)]
@@ -201,12 +202,12 @@ class Mail implements MultiTenantInterface
         return $this;
     }
 
-    public function getTemplate(): Template
+    public function getTemplate(): ?Template
     {
         return $this->template;
     }
 
-    public function setTemplate(Template $template): Mail
+    public function setTemplate(?Template $template): Mail
     {
         $this->template = $template;
 
