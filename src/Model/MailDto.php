@@ -63,6 +63,8 @@ class MailDto
 
     protected ?int $tenantId = null;
 
+    protected ?\DateTime $sendAt = null;
+
     public function getSubject(): string
     {
         return $this->subject;
@@ -226,5 +228,17 @@ class MailDto
     public function setTenantId(?int $tenantId): void
     {
         $this->tenantId = $tenantId;
+    }
+
+    public function getSendAt(): ?\DateTime
+    {
+        return $this->sendAt;
+    }
+
+    public function setSendAt(?\DateTime $sendAt): self
+    {
+        $this->sendAt = $sendAt;
+
+        return $this;
     }
 }

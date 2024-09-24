@@ -28,6 +28,7 @@ class MailFactory
         $mail = new Mail();
         $mail->setTemplate($template);
         $mail->setCreatedAt(new \DateTime());
+        $mail->setSendAtDate($mailDto->getSendAt());
 
         $tenantId = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {
