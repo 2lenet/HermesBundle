@@ -82,17 +82,8 @@ class MailController extends AbstractCrudController
 
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
-
-        $recipients = $mail->getRecipients();
-        $nb = $this->sender->sendAllRecipients($recipients->toArray());
-
-        $message = $this->translator->trans(
-            'flash.mail_sent',
-            ['%nb%' => $nb, '%nbTotal%' => $mail->getTotalToSend()],
-            'LleHermesBundle'
-        );
-        $this->addFlash(FlashBrickResponse::SUCCESS, $message);
-
+        $mail->setStatus(Mail::STATUS_SENDING);
+        $this->em->flush();
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
 
