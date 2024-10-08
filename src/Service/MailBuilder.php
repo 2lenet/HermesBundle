@@ -38,7 +38,7 @@ class MailBuilder
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
-        if ($mail->getTemplate()->isUnsubscriptions()) {
+        if ($mail->getTemplate()?->isUnsubscriptions()) {
             $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
         }
 
@@ -47,14 +47,14 @@ class MailBuilder
         /** @var string $returnPath */
         $returnPath = $this->parameters->get('lle_hermes.bounce_user');
         if ($mail->getTemplate()->getCustomBounceEmail()) {
-            $returnPath = $mail->getTemplate()->getCustomBounceEmail();
+            $returnPath = $mail->getTemplate()?->getCustomBounceEmail();
         }
 
         $context = $this->router->getContext();
         $context->setHost($domain);
         $context->setScheme('https');
 
-        $from = new Address($mail->getTemplate()->getSenderEmail(), $templater->getSenderName());
+        $from = new Address((string)$mail->getTemplate()?->getSenderEmail(), $templater->getSenderName());
 
         $email = new Email();
 
@@ -83,7 +83,7 @@ class MailBuilder
         // Generate confirmation of receipt link
         $html = $this->generateReceiptConfirmationLink($html, $recipient);
 
-        if ($mail->getTemplate()->hasStatistics()) {
+        if ($mail->getTemplate()?->hasStatistics()) {
             $html = $this->generateStatsLinks($html, $mail, $recipient);
         }
 

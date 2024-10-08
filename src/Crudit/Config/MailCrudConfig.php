@@ -79,7 +79,7 @@ class MailCrudConfig extends AbstractCrudConfig
             if ($request && $route == $request->attributes->get('_route')) {
                 /** @var Mail $mail */
                 $mail = $this->datasource->get($request->attributes->get('id'));
-                if ($mail->getTemplate()->hasStatistics()) {
+                if ($mail && $mail->getTemplate()->hasStatistics()) {
                     $fields = [
                         $subject,
                         $sendingDate,
@@ -166,7 +166,7 @@ class MailCrudConfig extends AbstractCrudConfig
         if ($request && $route == $request->attributes->get('_route')) {
             /** @var Mail $mail */
             $mail = $this->datasource->get($request->attributes->get('id'));
-            if ($mail->getTemplate()->hasStatistics()) {
+            if ($mail && $mail->getTemplate()->hasStatistics()) {
                 $tabs = [
                     'tab.recipients' => SublistConfig::new('mail', $this->recipientCrudConfig)
                         ->setFields($this->recipientCrudConfig->getSublistFields())

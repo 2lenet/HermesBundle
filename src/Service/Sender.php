@@ -70,7 +70,7 @@ class Sender
             $template = $mail->getTemplate();
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
-            if ($template->isUnsubscriptions()) {
+            if ($template && $template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
                     $this->updateMail($mail);
@@ -79,7 +79,7 @@ class Sender
                 }
             }
 
-            if (!$template->hasSendToErrors()) {
+            if ($template && !$template->hasSendToErrors()) {
                 if (in_array($recipient->getToEmail(), array_column($errorArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_ERROR);
                     $this->updateMail($mail);
