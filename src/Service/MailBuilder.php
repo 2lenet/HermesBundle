@@ -46,7 +46,7 @@ class MailBuilder
         $domain = $this->parameters->get('lle_hermes.app_domain');
         /** @var string $returnPath */
         $returnPath = $this->parameters->get('lle_hermes.bounce_user');
-        if ($mail->getTemplate()->getCustomBounceEmail()) {
+        if ($mail->getTemplate()?->getCustomBounceEmail()) {
             $returnPath = $mail->getTemplate()?->getCustomBounceEmail();
         }
 
@@ -75,8 +75,11 @@ class MailBuilder
         $email
             ->from($from)
             ->replyTo($from)
-            ->subject($templater->getSubject())
-            ->returnPath($returnPath);
+            ->subject($templater->getSubject());
+
+        if ($returnPath) {
+            $email->returnPath($returnPath);
+        }
 
         $html = $templater->getHtml();
 
