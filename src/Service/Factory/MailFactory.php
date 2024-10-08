@@ -28,7 +28,6 @@ class MailFactory
         $mail = new Mail();
         $mail->setTemplate($template);
         $mail->setCreatedAt(new \DateTime());
-        $mail->setSendAtDate($mailDto->getSendAt());
 
         $tenantId = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {
@@ -65,6 +64,9 @@ class MailFactory
         if ($mailDto->isSendHtml()) {
             $mail->setHtml($mail->getTemplate()->getHtml());
         }
+
+        $mail->setSendAtDate($mailDto->getSendAt());
+        $mail->setDsn($mailDto->getDsn());
 
         return $mail;
     }

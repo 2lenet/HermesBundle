@@ -14,7 +14,9 @@ use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
 
 /**
@@ -101,7 +103,14 @@ class Sender
     protected function send(Mail $mail, Recipient $recipient, bool $updateSendingDate = true): bool
     {
         try {
-            $this->mailer->send($this->mailBuilder->buildMail($mail, $recipient));
+            if ($mail->getDsn()) {
+                $transport = Transport::fromDsn($mail->getDsn());
+                $mailer = new SymfonyMailer($transport);
+            } else {
+                $mailer = $this->mailer;
+            }
+
+            $mailer->send($this->mailBuilder->buildMail($mail, $recipient));
             $recipient->setStatus(Recipient::STATUS_SENT);
 
             if ($updateSendingDate) {
