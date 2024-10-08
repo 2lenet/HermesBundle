@@ -40,7 +40,12 @@ class TemplateType extends AbstractType
         ])
             ->add('subject', TextType::class)
             ->add('html', CKEditorType::class, [
-                'config' => ['toolbar' => 'full', "fullPage" => true, "allowedContent" => true, "versionCheck"=> false],
+                'config' => [
+                    'toolbar' => 'full',
+                    'fullPage' => true,
+                    'allowedContent' => true,
+                    'versionCheck' => false
+                ],
                 'label' => false,
                 'attr' => [
                     'rows' => 20,

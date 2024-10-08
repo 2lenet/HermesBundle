@@ -35,8 +35,12 @@ class RecipientRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->leftJoin('r.mail', 'm')
             ->leftJoin('r.ccMail', 'cc')
-            ->where('(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status = :status_r AND m.status = :status_m')
-            ->orWhere('(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status = :status_r AND cc.status = :status_m')
+            ->andWhere(
+                '(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status = :status_r AND m.status = :status_m'
+            )
+            ->orWhere(
+                '(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status = :status_r AND cc.status = :status_m'
+            )
             ->setParameter('status_r', $recipientStatus)
             ->setParameter('status_m', $mailStatus)
             ->setParameter('now', new \DateTime())

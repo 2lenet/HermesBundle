@@ -47,7 +47,7 @@ class MailBuilder
         /** @var string $returnPath */
         $returnPath = $this->parameters->get('lle_hermes.bounce_user');
         if ($mail->getTemplate()?->getCustomBounceEmail()) {
-            $returnPath = $mail->getTemplate()?->getCustomBounceEmail();
+            $returnPath = $mail->getTemplate()->getCustomBounceEmail();
         }
 
         $context = $this->router->getContext();
