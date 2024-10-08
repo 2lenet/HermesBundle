@@ -65,6 +65,8 @@ class MailDto
 
     protected ?\DateTime $sendAt = null;
 
+    protected ?string $dsn = null;
+
     public function getSubject(): string
     {
         return $this->subject;
@@ -238,6 +240,18 @@ class MailDto
     public function setSendAt(?\DateTime $sendAt): self
     {
         $this->sendAt = $sendAt;
+
+        return $this;
+    }
+
+    public function getDsn(): ?string
+    {
+        return $this->dsn;
+    }
+
+    public function setDsn(?string $dsn): self
+    {
+        $this->dsn = $dsn;
 
         return $this;
     }

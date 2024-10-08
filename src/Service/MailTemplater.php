@@ -14,8 +14,11 @@ class MailTemplater
 {
     protected array $data = [];
 
-    public function __construct(protected Mail $mail, protected Environment $twig, protected RouterInterface $router)
-    {
+    public function __construct(
+        protected Mail $mail,
+        protected Environment $twig,
+        protected RouterInterface $router,
+    ) {
     }
 
     public function getSubject(): string
@@ -35,7 +38,7 @@ class MailTemplater
 
     public function getSenderName(): string
     {
-        return $this->render((string)$this->mail->getTemplate()->getSenderName());
+        return $this->render((string)$this->mail->getTemplate()?->getSenderName());
     }
 
     private function render(string $string, bool $decodeHtml = true): string

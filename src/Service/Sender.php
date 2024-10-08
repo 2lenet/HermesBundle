@@ -14,7 +14,9 @@ use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
 
 /**
@@ -68,7 +70,7 @@ class Sender
             $template = $mail->getTemplate();
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
-            if ($template->isUnsubscriptions()) {
+            if ($template && $template->isUnsubscriptions()) {
                 if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
                     $this->updateMail($mail);
@@ -77,7 +79,7 @@ class Sender
                 }
             }
 
-            if (!$template->hasSendToErrors()) {
+            if ($template && !$template->hasSendToErrors()) {
                 if (in_array($recipient->getToEmail(), array_column($errorArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_ERROR);
                     $this->updateMail($mail);
@@ -101,7 +103,14 @@ class Sender
     protected function send(Mail $mail, Recipient $recipient, bool $updateSendingDate = true): bool
     {
         try {
-            $this->mailer->send($this->mailBuilder->buildMail($mail, $recipient));
+            if ($mail->getDsn()) {
+                $transport = Transport::fromDsn($mail->getDsn());
+                $mailer = new SymfonyMailer($transport);
+            } else {
+                $mailer = $this->mailer;
+            }
+
+            $mailer->send($this->mailBuilder->buildMail($mail, $recipient));
             $recipient->setStatus(Recipient::STATUS_SENT);
 
             if ($updateSendingDate) {

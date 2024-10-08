@@ -20,56 +20,80 @@ class Mail implements MultiTenantInterface
     public const STATUS_SENT = 'sent';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_ERROR = 'error';
+
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
+
     #[ORM\ManyToOne(targetEntity: Template::class)]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
     #[Assert\NotBlank]
     protected ?Template $template;
+
     #[ORM\Column(type: 'json', nullable: false)]
     protected array $data = [];
+
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     protected string $status;
+
     #[ORM\Column(type: 'integer')]
     protected int $totalToSend = 0;
+
     #[ORM\Column(type: 'integer')]
     protected int $totalSended = 0;
+
     #[ORM\OneToMany(targetEntity: Recipient::class, mappedBy: 'mail', cascade: ['persist', 'remove'])]
     protected Collection $recipients;
+
     #[ORM\Column(type: 'string', length: 1024)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 1024)]
     protected string $subject;
+
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTime $sendingDate = null;
+
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTime $sendAtDate = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $text = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $html = null;
+
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTime $createdAt = null;
+
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTime $updatedAt = null;
+
     #[ORM\Column(type: 'integer')]
     protected int $totalUnsubscribed = 0;
+
     #[ORM\Column(type: 'integer')]
     protected int $totalError = 0;
+
     #[ORM\Column(type: 'json')]
     protected array $attachement = [];
+
     #[ORM\Column(type: 'integer')]
     protected int $totalOpened = 0;
+
     #[ORM\OneToMany(targetEntity: Recipient::class, mappedBy: 'ccMail', cascade: ['persist', 'remove'])]
     protected Collection $ccRecipients;
+
     #[ORM\OneToMany(targetEntity: Link::class, mappedBy: 'mail', cascade: ['persist', 'remove'])]
     protected Collection $links;
+
     #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $tenantId = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $dsn = null;
 
     public function __construct()
     {
@@ -467,8 +491,22 @@ class Mail implements MultiTenantInterface
         return $this->tenantId;
     }
 
-    public function setTenantId(?int $tenantId): void
+    public function setTenantId(?int $tenantId): self
     {
         $this->tenantId = $tenantId;
+
+        return $this;
+    }
+
+    public function getDsn(): ?string
+    {
+        return $this->dsn;
+    }
+
+    public function setDsn(?string $dsn): self
+    {
+        $this->dsn = $dsn;
+
+        return $this;
     }
 }

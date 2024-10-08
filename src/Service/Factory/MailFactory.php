@@ -28,7 +28,6 @@ class MailFactory
         $mail = new Mail();
         $mail->setTemplate($template);
         $mail->setCreatedAt(new \DateTime());
-        $mail->setSendAtDate($mailDto->getSendAt());
 
         $tenantId = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {
@@ -57,14 +56,17 @@ class MailFactory
         $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
-        $mail->setSubject($mail->getTemplate()->getSubject());
+        $mail->setSubject($template->getSubject());
 
         if ($mailDto->isSendText()) {
-            $mail->setText($mail->getTemplate()->getText());
+            $mail->setText($template->getText());
         }
         if ($mailDto->isSendHtml()) {
-            $mail->setHtml($mail->getTemplate()->getHtml());
+            $mail->setHtml($template->getHtml());
         }
+
+        $mail->setSendAtDate($mailDto->getSendAt());
+        $mail->setDsn($mailDto->getDsn());
 
         return $mail;
     }
