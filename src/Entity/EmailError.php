@@ -8,12 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\EmailErrorRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class EmailError
- * @package Lle\HermesBundle\Entity
- *
- * @author 2LE <2le@2le.net>
- */
 #[ORM\Entity(repositoryClass: EmailErrorRepository::class)]
 #[ORM\Table(name: 'lle_hermes_email_error')]
 class EmailError

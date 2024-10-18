@@ -9,15 +9,10 @@ use Lle\HermesBundle\Entity\LinkOpening;
 use Lle\HermesBundle\Entity\Recipient;
 
 /**
- * Class LinkOpeningRepository
- * @package Lle\HermesBundle\Repository
- *
- * @author 2LE <2le@2le.net>
- *
- * @method Template|null find($id, $lockMode = null, $lockVersion = null)
- * @method Template|null findOneBy(array $criteria, array $orderBy = null)
- * @method Template[]    findAll()
- * @method Template[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method LinkOpening|null find($id, $lockMode = null, $lockVersion = null)
+ * @method LinkOpening|null findOneBy(array $criteria, array $orderBy = null)
+ * @method LinkOpening[]    findAll()
+ * @method LinkOpening[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class LinkOpeningRepository extends ServiceEntityRepository
 {

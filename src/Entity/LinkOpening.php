@@ -6,12 +6,6 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\LinkOpeningRepository;
 
-/**
- * Class LinkOpening
- * @package Lle\HermesBundle\Entity
- *
- * @author 2LE <2le@2le.net>
- */
 #[ORM\Entity(repositoryClass: LinkOpeningRepository::class)]
 #[ORM\Table(name: 'lle_hermes_link_opening')]
 class LinkOpening

@@ -8,11 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Lle\HermesBundle\Entity\Mail;
 
 /**
- * Class MailRepository
- * @package Lle\HermesBundle\Repository
- *
- * @author 2LE <2le@2le.net>
- *
  * @method Mail|null find($id, $lockMode = null, $lockVersion = null)
  * @method Mail|null findOneBy(array $criteria, array $orderBy = null)
  * @method Mail[]    findAll()
