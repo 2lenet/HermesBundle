@@ -32,7 +32,7 @@ class Link
     #[Assert\NotBlank]
     protected Mail $mail;
 
-    #[ORM\OneToMany(targetEntity: LinkOpening::class, mappedBy: 'link', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: LinkOpening::class, mappedBy: 'link', cascade: ['persist', 'remove'], fetch: 'EXTRA_LAZY')]
     protected Collection $linkOpenings;
 
     public function __construct()

@@ -85,6 +85,7 @@ field:
     link: Lien
     url: URL
     nbopenings: Nombre d'ouvertures
+    nbuniqueopenings: Nb. d'ouvertures uniques
     nbopeningsLinks: Nombre d'ouverture de liens
     linkOpeningRate: Taux d'ouverture de liens
     firstLinkOpening: Date de première ouverture

@@ -84,6 +84,7 @@ field:
     link: Link
     url: URL
     nbopenings: Opening number
+    nbuniqueopenings: Unique opening number
     nbopeningsLinks: Link opening number
     linkOpeningRate: Link opening rate
     firstLinkOpening: First opening date
