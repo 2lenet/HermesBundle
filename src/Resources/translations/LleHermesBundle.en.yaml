@@ -99,6 +99,7 @@ field:
     date: Date
     content: Content
     custombounceemail: Custom bounce email
+    data: Data
 
 title:
     dashboard: Dashboard

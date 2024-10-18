@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Crudit\Config;
 
-use Lle\CruditBundle\Brick\SublistBrick\SublistConfig;
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
@@ -16,7 +15,6 @@ class RecipientCrudConfig extends AbstractCrudConfig
 {
     public function __construct(
         RecipientDatasource $datasource,
-        protected LinkCrudConfig $linkCrudConfig,
     ) {
         $this->datasource = $datasource;
     }
@@ -40,8 +38,9 @@ class RecipientCrudConfig extends AbstractCrudConfig
         $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
         $openDate = Field::new('openDate');
         $linkOpening = Field::new('totalLinkOpening')->setLabel('field.nbopenings')->setSortable(false);
+        $data = Field::new('data', 'string')->setTemplate('@LleHermes/crud/recipient/_data.html.twig');
 
-        if ($key == CrudConfigInterface::INDEX || $key == CrudConfigInterface::SHOW) {
+        if ($key == CrudConfigInterface::INDEX) {
             return [
                 $mail,
                 $sendingDate,
@@ -49,6 +48,16 @@ class RecipientCrudConfig extends AbstractCrudConfig
                 $status,
                 $openDate,
                 $linkOpening,
+            ];
+        } elseif ($key == CrudConfigInterface::SHOW) {
+            return [
+                $mail,
+                $sendingDate,
+                $toEmail,
+                $status,
+                $openDate,
+                $linkOpening,
+                $data,
             ];
         }
 
@@ -106,15 +115,6 @@ class RecipientCrudConfig extends AbstractCrudConfig
             $status,
             $openDate,
             $linkOpening,
-        ];
-    }
-
-    public function getTabs(): array
-    {
-        return [
-            'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
-                ->setActions($this->linkCrudConfig->getSublistAction())
-                ->setFields($this->linkCrudConfig->getSublistFields()),
         ];
     }
 

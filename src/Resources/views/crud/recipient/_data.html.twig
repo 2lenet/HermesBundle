@@ -1,0 +1,5 @@
+{% set json = (value|default('{}')) %}
+
+<pre style="white-space: pre-wrap">
+{{ json|json_encode(constant('JSON_PRETTY_PRINT')) }}
+</pre>
