@@ -35,13 +35,19 @@ class LinkCrudConfig extends AbstractCrudConfig
         $mail = Field::new('mail', null, [
             'route' => 'lle_hermes_crudit_mail_show',
         ])->setType(DoctrineEntityField::class);
-        $totalOpened = Field::new('totalOpened')->setLabel('field.nbopenings')
+        $totalUniqueOpened = Field::new('linkOpenings')
+            ->setLabel('field.nbuniqueopenings');
+        $totalOpened = Field::new('totalOpened')
+            ->setLabel('field.nbopenings')
+            ->setTemplate('@LleHermes/crud/link/_total_opened.html.twig')
             ->setSortable(false);
-        $url = Field::new('url')->setCssClass('col-12');
+        $url = Field::new('url')
+            ->setCssClass('col-12');
 
         if ($key == CrudConfigInterface::INDEX || $key == CrudConfigInterface::SHOW) {
             return [
                 $mail,
+                $totalUniqueOpened,
                 $totalOpened,
                 $url,
             ];
@@ -80,12 +86,16 @@ class LinkCrudConfig extends AbstractCrudConfig
     public function getSublistFields(): array
     {
         $url = Field::new('url');
+        $totalUniqueOpened = Field::new('linkOpenings')
+            ->setLabel('field.nbuniqueopenings');
         $linkOpenings = Field::new('totalOpened')
             ->setLabel('field.nbopenings')
+            ->setTemplate('@LleHermes/crud/link/_total_opened.html.twig')
             ->setSortable(false);
 
         return [
             $url,
+            $totalUniqueOpened,
             $linkOpenings,
         ];
     }

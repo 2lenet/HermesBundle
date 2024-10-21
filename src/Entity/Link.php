@@ -8,12 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\LinkRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class Link
- * @package Lle\HermesBundle\Entity
- *
- * @author 2LE <2le@2le.net>
- */
 #[ORM\Entity(repositoryClass: LinkRepository::class)]
 #[ORM\Table(name: 'lle_hermes_link')]
 class Link
@@ -32,7 +26,12 @@ class Link
     #[Assert\NotBlank]
     protected Mail $mail;
 
-    #[ORM\OneToMany(targetEntity: LinkOpening::class, mappedBy: 'link', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(
+        targetEntity: LinkOpening::class,
+        mappedBy: 'link',
+        cascade: ['persist', 'remove'],
+        fetch: 'EXTRA_LAZY'
+    )]
     protected Collection $linkOpenings;
 
     public function __construct()

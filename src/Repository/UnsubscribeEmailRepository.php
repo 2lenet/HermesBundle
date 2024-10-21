@@ -7,11 +7,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Lle\HermesBundle\Entity\UnsubscribeEmail;
 
 /**
- * Class UnsubscribeEmailRepository
- * @package Lle\HermesBundle\Repository
- *
- * @author 2LE <2le@2le.net>
- *
  * @method UnsubscribeEmail|null find($id, $lockMode = null, $lockVersion = null)
  * @method UnsubscribeEmail|null findOneBy(array $criteria, array $orderBy = null)
  * @method UnsubscribeEmail[]    findAll()

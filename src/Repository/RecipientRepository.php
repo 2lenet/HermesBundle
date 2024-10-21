@@ -10,11 +10,6 @@ use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 
 /**
- * Class RecipientRepository
- * @package Lle\HermesBundle\Repository
- *
- * @author 2LE <2le@2le.net>
- *
  * @method Recipient|null find($id, $lockMode = null, $lockVersion = null)
  * @method Recipient|null findOneBy(array $criteria, array $orderBy = null)
  * @method Recipient[]    findAll()

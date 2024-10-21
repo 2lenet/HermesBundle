@@ -7,11 +7,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Lle\HermesBundle\Entity\Template;
 
 /**
- * Class TemplateRepository
- * @package Lle\HermesBundle\Repository
- *
- * @author 2LE <2le@2le.net>
- *
  * @method Template|null find($id, $lockMode = null, $lockVersion = null)
  * @method Template|null findOneBy(array $criteria, array $orderBy = null)
  * @method Template[]    findAll()

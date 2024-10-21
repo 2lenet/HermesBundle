@@ -10,12 +10,6 @@ use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Class Recipient
- * @package Lle\HermesBundle\Entity
- *
- * @author 2LE <2le@2le.net>
- */
 #[ORM\Entity(repositoryClass: RecipientRepository::class)]
 #[ORM\Table(name: 'lle_hermes_recipient')]
 #[ORM\Index(name: 'tenant_id_idx', columns: ['tenant_id'])]

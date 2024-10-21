@@ -135,11 +135,14 @@ class MailBuilder
         return preg_replace_callback(
             '/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/s',
             function ($matches) use ($mail, $recipient) {
-                $link = new Link();
-                $link->setMail($mail);
-                $link->setUrl($matches[2]);
-                $this->em->persist($link);
-                $this->em->flush();
+                $link = $this->em->getRepository(Link::class)->findOneBy(['mail' => $mail, 'url' => $matches[2]]);
+                if (!$link) {
+                    $link = new Link();
+                    $link->setMail($mail);
+                    $link->setUrl($matches[2]);
+                    $this->em->persist($link);
+                    $this->em->flush();
+                }
 
                 $route = $this->router->generate(
                     'statistics',

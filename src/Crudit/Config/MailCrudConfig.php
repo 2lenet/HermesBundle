@@ -140,7 +140,7 @@ class MailCrudConfig extends AbstractCrudConfig
         )
             ->setRole('ROLE_HERMES_MAIL_SENDTESTMAIL')
             ->setCssClass('btn btn-warning btn-sm mr-1')
-            ->setModal('@LleHermes/crud/Mail/_modal_send_testmail.html.twig');
+            ->setModal('@LleHermes/crud/mail/_modal_send_testmail.html.twig');
 
         return $actions;
     }
