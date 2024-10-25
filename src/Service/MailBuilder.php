@@ -80,6 +80,9 @@ class MailBuilder
 
         $html = $templater->getHtml();
 
+        // Generate confirmation of receipt link
+        $html = $this->generateReceiptConfirmationLink($html, $recipient);
+
         if ($mail->getTemplate()?->hasStatistics()) {
             $html = $this->generateStatsLinks($html, $mail, $recipient);
         }
@@ -87,9 +90,6 @@ class MailBuilder
         if ($mail->getTemplate()?->isUnsubscriptions()) {
             $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
         }
-
-        // Generate confirmation of receipt link
-        $html = $this->generateReceiptConfirmationLink($html, $recipient);
 
         $email->text($templater->getText());
 
