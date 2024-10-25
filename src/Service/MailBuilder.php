@@ -38,9 +38,6 @@ class MailBuilder
 
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
-        if ($mail->getTemplate()?->isUnsubscriptions()) {
-            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
-        }
 
         /** @var string $domain */
         $domain = $this->parameters->get('lle_hermes.app_domain');
@@ -88,6 +85,10 @@ class MailBuilder
 
         if ($mail->getTemplate()?->hasStatistics()) {
             $html = $this->generateStatsLinks($html, $mail, $recipient);
+        }
+
+        if ($mail->getTemplate()?->isUnsubscriptions()) {
+            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
         }
 
         $email->text($templater->getText());
