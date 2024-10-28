@@ -39,6 +39,10 @@ class MailBuilder
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
 
+        if ($mail->getTemplate()?->isUnsubscriptions()) {
+            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
+        }
+
         /** @var string $domain */
         $domain = $this->parameters->get('lle_hermes.app_domain');
         /** @var string $returnPath */
@@ -87,10 +91,6 @@ class MailBuilder
             $html = $this->generateStatsLinks($html, $mail, $recipient);
         }
 
-        if ($mail->getTemplate()?->isUnsubscriptions()) {
-            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
-        }
-
         $email->text($templater->getText());
 
         $email->html($html);
@@ -136,22 +136,26 @@ class MailBuilder
         return preg_replace_callback(
             '/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/s',
             function ($matches) use ($mail, $recipient) {
-                $link = $this->em->getRepository(Link::class)->findOneBy(['mail' => $mail, 'url' => $matches[2]]);
-                if (!$link) {
-                    $link = new Link();
-                    $link->setMail($mail);
-                    $link->setUrl($matches[2]);
-                    $this->em->persist($link);
-                    $this->em->flush();
+                if (!str_contains($matches[2], '/hermes/unsubscribe')) {
+                    $link = $this->em->getRepository(Link::class)->findOneBy(['mail' => $mail, 'url' => $matches[2]]);
+                    if (!$link) {
+                        $link = new Link();
+                        $link->setMail($mail);
+                        $link->setUrl($matches[2]);
+                        $this->em->persist($link);
+                        $this->em->flush();
+                    }
+
+                    $route = $this->router->generate(
+                        'statistics',
+                        ['recipient' => $recipient->getId(), 'link' => $link->getId()],
+                        UrlGeneratorInterface::ABSOLUTE_URL
+                    );
+
+                    return '<a' . $matches[1] . 'href="' . $route . '"' . $matches[3] . '>' . $matches[4] . '</a>';
+                } else {
+                    return '<a' . $matches[1] . 'href="' . $matches[2] . '"' . $matches[3] . '>' . $matches[4] . '</a>';
                 }
-
-                $route = $this->router->generate(
-                    'statistics',
-                    ['recipient' => $recipient->getId(), 'link' => $link->getId()],
-                    UrlGeneratorInterface::ABSOLUTE_URL
-                );
-
-                return '<a' . $matches[1] . 'href="' . $route . '"' . $matches[3] . '>' . $matches[4] . '</a>';
             },
             $html
         );
