@@ -154,7 +154,7 @@ class MailBuilder
 
                     return '<a' . $matches[1] . 'href="' . $route . '"' . $matches[3] . '>' . $matches[4] . '</a>';
                 } else {
-                    return '<a' . $matches[1] . 'href="' . $matches[2] . '"' . $matches[3] . '>' . $matches[4] . '</a>';
+                    return $matches[0];
                 }
             },
             $html
