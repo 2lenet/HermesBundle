@@ -53,7 +53,7 @@ class UnsubscribeController extends AbstractController
         }
 
         $unsubscribe = new UnsubscribeEmail();
-        $unsubscribe->setEmail($email);
+        $unsubscribe->setEmail(strtolower($email));
         $unsubscribe->setUnsubscribeDate(new DateTime());
         $this->em->persist($unsubscribe);
         $this->em->flush();

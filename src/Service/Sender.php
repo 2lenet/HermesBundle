@@ -55,7 +55,7 @@ class Sender
      */
     public function sendAllRecipients(array $recipients): int
     {
-        $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
+        $unsubscribedEmails = $this->getUnsubscribedEmails();
         /** @var int $maxNbRetry */
         $maxNbRetry = $this->parameters->get('lle_hermes.recipient_error_retry');
         $errorArray = $this->emailErrorRepository->findEmailsInError($maxNbRetry);
@@ -71,7 +71,12 @@ class Sender
 
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
             if ($template && $template->isUnsubscriptions()) {
-                if (in_array($recipient->getToEmail(), array_column($unsubscribedArray, 'email'))) {
+                if (
+                    in_array(
+                        strtolower($recipient->getToEmail()),
+                        $unsubscribedEmails
+                    )
+                ) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
                     $this->updateMail($mail);
 
@@ -98,6 +103,14 @@ class Sender
         }
 
         return $nb;
+    }
+
+    public function getUnsubscribedEmails(): array
+    {
+        $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
+        $emails = array_column($unsubscribedArray, 'email');
+
+        return array_map('strtolower', $emails);
     }
 
     protected function send(Mail $mail, Recipient $recipient, bool $updateSendingDate = true): bool
