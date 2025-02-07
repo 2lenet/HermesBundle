@@ -16,7 +16,7 @@ crud:
             hermes_template: Templates
             hermes_mail: Mails
             hermes_recipient: Destinataires
-            hermes_personalizedtemplate: Templates personnalisés
+            hermes_personalized_template: Templates personnalisés
             hermes_email_error: Emails en erreur
             hermes_unsubscribe_email: Désinscrits
         show:

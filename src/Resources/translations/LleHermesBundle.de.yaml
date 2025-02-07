@@ -1,0 +1,167 @@
+action:
+    list: Zurück
+    add: Hinzufügen
+    delete: Löschen
+    edit: Bearbeiten
+    export: Exportieren
+    show: Anzeigen
+    send: Senden
+
+crudit:
+    action: Aktionen
+
+crud:
+    title:
+        list:
+            hermes_template: Vorlagen
+            hermes_mail: E-Mails
+            hermes_recipient: Empfänger
+            hermes_personalized_template: Personalisierte Vorlagen
+            hermes_emailerror: Fehlerhafte E-Mails
+            hermes_unsubscribe_email: Abgemeldet
+        show:
+            hermes_template: Vorlage %entity%
+            hermes_mail: E-Mail %entity%
+            hermes_recipient: Empfänger %entity%
+            hermes_link: Link %entity%
+            hermes_email_error: Fehlerhafte E-Mail %entity%
+            hermes_error: Fehler %entity%
+            hermes_unsubscribe_email: Abgemeldet %entity%
+        edit:
+            hermes_template: Vorlage %entity% bearbeiten
+        new:
+            hermes_template: Vorlage erstellen
+    action:
+        duplicate: Duplizieren
+        copy_for_tenant: Für Personalisierung kopieren
+    modal:
+        send_mail: Möchten Sie diese E-Mail wirklich an %nb% Empfänger senden? Diese Aktion ist endgültig.
+    canDelete:
+        mail: Die E-Mail wird gesendet
+
+tab:
+    recipients: Empfänger
+    links: Links
+    linkOpening: Geöffnete Links
+    errors: Fehler
+
+export:
+    csv: Csv
+    excel: Excel
+
+field:
+    code: Code
+    libelle: Bezeichnung
+    mail: E-Mail
+    recipients: Empfänger
+    recipient: Empfänger
+    countrecipients: Anzahl der Empfänger
+    'mail:sendingDate': Sendedatum
+    openDate: Öffnungsdatum
+    opendate: Öffnungsdatum
+    senderEmail: Absender-E-Mail
+    senderemail: Absender-E-Mail
+    senderName: Absendername
+    sendername: Absendername
+    sendingDate: Sendedatum
+    sendingdate: Sendedatum
+    status: Status
+    totalOpened: Öffnungsrate
+    sendingRate: Senderate
+    mailStatistics: E-Mail-Statistiken
+    html: HTML
+    text: Text
+    subject: Betreff
+    toEmail: An E-Mail
+    toemail: An E-Mail
+    toName: An Name
+    toname: An Name
+    unsubscriptions: Abmeldungen
+    statistics: Statistiken
+    sendtoerrors: An fehlerhafte E-Mail-Adressen senden
+    jsonattachement: Anhänge
+    totalLinkOpening: Anzahl der geöffneten Links
+    link: Link
+    url: URL
+    nbopenings: Anzahl der Öffnungen
+    nbuniqueopenings: Anzahl der eindeutigen Öffnungen
+    nbopeningsLinks: Anzahl der Linköffnungen
+    linkOpeningRate: Linköffnungsrate
+    firstLinkOpening: Erstes Öffnungsdatum
+    lastLinkOpening: Letztes Öffnungsdatum
+    unsubscribedate: Abmeldedatum
+    group:
+        template_informations: Informationen
+        template_content: Inhalt
+        template_options: Optionen
+    email: E-Mail
+    nberror: Anzahl der Fehler
+    date: Datum
+    content: Inhalt
+    custombounceemail: Benutzerdefinierte Bounce-E-Mail
+    data: Daten
+
+title:
+    dashboard: Dashboard
+    totalToSend: Zu sendende E-Mails
+    totalError: Fehlerhafte E-Mails
+    totalUnsubscribed: Gesamt abgemeldet
+    totalLinkOpened: Gesamt geöffnete Links
+    totalOpened: Öffnungsrate
+    totalSended: Gesendete E-Mails
+
+status:
+    error: Fehler
+    draft: Entwurf
+    sending: Senden
+    sent: Gesendet
+    unsubscribed: Abgemeldet
+    cancelled: Abgebrochen
+
+menu:
+    lle_hermes:
+        hermes: Hermes
+
+pagination:
+    first: "Erste"
+    previous: "Vorherige"
+    next: "Nächste"
+    last: "Letzte"
+    firstPage: "Erste Seite"
+    previousPage: "Vorherige Seite"
+    nextPage: "Nächste Seite"
+    lastPage: "Letzte Seite"
+    goToPage: "Gehe zu Seite %nb%"
+    items: "E-Mails"
+    to: "bis"
+    of: "von"
+    noItem: "Keine E-Mails gefunden"
+    limit: "Anzahl der E-Mails"
+
+text:
+    confirmUnsubscribtionQuestion: Möchten Sie die folgende E-Mail-Adresse wirklich abmelden?
+    confirmUnsubscribtion: Ja, abmelden
+    cancelUnsubscribtion: Nein, abbrechen
+    errorOccured: "Ein Fehler ist aufgetreten: Token-Diskrepanz"
+    unsubscribtionConfirmed: Abmeldung bestätigt, Sie können dieses Fenster schließen
+    unsubscribtionCancelled: Abmeldung abgebrochen, Sie können dieses Fenster schließen
+    alreadyUnsubscribe: Sie haben sich bereits abgemeldet, Sie können dieses Fenster schließen
+    percentMailSent: '%nb%% gesendet'
+    percentMailUnsubscribed: '%nb%% abgemeldet'
+    percentMailError: '%nb%% Fehler'
+
+flash:
+    copyAlreadyExist: Eine Kopie dieser Vorlage existiert bereits, bitte bearbeiten Sie den Code der Kopie und versuchen Sie es erneut
+    mail_sent: '%nb% / %nbTotal% E-Mails gesendet'
+    copy_for_tenants: '%count% kopierte Vorlagen'
+    no_email: Es wurde keine E-Mail-Adresse angegeben
+    not_owner:
+        email: Keine E-Mail gefunden
+        recipient: Kein Empfänger gefunden
+
+modal:
+    action:
+        cancel: Abbrechen
+        send: Senden
+    message:
+        sendTestMail: Test-E-Mail senden an
