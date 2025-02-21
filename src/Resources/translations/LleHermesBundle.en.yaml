@@ -27,10 +27,13 @@ crud:
             hermes_email_error: Error email %entity%
             hermes_error: Error %entity%
             hermes_unsubscribe_email: Unsubscribed %entity%
+            hermes_personalized_template: Template %entity%
         edit:
             hermes_template: Edit template %entity%
+            hermes_personalized_template: Edit template %entity%
         new:
             hermes_template: Create template
+            hermes_personalized_template: Create template
     action:
         duplicate: Duplicate
         copy_for_tenant: Copy for personalization

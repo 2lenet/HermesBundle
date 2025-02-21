@@ -27,10 +27,13 @@ crud:
             hermes_email_error: Fehlerhafte E-Mail %entity%
             hermes_error: Fehler %entity%
             hermes_unsubscribe_email: Abgemeldet %entity%
+            hermes_personalized_template: Vorlage %entity%
         edit:
             hermes_template: Vorlage %entity% bearbeiten
+            hermes_personalized_template: Vorlage %entity% bearbeiten
         new:
             hermes_template: Vorlage erstellen
+            hermes_personalized_template: Vorlage erstellen
     action:
         duplicate: Duplizieren
         copy_for_tenant: Für Personalisierung kopieren
