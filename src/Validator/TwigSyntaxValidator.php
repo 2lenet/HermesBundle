@@ -43,6 +43,7 @@ class TwigSyntaxValidator extends ConstraintValidator
         
         // the argument must be a string or an object implementing __toString()
         $this->context->buildViolation($constraint->message)
+            ->setTranslationDomain('LleHermesBundle')
             ->addViolation();
     }
 }
