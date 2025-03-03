@@ -168,3 +168,7 @@ modal:
         send: Senden
     message:
         sendTestMail: Test-E-Mail senden an
+
+validator:
+    twig_syntax:
+        error: Die Vorlage hat Syntaxfehler

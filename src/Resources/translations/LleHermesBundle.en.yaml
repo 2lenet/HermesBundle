@@ -168,3 +168,7 @@ modal:
         send: Send
     message:
         sendTestMail: Send a test mail to
+
+validator:
+    twig_syntax:
+        error: The template has syntax errors
