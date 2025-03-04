@@ -38,10 +38,9 @@ class AttachmentService
         foreach ($mailDto->getAttachments() as $attachment) {
             $attachments[] = $this->saveAttachment($attachment, $mail);
         }
-
-        $manager = $this->entityFileLoader->get('attached_file');
-        foreach ($manager->get($mail->getTemplate()) as $file) {
-            if ($mail->getTemplate()) {
+        if ($mail->getTemplate()) {
+            $manager = $this->entityFileLoader->get('attached_file');
+            foreach ($manager->get($mail->getTemplate()) as $file) {
                 $attachment = new StringAttachmentDto(
                     $manager->read($file),
                     (string) $file->getName(),
