@@ -141,7 +141,7 @@ class MailBuilder
                     if (!$link) {
                         $link = new Link();
                         $link->setMail($mail);
-                        $link->setUrl($matches[2]);
+                        $link->setUrl(htmlspecialchars_decode($matches[2]));
                         $this->em->persist($link);
                         $this->em->flush();
                     }
