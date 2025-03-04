@@ -5,6 +5,7 @@ namespace Lle\HermesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\TemplateRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TemplateRepository::class)]
@@ -12,29 +13,36 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'tenant_id_idx', columns: ['tenant_id'])]
 class Template implements MultiTenantInterface
 {
+    public const TEMPLATE_API_GROUP = 'template-api';
+
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    #[Groups([self::TEMPLATE_API_GROUP])]
     protected ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[Groups([self::TEMPLATE_API_GROUP])]
     protected string $libelle;
 
     #[ORM\Column(type: 'string', length: 1024)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 1024)]
+    #[Groups([self::TEMPLATE_API_GROUP])]
     protected string $subject;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
+    #[Groups([self::TEMPLATE_API_GROUP])]
     protected ?string $senderName = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
+    #[Groups([self::TEMPLATE_API_GROUP])]
     protected string $senderEmail;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -43,6 +51,7 @@ class Template implements MultiTenantInterface
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[Groups([self::TEMPLATE_API_GROUP])]
     protected string $code;
 
     #[ORM\Column(type: 'text', nullable: true)]
