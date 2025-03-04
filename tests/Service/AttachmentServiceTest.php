@@ -2,6 +2,7 @@
 
 namespace App\Tests\Service;
 
+use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Dto\Base64AttachmentDto;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Model\MailDto;
@@ -21,8 +22,11 @@ class AttachmentServiceTest extends TestCase
             'lle_hermes.root_dir' => __DIR__ . '/../',
             'lle_hermes.attachment_path' => 'data/attachments/',
         ]);
+        $fileLoader = $this->getMockBuilder(EntityFileLoader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->attachmentService = new AttachmentService($parameters);
+        $this->attachmentService = new AttachmentService($parameters, $fileLoader);
     }
 
     protected function tearDown(): void

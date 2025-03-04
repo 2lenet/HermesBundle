@@ -4,7 +4,6 @@ namespace Lle\HermesBundle\Service;
 
 use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Contracts\AttachmentInterface;
-use Lle\HermesBundle\Dto\ResourceAttachmentDto;
 use Lle\HermesBundle\Dto\StringAttachmentDto;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\AttachmentCreationException;
@@ -42,12 +41,14 @@ class AttachmentService
 
         $manager = $this->entityFileLoader->get('attached_file');
         foreach ($manager->get($mail->getTemplate()) as $file) {
-            $attachment = new StringAttachmentDto(
-                $manager->read($file),
-                $file->getName(),
-                $file->getMimeType()
-            );
-            $attachments[] = $this->saveAttachment($attachment, $mail);
+            if ($mail->getTemplate()) {
+                $attachment = new StringAttachmentDto(
+                    $manager->read($file),
+                    (string) $file->getName(),
+                    (string) $file->getMimeType()
+                );
+                $attachments[] = $this->saveAttachment($attachment, $mail);
+            }
         }
 
         $mail->setAttachement($attachments);
