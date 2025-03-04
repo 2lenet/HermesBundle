@@ -19,6 +19,7 @@
         "php": "^8.0",
         "ext-imap": "*",
         "2lenet/crudit-bundle": "^1.5.11",
+        "2lenet/entity-file-bundle": "^1.1.12",
         "doctrine/collections": "^1.0 || ^2.0",
         "doctrine/common": "^2.13 || ^3.0",
         "doctrine/event-manager": "^1.0 || ^2.0",

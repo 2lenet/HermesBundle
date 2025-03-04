@@ -47,6 +47,7 @@ tab:
     links: Links
     linkOpening: Geöffnete Links
     errors: Fehler
+    attached_files: Angehängte Dateien
 
 export:
     csv: Csv

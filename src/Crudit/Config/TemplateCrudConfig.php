@@ -10,6 +10,7 @@ use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Path;
+use Lle\EntityFileBundle\Crudit\Brick\EntityFileBrickConfig;
 use Lle\HermesBundle\Crudit\Datasource\TemplateDatasource;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -98,6 +99,13 @@ class TemplateCrudConfig extends AbstractCrudConfig
         }
 
         return $actions;
+    }
+
+    public function getTabs(): array
+    {
+        return [
+            "tab.attached_files" => EntityFileBrickConfig::new("attached_file"),
+        ];
     }
 
     public function getRootRoute(): string
