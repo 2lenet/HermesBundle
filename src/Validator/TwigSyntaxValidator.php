@@ -37,13 +37,10 @@ class TwigSyntaxValidator extends ConstraintValidator
             $template = $this->twig->createTemplate($value);
             $this->twig->render($template);
             $this->twig->enableStrictVariables();
-            return;
         } catch (SyntaxError) {
+            $this->context->buildViolation($constraint->message)
+                ->setTranslationDomain('LleHermesBundle')
+                ->addViolation();
         }
-
-        // the argument must be a string or an object implementing __toString()
-        $this->context->buildViolation($constraint->message)
-            ->setTranslationDomain('LleHermesBundle')
-            ->addViolation();
     }
 }
