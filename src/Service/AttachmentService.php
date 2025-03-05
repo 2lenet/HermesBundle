@@ -4,6 +4,7 @@ namespace Lle\HermesBundle\Service;
 
 use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Contracts\AttachmentInterface;
+use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
 use Lle\HermesBundle\Dto\StringAttachmentDto;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\AttachmentCreationException;
@@ -39,7 +40,7 @@ class AttachmentService
             $attachments[] = $this->saveAttachment($attachment, $mail);
         }
         if ($mail->getTemplate()) {
-            $manager = $this->entityFileLoader->get('attached_file');
+            $manager = $this->entityFileLoader->get(TemplateCrudConfig::ATTACHED_FILE_CONFIG);
             foreach ($manager->get($mail->getTemplate()) as $file) {
                 $attachment = new StringAttachmentDto(
                     $manager->read($file),

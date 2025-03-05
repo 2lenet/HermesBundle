@@ -18,6 +18,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
 {
     public const ACTION_DUPLICATE = 'duplicate';
     public const ACTION_COPY_FOR_TENANT = 'copy_for_tenant';
+    pubilc const ATTACHED_FILE_CONFIG = 'attached_file';
 
     public function __construct(
         TemplateDatasource $datasource,
@@ -104,7 +105,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
     public function getTabs(): array
     {
         return [
-            "tab.attached_files" => EntityFileBrickConfig::new("attached_file"),
+            "tab.attached_files" => EntityFileBrickConfig::new(self::ATTACHED_FILE_CONFIG),
         ];
     }
 
