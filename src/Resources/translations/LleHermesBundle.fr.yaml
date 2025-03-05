@@ -169,3 +169,7 @@ modal:
         send: Envoyer
     message:
         sendTestMail: Envoyer un mail de test à
+
+validator:
+    twig_syntax:
+        error: Le modèle présente des erreurs de syntaxe

@@ -5,6 +5,7 @@ namespace Lle\HermesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Validator as HermesAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TemplateRepository::class)]
@@ -38,6 +39,7 @@ class Template implements MultiTenantInterface
     protected string $senderEmail;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[HermesAssert\TwigSyntax]
     protected ?string $text = null;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -46,6 +48,7 @@ class Template implements MultiTenantInterface
     protected string $code;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[HermesAssert\TwigSyntax]
     protected ?string $html = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
