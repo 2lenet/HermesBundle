@@ -2,8 +2,10 @@
 
 namespace App\Tests\Service;
 
+use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Dto\Base64AttachmentDto;
 use Lle\HermesBundle\Entity\Mail;
+use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Service\AttachmentService;
 use PHPUnit\Framework\TestCase;
@@ -21,8 +23,11 @@ class AttachmentServiceTest extends TestCase
             'lle_hermes.root_dir' => __DIR__ . '/../',
             'lle_hermes.attachment_path' => 'data/attachments/',
         ]);
+        $fileLoader = $this->getMockBuilder(EntityFileLoader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->attachmentService = new AttachmentService($parameters);
+        $this->attachmentService = new AttachmentService($parameters, $fileLoader);
     }
 
     protected function tearDown(): void
@@ -79,10 +84,12 @@ class AttachmentServiceTest extends TestCase
 
     protected function createMail(int $id): Mail
     {
+        $template = new Template();
         $mail = new Mail();
         $mail->setId($id)
             ->setSubject('subject')
-            ->setStatus(Mail::STATUS_DRAFT);
+            ->setStatus(Mail::STATUS_DRAFT)
+            ->setTemplate($template);
 
         return $mail;
     }

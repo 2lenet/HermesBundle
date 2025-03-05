@@ -2,7 +2,10 @@
 
 namespace Lle\HermesBundle\Service;
 
+use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Contracts\AttachmentInterface;
+use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
+use Lle\HermesBundle\Dto\StringAttachmentDto;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\AttachmentCreationException;
 use Lle\HermesBundle\Model\MailDto;
@@ -16,8 +19,10 @@ class AttachmentService
     protected string $attachmentsPath;
     protected string $rootDir;
 
-    public function __construct(ParameterBagInterface $parameters)
-    {
+    public function __construct(
+        ParameterBagInterface $parameters,
+        protected EntityFileLoader $entityFileLoader,
+    ) {
         /** @var string $rootDir */
         $rootDir = $parameters->get('lle_hermes.root_dir');
         $this->rootDir = $rootDir;
@@ -33,6 +38,17 @@ class AttachmentService
 
         foreach ($mailDto->getAttachments() as $attachment) {
             $attachments[] = $this->saveAttachment($attachment, $mail);
+        }
+        if ($mail->getTemplate()) {
+            $manager = $this->entityFileLoader->get(TemplateCrudConfig::ATTACHED_FILE_CONFIG);
+            foreach ($manager->get($mail->getTemplate()) as $file) {
+                $attachment = new StringAttachmentDto(
+                    $manager->read($file),
+                    (string) $file->getName(),
+                    (string) $file->getMimeType()
+                );
+                $attachments[] = $this->saveAttachment($attachment, $mail);
+            }
         }
 
         $mail->setAttachement($attachments);

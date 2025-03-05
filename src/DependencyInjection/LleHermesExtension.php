@@ -6,6 +6,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
 /**
  * Class LleHermesExtension
@@ -13,7 +14,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  *
  * @author 2LE <2le@2le.net>
  */
-class LleHermesExtension extends Extension
+class LleHermesExtension extends Extension implements PrependExtensionInterface
 {
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -35,5 +36,18 @@ class LleHermesExtension extends Extension
         $container->setParameter('lle_hermes.menu_icons', $processedConfig['menu_icons']);
         $container->setParameter('lle_hermes.recipient_error_retry', $processedConfig['recipient_error_retry']);
         $container->setParameter('lle_hermes.tenant_class', $processedConfig['tenant_class']);
+    }
+
+    public function prepend(ContainerBuilder $container): void
+    {
+        $container->prependExtensionConfig("lle_entity_file", [
+            "configurations" => [
+                "attached_file" => [
+                    "class" => "Lle\\HermesBundle\\Entity\\Template",
+                    "storage_adapter" => "lle_entity_file.storage.default",
+                    "role" => "PUBLIC_ACCESS",
+                ],
+            ],
+        ]);
     }
 }

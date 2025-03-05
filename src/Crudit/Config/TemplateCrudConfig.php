@@ -10,6 +10,7 @@ use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Path;
+use Lle\EntityFileBundle\Crudit\Brick\EntityFileBrickConfig;
 use Lle\HermesBundle\Crudit\Datasource\TemplateDatasource;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -17,6 +18,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
 {
     public const ACTION_DUPLICATE = 'duplicate';
     public const ACTION_COPY_FOR_TENANT = 'copy_for_tenant';
+    public const ATTACHED_FILE_CONFIG = 'attached_file';
 
     public function __construct(
         TemplateDatasource $datasource,
@@ -98,6 +100,13 @@ class TemplateCrudConfig extends AbstractCrudConfig
         }
 
         return $actions;
+    }
+
+    public function getTabs(): array
+    {
+        return [
+            "tab.attached_files" => EntityFileBrickConfig::new(self::ATTACHED_FILE_CONFIG),
+        ];
     }
 
     public function getRootRoute(): string
