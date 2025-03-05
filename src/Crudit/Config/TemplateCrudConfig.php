@@ -18,7 +18,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
 {
     public const ACTION_DUPLICATE = 'duplicate';
     public const ACTION_COPY_FOR_TENANT = 'copy_for_tenant';
-    pubilc const ATTACHED_FILE_CONFIG = 'attached_file';
+    public const ATTACHED_FILE_CONFIG = 'attached_file';
 
     public function __construct(
         TemplateDatasource $datasource,
