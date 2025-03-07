@@ -29,7 +29,7 @@ class Mailer
         $template = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {
             if (!$tenantId) {
-                $tenantId = $this->multiTenantManager->getTenantId();
+                $tenantId = $mail->getTenantId() ?? $this->multiTenantManager->getTenantId();
             }
             $template = $this->templateRepository->findOneBy(['code' => $mail->getTemplate(), 'tenantId' => $tenantId]);
         }
