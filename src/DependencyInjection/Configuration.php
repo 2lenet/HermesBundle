@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
         $children->scalarNode('menu_icons')->defaultTrue()->end();
         $children->scalarNode('recipient_error_retry')->defaultValue(3)->end();
         $children->scalarNode('tenant_class')->defaultNull()->end();
+        $children->scalarNode('attachment_nb_days')->defaultValue(365)->end();
 
         return $treeBuilder;
     }

@@ -95,6 +95,9 @@ class Mail implements MultiTenantInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     protected ?string $dsn = null;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    protected bool $attachmentDeleted = false;
+
     public function __construct()
     {
         $this->recipients = new ArrayCollection();
@@ -506,6 +509,18 @@ class Mail implements MultiTenantInterface
     public function setDsn(?string $dsn): self
     {
         $this->dsn = $dsn;
+
+        return $this;
+    }
+
+    public function hasAttachmentDeleted(): bool
+    {
+        return $this->attachmentDeleted;
+    }
+
+    public function setAttachmentDeleted(bool $attachmentDeleted): self
+    {
+        $this->attachmentDeleted = $attachmentDeleted;
 
         return $this;
     }
