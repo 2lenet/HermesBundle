@@ -14,7 +14,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 #[AsCommand(name: 'lle:hermes:delete_attachments')]
-class DeleteAttachments extends Command
+class DeleteAttachmentsCommand extends Command
 {
     public function __construct(
         protected AttachmentService $attachmentService,
