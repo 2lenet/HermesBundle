@@ -6,8 +6,8 @@ namespace Lle\HermesBundle\Crudit\Datasource\Filterset;
 
 use Lle\CruditBundle\Datasource\AbstractFilterSet;
 use Lle\CruditBundle\Filter\FilterType\ChoiceFilterType;
-use Lle\CruditBundle\Filter\FilterType\DateFilterType;
 use Lle\CruditBundle\Filter\FilterType\EntityFilterType;
+use Lle\CruditBundle\Filter\FilterType\PeriodeFilterType;
 use Lle\CruditBundle\Filter\FilterType\StringFilterType;
 use Lle\HermesBundle\Entity\Recipient;
 
@@ -26,8 +26,8 @@ class RecipientFilterSet extends AbstractFilterSet
                 Recipient::STATUS_UNSUBSCRIBED,
                 Recipient::STATUS_ERROR,
             ]),
-            DateFilterType::new('mail:sendingDate'),
-            DateFilterType::new('openDate'),
+            PeriodeFilterType::new('mail:sendingDate'),
+            PeriodeFilterType::new('openDate'),
         ];
     }
 }

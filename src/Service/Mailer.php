@@ -18,13 +18,14 @@ class Mailer
         protected MailFactory $mailFactory,
         protected MultiTenantManager $multiTenantManager,
         protected TemplateRepository $templateRepository,
+        protected Sender $sender,
     ) {
     }
 
     /**
      * @throws TemplateNotFoundException
      */
-    public function create(MailDto $mail, string $status = Mail::STATUS_SENDING, ?int $tenantId = null): void
+    public function create(MailDto $mail, string $status = Mail::STATUS_SENDING, ?int $tenantId = null): Mail
     {
         $template = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {
@@ -53,13 +54,18 @@ class Mailer
         $mailObj->setStatus($status);
         $this->em->persist($mailObj);
         $this->em->flush();
+
+        return $mailObj;
     }
 
     /**
-     * @deprecated Use create() method instead
+     * This method allows you to send the mail immediately. create() is still preferred for performance reasons,
+     * but in some cases (e.g. user waiting) it may be useful.
      */
-    public function send(MailDto $mail, string $status = Mail::STATUS_SENDING): void
+    public function send(MailDto $mail, string $status = Mail::STATUS_DRAFT): void
     {
-        $this->create($mail, $status);
+        $mailObj = $this->create($mail, $status);
+
+        $this->sender->sendAllRecipients($mailObj->getRecipients()->toArray());
     }
 }
