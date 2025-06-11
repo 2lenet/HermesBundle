@@ -25,9 +25,16 @@ class DeleteAttachmentsCommand extends Command
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (!$this->lock()) {
+            $output->writeln('The command is already running in another process');
+
+            return Command::FAILURE;
+        }
+
         $io = new SymfonyStyle($input, $output);
 
-        $nbDays = $this->parameters->get('lle_hermes.attachment_nb_days');
+        /** @var string $nbDays */
+        $nbDays = $this->parameters->get('lle_hermes.attachment_nb_days_before_deletion');
         $date = new DateTime('-' . $nbDays . ' days');
         $mails = $this->em->getRepository(Mail::class)->findOldMails($date);
         $count = 0;
@@ -36,9 +43,15 @@ class DeleteAttachmentsCommand extends Command
             $this->attachmentService->deleteAttachements($mail);
             $mail->setAttachmentDeleted(true);
             $count++;
+
+            if ($count % 1000 === 0) {
+                $this->em->flush();
+            }
         }
 
         $this->em->flush();
+
+
 
         $io->success("Success attachments deleted for $count mail(s)");
 

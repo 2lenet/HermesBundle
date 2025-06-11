@@ -2,7 +2,7 @@
     {% if resource.attachmentDeleted %}
         {% for attachement in value %}
             <p>
-                {{ attachement["name"] }} (deleted)
+                {{ attachement["name"] }} {{ text.deleted|trans({}, 'LleHermesBundle') }}
             </p> <br>
         {% endfor %}
     {% else %}
