@@ -12,10 +12,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Console\Command\LockableTrait;
 
 #[AsCommand(name: 'lle:hermes:delete_attachments')]
 class DeleteAttachmentsCommand extends Command
 {
+    use LockableTrait;
+
     public function __construct(
         protected AttachmentService $attachmentService,
         protected EntityManagerInterface $em,

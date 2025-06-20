@@ -96,7 +96,7 @@ class Mail implements MultiTenantInterface
     protected ?string $dsn = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
-    protected bool $attachmentDeleted = false;
+    protected bool $attachmentsDeleted = false;
 
     public function __construct()
     {
@@ -513,14 +513,14 @@ class Mail implements MultiTenantInterface
         return $this;
     }
 
-    public function hasAttachmentDeleted(): bool
+    public function hasAttachmentsDeleted(): bool
     {
-        return $this->attachmentDeleted;
+        return $this->attachmentsDeleted;
     }
 
-    public function setAttachmentDeleted(bool $attachmentDeleted): self
+    public function setAttachmentDeleted(bool $attachmentsDeleted): self
     {
-        $this->attachmentDeleted = $attachmentDeleted;
+        $this->attachmentsDeleted = $attachmentsDeleted;
 
         return $this;
     }
