@@ -104,6 +104,7 @@ field:
     content: Inhalt
     custombounceemail: Benutzerdefinierte Bounce-E-Mail
     data: Daten
+    errormessage: Fehlermeldung
 
 title:
     dashboard: Dashboard

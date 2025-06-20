@@ -40,6 +40,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
         $openDate = Field::new('openDate');
         $linkOpening = Field::new('totalLinkOpening')->setLabel('field.nbopenings')->setSortable(false);
         $data = Field::new('data', 'string')->setTemplate('@LleHermes/crud/recipient/_data.html.twig');
+        $errorMessage = Field::new('errorMessage');
 
         if ($key == CrudConfigInterface::INDEX) {
             return [
@@ -58,6 +59,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
                 $status,
                 $openDate,
                 $linkOpening,
+                $errorMessage,
                 $data,
             ];
         }
