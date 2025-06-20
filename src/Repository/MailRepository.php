@@ -59,4 +59,15 @@ class MailRepository extends ServiceEntityRepository
 
         return $paginator;
     }
+
+    public function findOldMails(\DateTime $date): array
+    {
+        return $this->createQueryBuilder("m")
+            ->orWhere("m.sendingDate IS NOT NULL AND m.sendingDate < :date")
+            ->orWhere("m.status LIKE '" . Mail::STATUS_ERROR . "' AND m.createdAt < :date")
+            ->andWhere("m.attachmentDeleted = false")
+            ->setParameter("date", $date)
+            ->getQuery()
+            ->getResult();
+    }
 }
