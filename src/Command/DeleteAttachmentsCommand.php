@@ -42,7 +42,7 @@ class DeleteAttachmentsCommand extends Command
         $mails = $this->em->getRepository(Mail::class)->findOldMails($date);
         $count = 0;
 
-        foreach($mails as $mail) {
+        foreach ($mails as $mail) {
             $this->attachmentService->deleteAttachements($mail);
             $mail->setAttachmentDeleted(true);
             $count++;
