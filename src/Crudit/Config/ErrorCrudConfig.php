@@ -28,7 +28,6 @@ class ErrorCrudConfig extends AbstractCrudConfig
     {
         $date = Field::new('date');
         $subject = Field::new('subject');
-//        $message = Field::new('message');
         $content = Field::new('content')->setCssClass('col-12');
 
         if ($key == CrudConfigInterface::INDEX) {
@@ -42,7 +41,6 @@ class ErrorCrudConfig extends AbstractCrudConfig
             return [
                 $date,
                 $subject,
-//                $message,
                 $content,
             ];
         }
