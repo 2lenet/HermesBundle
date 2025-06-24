@@ -105,6 +105,7 @@ field:
     content: Contenu
     custombounceemail: E-mail bounce personnalisé
     data: Données
+    errormessage: Message d'erreur
 
 title:
     dashboard: Tableau de bord
