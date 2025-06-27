@@ -65,4 +65,17 @@ class RecipientRepository extends ServiceEntityRepository
 
         return (int)$result;
     }
+
+    public function countStatusesByMail(Mail $mail): array
+    {
+        return $this->createQueryBuilder('r', 'r.status')
+            ->select('r.status AS status, COUNT(r.id) AS count')
+            ->where('r.mail = :mail')
+            ->andWhere('r.test = :test')
+            ->setParameter('mail', $mail)
+            ->setParameter('test', false)
+            ->groupBy('r.status')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
