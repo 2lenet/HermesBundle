@@ -3,9 +3,7 @@
 namespace Lle\HermesBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
-use Lle\HermesBundle\Entity\EmailError;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 
@@ -42,15 +40,6 @@ class RecipientRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
-    }
-
-    public function disableUnsubscribed(): void
-    {
-        $this->createQueryBuilder('e')
-            ->update()
-            ->set('e.status', Recipient::STATUS_UNSUBSCRIBED)
-            ->join(EmailError::class, 'ee', Join::WITH, 'ee.mail = e.toEmail')
-            ->getQuery()->execute();
     }
 
     public function countOpenRecipients(Mail $mail): int
