@@ -147,21 +147,25 @@ class Sender
     {
         $this->em->flush();
 
-        $counts = $this->recipientRepository->countStatusesByMail($mail);
-
         $mail
-            ->setTotalSended($counts['sent']['count'])
-            ->setTotalUnsubscribed($counts['unsubscribed']['count'])
-            ->setTotalError($counts['error']['count'])
+            ->setTotalSended($mail->getRecipients()->filter(function (Recipient $recipient) {
+                return $recipient->getStatus() === Recipient::STATUS_SENT;
+            })->count())
+            ->setTotalUnsubscribed($mail->getRecipients()->filter(function (Recipient $recipient) {
+                return $recipient->getStatus() === Recipient::STATUS_UNSUBSCRIBED;
+            })->count())
+            ->setTotalError($mail->getRecipients()->filter(function (Recipient $recipient) {
+                return $recipient->getStatus() === Recipient::STATUS_ERROR;
+            })->count())
             ->setTotalToSend($mail->getRecipients()->count());
 
         $totalRecipientsToSend = $mail->getTotalToSend() - $mail->getTotalUnsubscribed();
         $totalRecipientsSent = $mail->getTotalSended() + $mail->getTotalError();
 
-        if ($totalRecipientsToSend === $mail->getTotalToSend()) {
-            $mail->setStatus(Mail::STATUS_SENT);
-        } elseif ($mail->getTotalError() === $totalRecipientsSent) {
+        if ($mail->getTotalError() === $totalRecipientsToSend) {
             $mail->setStatus(Mail::STATUS_ERROR);
+        } elseif ($totalRecipientsSent === $totalRecipientsToSend) {
+            $mail->setStatus(Mail::STATUS_SENT);
         }
 
         $this->em->flush();
