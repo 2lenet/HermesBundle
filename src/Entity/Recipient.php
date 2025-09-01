@@ -64,7 +64,7 @@ class Recipient implements MultiTenantInterface
     #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $tenantId = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'text', length: 255, nullable: true)]
     protected ?string $errorMessage = null;
 
 
