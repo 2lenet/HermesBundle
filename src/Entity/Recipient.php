@@ -64,6 +64,10 @@ class Recipient implements MultiTenantInterface
     #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $tenantId = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $errorMessage = null;
+
+
     public function __construct()
     {
         $this->linkOpenings = new ArrayCollection();
@@ -225,6 +229,18 @@ class Recipient implements MultiTenantInterface
     public function setTenantId(?int $tenantId): self
     {
         $this->tenantId = $tenantId;
+
+        return $this;
+    }
+
+    public function getErrorMessage(): ?string
+    {
+        return $this->errorMessage;
+    }
+
+    public function setErrorMessage(?string $errorMessage): self
+    {
+        $this->errorMessage = $errorMessage;
 
         return $this;
     }

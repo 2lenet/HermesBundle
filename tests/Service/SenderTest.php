@@ -9,6 +9,7 @@ use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Repository\EmailErrorRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
+use Lle\HermesBundle\Service\ErrorLogger;
 use Lle\HermesBundle\Service\MailBuilder;
 use Lle\HermesBundle\Service\Sender;
 use PHPUnit\Framework\TestCase;
@@ -37,6 +38,7 @@ class SenderTest extends TestCase
             $this->getMockParameterBag(),
             $this->getMockRecipientRepository(),
             $this->getMockUnsubscribeEmailRepository(),
+            $this->getMockErrorLogger(),
         );
         self::assertEquals(1, $sender->sendAllMails());
     }
@@ -61,6 +63,11 @@ class SenderTest extends TestCase
     protected function getMockParameterBag(): ParameterBagInterface
     {
         return $this->createMock(ParameterBagInterface::class);
+    }
+
+    protected function getMockErrorLogger(): ErrorLogger
+    {
+        return $this->createMock(ErrorLogger::class);
     }
 
     protected function getMockRecipientRepository(): RecipientRepository
