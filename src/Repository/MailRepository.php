@@ -67,7 +67,7 @@ class MailRepository extends ServiceEntityRepository
             ->orWhere("m.status LIKE :status AND m.createdAt < :date")
             ->andWhere("m.attachmentsDeleted = false")
             ->setParameter("date", $date)
-            ->seParameter("status", Mail::STATUS_ERROR)
+            ->setParameter("status", Mail::STATUS_ERROR)
             ->getQuery()
             ->getResult();
     }
