@@ -518,7 +518,7 @@ class Mail implements MultiTenantInterface
         return $this->attachmentsDeleted;
     }
 
-    public function setAttachmentDeleted(bool $attachmentsDeleted): self
+    public function setAttachmentsDeleted(bool $attachmentsDeleted): self
     {
         $this->attachmentsDeleted = $attachmentsDeleted;
 

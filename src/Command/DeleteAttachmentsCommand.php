@@ -44,7 +44,7 @@ class DeleteAttachmentsCommand extends Command
 
         foreach ($mails as $mail) {
             $this->attachmentService->deleteAttachements($mail);
-            $mail->setAttachmentDeleted(true);
+            $mail->setAttachmentsDeleted(true);
             $count++;
 
             if ($count % 1000 === 0) {
