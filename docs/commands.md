@@ -30,3 +30,14 @@ To increase the number of mails by batch, you can use the `--nb` option :
 ```bash
 bin/console lle:hermes:recover-errors --nb=100
 ```
+
+## Delete old attachments
+This command can be used to delete attachments of old emails
+
+
+```bash
+bin/console lle:hermes:delete_attachments
+```
+
+The number of days can be configured with the `attachment_nb_days` config.
+The default value is 365 days.

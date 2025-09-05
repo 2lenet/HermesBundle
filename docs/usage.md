@@ -80,6 +80,28 @@ public function sendUserMail(): void
 }
 ```
 
+## Send mail immediately
+
+If you want to send a mail without waiting for the cron command (e.g. an user did an action and is waiting for the mail) use the `send()` method:
+
+```php
+use Lle\HermesBundle\Model\MailDto;
+use Lle\HermesBundle\Service\Mailer;
+
+public function __construct(
+    private readonly Mailer $mailer,
+) {
+}
+
+public function sendUserMail(): void
+{
+    $mail = new MailDto();
+    // ...
+
+    $this->mailer->send($mail);
+}
+```
+
 ## Add attachment
 
 See [attachments](attachments.md).

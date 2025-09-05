@@ -30,15 +30,17 @@ class RecipientCrudConfig extends AbstractCrudConfig
      */
     public function getFields($key): array
     {
-        $mail = Field::new('mail', null, [
-            "route" => "lle_hermes_crudit_mail_show",
-        ])->setType(DoctrineEntityField::class);
+        $mail = Field::new('mail', DoctrineEntityField::class, [
+            'route' => 'lle_hermes_crudit_mail_show',
+            'routeRole' => 'ROLE_HERMES_MAIL_SHOW',
+        ]);
         $sendingDate = Field::new('toName');
         $toEmail = Field::new('toEmail');
         $status = Field::new('status')->setTemplate('@LleHermes/crud/_status.html.twig');
         $openDate = Field::new('openDate');
         $linkOpening = Field::new('totalLinkOpening')->setLabel('field.nbopenings')->setSortable(false);
         $data = Field::new('data', 'string')->setTemplate('@LleHermes/crud/recipient/_data.html.twig');
+        $errorMessage = Field::new('errorMessage');
 
         if ($key == CrudConfigInterface::INDEX) {
             return [
@@ -57,6 +59,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
                 $status,
                 $openDate,
                 $linkOpening,
+                $errorMessage,
                 $data,
             ];
         }

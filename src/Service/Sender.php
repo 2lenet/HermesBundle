@@ -12,7 +12,6 @@ use Lle\HermesBundle\Repository\EmailErrorRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 use Symfony\Component\Mailer\MailerInterface;
@@ -35,6 +34,7 @@ class Sender
         protected readonly ParameterBagInterface $parameters,
         protected readonly RecipientRepository $recipientRepository,
         protected readonly UnsubscribeEmailRepository $unsubscribeEmailRepository,
+        protected readonly ErrorLogger $errorLogger,
     ) {
     }
 
@@ -87,6 +87,7 @@ class Sender
             if ($template && !$template->hasSendToErrors()) {
                 if (in_array($recipient->getToEmail(), array_column($errorArray, 'email'))) {
                     $recipient->setStatus(Recipient::STATUS_ERROR);
+                    $this->errorLogger->logError('Email was not sent to recipient in error', $recipient);
                     $this->updateMail($mail);
 
                     continue;
@@ -131,12 +132,15 @@ class Sender
             }
 
             return true;
-        } catch (TransportExceptionInterface | RfcComplianceException) {
+        } catch (TransportExceptionInterface | RfcComplianceException $e) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
+            $this->errorLogger
+                ->logError('Transport or RFC error with message : ' . $e->getMessage(), $recipient);
 
             return false;
-        } catch (Exception) {
+        } catch (Exception $e) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
+            $this->errorLogger->logError('Generic error with message : ' . $e->getMessage(), $recipient);
             $mail->setStatus(Mail::STATUS_ERROR);
 
             return false;
@@ -147,27 +151,25 @@ class Sender
     {
         $this->em->flush();
 
-        $recipientsSent = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_SENT, 'mail' => $mail, 'test' => false]);
-        $mail->setTotalSended(count($recipientsSent));
-
-        $unsubscribedMails = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_UNSUBSCRIBED, 'mail' => $mail, 'test' => false]);
-        $mail->setTotalUnsubscribed(count($unsubscribedMails));
-
-        $errorMails = $this->recipientRepository
-            ->findBy(['status' => Recipient::STATUS_ERROR, 'mail' => $mail, 'test' => false]);
-        $mail->setTotalError(count($errorMails));
+        $mail
+            ->setTotalSended($mail->getRecipients()->filter(function (Recipient $recipient) {
+                return $recipient->getStatus() === Recipient::STATUS_SENT;
+            })->count())
+            ->setTotalUnsubscribed($mail->getRecipients()->filter(function (Recipient $recipient) {
+                return $recipient->getStatus() === Recipient::STATUS_UNSUBSCRIBED;
+            })->count())
+            ->setTotalError($mail->getRecipients()->filter(function (Recipient $recipient) {
+                return $recipient->getStatus() === Recipient::STATUS_ERROR;
+            })->count())
+            ->setTotalToSend($mail->getRecipients()->count());
 
         $totalRecipientsToSend = $mail->getTotalToSend() - $mail->getTotalUnsubscribed();
-        $totalRecipientsSended = $mail->getTotalSended() + $mail->getTotalError();
+        $totalRecipientsSent = $mail->getTotalSended() + $mail->getTotalError();
 
-        if ($totalRecipientsSended === $totalRecipientsToSend) {
+        if ($mail->getTotalError() === $totalRecipientsToSend) {
+            $mail->setStatus(Mail::STATUS_ERROR);
+        } elseif ($totalRecipientsSent === $totalRecipientsToSend) {
             $mail->setStatus(Mail::STATUS_SENT);
-        } else {
-            if ($mail->getTotalError() === $totalRecipientsToSend) {
-                $mail->setStatus(Mail::STATUS_ERROR);
-            }
         }
 
         $this->em->flush();
