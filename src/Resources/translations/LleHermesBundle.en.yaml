@@ -80,9 +80,9 @@ field:
     toemail: To email
     toName: To name
     toname: To name
-    unsubscriptions: Unsubscriptions
-    statistics: Statistics
-    sendtoerrors: Send to email addresses in error
+    unsubscriptions: Send to unsubscribed
+    statistics: Enable statistics tracking
+    sendtoerrors: Send to emails in error
     jsonattachement: Attachments
     totalLinkOpening: Number of links opened
     link: Link

@@ -80,8 +80,8 @@ field:
     toemail: An E-Mail
     toName: An Name
     toname: An Name
-    unsubscriptions: Abmeldungen
-    statistics: Statistiken
+    unsubscriptions: An Abgemeldete senden
+    statistics: Statistikverfolgung aktivieren
     sendtoerrors: An fehlerhafte E-Mail-Adressen senden
     jsonattachement: Anhänge
     totalLinkOpening: Anzahl der geöffneten Links
