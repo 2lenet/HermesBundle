@@ -81,9 +81,9 @@ field:
     toemail: À email
     toName: À nom
     toname: À nom
-    unsubscriptions: Désinscriptions
-    statistics: Statistiques
-    sendtoerrors: Envoyer aux adresses email en erreur
+    unsubscriptions: Envoyer aux désinscrits
+    statistics: Activer le suivi des statistiques
+    sendtoerrors: Envoyer aux mails en erreur
     jsonattachement: Pièces jointes
     totalLinkOpening: Nombre de liens ouverts
     link: Lien
