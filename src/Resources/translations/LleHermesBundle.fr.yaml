@@ -155,6 +155,7 @@ text:
     percentMailSent: '%nb%% envoyés'
     percentMailUnsubscribed: '%nb%% désinscrits'
     percentMailError: '%nb%% erreurs'
+    deleted: 'Supprimé'
 
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer
