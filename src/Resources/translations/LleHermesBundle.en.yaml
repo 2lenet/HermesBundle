@@ -19,6 +19,7 @@ crud:
             hermes_personalized_template: Personalized templates
             hermes_emailerror: Error emails
             hermes_unsubscribe_email: Unsubscribed
+            hermes_typetemplate: Template types
         show:
             hermes_template: Template %entity%
             hermes_mail: Mail %entity%
@@ -28,12 +29,15 @@ crud:
             hermes_error: Error %entity%
             hermes_unsubscribe_email: Unsubscribed %entity%
             hermes_personalized_template: Template %entity%
+            hermes_typetemplate: Template type %entity%
         edit:
             hermes_template: Edit template %entity%
             hermes_personalized_template: Edit template %entity%
+            hermes_typetemplate: Edit type template %entity%
         new:
             hermes_template: Create template
             hermes_personalized_template: Create template
+            hermes_typetemplate: Create type template
     action:
         duplicate: Duplicate
         copy_for_tenant: Copy for personalization
@@ -105,6 +109,8 @@ field:
     custombounceemail: Custom bounce email
     data: Data
     errormessage: Error message
+    unsubscriptionsallowed: Unsubscription allowed
+    typetemplate: Template type
 
 title:
     dashboard: Dashboard
@@ -174,3 +180,7 @@ modal:
 validator:
     twig_syntax:
         error: The template has syntax errors
+
+type_template:
+    can_delete:
+        templates: There are templates with this type.

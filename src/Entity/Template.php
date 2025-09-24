@@ -67,6 +67,9 @@ class Template implements MultiTenantInterface
     #[Assert\Email]
     protected ?string $customBounceEmail = null;
 
+    #[ORM\ManyToOne(targetEntity: TypeTemplate::class, inversedBy: 'templates')]
+    protected ?TypeTemplate $typeTemplate = null;
+
     public function __toString(): string
     {
         return sprintf('%s %s', $this->code, $this->getSubject());
@@ -224,6 +227,18 @@ class Template implements MultiTenantInterface
     public function setCustomBounceEmail(?string $customBounceEmail): self
     {
         $this->customBounceEmail = $customBounceEmail;
+
+        return $this;
+    }
+
+    public function getTypeTemplate(): ?TypeTemplate
+    {
+        return $this->typeTemplate;
+    }
+
+    public function setTypeTemplate(?TypeTemplate $typeTemplate): self
+    {
+        $this->typeTemplate = $typeTemplate;
 
         return $this;
     }

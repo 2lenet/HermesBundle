@@ -90,6 +90,14 @@ class HermesMenuProvider implements MenuProviderInterface
                 'ROLE_HERMES_UNSUBSCRIBEEMAIL_INDEX',
             ),
         );
+        $menu->addChild(
+            LinkElement::new(
+                'menu.lle_hermes_typetemplate',
+                Path::new('lle_hermes_crudit_typetemplate_index'),
+                ($hasIcons ? Icon::new('/bundles/llehermes/img/hermes.svg', Icon::TYPE_IMG) : null),
+                'ROLE_HERMES_TYPETEMPLATE_INDEX',
+            ),
+        );
 
         return [
             $menu,

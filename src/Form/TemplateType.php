@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Form;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Lle\CruditBundle\Form\Type\AutocompleteType;
 use Lle\CruditBundle\Form\Type\GroupType;
+use Lle\HermesBundle\Entity\TypeTemplate;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -22,10 +24,18 @@ class TemplateType extends AbstractType
             'inherit_data' => true,
         ])
             ->add('libelle', TextType::class, [
-                'attr' => ['class' => 'col-md-6'],
+                'attr' => ['class' => 'col-md-4'],
             ])
             ->add('code', TextType::class, [
-                'attr' => ['class' => 'col-md-6'],
+                'attr' => ['class' => 'col-md-4'],
+            ])
+            ->add('typeTemplate', AutocompleteType::class, [
+                'label' => 'field.typetemplate',
+                'translation_domain' => 'LleHermesBundle',
+                'class' => TypeTemplate::class,
+                'route' => 'lle_hermes_crudit_typetemplate_autocomplete',
+                'attr' => ['class' => 'col-md-4'],
+                'required' => false,
             ])
             ->add('senderName', TextType::class, [
                 'attr' => ['class' => 'col-md-6'],
