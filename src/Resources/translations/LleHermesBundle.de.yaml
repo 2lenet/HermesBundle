@@ -19,6 +19,7 @@ crud:
             hermes_personalized_template: Personalisierte Vorlagen
             hermes_emailerror: Fehlerhafte E-Mails
             hermes_unsubscribe_email: Abgemeldet
+            hermes_typetemplate: Modelltypen
         show:
             hermes_template: Vorlage %entity%
             hermes_mail: E-Mail %entity%
@@ -28,12 +29,15 @@ crud:
             hermes_error: Fehler %entity%
             hermes_unsubscribe_email: Abgemeldet %entity%
             hermes_personalized_template: Vorlage %entity%
+            hermes_typetemplate: Modelltyp %entity%
         edit:
             hermes_template: Vorlage %entity% bearbeiten
             hermes_personalized_template: Vorlage %entity% bearbeiten
+            hermes_typetemplate: Modelltyp %entity% bearbeiten
         new:
             hermes_template: Vorlage erstellen
             hermes_personalized_template: Vorlage erstellen
+            hermes_typetemplate: Modelltyp erstellen
     action:
         duplicate: Duplizieren
         copy_for_tenant: Für Personalisierung kopieren
@@ -56,6 +60,7 @@ export:
 field:
     code: Code
     libelle: Bezeichnung
+    label: Bezeichnung
     mail: E-Mail
     recipients: Empfänger
     recipient: Empfänger
@@ -105,6 +110,8 @@ field:
     custombounceemail: Benutzerdefinierte Bounce-E-Mail
     data: Daten
     errormessage: Fehlermeldung
+    unsubscriptionsallowed: Abmeldung möglich
+    typetemplate: Modelltyp
 
 title:
     dashboard: Dashboard
@@ -174,3 +181,7 @@ modal:
 validator:
     twig_syntax:
         error: Die Vorlage hat Syntaxfehler
+
+type_template:
+    can_delete:
+        templates: Es gibt Vorlagen mit diesem Typ.
