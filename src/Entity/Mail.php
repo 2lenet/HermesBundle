@@ -31,6 +31,16 @@ class Mail implements MultiTenantInterface
     #[Assert\NotBlank]
     protected ?Template $template;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    protected ?string $senderName = null;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
+    #[Assert\Email]
+    protected string $senderEmail;
+
     #[ORM\Column(type: 'json', nullable: false)]
     protected array $data = [];
 
@@ -237,6 +247,30 @@ class Mail implements MultiTenantInterface
     public function setTemplate(?Template $template): Mail
     {
         $this->template = $template;
+
+        return $this;
+    }
+
+    public function getSenderName(): ?string
+    {
+        return $this->senderName;
+    }
+
+    public function setSenderName(?string $senderName): Mail
+    {
+        $this->senderName = $senderName;
+
+        return $this;
+    }
+
+    public function getSenderEmail(): string
+    {
+        return $this->senderEmail;
+    }
+
+    public function setSenderEmail(string $senderEmail): Mail
+    {
+        $this->senderEmail = $senderEmail;
 
         return $this;
     }
