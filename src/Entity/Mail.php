@@ -35,11 +35,10 @@ class Mail implements MultiTenantInterface
     #[Assert\Length(max: 255)]
     protected ?string $senderName = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
-    protected string $senderEmail;
+    protected ?string $senderEmail = null;
 
     #[ORM\Column(type: 'json', nullable: false)]
     protected array $data = [];
@@ -263,12 +262,12 @@ class Mail implements MultiTenantInterface
         return $this;
     }
 
-    public function getSenderEmail(): string
+    public function getSenderEmail(): ?string
     {
         return $this->senderEmail;
     }
 
-    public function setSenderEmail(string $senderEmail): Mail
+    public function setSenderEmail(?string $senderEmail): Mail
     {
         $this->senderEmail = $senderEmail;
 
