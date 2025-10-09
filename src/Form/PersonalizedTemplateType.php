@@ -46,14 +46,7 @@ class PersonalizedTemplateType extends AbstractType
             'inherit_data' => true,
         ])
             ->add('subject', TextType::class)
-            ->add('html', CKEditorType::class, [
-                'config' => [
-                    'toolbar' => 'full',
-                    'fullPage' => true,
-                    'allowedContent' => true,
-                    'versionCheck' => false
-                ],
-                'label' => false,
+            ->add('html', TextareaType::class, [
                 'attr' => [
                     'rows' => 20,
                 ],

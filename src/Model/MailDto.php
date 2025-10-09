@@ -36,7 +36,7 @@ class MailDto
     /**
      * The person that sends the mail.
      */
-    protected ContactDto $from;
+    protected ?ContactDto $from = null;
 
     /**
      * The code of the template to use.
@@ -129,7 +129,7 @@ class MailDto
         return $this;
     }
 
-    public function getFrom(): ContactDto
+    public function getFrom(): ?ContactDto
     {
         return $this->from;
     }

@@ -41,6 +41,11 @@ class MailFactory
             $mail->setTenantId($tenantId);
         }
 
+        if ($mailDto->getFrom()) {
+            $mail->setSenderName($mailDto->getFrom()->getName());
+            $mail->setSenderEmail($mailDto->getFrom()->getAddress());
+        }
+
         $nbDest = 0;
         foreach ($mailDto->getTo() as $contactDto) {
             $recipient = $this->recipientFactory->createRecipientFromDto($contactDto, $tenantId);

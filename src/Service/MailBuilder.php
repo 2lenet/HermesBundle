@@ -55,7 +55,11 @@ class MailBuilder
         $context->setHost($domain);
         $context->setScheme('https');
 
-        $from = new Address((string)$mail->getTemplate()?->getSenderEmail(), $templater->getSenderName());
+        if ($mail->getSenderName() && $mail->getSenderEmail()) {
+            $from = new Address($mail->getSenderEmail(), $mail->getSenderName());
+        } else {
+            $from = new Address((string)$mail->getTemplate()?->getSenderEmail(), $templater->getSenderName());
+        }
 
         $email = new Email();
 
