@@ -62,6 +62,10 @@ class Mailer
      * This method allows you to send the mail immediately. create() is still preferred for performance reasons,
      * but in some cases (e.g. user waiting) it may be useful.
      */
+    /**
+     * @throws TemplateNotFoundException
+     * @throws NoMailFoundException
+     */
     public function send(MailDto $mail, string $status = Mail::STATUS_DRAFT): void
     {
         $mailObj = $this->create($mail, $status);
