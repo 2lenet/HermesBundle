@@ -5,6 +5,7 @@ namespace Lle\HermesBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
+use Lle\HermesBundle\Exception\NoMailFoundException;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Lle\HermesBundle\Service\AttachmentService;
