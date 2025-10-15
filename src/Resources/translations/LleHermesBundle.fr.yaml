@@ -19,6 +19,7 @@ crud:
             hermes_personalized_template: Templates personnalisés
             hermes_email_error: Emails en erreur
             hermes_unsubscribe_email: Désinscrits
+            hermes_typetemplate: Types de modèle
         show:
             hermes_template: Modèle %entity%
             hermes_mail: Mail %entity%
@@ -28,12 +29,15 @@ crud:
             hermes_error: Erreur %entity%
             hermes_unsubscribe_email: Désinscrit %entity%
             hermes_personalized_template: Template %entity%
+            hermes_typetemplate: Type de modèle %entity%
         edit:
             hermes_template: Édition modèle %entity%
-            hermes_personalized_template: Édition modèle  %entity%
+            hermes_personalized_template: Édition modèle %entity%
+            hermes_typetemplate: Édition type de modèle %entity%
         new:
             hermes_template: Création modèle
             hermes_personalized_template: Création modèle
+            hermes_typetemplate: Création type de modèle
     action:
         duplicate: Dupliquer
         copy_for_tenant: Copier pour personnalier
@@ -52,10 +56,12 @@ tab:
 export:
     csv: Csv
     excel: Excel
+    xls: Excel
 
 field:
     code: Code
     libelle: Libellé
+    label: Libellé
     mail: Mail
     recipients: Destinataires
     recipient: Destinataire
@@ -106,6 +112,8 @@ field:
     custombounceemail: E-mail bounce personnalisé
     data: Données
     errormessage: Message d'erreur
+    unsubscriptionsallowed: Désinscription possible
+    typetemplate: Type de modèle
 
 title:
     dashboard: Tableau de bord
@@ -176,3 +184,7 @@ modal:
 validator:
     twig_syntax:
         error: Le modèle présente des erreurs de syntaxe
+
+type_template:
+    can_delete:
+        templates: Il y a des templates associés.

@@ -3,6 +3,8 @@
 namespace Lle\HermesBundle\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,6 +27,18 @@ class UnsubscribeEmail
     #[ORM\Column(type: 'datetime')]
     #[Assert\NotBlank]
     private DateTime $unsubscribeDate;
+
+    /**
+     * @var Collection<int, TypeTemplate>
+     */
+    #[ORM\ManyToMany(targetEntity: TypeTemplate::class, inversedBy: 'unsubscribedEmails')]
+    #[ORM\JoinTable(name: 'lle_hermes_unsubscribe_email_type_template')]
+    private Collection $typesTemplate;
+
+    public function __construct()
+    {
+        $this->typesTemplate = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -63,6 +77,30 @@ class UnsubscribeEmail
     public function setUnsubscribeDate(DateTime $unsubscribeDate): UnsubscribeEmail
     {
         $this->unsubscribeDate = $unsubscribeDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, TypeTemplate>
+     */
+    public function getTypesTemplate(): Collection
+    {
+        return $this->typesTemplate;
+    }
+
+    public function addTypeTemplate(TypeTemplate $typeTemplate): self
+    {
+        if (!$this->typesTemplate->contains($typeTemplate)) {
+            $this->typesTemplate->add($typeTemplate);
+        }
+
+        return $this;
+    }
+
+    public function removeTypeTemplate(TypeTemplate $typeTemplate): self
+    {
+        $this->typesTemplate->removeElement($typeTemplate);
 
         return $this;
     }
