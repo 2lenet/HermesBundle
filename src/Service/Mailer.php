@@ -5,6 +5,7 @@ namespace Lle\HermesBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
+use Lle\HermesBundle\Exception\NoMailFoundException;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Lle\HermesBundle\Service\AttachmentService;
@@ -61,6 +62,10 @@ class Mailer
     /**
      * This method allows you to send the mail immediately. create() is still preferred for performance reasons,
      * but in some cases (e.g. user waiting) it may be useful.
+     */
+    /**
+     * @throws TemplateNotFoundException
+     * @throws NoMailFoundException
      */
     public function send(MailDto $mail, string $status = Mail::STATUS_DRAFT): void
     {
