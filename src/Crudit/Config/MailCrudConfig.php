@@ -147,8 +147,30 @@ class MailCrudConfig extends AbstractCrudConfig
 
     public function getShowActions(): array
     {
-        $actions = parent::getShowActions();
-        unset($actions[CrudConfigInterface::ACTION_EDIT]);
+        $actions = [];
+        $parentActions = parent::getShowActions();
+
+        $actions[CrudConfigInterface::ACTION_LIST] = $parentActions[CrudConfigInterface::ACTION_LIST];
+
+        $actions['send'] = ItemAction::new(
+            'action.send',
+            new Path('lle_hermes_crudit_mail_send'),
+            Icon::new('paper-plane')
+        )
+            ->setRole('ROLE_HERMES_MAIL_SEND')
+            ->setCssClass('btn btn-success btn-sm ms-1')
+            ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig');
+
+        $actions['send_test'] = ItemAction::new(
+            'action.sendmailtest',
+            (Path::new('lle_hermes_crudit_mail_send_testmail')),
+            Icon::new('fas fa-envelope')
+        )
+            ->setRole('ROLE_HERMES_MAIL_SENDTESTMAIL')
+            ->setCssClass('btn btn-warning btn-sm ms-1')
+            ->setModal('@LleHermes/crud/mail/_modal_send_testmail.html.twig');
+
+        $actions[CrudConfigInterface::ACTION_DELETE] = $parentActions[CrudConfigInterface::ACTION_DELETE];
 
         return $actions;
     }
