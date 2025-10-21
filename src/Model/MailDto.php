@@ -67,6 +67,10 @@ class MailDto
 
     protected ?string $dsn = null;
 
+    protected ?string $entityClass = null;
+
+    protected ?int $entityId = null;
+
     public function getSubject(): string
     {
         return $this->subject;
@@ -252,6 +256,30 @@ class MailDto
     public function setDsn(?string $dsn): self
     {
         $this->dsn = $dsn;
+
+        return $this;
+    }
+
+    public function getEntityClass(): ?string
+    {
+        return $this->entityClass;
+    }
+
+    public function setEntityClass(?string $entityClass): self
+    {
+        $this->entityClass = $entityClass;
+
+        return $this;
+    }
+
+    public function getEntityId(): ?int
+    {
+        return $this->entityId;
+    }
+
+    public function setEntityId(?int $entityId): self
+    {
+        $this->entityId = $entityId;
 
         return $this;
     }

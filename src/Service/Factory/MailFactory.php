@@ -26,8 +26,11 @@ class MailFactory
     public function createMailFromDto(MailDto $mailDto, Template $template): Mail
     {
         $mail = new Mail();
-        $mail->setTemplate($template);
-        $mail->setCreatedAt(new \DateTime());
+        $mail
+            ->setTemplate($template)
+            ->setCreatedAt(new \DateTime())
+            ->setEntityClass($mailDto->getEntityClass())
+            ->setEntityId($mailDto->getEntityId());
 
         $tenantId = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {

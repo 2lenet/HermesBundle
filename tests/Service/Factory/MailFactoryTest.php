@@ -77,6 +77,8 @@ class MailFactoryTest extends TestCase
         self::assertEquals(0, $mail->getTotalError());
         self::assertEquals([], $mail->getAttachement());
         self::assertEquals(0, $mail->getTotalOpened());
+        self::assertSame('App\Entity\User', $mail->getEntityClass());
+        self::assertSame(12, $mail->getEntityId());
 
         self::assertCount(2, $mail->getCcRecipients());
         self::assertInstanceOf(Recipient::class, $mail->getRecipients()->first());
@@ -155,6 +157,8 @@ class MailFactoryTest extends TestCase
         $mail->setSendHtml(true);
         $mail->setSendText(false);
         $mail->setTenantId($tenantId);
+        $mail->setEntityClass('App\Entity\User');
+        $mail->setEntityId(12);
 
         return $mail;
     }

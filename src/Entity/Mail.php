@@ -107,6 +107,12 @@ class Mail implements MultiTenantInterface
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     protected bool $attachmentsDeleted = false;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $entityClass = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    protected ?int $entityId = null;
+
     public function __construct()
     {
         $this->recipients = new ArrayCollection();
@@ -554,6 +560,30 @@ class Mail implements MultiTenantInterface
     public function setAttachmentsDeleted(bool $attachmentsDeleted): self
     {
         $this->attachmentsDeleted = $attachmentsDeleted;
+
+        return $this;
+    }
+
+    public function getEntityClass(): ?string
+    {
+        return $this->entityClass;
+    }
+
+    public function setEntityClass(?string $entityClass): self
+    {
+        $this->entityClass = $entityClass;
+
+        return $this;
+    }
+
+    public function getEntityId(): ?int
+    {
+        return $this->entityId;
+    }
+
+    public function setEntityId(?int $entityId): self
+    {
+        $this->entityId = $entityId;
 
         return $this;
     }
