@@ -18,4 +18,18 @@ class RecipientFactory
 
         return $recipient;
     }
+
+    public function copy(Recipient $recipient): Recipient
+    {
+        $copy = new Recipient();
+        $copy
+            ->setToName($recipient->getToName())
+            ->setToEmail($recipient->getToEmail())
+            ->setData($recipient->getData())
+            ->setStatus(Recipient::STATUS_SENDING)
+            ->setMail($recipient->getMail())
+            ->setCcMail($recipient->getCcMail());
+
+        return $copy;
+    }
 }

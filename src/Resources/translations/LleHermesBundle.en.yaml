@@ -7,6 +7,7 @@ action:
     show: Show
     send: Send
     sendmailtest: Send a test mail
+    resend: Resend
 
 crudit:
     action: Actions
@@ -163,7 +164,8 @@ flash:
     no_email: No email address has been filled in
     not_owner:
         email: No mail found
-        recipient: No destinataire found
+        recipient: No recipient found
+    no_mail: No mail found
 
 modal:
     action:
