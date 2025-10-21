@@ -17,6 +17,14 @@ To add recipients to the mail, you need to instantiate new ContactDto objects:
 $mail->addTo(new ContactDto($user->getFullName(), $user->getEmail()));
 ```
 
+To link the mail to an entity:
+
+```php
+$mail
+    ->setEntityClass('App\Entity\User')
+    ->setEntityId(99);
+```
+
 ## Add data to the mail
 
 As your template can contain variables, you can pass data to your mail or your recipient.
