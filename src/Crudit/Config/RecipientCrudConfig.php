@@ -8,6 +8,7 @@ use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
+use Lle\CruditBundle\Dto\Path;
 use Lle\CruditBundle\Field\DoctrineEntityField;
 use Lle\HermesBundle\Crudit\Datasource\RecipientDatasource;
 
@@ -90,6 +91,15 @@ class RecipientCrudConfig extends AbstractCrudConfig
         unset($actions[CrudConfigInterface::ACTION_EDIT]);
         unset($actions[CrudConfigInterface::ACTION_DELETE]);
 
+        $actions[] = ItemAction::new(
+            'action.resend',
+            new Path('lle_hermes_crudit_recipient_resend'),
+            Icon::new('paper-plane')
+        )
+            ->setRole('ROLE_HERMES_RECIPIENT_RESEND')
+            ->setCssClass('btn btn-success btn-sm ms-1')
+            ->setConfirmModal(true);
+
         return $actions;
     }
 
@@ -98,6 +108,15 @@ class RecipientCrudConfig extends AbstractCrudConfig
         $actions = parent::getItemActions();
         unset($actions[CrudConfigInterface::ACTION_EDIT]);
         unset($actions[CrudConfigInterface::ACTION_DELETE]);
+
+        $actions[] = ItemAction::new(
+            'action.resend',
+            new Path('lle_hermes_crudit_recipient_resend'),
+            Icon::new('paper-plane')
+        )
+            ->setRole('ROLE_HERMES_RECIPIENT_RESEND')
+            ->setCssClass('btn btn-success btn-sm')
+            ->setConfirmModal(true);
 
         return $actions;
     }

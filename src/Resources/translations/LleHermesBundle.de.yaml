@@ -7,6 +7,7 @@ action:
     show: Anzeigen
     send: Senden
     sendmailtest: Test-E-Mail senden
+    resend: Zurücksenden
 
 crudit:
     action: Aktionen
@@ -164,6 +165,7 @@ flash:
     not_owner:
         email: Keine E-Mail gefunden
         recipient: Kein Empfänger gefunden
+    no_mail: Keine E-Mail gefunden
 
 modal:
     action:
