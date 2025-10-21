@@ -6,6 +6,7 @@ action:
     export: Export
     show: Show
     send: Send
+    sendmailtest: Send a test mail
 
 crudit:
     action: Actions

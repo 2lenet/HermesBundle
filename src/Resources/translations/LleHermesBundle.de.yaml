@@ -6,6 +6,7 @@ action:
     export: Exportieren
     show: Anzeigen
     send: Senden
+    sendmailtest: Test-E-Mail senden
 
 crudit:
     action: Aktionen
