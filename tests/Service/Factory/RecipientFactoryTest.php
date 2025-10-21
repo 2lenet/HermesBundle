@@ -103,7 +103,7 @@ class RecipientFactoryTest extends TestCase
             ->setData(['data'])
             ->setStatus(Recipient::STATUS_SENT)
             ->setMail($mail)
-            ->setOpenDate('2025-10-01')
+            ->setOpenDate(new \DateTime('2025-10-01'))
             ->setErrorMessage('error');
 
         return $recipient;

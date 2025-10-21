@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Controller\Crudit;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
@@ -14,6 +15,7 @@ use Lle\HermesBundle\Service\Factory\RecipientFactory;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/recipient')]
@@ -25,6 +27,7 @@ class RecipientController extends AbstractCrudController
 
     public function __construct(
         RecipientCrudConfig $config,
+        protected EntityManagerInterface $em,
         protected MultiTenantManager $multiTenantManager,
         protected RecipientFactory $recipientFactory,
     ) {
