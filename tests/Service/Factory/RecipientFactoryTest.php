@@ -81,7 +81,7 @@ class RecipientFactoryTest extends TestCase
         self::assertNull($copy->getCcMail());
         self::assertCount(0, $copy->getLinkOpenings());
         self::assertFalse($copy->isTest());
-        self::assertEquals(1, $copy->getTenantId());
+        self::assertNull($copy->getTenantId());
     }
 
     protected function createContactDto(): ContactDto
