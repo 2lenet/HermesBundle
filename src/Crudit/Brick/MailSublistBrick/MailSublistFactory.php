@@ -26,7 +26,6 @@ class MailSublistFactory extends SublistFactory
         RequestStack $requestStack,
         protected MailCrudConfig $mailCrudConfig,
         protected MailDatasource $mailDatasource,
-
     ) {
         parent::__construct($resourceResolver, $requestStack);
 
@@ -79,11 +78,15 @@ class MailSublistFactory extends SublistFactory
         $lines = [];
         $foreignKeyValue = $this->getRequest()->get('id');
         $resource = $brickConfigurator->getDataSource()->get($foreignKeyValue);
+        if (!$resource) {
+            return $lines;
+        }
 
-        $classFilter = new DatasourceFilter('entityClass', get_class($resource));
-        $idFilter = new DatasourceFilter('entityId', $foreignKeyValue);
         $this->datasourceParams->setEnableFilters(false);
-        $this->datasourceParams->setFilters(array_merge($this->datasourceParams->getFilters(), [$classFilter, $idFilter]));
+        $this->datasourceParams->setFilters(array_merge($this->datasourceParams->getFilters(), [
+            new DatasourceFilter('entityClass', get_class($resource)),
+            new DatasourceFilter('entityId', $foreignKeyValue),
+        ]));
         $this->datasourceParams->setCount($this->mailDatasource->count($this->datasourceParams));
         $resources = $this->mailDatasource->list($this->datasourceParams);
 
@@ -97,11 +100,5 @@ class MailSublistFactory extends SublistFactory
         }
 
         return $lines;
-    }
-
-    /** @return Field[] */
-    private function getFields(MailSublistConfig $brickConfigurator): array
-    {
-        return $brickConfigurator->getFields();
     }
 }
