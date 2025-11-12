@@ -121,8 +121,16 @@ class MailCrudConfig extends AbstractCrudConfig
 
     public function getItemActions(): array
     {
-        $actions = [];
-        $parentActions = parent::getItemActions();
+        $actions = parent::getItemActions();
+
+        $actions[CrudConfigInterface::ACTION_EDIT] = EditAction::new(
+            'action.edit',
+            new Path('lle_hermes_crudit_mail_edit'),
+            Icon::new('edit')
+        )
+            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_DRAFT))
+            ->setCssClass('btn btn-secondary btn-sm crudit-action')
+            ->setRole('ROLE_HERMES_MAIL_EDIT');
 
         $actions[] = ItemAction::new(
             'action.send',
@@ -132,9 +140,6 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setRole('ROLE_HERMES_MAIL_SEND')
             ->setCssClass('btn btn-success btn-sm mr-1')
             ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig');
-
-        $actions[CrudConfigInterface::ACTION_SHOW] = $parentActions[CrudConfigInterface::ACTION_SHOW];
-        $actions[CrudConfigInterface::ACTION_DELETE] = $parentActions[CrudConfigInterface::ACTION_DELETE];
 
         $actions[] = ItemAction::new(
             'action.sendmailtest',
@@ -154,6 +159,15 @@ class MailCrudConfig extends AbstractCrudConfig
         $parentActions = parent::getShowActions();
 
         $actions[CrudConfigInterface::ACTION_LIST] = $parentActions[CrudConfigInterface::ACTION_LIST];
+
+        $actions[CrudConfigInterface::ACTION_EDIT] = EditAction::new(
+            'action.edit',
+            new Path('lle_hermes_crudit_mail_edit'),
+            Icon::new('edit')
+        )
+            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_DRAFT))
+            ->setCssClass('btn btn-secondary btn-sm crudit-action ms-1')
+            ->setRole('ROLE_HERMES_MAIL_EDIT');
 
         $actions['send'] = ItemAction::new(
             'action.send',
