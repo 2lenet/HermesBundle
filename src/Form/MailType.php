@@ -11,13 +11,21 @@ class MailType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('subject', TextType::class);
+        $builder->add('subject', TextType::class, [
+            "label" => "field.subject",
+            "translation_domain" => "LleHermesBundle",
+        ]);
         $builder->add('html', TextareaType::class, [
             'attr' => [
                 'rows' => 25,
-            ]
+            ],
+            "label" => "field.html",
+            "translation_domain" => "LleHermesBundle",
         ]);
-        $builder->add('text', TextType::class);
+        $builder->add('text', TextType::class, [
+            "label" => "field.text",
+            "translation_domain" => "LleHermesBundle",
+        ]);
     }
 
 
