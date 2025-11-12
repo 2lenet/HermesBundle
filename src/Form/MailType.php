@@ -23,6 +23,6 @@ class MailType extends AbstractType
 
     public function getName(): string
     {
-        return 'edit_mail_form';
+        return 'mail_form';
     }
 }

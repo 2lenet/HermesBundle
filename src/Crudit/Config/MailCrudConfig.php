@@ -160,6 +160,15 @@ class MailCrudConfig extends AbstractCrudConfig
 
         $actions[CrudConfigInterface::ACTION_LIST] = $parentActions[CrudConfigInterface::ACTION_LIST];
 
+        $actions[CrudConfigInterface::ACTION_EDIT] = EditAction::new(
+            'action.edit',
+            new Path('lle_hermes_crudit_mail_edit'),
+            Icon::new('edit')
+        )
+            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_DRAFT))
+            ->setCssClass('btn btn-secondary btn-sm crudit-action ms-1')
+            ->setRole('ROLE_HERMES_MAIL_EDIT');
+
         $actions['send'] = ItemAction::new(
             'action.send',
             new Path('lle_hermes_crudit_mail_send'),
