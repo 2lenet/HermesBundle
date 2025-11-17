@@ -23,3 +23,7 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@Lle\HermesBundle\Service\MailError\MailAnalyzer'
             - '@parameter_bag'
+
+    Lle\HermesBundle\Service\MailBuilder:
+        arguments:
+            $linkTransformer: '@?lle_hermes.link_transformer_service'

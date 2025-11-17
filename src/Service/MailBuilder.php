@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Lle\HermesBundle\Contracts\LinkTransformerInterface;
 use Lle\HermesBundle\Entity\Link;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
@@ -23,6 +24,7 @@ class MailBuilder
         protected readonly ParameterBagInterface $parameters,
         protected readonly RouterInterface $router,
         protected readonly Environment $twig,
+        protected readonly ?LinkTransformerInterface $linkTransformer,
     ) {
         /** @var string $secret */
         $secret = $parameters->get('lle_hermes.app_secret');
@@ -91,6 +93,10 @@ class MailBuilder
             $html = $this->generateStatsLinks($html, $mail, $recipient);
         }
 
+        if ($this->linkTransformer) {
+            $html = $this->transformLinks($html, $mail, $recipient);
+        }
+
         $email->text($templater->getText());
 
         $email->html($html);
@@ -156,6 +162,29 @@ class MailBuilder
                 } else {
                     return $matches[0];
                 }
+            },
+            $html
+        );
+    }
+
+    private function transformLinks(string $html, Mail $mail, Recipient $recipient): ?string
+    {
+        return preg_replace_callback(
+            '/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/s',
+            function ($matches) use ($mail, $recipient) {
+                $url = $matches[2];
+                $newParameters = $this->linkTransformer->addQueryParameters($url, $recipient, $mail->getTemplate());
+
+                if ($newParameters) {
+                    $query = parse_url($url, PHP_URL_QUERY);
+                    if ($query) {
+                        $url .= '&' . http_build_query($newParameters);
+                    } else {
+                        $url .= '?' . http_build_query($newParameters);
+                    }
+                }
+
+                return '<a' . $matches[1] . 'href="' . $url . '"' . $matches[3] . '>' . $matches[4] . '</a>';
             },
             $html
         );
