@@ -40,6 +40,12 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             'lle_hermes.attachment_nb_days_before_deletion',
             $processedConfig['attachment_nb_days_before_deletion']
         );
+        if ($processedConfig['link_transformer_service_id']) {
+            $container->setAlias(
+                'lle_hermes.link_transformer_service',
+                $processedConfig['link_transformer_service_id']
+            );
+        }
     }
 
     public function prepend(ContainerBuilder $container): void
