@@ -43,7 +43,7 @@ class MailSublistFactory extends SublistFactory
         if ($brickConfigurator instanceof MailSublistConfig) {
             $view
                 ->setTemplate($brickConfigurator->getTemplate() ?? '@LleCrudit/brick/sublist_items')
-                ->setConfig($this->getConfig())
+                ->setConfig($this->getConfig($brickConfigurator))
                 ->setPath($this->getPath($brickConfigurator))
                 ->setData([
                     'lines' => $this->getLines($brickConfigurator),
@@ -53,14 +53,14 @@ class MailSublistFactory extends SublistFactory
         return $view;
     }
 
-    public function getConfig(): array
+    public function getConfig(BrickConfigInterface $brickConfigurator): array
     {
         return [
             'fields' => $this->mailCrudConfig->getFields(CrudConfigInterface::INDEX),
             'actions' => $this->mailCrudConfig->getItemActions(),
             'batch_actions' => [],
             'name' => $this->mailCrudConfig->getName(),
-            'title' => $this->mailCrudConfig->getTitle('list'),
+            'title' => $brickConfigurator->getTitle(),
             'datasource_params' => $this->datasourceParams,
             'detail' => null,
             'hidden_action' => false,
