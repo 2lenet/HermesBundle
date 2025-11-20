@@ -53,7 +53,7 @@ class MailSublistFactory extends SublistFactory
         return $view;
     }
 
-    public function getConfig(BrickConfigInterface $brickConfigurator): array
+    public function getConfig(MailSublistConfig $brickConfigurator): array
     {
         return [
             'fields' => $this->mailCrudConfig->getFields(CrudConfigInterface::INDEX),
@@ -61,6 +61,7 @@ class MailSublistFactory extends SublistFactory
             'batch_actions' => [],
             'name' => $this->mailCrudConfig->getName(),
             'title' => $brickConfigurator->getTitle(),
+            'titleCss' => $brickConfigurator->getTitleCss(),
             'datasource_params' => $this->datasourceParams,
             'detail' => null,
             'hidden_action' => false,
