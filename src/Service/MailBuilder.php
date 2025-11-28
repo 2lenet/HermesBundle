@@ -39,10 +39,6 @@ class MailBuilder
         $templater->addData($mail->getData());
         $templater->addData($recipient->getData());
 
-        if ($mail->getTemplate()?->isUnsubscriptions()) {
-            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
-        }
-
         /** @var string $domain */
         $domain = $this->parameters->get('lle_hermes.app_domain');
         /** @var string $returnPath */
@@ -54,6 +50,10 @@ class MailBuilder
         $context = $this->router->getContext();
         $context->setHost($domain);
         $context->setScheme('https');
+
+        if ($mail->getTemplate()?->isUnsubscriptions()) {
+            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
+        }
 
         if ($mail->getSenderName() && $mail->getSenderEmail()) {
             $from = new Address($mail->getSenderEmail(), $mail->getSenderName());
