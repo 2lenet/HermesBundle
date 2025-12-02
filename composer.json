@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.4",
         "ext-imap": "*",
         "2lenet/crudit-bundle": "^1.5.11",
         "2lenet/entity-file-bundle": "^1.1.2",
@@ -24,14 +24,14 @@
         "doctrine/common": "^2.13 || ^3.0",
         "doctrine/event-manager": "^1.0 || ^2.0",
         "doctrine/persistence": "^2.0 || ^3.0",
-        "symfony/validator": "^6.0 || ^7.0",
-        "symfony/dependency-injection": "^6.0 || ^7.0",
-        "symfony/framework-bundle": "^6.0 || ^7.0",
-        "symfony/lock": "^6.0 || ^7.0",
-        "symfony/mailer": "^6.0 || ^7.0",
+        "symfony/validator": "^7.0 || ^8.0",
+        "symfony/dependency-injection": "^7.0 || ^8.0",
+        "symfony/framework-bundle": "^7.0 || ^8.0",
+        "symfony/lock": "^7.0 || ^8.0",
+        "symfony/mailer": "^7.0 || ^8.0",
         "symfony/orm-pack": "*",
-        "symfony/twig-bundle": "^6.0 || ^7.0",
-        "symfony/yaml": "^6.0 || ^7.0",
+        "symfony/twig-bundle": "^7.0 || ^8.0",
+        "symfony/yaml": "^7.0 || ^8.0",
         "twig/twig": "^3.4"
     },
     "require-dev": {

@@ -18,19 +18,47 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('lle_hermes');
         $rootNode = $treeBuilder->getRootNode();
         $children = $rootNode->children();
-        $children->scalarNode('root_dir')->isRequired()->end();
-        $children->scalarNode('attachment_path')->defaultValue('/data/hermes/attachments/')->end();
-        $children->scalarNode('upload_path')->defaultValue('/upload/images/')->end();
-        $children->scalarNode('app_secret')->isRequired()->end();
-        $children->scalarNode('app_domain')->isRequired()->end();
-        $children->scalarNode('bounce_host')->isRequired()->end();
-        $children->scalarNode('bounce_port')->isRequired()->end();
-        $children->scalarNode('bounce_user')->isRequired()->end();
-        $children->scalarNode('bounce_password')->isRequired()->end();
-        $children->scalarNode('menu_icons')->defaultTrue()->end();
-        $children->scalarNode('recipient_error_retry')->defaultValue(3)->end();
-        $children->scalarNode('tenant_class')->defaultNull()->end();
-        $children->scalarNode('attachment_nb_days_before_deletion')->defaultValue(365)->end();
+        /** @phpstan-ignore-next-line */
+        $children
+            ->scalarNode('root_dir')
+                ->isRequired()
+            ->end()
+            ->scalarNode('attachment_path')
+                ->defaultValue('/data/hermes/attachments/')
+            ->end()
+            ->scalarNode('upload_path')
+                ->defaultValue('/upload/images/')
+            ->end()
+            ->scalarNode('app_secret')
+                ->isRequired()
+            ->end()
+            ->scalarNode('app_domain')
+                ->isRequired()
+            ->end()
+            ->scalarNode('bounce_host')
+                ->isRequired()
+            ->end()
+            ->scalarNode('bounce_port')
+                ->isRequired()
+            ->end()
+            ->scalarNode('bounce_user')
+                ->isRequired()
+            ->end()
+            ->scalarNode('bounce_password')
+                ->isRequired()
+            ->end()
+            ->scalarNode('menu_icons')
+                ->defaultTrue()
+            ->end()
+            ->scalarNode('recipient_error_retry')
+                ->defaultValue(3)
+            ->end()
+            ->scalarNode('tenant_class')
+                ->defaultNull()
+            ->end()
+            ->scalarNode('attachment_nb_days_before_deletion')
+                ->defaultValue(365)
+            ->end();
 
         return $treeBuilder;
     }

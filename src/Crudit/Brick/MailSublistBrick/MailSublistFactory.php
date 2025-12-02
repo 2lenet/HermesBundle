@@ -77,7 +77,7 @@ class MailSublistFactory extends SublistFactory
     private function getLines(MailSublistConfig $brickConfigurator): array
     {
         $lines = [];
-        $foreignKeyValue = $this->getRequest()->get('id');
+        $foreignKeyValue = $this->getRequest()->attributes->get('id');
         $resource = $brickConfigurator->getDataSource()->get($foreignKeyValue);
         if (!$resource) {
             return $lines;

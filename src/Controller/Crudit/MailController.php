@@ -45,10 +45,10 @@ class MailController extends AbstractCrudController
     #[Route('/dashboard', name: 'lle_hermes_dashboard', methods: ['GET'])]
     public function dashboard(Request $request): Response
     {
-        $this->denyAccessUnlessGranted("ROLE_HERMES_DASHBOARD");
+        $this->denyAccessUnlessGranted('ROLE_HERMES_DASHBOARD');
 
-        $number = (int)$request->get("number", 30);
-        $page = (int)$request->get("page", 1);
+        $number = $request->query->getInt('number', 30);
+        $page = $request->query->getInt('page', 1);
 
         $tenantId = null;
         if ($this->multiTenantManager->isMultiTenantEnabled()) {
@@ -62,13 +62,13 @@ class MailController extends AbstractCrudController
         $to = min($number * $page, $total);
         $totalPages = intdiv($total, $number) + ($total % $number > 0 ? 1 : 0);
 
-        return $this->render("@LleHermes/Dashboard/dashboard.html.twig", [
-            "mails" => $mails,
-            "total" => $total,
-            "from" => $from,
-            "to" => $to,
-            "page" => $page,
-            "total_pages" => $totalPages,
+        return $this->render('@LleHermes/Dashboard/dashboard.html.twig', [
+            'mails' => $mails,
+            'total' => $total,
+            'from' => $from,
+            'to' => $to,
+            'page' => $page,
+            'total_pages' => $totalPages,
         ]);
     }
 
