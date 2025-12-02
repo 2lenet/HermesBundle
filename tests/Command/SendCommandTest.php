@@ -26,7 +26,7 @@ class SendCommandTest extends TestCase
         parent::setUp();
         $this->sender = $this->createMock(Sender::class);
         $application = new Application();
-        $application->add(new SendCommand($this->sender));
+        $application->addCommand(new SendCommand($this->sender));
         $command = $application->find('lle:hermes:send');
         $this->commandTester = new CommandTester($command);
     }
