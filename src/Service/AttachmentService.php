@@ -2,14 +2,14 @@
 
 namespace Lle\HermesBundle\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Contracts\AttachmentInterface;
+use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
-use Lle\HermesBundle\Dto\StringAttachmentDto;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\AttachmentCreationException;
 use Lle\HermesBundle\Model\MailDto;
-use Lle\HermesBundle\Service\Factory\AttachmentFactory;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class AttachmentService
@@ -22,6 +22,7 @@ class AttachmentService
     public function __construct(
         ParameterBagInterface $parameters,
         protected EntityFileLoader $entityFileLoader,
+        protected EntityManagerInterface $em,
     ) {
         /** @var string $rootDir */
         $rootDir = $parameters->get('lle_hermes.root_dir');
@@ -34,24 +35,20 @@ class AttachmentService
 
     public function saveAttachments(MailDto $mailDto, Mail $mail): Mail
     {
-        $attachments = [];
-
+        $mailManager = $this->entityFileLoader->get(MailCrudConfig::MAIL_ATTACHED_FILE_CONFIG);
         foreach ($mailDto->getAttachments() as $attachment) {
-            $attachments[] = $this->saveAttachment($attachment, $mail);
+            $entityFile = $mailManager->save($mail, $attachment->getData(), $attachment->getName());
+
+            $this->em->persist($entityFile);
         }
         if ($mail->getTemplate()) {
             $manager = $this->entityFileLoader->get(TemplateCrudConfig::ATTACHED_FILE_CONFIG);
             foreach ($manager->get($mail->getTemplate()) as $file) {
-                $attachment = new StringAttachmentDto(
-                    $manager->read($file),
-                    (string) $file->getName(),
-                    (string) $file->getMimeType()
-                );
-                $attachments[] = $this->saveAttachment($attachment, $mail);
+                $entityFile = $mailManager->save($mail, $manager->read($file), $file->getName());
+
+                $this->em->persist($entityFile);
             }
         }
-
-        $mail->setAttachement($attachments);
 
         return $mail;
     }

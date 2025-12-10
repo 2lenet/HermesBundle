@@ -3,6 +3,8 @@
 namespace Lle\HermesBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Lle\EntityFileBundle\Service\EntityFileLoader;
+use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Link;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
@@ -23,6 +25,7 @@ class MailBuilder
         protected readonly ParameterBagInterface $parameters,
         protected readonly RouterInterface $router,
         protected readonly Environment $twig,
+        protected EntityFileLoader $entityFileLoader,
     ) {
         /** @var string $secret */
         $secret = $parameters->get('lle_hermes.app_secret');
@@ -103,6 +106,11 @@ class MailBuilder
             foreach ($mail->getAttachement() as $attachment) {
                 $email->attachFromPath($attachment['path'] . $attachment['name']);
             }
+        }
+
+        $manager = $this->entityFileLoader->get(MailCrudConfig::MAIL_ATTACHED_FILE_CONFIG);
+        foreach ($manager->get($mail) as $file) {
+            $email->attach($manager->read($file), $file->getMimeType());
         }
 
         return $this->attachBase64Img($email, $domain);
