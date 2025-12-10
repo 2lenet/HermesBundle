@@ -110,7 +110,7 @@ class MailBuilder
 
         $manager = $this->entityFileLoader->get(MailCrudConfig::MAIL_ATTACHED_FILE_CONFIG);
         foreach ($manager->get($mail) as $file) {
-            $email->attach($manager->read($file), $file->getMimeType());
+            $email->attach($manager->read($file), $file->getName(), $file->getMimeType());
         }
 
         return $this->attachBase64Img($email, $domain);
