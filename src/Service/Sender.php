@@ -133,14 +133,12 @@ class Sender
 
             return true;
         } catch (TransportExceptionInterface | RfcComplianceException $e) {
-            dd($e->getMessage());
             $recipient->setStatus(Recipient::STATUS_ERROR);
             $this->errorLogger
                 ->logError('Transport or RFC error with message : ' . $e->getMessage(), $recipient);
 
             return false;
         } catch (Exception $e) {
-            dd($e->getMessage());
             $recipient->setStatus(Recipient::STATUS_ERROR);
             $this->errorLogger->logError('Generic error with message : ' . $e->getMessage(), $recipient);
             $mail->setStatus(Mail::STATUS_ERROR);
