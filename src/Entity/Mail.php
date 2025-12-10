@@ -113,6 +113,9 @@ class Mail implements MultiTenantInterface
     #[ORM\Column(type: 'integer', nullable: true)]
     protected ?int $entityId = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $mjml = null;
+
     public function __construct()
     {
         $this->recipients = new ArrayCollection();
@@ -586,5 +589,15 @@ class Mail implements MultiTenantInterface
         $this->entityId = $entityId;
 
         return $this;
+    }
+
+    public function getMjml(): ?string
+    {
+        return $this->mjml;
+    }
+
+    public function setMjml(?string $mjml): void
+    {
+        $this->mjml = $mjml;
     }
 }
