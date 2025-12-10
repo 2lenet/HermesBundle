@@ -95,8 +95,6 @@ class TemplateType extends AbstractType
             ]);
     }
 
-
-
     public function getName(): string
     {
         return 'template_form';
