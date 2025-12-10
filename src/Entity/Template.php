@@ -13,6 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'tenant_id_idx', columns: ['tenant_id'])]
 class Template implements MultiTenantInterface
 {
+    public const string TYPE_HTML = 'html';
+    public const string TYPE_CKEDITOR = 'ckeditor';
+    public const string TYPE_MJML = 'mjml';
+
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
@@ -66,6 +70,12 @@ class Template implements MultiTenantInterface
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Email]
     protected ?string $customBounceEmail = null;
+
+    #[ORM\Column(type: 'string', options: ['default' => self::TYPE_HTML])]
+    protected string $type = self::TYPE_HTML;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $mjml = null;
 
     public function __toString(): string
     {
@@ -226,5 +236,25 @@ class Template implements MultiTenantInterface
         $this->customBounceEmail = $customBounceEmail;
 
         return $this;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getMjml(): ?string
+    {
+        return $this->mjml;
+    }
+
+    public function setMjml(?string $mjml): void
+    {
+        $this->mjml = $mjml;
     }
 }

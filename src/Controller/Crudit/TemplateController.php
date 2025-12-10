@@ -10,6 +10,7 @@ use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Form\TemplateType;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,27 @@ class TemplateController extends AbstractCrudController
         protected readonly MultiTenantManager $multiTenantManager,
     ) {
         $this->config = $config;
+    }
+
+    #[Route('/new')]
+    public function new(Request $request): Response
+    {
+        $type = $request->query->getString('type');
+
+        $template = new Template();
+        $template->setType($type);
+
+        $form = $this->createForm(TemplateType::class, $template)->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($template);
+            $this->em->flush();
+
+            return $this->redirectToRoute('lle_hermes_crudit_template_show', ['id' => $template->getId()]);
+        }
+
+        return $this->render('@LleHermes/crud/template/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     #[Route('/duplicate/{id}', name: 'lle_hermes_template_duplicate', methods: ['GET'])]

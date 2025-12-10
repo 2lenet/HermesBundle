@@ -12,6 +12,7 @@ use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Path;
 use Lle\EntityFileBundle\Crudit\Brick\EntityFileBrickConfig;
 use Lle\HermesBundle\Crudit\Datasource\TemplateDatasource;
+use Lle\HermesBundle\Entity\Template;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class TemplateCrudConfig extends AbstractCrudConfig
@@ -75,6 +76,18 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $statistics,
             $customBounceEmail,
         ];
+    }
+
+    public function getListActions(): array
+    {
+        $actions = parent::getListActions();
+        $actions[CrudConfigInterface::ACTION_ADD]
+            ->setModal('@LleHermes/crud/template/add_modal.html.twig')
+            ->setConfig([
+                'types' => [Template::TYPE_HTML, Template::TYPE_CKEDITOR, Template::TYPE_MJML],
+            ]);
+
+        return $actions;
     }
 
     public function getItemActions(): array

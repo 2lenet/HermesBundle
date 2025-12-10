@@ -41,6 +41,7 @@ crud:
         copy_for_tenant: Copier pour personnalier
     modal:
         send_mail: Voulez-vous vraiment envoyer cet email à %nb% destinataires ? Cette action est définitive.
+        choose_type: Choisissez un type de modèle
     canDelete:
         mail: Le mail est en cours d'envoi
 
@@ -158,6 +159,10 @@ text:
     percentMailUnsubscribed: '%nb%% désinscrits'
     percentMailError: '%nb%% erreurs'
     deleted: 'Supprimé'
+    template:
+        type_html: HTML
+        type_ckeditor: CKEditor
+        type_mjml: MJML
 
 flash:
     copyAlreadyExist: Une copie de ce template existe déjà, veuillez modifier le code de la copie et réessayer

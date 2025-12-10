@@ -1,0 +1,27 @@
+{% extends '@LleCrudit/modal/_base_modal.html.twig' %}
+
+{% block header %}
+    {{ 'crud.modal.choose_type'|trans({}, 'LleHermesBundle') }}
+{% endblock %}
+{% block body %}
+    <form
+        id="form_{{ id }}"
+        method="GET"
+        action="{{ action.url ?? path(action.path.route, action.path.params) }}"
+    >
+        <select name="type" class="form-select">
+            {% for type in action.config.types %}
+                <option
+                    value="{{ type }}">{{ ('text.template.type_' ~ type)|trans({}, 'LleHermesBundle') }}</option>
+            {% endfor %}
+        </select>
+    </form>
+{% endblock %}
+{% block footer %}
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        {{ 'crudit.modal.cancel'|trans({}, 'LleCruditBundle') }}
+    </button>
+    <button type="submit" class="btn btn-primary" form="form_{{ id }}">
+        {{ 'crudit.modal.validate'|trans({}, 'LleCruditBundle') }}
+    </button>
+{% endblock %}

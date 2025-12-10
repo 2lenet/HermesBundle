@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Lle\HermesBundle\Form;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
+use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Form\Type\MjmlType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -17,10 +17,13 @@ class TemplateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('groupInformations', GroupType::class, [
-            'label' => 'field.group.template_informations',
-            'inherit_data' => true,
-        ])
+        $templateType = $options['data']->getType();
+
+        $builder
+            ->add('groupInformations', GroupType::class, [
+                'label' => 'field.group.template_informations',
+                'inherit_data' => true,
+            ])
             ->add('libelle', TextType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
@@ -32,28 +35,46 @@ class TemplateType extends AbstractType
             ])
             ->add('senderEmail', EmailType::class, [
                 'attr' => ['class' => 'col-md-6'],
-            ]);
-
-        $builder->add('groupContent', GroupType::class, [
-            'label' => 'field.group.template_content',
-            'inherit_data' => true,
-        ])
-            ->add('subject', TextType::class)
-            ->add('html', TextareaType::class, [
-                'attr' => [
-                    'rows' => 20,
-                ],
             ])
+            ->add('groupContent', GroupType::class, [
+                'label' => 'field.group.template_content',
+                'inherit_data' => true,
+            ])
+            ->add('subject', TextType::class);
+
+        switch ($templateType) {
+            case Template::TYPE_CKEDITOR:
+                $builder->add('html', CKEditorType::class, [
+                    'label' => false,
+                    'config' => ['toolbar' => 'full'],
+                    'attr' => [
+                        'rows' => 20,
+                    ],
+                ]);
+                break;
+            case Template::TYPE_MJML:
+                $builder->add('mjml', MjmlType::class);
+                break;
+            case Template::TYPE_HTML:
+            default:
+                $builder->add('html', TextareaType::class, [
+                    'attr' => [
+                        'rows' => 20,
+                    ],
+                ]);
+                break;
+        }
+
+        $builder
             ->add('text', TextareaType::class, [
                 'attr' => [
                     'rows' => 20,
                 ],
-            ]);
-
-        $builder->add('groupOptions', GroupType::class, [
-            'label' => 'field.group.template_options',
-            'inherit_data' => true,
-        ])
+            ])
+            ->add('groupOptions', GroupType::class, [
+                'label' => 'field.group.template_options',
+                'inherit_data' => true,
+            ])
             ->add('unsubscriptions', CheckboxType::class, [
                 "required" => false,
                 "label" => "field.unsubscriptions",
@@ -73,6 +94,8 @@ class TemplateType extends AbstractType
                 'label' => 'field.custombounceemail',
             ]);
     }
+
+
 
     public function getName(): string
     {

@@ -1,0 +1,17 @@
+{% block lle_hermes_mjml_widget %}
+    {% set input_id = 'lle_hermes_mjml_' ~ id %}
+
+    <input type="hidden" name="{{ full_name }}" id="{{ input_id }}">
+
+    <div class="lle_hermes_mjml_editor" data-input="#{{ input_id }}">
+        {% if value %}
+            {{ value|raw }}
+        {% else %}
+            <mjml>
+                <mj-body>
+                    <mj-section></mj-section>
+                </mj-body>
+            </mjml>
+        {% endif %}
+    </div>
+{% endblock %}

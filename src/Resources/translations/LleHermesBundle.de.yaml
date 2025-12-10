@@ -41,6 +41,7 @@ crud:
         copy_for_tenant: Für Personalisierung kopieren
     modal:
         send_mail: Möchten Sie diese E-Mail wirklich an %nb% Empfänger senden? Diese Aktion ist endgültig.
+        choose_type: Wählen Sie einen Modelltyp aus
     canDelete:
         mail: Die E-Mail wird gesendet
 
@@ -156,6 +157,10 @@ text:
     percentMailSent: '%nb%% gesendet'
     percentMailUnsubscribed: '%nb%% abgemeldet'
     percentMailError: '%nb%% Fehler'
+    template:
+        type_html: HTML
+        type_ckeditor: CKEditor
+        type_mjml: MJML
 
 flash:
     copyAlreadyExist: Eine Kopie dieser Vorlage existiert bereits, bitte bearbeiten Sie den Code der Kopie und versuchen Sie es erneut

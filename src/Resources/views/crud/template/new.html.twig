@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <nav class="navbar navbar-light bg-light mb-2 px-2 shadow">
+        <h4 class="navbar-brand text-primary mb-0">{{ 'crud.title.new.contact'|trans }}</h4>
+    </nav>
+
+    {% include '@LleCrudit/brick/form/index.html.twig' with {
+        view: {
+            data: {
+                form: form,
+                title: null,
+                titleCss: null,
+                cancel_path: {
+                    route: 'lle_hermes_crudit_template_index',
+                    params: [],
+                    role: 'ROLE_HERMES_TEMPLATE_INDEX',
+                }
+            }
+        }
+    } %}
+
+{% endblock %}
