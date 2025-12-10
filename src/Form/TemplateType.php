@@ -100,3 +100,4 @@ class TemplateType extends AbstractType
         return 'template_form';
     }
 }
+
