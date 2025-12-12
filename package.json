@@ -30,11 +30,13 @@
     },
     "homepage": "https://github.com/2lenet/HermesBundle#readme",
     "dependencies": {
-        "@symfony/webpack-encore": "^1.7.0"
+        "@symfony/webpack-encore": "^1.7.0",
+        "grapesjs": "^0.22.14",
+        "grapesjs-mjml": "^1.0.7"
     },
     "devDependencies": {
         "file-loader": "^6.2.0",
-        "node-sass": "^9.0.0",
+        "sass": "^1.95.1",
         "sass-loader": "^13.3.2"
     }
 }

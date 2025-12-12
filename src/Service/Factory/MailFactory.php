@@ -40,6 +40,7 @@ class MailFactory
                 $tenantId = $this->multiTenantManager->getTenantId();
             }
         }
+
         if ($tenantId) {
             $mail->setTenantId($tenantId);
         }
@@ -55,6 +56,7 @@ class MailFactory
             $mail->addRecipient($recipient);
             $nbDest++;
         }
+
         foreach ($mailDto->getCc() as $ccDto) {
             $recipient = $this->recipientFactory->createRecipientFromDto($ccDto, $tenantId);
             $mail->addCcRecipient($recipient);
@@ -65,10 +67,12 @@ class MailFactory
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
         $mail->setSubject($template->getSubject());
+        $mail->setMjml($template->getMjml());
 
         if ($mailDto->isSendText()) {
             $mail->setText($template->getText());
         }
+
         if ($mailDto->isSendHtml()) {
             $mail->setHtml($template->getHtml());
         }

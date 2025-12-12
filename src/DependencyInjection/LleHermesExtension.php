@@ -40,6 +40,20 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             'lle_hermes.attachment_nb_days_before_deletion',
             $processedConfig['attachment_nb_days_before_deletion']
         );
+
+        // Load the templates for the Hermes form types
+        if ($container->hasParameter('twig.form.resources')) {
+            /** @var array $parameter */
+            $parameter = $container->getParameter('twig.form.resources');
+
+            $container->setParameter(
+                'twig.form.resources',
+                array_merge(
+                    ['@LleHermes/form/custom_types.html.twig'],
+                    $parameter
+                )
+            );
+        }
     }
 
     public function prepend(ContainerBuilder $container): void

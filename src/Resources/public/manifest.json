@@ -1,4 +1,5 @@
 {
+  "bundles/hermes/app.js": "./app.js",
   "bundles/hermes/style.css": "./style.css",
   "bundles/hermes/img/hermes.svg": "./img/hermes.svg",
   "bundles/hermes/img/pixel.png": "./img/pixel.png"

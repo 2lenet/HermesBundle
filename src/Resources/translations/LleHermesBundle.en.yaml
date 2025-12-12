@@ -41,6 +41,7 @@ crud:
         copy_for_tenant: Copy for personalization
     modal:
         send_mail: Do you really want to send this email to %nb% recipients? This action is final.
+        choose_type: Choose a template type
     canDelete:
         mail: The email is being sent
 
@@ -156,6 +157,10 @@ text:
     percentMailSent: '%nb%% sent'
     percentMailUnsubscribed: '%nb%% unsubscribed'
     percentMailError: '%nb%% errors'
+    template:
+        type_html: HTML
+        type_ckeditor: CKEditor
+        type_mjml: MJML
 
 flash:
     copyAlreadyExist: A copy of this template already exists, please edit the code of the copy and try again

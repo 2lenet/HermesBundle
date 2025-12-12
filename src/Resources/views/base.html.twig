@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block head_stylesheets %}
+{% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/llehermes/style.css') }}"/>
 {% endblock %}
 
-{% block head_javascript %}
+{% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/llehermes/app.js') }}"></script>
 {% endblock %}
