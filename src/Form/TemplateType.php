@@ -2,7 +2,7 @@
 
 namespace Lle\HermesBundle\Form;
 
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Lle\CruditBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Form\Type\MjmlType;

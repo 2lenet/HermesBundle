@@ -68,7 +68,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                 "mail_attached_file" => [
                     "class" => "Lle\\HermesBundle\\Entity\\Mail",
                     "storage_adapter" => "lle_entity_file.storage.default",
-                    "role" => "PUBLIC_ACCESS",
+                    "role" => "ROLE_HERMES_MAIL_READATTACHMENT",
                 ],
             ],
         ]);
