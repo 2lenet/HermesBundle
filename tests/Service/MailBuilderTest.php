@@ -3,6 +3,7 @@
 namespace App\Tests\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
@@ -54,6 +55,7 @@ class MailBuilderTest extends TestCase
             $bag,
             $this->createMock(RouterInterface::class),
             $twig,
+            $this->createMock(EntityFileLoader::class),
         );
 
         $email = $builder->buildMail($mail, $recipient);

@@ -12,12 +12,15 @@ use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Path;
+use Lle\EntityFileBundle\Crudit\Brick\EntityFileBrickConfig;
 use Lle\HermesBundle\Crudit\Datasource\MailDatasource;
 use Lle\HermesBundle\Entity\Mail;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class MailCrudConfig extends AbstractCrudConfig
 {
+    public const MAIL_ATTACHED_FILE_CONFIG = 'mail_attached_file';
+
     public function __construct(
         MailDatasource $datasource,
         protected RequestStack $requestStack,
@@ -198,6 +201,7 @@ class MailCrudConfig extends AbstractCrudConfig
             'tab.recipients' => SublistConfig::new('mail', $this->recipientCrudConfig)
                 ->setFields($this->recipientCrudConfig->getSublistFields())
                 ->setActions($this->recipientCrudConfig->getSublistAction()),
+            'tab.attached_files' => EntityFileBrickConfig::new(self::MAIL_ATTACHED_FILE_CONFIG),
         ];
 
         $request = $this->requestStack->getMainRequest();
