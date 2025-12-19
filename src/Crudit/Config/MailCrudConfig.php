@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Crudit\Config;
 
 use Lle\CruditBundle\Brick\SublistBrick\SublistConfig;
+use Lle\CruditBundle\Brick\TabBrick\TabConfig;
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
-use Lle\CruditBundle\Dto\Action\DeleteAction;
 use Lle\CruditBundle\Dto\Action\EditAction;
 use Lle\CruditBundle\Dto\Action\ItemAction;
 use Lle\CruditBundle\Dto\Field\Field;
@@ -109,9 +109,33 @@ class MailCrudConfig extends AbstractCrudConfig
         ];
     }
 
-    public function getDefaultSort(): array
+    public function getTabConfig(): ?TabConfig
     {
-        return [['id', 'DESC']];
+        $tabs = parent::getTabConfig();
+        if (!$tabs) {
+            $tabs = TabConfig::new();
+        }
+
+        $tabs->add(
+            'tab.recipients',
+            SublistConfig::new('mail', $this->recipientCrudConfig)
+                ->setFields($this->recipientCrudConfig->getSublistFields())
+                ->setActions($this->recipientCrudConfig->getSublistAction()),
+        );
+        $tabs->add(
+            'tab.links',
+            SublistConfig::new('mail', $this->linkCrudConfig)
+                ->setFields($this->linkCrudConfig->getSublistFields())
+                ->setActions($this->linkCrudConfig->getSublistAction()),
+            displayIf: fn(Mail $mail) => $mail->getTemplate()?->hasStatistics(),
+        );
+        $tabs->add(
+            'tab.attached_files',
+            EntityFileBrickConfig::new(self::MAIL_ATTACHED_FILE_CONFIG),
+            displayIf: fn(Mail $mail) => !$mail->hasAttachmentsDeleted(),
+        );
+
+        return $tabs;
     }
 
     public function getListActions(): array
@@ -195,33 +219,9 @@ class MailCrudConfig extends AbstractCrudConfig
         return $actions;
     }
 
-    public function getTabs(): array
+    public function getDefaultSort(): array
     {
-        $tabs = [
-            'tab.recipients' => SublistConfig::new('mail', $this->recipientCrudConfig)
-                ->setFields($this->recipientCrudConfig->getSublistFields())
-                ->setActions($this->recipientCrudConfig->getSublistAction()),
-            'tab.attached_files' => EntityFileBrickConfig::new(self::MAIL_ATTACHED_FILE_CONFIG),
-        ];
-
-        $request = $this->requestStack->getMainRequest();
-        $route = $this->getPath(CrudConfigInterface::SHOW)->getRoute();
-        if ($request && $route == $request->attributes->get('_route')) {
-            /** @var Mail $mail */
-            $mail = $this->datasource->get($request->attributes->get('id'));
-            if ($mail->getTemplate()?->hasStatistics()) {
-                $tabs = [
-                    'tab.recipients' => SublistConfig::new('mail', $this->recipientCrudConfig)
-                        ->setFields($this->recipientCrudConfig->getSublistFields())
-                        ->setActions($this->recipientCrudConfig->getSublistAction()),
-                    'tab.links' => SublistConfig::new('mail', $this->linkCrudConfig)
-                        ->setFields($this->linkCrudConfig->getSublistFields())
-                        ->setActions($this->linkCrudConfig->getSublistAction()),
-                ];
-            }
-        }
-
-        return $tabs;
+        return [['id', 'DESC']];
     }
 
     public function getRootRoute(): string
