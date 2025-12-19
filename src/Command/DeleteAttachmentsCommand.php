@@ -4,6 +4,8 @@ namespace Lle\HermesBundle\Command;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Lle\EntityFileBundle\Service\EntityFileLoader;
+use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Service\AttachmentService;
 use Symfony\Component\Console\Command\Command;
@@ -22,7 +24,8 @@ class DeleteAttachmentsCommand extends Command
     public function __construct(
         protected AttachmentService $attachmentService,
         protected EntityManagerInterface $em,
-        private ParameterBagInterface $parameters,
+        protected ParameterBagInterface $parameters,
+        protected EntityFileLoader $entityFileLoader,
     ) {
         parent::__construct();
     }
@@ -44,6 +47,11 @@ class DeleteAttachmentsCommand extends Command
 
         foreach ($mails as $mail) {
             $this->attachmentService->deleteAttachements($mail);
+            $entityConfig = $this->entityFileLoader->get(MailCrudConfig::MAIL_ATTACHED_FILE_CONFIG);
+            foreach ($entityConfig->get($mail) as $file) {
+                $entityConfig->delete($file);
+            }
+
             $mail->setAttachmentsDeleted(true);
             $count++;
 
