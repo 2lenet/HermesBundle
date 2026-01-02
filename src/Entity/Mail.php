@@ -236,6 +236,13 @@ class Mail implements MultiTenantInterface
         return round($openinglinks / $this->recipients->count() * 100, 2);
     }
 
+    public function getSendingRecipients(): Collection
+    {
+        return $this->recipients->filter(function (Recipient $recipient) {
+            return $recipient->getStatus() === Recipient::STATUS_SENDING;
+        });
+    }
+
     public function getId(): int
     {
         return $this->id;
