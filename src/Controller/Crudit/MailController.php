@@ -33,11 +33,12 @@ class MailController extends AbstractCrudController
     public function __construct(
         MailCrudConfig $config,
         protected AttachmentService $attachmentService,
-        protected readonly EntityManagerInterface $em,
-        protected readonly MailRepository $mailRepository,
-        protected readonly TranslatorInterface $translator,
-        protected readonly Sender $sender,
-        protected readonly MultiTenantManager $multiTenantManager,
+        protected EntityManagerInterface $em,
+        protected MailRepository $mailRepository,
+        protected MailCanceller $mailCanceller,
+        protected TranslatorInterface $translator,
+        protected Sender $sender,
+        protected MultiTenantManager $multiTenantManager,
     ) {
         $this->config = $config;
     }
@@ -167,6 +168,24 @@ class MailController extends AbstractCrudController
 
         $message = $this->translator->trans('flash.mail_sent', ['%nb%' => $nb, '%nbTotal%' => 1], 'LleHermesBundle');
         $this->addFlash(FlashBrickResponse::SUCCESS, $message);
+
+        return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+    }
+
+    #[Route('/cancel/{id}')]
+    public function cancel(Mail $mail): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_CANCEL');
+
+        if (!$this->multiTenantManager->isOwner($mail)) {
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
+
+            return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        }
+
+        $this->mailCanceller->cancel($mail);
+
+        $this->addFlash(FlashBrickResponse::SUCCESS, 'flash.mail_cancelled');
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
