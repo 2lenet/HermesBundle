@@ -13,6 +13,7 @@ use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Service\AttachmentService;
+use Lle\HermesBundle\Service\MailCanceller;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Lle\HermesBundle\Service\Sender;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
