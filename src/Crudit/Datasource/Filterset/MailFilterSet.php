@@ -17,11 +17,15 @@ class MailFilterSet extends AbstractFilterSet
         return [
             StringFilterType::new('subject'),
             PeriodeFilterType::new('sendingDate'),
-            ChoiceFilterType::new(
-                'status',
-                [null, Mail::STATUS_DRAFT, Mail::STATUS_SENDING, Mail::STATUS_SENT, Mail::STATUS_CANCELLED]
-            ),
-            StringFilterType::new('recipients:toEmail')->setLabel('field.toemail'),
+            ChoiceFilterType::new('status', [
+                'status.draft' => Mail::STATUS_DRAFT,
+                'status.sending' => Mail::STATUS_SENDING,
+                'status.sent' => Mail::STATUS_SENT,
+                'status.cancelled' => Mail::STATUS_CANCELLED,
+                'status.error' => Mail::STATUS_ERROR,
+            ]),
+            StringFilterType::new('recipients:toEmail')
+                ->setLabel('field.toemail'),
         ];
     }
 }
