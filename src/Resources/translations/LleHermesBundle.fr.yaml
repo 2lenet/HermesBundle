@@ -8,6 +8,7 @@ action:
     send: Envoyer
     sendmailtest: Envoyer un mail de test
     resend: Renvoyer
+    cancel: Annuler
 
 crudit:
     action: Actions
@@ -173,11 +174,15 @@ flash:
         email: Aucun mail trouvé
         recipient: Aucun destinataire trouvé
     no_mail: Aucun mail trouvé
+    mail_cancelled: Le mail a bien été annulé
 
 modal:
     action:
         cancel: Annuler
         send: Envoyer
+    confirm:
+        action:
+            cancel: Êtes-vous sûr de vouloir annnuler l'envoi de ce mail ?
     message:
         sendTestMail: Envoyer un mail de test à
 

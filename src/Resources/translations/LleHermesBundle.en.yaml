@@ -8,6 +8,7 @@ action:
     send: Send
     sendmailtest: Send a test mail
     resend: Resend
+    cancel: Cancel
 
 crudit:
     action: Actions
@@ -171,11 +172,15 @@ flash:
         email: No mail found
         recipient: No recipient found
     no_mail: No mail found
+    mail_cancelled: The mail has been successfully cancelled
 
 modal:
     action:
         cancel: Cancel
         send: Send
+    confirm:
+        action:
+            cancel: Are you sure you want to cancel sending this mail ?
     message:
         sendTestMail: Send a test mail to
 
