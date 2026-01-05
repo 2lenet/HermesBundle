@@ -19,7 +19,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class MailCrudConfig extends AbstractCrudConfig
 {
-    public const MAIL_ATTACHED_FILE_CONFIG = 'mail_attached_file';
+    public const string MAIL_ATTACHED_FILE_CONFIG = 'mail_attached_file';
+    public const string ACTION_SEND = 'send';
+    public const string ACTION_SEND_TEST = 'send_test';
+    public const string ACTION_CANCEL = 'cancel';
 
     public function __construct(
         MailDatasource $datasource,
@@ -159,7 +162,7 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setCssClass('btn btn-secondary btn-sm crudit-action')
             ->setRole('ROLE_HERMES_MAIL_EDIT');
 
-        $actions[] = ItemAction::new(
+        $actions[self::ACTION_SEND] = ItemAction::new(
             'action.send',
             new Path('lle_hermes_crudit_mail_send'),
             Icon::new('paper-plane')
@@ -168,7 +171,7 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setCssClass('btn btn-success btn-sm mr-1')
             ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig');
 
-        $actions[] = ItemAction::new(
+        $actions[self::ACTION_SEND_TEST] = ItemAction::new(
             'action.sendmailtest',
             (Path::new('lle_hermes_crudit_mail_send_testmail')),
             Icon::new('fas fa-envelope')
@@ -176,6 +179,16 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setRole('ROLE_HERMES_MAIL_SENDTESTMAIL')
             ->setCssClass('btn btn-warning btn-sm mr-1')
             ->setModal('@LleHermes/crud/mail/_modal_send_testmail.html.twig');
+
+        $actions[self::ACTION_CANCEL] = ItemAction::new(
+            'action.cancel',
+            Path::new('lle_hermes_crudit_mail_cancel'),
+            Icon::new('ban'),
+        )
+            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_SENDING))
+            ->setRole('ROLE_HERMES_MAIL_CANCEL')
+            ->setCssClass('btn btn-danger btn-sm')
+            ->setConfirmModal(true);
 
         return $actions;
     }
@@ -196,7 +209,7 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setCssClass('btn btn-secondary btn-sm crudit-action ms-1')
             ->setRole('ROLE_HERMES_MAIL_EDIT');
 
-        $actions['send'] = ItemAction::new(
+        $actions[self::ACTION_SEND] = ItemAction::new(
             'action.send',
             new Path('lle_hermes_crudit_mail_send'),
             Icon::new('paper-plane')
@@ -205,7 +218,7 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setCssClass('btn btn-success btn-sm ms-1')
             ->setModal('@LleHermes/modal/_confirm_send_mail.html.twig');
 
-        $actions['send_test'] = ItemAction::new(
+        $actions[self::ACTION_SEND_TEST] = ItemAction::new(
             'action.sendmailtest',
             (Path::new('lle_hermes_crudit_mail_send_testmail')),
             Icon::new('fas fa-envelope')
@@ -213,6 +226,16 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setRole('ROLE_HERMES_MAIL_SENDTESTMAIL')
             ->setCssClass('btn btn-warning btn-sm ms-1')
             ->setModal('@LleHermes/crud/mail/_modal_send_testmail.html.twig');
+
+        $actions[self::ACTION_CANCEL] = ItemAction::new(
+            'action.cancel',
+            Path::new('lle_hermes_crudit_mail_cancel'),
+            Icon::new('ban'),
+        )
+            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_SENDING))
+            ->setRole('ROLE_HERMES_MAIL_CANCEL')
+            ->setCssClass('btn btn-danger btn-sm ms-1')
+            ->setConfirmModal(true);
 
         $actions[CrudConfigInterface::ACTION_DELETE] = $parentActions[CrudConfigInterface::ACTION_DELETE];
 

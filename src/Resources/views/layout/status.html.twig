@@ -1,4 +1,4 @@
 <span
-    class="badge {% if position is defined %}float-{{ position }}{% endif %} {% if status == 'error' %}bg-danger{% else %}bg-primary{% endif %}">
+    class="badge {% if position is defined %}float-{{ position }}{% endif %} {% if status == 'error' or status == 'cancelled' %}bg-danger{% else %}bg-primary{% endif %}">
     {{ ('status.' ~ status)|trans({}, 'LleHermesBundle') }}
 </span>

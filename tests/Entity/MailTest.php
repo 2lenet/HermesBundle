@@ -98,4 +98,33 @@ class MailTest extends TestCase
         $errors = $validator->validate($mail);
         self::assertCount(0, $errors);
     }
+
+    public function testGetSendingRecipients(): void
+    {
+        $recipient1 = new Recipient();
+        $recipient1->setStatus(Recipient::STATUS_SENDING);
+
+        $recipient2 = new Recipient();
+        $recipient2->setStatus(Recipient::STATUS_SENT);
+
+        $recipient3 = new Recipient();
+        $recipient3->setStatus(Recipient::STATUS_CANCELLED);
+
+        $recipient4 = new Recipient();
+        $recipient4->setStatus(Recipient::STATUS_ERROR);
+
+        $recipient5 = new Recipient();
+        $recipient5->setStatus(Recipient::STATUS_UNSUBSCRIBED);
+
+        $mail = new Mail();
+        $mail
+            ->setStatus(Mail::STATUS_SENDING)
+            ->addRecipient($recipient1)
+            ->addRecipient($recipient2)
+            ->addRecipient($recipient3)
+            ->addRecipient($recipient4)
+            ->addRecipient($recipient5);
+
+        self::assertCount(1, $mail->getSendingRecipients());
+    }
 }

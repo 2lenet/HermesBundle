@@ -8,6 +8,7 @@ action:
     send: Senden
     sendmailtest: Test-E-Mail senden
     resend: Zurücksenden
+    cancel: Abbrechen
 
 crudit:
     action: Aktionen
@@ -171,11 +172,15 @@ flash:
         email: Keine E-Mail gefunden
         recipient: Kein Empfänger gefunden
     no_mail: Keine E-Mail gefunden
+    mail_cancelled: Die E-Mail wurde erfolgreich gelöscht
 
 modal:
     action:
         cancel: Abbrechen
         send: Senden
+    confirm:
+        action:
+            cancel: Sind Sie sicher, dass Sie den Versand dieser E-Mail abbrechen möchten ?
     message:
         sendTestMail: Test-E-Mail senden an
 

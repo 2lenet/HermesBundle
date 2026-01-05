@@ -13,6 +13,7 @@ use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Repository\MailRepository;
 use Lle\HermesBundle\Service\AttachmentService;
+use Lle\HermesBundle\Service\MailCanceller;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Lle\HermesBundle\Service\Sender;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/mail')]
@@ -33,11 +35,12 @@ class MailController extends AbstractCrudController
     public function __construct(
         MailCrudConfig $config,
         protected AttachmentService $attachmentService,
-        protected readonly EntityManagerInterface $em,
-        protected readonly MailRepository $mailRepository,
-        protected readonly TranslatorInterface $translator,
-        protected readonly Sender $sender,
-        protected readonly MultiTenantManager $multiTenantManager,
+        protected EntityManagerInterface $em,
+        protected MailRepository $mailRepository,
+        protected MailCanceller $mailCanceller,
+        protected TranslatorInterface $translator,
+        protected Sender $sender,
+        protected MultiTenantManager $multiTenantManager,
     ) {
         $this->config = $config;
     }
@@ -166,6 +169,24 @@ class MailController extends AbstractCrudController
         $nb = $this->sender->sendRecipient($recipient);
 
         $message = $this->translator->trans('flash.mail_sent', ['%nb%' => $nb, '%nbTotal%' => 1], 'LleHermesBundle');
+        $this->addFlash(FlashBrickResponse::SUCCESS, $message);
+
+        return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+    }
+
+    #[IsGranted('ROLE_HERMES_MAIL_CANCEL')]
+    #[Route('/cancel/{id}')]
+    public function cancel(Mail $mail): Response
+    {
+        if (!$this->multiTenantManager->isOwner($mail)) {
+            $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
+
+            return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+        }
+
+        $this->mailCanceller->cancel($mail);
+
+        $message = $this->translator->trans('flash.mail_cancelled', [], 'LleHermesBundle');
         $this->addFlash(FlashBrickResponse::SUCCESS, $message);
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
