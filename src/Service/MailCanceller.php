@@ -17,8 +17,12 @@ class MailCanceller
     {
         $mail->setStatus(Mail::STATUS_CANCELLED);
 
-        foreach ($mail->getSendingRecipients() as $recipient) {
+        foreach ($mail->getSendingRecipients() as $key => $recipient) {
             $recipient->setStatus(Recipient::STATUS_CANCELLED);
+
+            if ($key % 1000 === 0) {
+                $this->em->flush();
+            }
         }
 
         $this->em->flush();

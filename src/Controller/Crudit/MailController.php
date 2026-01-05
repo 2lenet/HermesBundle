@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/mail')]
@@ -173,11 +174,10 @@ class MailController extends AbstractCrudController
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
 
+    #[IsGranted('ROLE_HERMES_MAIL_CANCEL')]
     #[Route('/cancel/{id}')]
     public function cancel(Mail $mail): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_HERMES_MAIL_CANCEL');
-
         if (!$this->multiTenantManager->isOwner($mail)) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.not_owner.mail');
 
@@ -186,7 +186,8 @@ class MailController extends AbstractCrudController
 
         $this->mailCanceller->cancel($mail);
 
-        $this->addFlash(FlashBrickResponse::SUCCESS, 'flash.mail_cancelled');
+        $message = $this->translator->trans('flash.mail_cancelled', [], 'LleHermesBundle');
+        $this->addFlash(FlashBrickResponse::SUCCESS, $message);
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
