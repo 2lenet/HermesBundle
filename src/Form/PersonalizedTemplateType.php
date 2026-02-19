@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Form;
 
-use Lle\CruditBundle\Form\Type\CKEditorType
+use Lle\CruditBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Service\MultiTenantManager;
