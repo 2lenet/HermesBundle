@@ -70,7 +70,7 @@ class PersonalizedTemplateType extends AbstractType
                 ]);
                 break;
         }
-        $builder->->add('text', TextareaType::class, [
+        $builder->add('text', TextareaType::class, [
             'attr' => [
                 'rows' => 20,
             ],
