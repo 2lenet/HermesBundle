@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Form;
 
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Lle\CruditBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\Form\AbstractType;
@@ -18,12 +18,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 class PersonalizedTemplateType extends AbstractType
 {
     public function __construct(
-        protected MultiTenantManager $multiTenantManager,
+        protected MultiTenantManager $multiTenantManager
     ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $templateType = $options['data']->getType();
+
         $builder->add('groupInformations', GroupType::class, [
             'label' => 'field.group.template_informations',
             'inherit_data' => true,
@@ -46,19 +48,34 @@ class PersonalizedTemplateType extends AbstractType
             'label' => 'field.group.template_content',
             'inherit_data' => true,
         ])
-            ->add('subject', GedmoTranslatableType::class)
-            ->add('html', GedmoTranslatableType::class, [
-                'field_class' => TextareaType::class,
-                'attr' => [
-                    'rows' => 20,
-                ],
-            ])
-            ->add('text', GedmoTranslatableType::class, [
-                'field_class' => TextareaType::class,
-                'attr' => [
-                    'rows' => 20,
-                ],
-            ]);
+            ->add('subject', GedmoTranslatableType::class);
+        switch ($templateType) {
+            case Template::TYPE_CKEDITOR:
+                $builder->add('html', GedmoTranslatableType::class, [
+                    'fields_class' => CKEditorType::class,
+                ]);
+                break;
+            case Template::TYPE_MJML:
+                $builder->add('mjml', GemdoTranslatableTyoe::class, [
+                    'fields_class' => MjmlType::class,
+                ]);
+                break;
+            case Template::TYPE_HTML:
+            default:
+                $builder->add('html', GedmoTranslatableType::class, [
+                    'fields_class' => TextareaType::class,
+                    'attr' => [
+                        'rows' => 20,
+                    ],
+                ]);
+                break;
+        }
+        $builder->add('text', GedmoTranslatableType::class, [
+            'fields_class' => TextareaType::class,
+            'attr' => [
+                'rows' => 20,
+            ],
+        ]);
         $builder->add('groupOptions', GroupType::class, [
             'label' => 'field.group.template_options',
             'inherit_data' => true,
