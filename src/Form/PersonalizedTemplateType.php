@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Form;
 
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Lle\CruditBundle\Form\Type\CKEditorType
 use Lle\CruditBundle\Form\Type\GroupType;
+use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -50,7 +51,7 @@ class PersonalizedTemplateType extends AbstractType
             ->add('subject', TextType::class);
         switch ($templateType) {
             case Template::TYPE_CKEDITOR:
-                $builder->add('html', \Lle\CruditBundle\Form\Type\CKEditorType::class, [
+                $builder->add('html', CKEditorType::class, [
                     'label' => false,
                     'config' => ['toolbar' => 'full'],
                     'attr' => [
