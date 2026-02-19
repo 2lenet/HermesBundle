@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class PersonalizedTemplateType extends AbstractType
 {
     public function __construct(
-        protected MultiTenantManager $multiTenantManager
+        protected MultiTenantManager $multiTenantManager,
     ) {
     }
 
@@ -28,16 +28,17 @@ class PersonalizedTemplateType extends AbstractType
             'label' => 'field.group.template_informations',
             'inherit_data' => true,
         ])
-            ->add('libelle', TextType::class, [
+            ->add('libelle', GedmoTranslatableType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
             ->add('code', TextType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
-            ->add('senderName', TextType::class, [
+            ->add('senderName', GedmoTranslatableType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
-            ->add('senderEmail', EmailType::class, [
+            ->add('senderEmail', GedmoTranslatableType::class, [
+                'field_class' => EmailType::class,
                 'attr' => ['class' => 'col-md-6'],
             ]);
 
@@ -45,13 +46,15 @@ class PersonalizedTemplateType extends AbstractType
             'label' => 'field.group.template_content',
             'inherit_data' => true,
         ])
-            ->add('subject', TextType::class)
-            ->add('html', TextareaType::class, [
+            ->add('subject', GedmoTranslatableType::class)
+            ->add('html', GedmoTranslatableType::class, [
+                'field_class' => TextareaType::class,
                 'attr' => [
                     'rows' => 20,
                 ],
             ])
-            ->add('text', TextareaType::class, [
+            ->add('text', GedmoTranslatableType::class, [
+                'field_class' => TextareaType::class,
                 'attr' => [
                     'rows' => 20,
                 ],

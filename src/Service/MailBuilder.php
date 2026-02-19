@@ -58,8 +58,8 @@ class MailBuilder
             $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
         }
 
-        if ($mail->getSenderName() && $mail->getSenderEmail()) {
-            $from = new Address($mail->getSenderEmail(), $mail->getSenderName());
+        if ($mail->getSenderEmailFromLocale($mail->getLocale()) && $mail->getSenderEmailFromLocale($mail->getLocale())) {
+            $from = new Address($mail->getSenderEmailFromLocale($mail->getLocale()), $mail->getSenderNameFromLocale($mail->getLocale()));
         } else {
             $from = new Address((string)$mail->getTemplate()?->getSenderEmail(), $templater->getSenderName());
         }

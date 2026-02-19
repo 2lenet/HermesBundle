@@ -2,13 +2,19 @@
 
 namespace Lle\HermesBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Contracts\MultiTenantInterface;
+use Lle\HermesBundle\Entity\Translation\TemplateTranslation;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Lle\HermesBundle\Validator as HermesAssert;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Translatable;
 
 #[ORM\Entity(repositoryClass: TemplateRepository::class)]
+#[Gedmo\TranslationEntity(class: TemplateTranslation::class)]
 #[ORM\Table(name: 'lle_hermes_template')]
 #[ORM\Index(name: 'tenant_id_idx', columns: ['tenant_id'])]
 class Template implements MultiTenantInterface
@@ -23,26 +29,31 @@ class Template implements MultiTenantInterface
     protected ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Translatable]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     protected string $libelle;
 
     #[ORM\Column(type: 'string', length: 1024)]
+    #[Translatable]
     #[Assert\NotBlank]
     #[Assert\Length(max: 1024)]
     protected string $subject;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Translatable]
     #[Assert\Length(max: 255)]
     protected ?string $senderName = null;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Translatable]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
     protected string $senderEmail;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Translatable]
     #[HermesAssert\TwigSyntax]
     protected ?string $text = null;
 
@@ -52,6 +63,7 @@ class Template implements MultiTenantInterface
     protected string $code;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Translatable]
     #[HermesAssert\TwigSyntax]
     protected ?string $html = null;
 
@@ -75,7 +87,15 @@ class Template implements MultiTenantInterface
     protected string $type = self::TYPE_HTML;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Translatable]
     protected ?string $mjml = null;
+
+    #[ORM\OneToMany(mappedBy: 'object', targetEntity: TemplateTranslation::class, cascade: ['persist', 'remove'])]
+    private Collection $translations;
+
+    public function __construct() {
+        $this->translations = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -256,5 +276,95 @@ class Template implements MultiTenantInterface
     public function setMjml(?string $mjml): void
     {
         $this->mjml = $mjml;
+    }
+
+    public function getTranslations(): Collection
+    {
+        return $this->translations;
+    }
+
+    public function addTranslation(TemplateTranslation $templateTranslation): void
+    {
+        if (!$this->translations->contains($templateTranslation)) {
+            $this->translations[] = $templateTranslation;
+            $templateTranslation->setObject($this);
+        }
+    }
+
+    public function getLibelleFromLocale(string $locale): ?string
+    {
+        foreach ($this->getTranslations()  as $translation) {
+            if ($translation->getLocale() === $locale && $translation->getField() === 'libelle') {
+                return $translation->getContent();
+            }
+        }
+
+        return null;
+    }
+
+    public function getSubjectFromLocale(string $locale): ?string
+    {
+        foreach ($this->getTranslations() as $translation) {
+            if ($translation->getLocale() === $locale && $translation->getField() === 'subject') {
+                return $translation->getContent();
+            }
+        }
+
+        return null;
+    }
+
+    public function getSenderNameFromLocale(string $locale): ?string
+    {
+        foreach ($this->getTranslations()  as $translation) {
+            if ($translation->getLocale() === $locale && $translation->getField() === 'senderName') {
+                return $translation->getContent();
+            }
+        }
+
+        return null;
+    }
+
+    public function getSenderEmailFromLocale(string $locale): ?string
+    {
+        foreach ($this->getTranslations()  as $translation) {
+            if ($translation->getLocale() === $locale && $translation->getField() === 'senderEmail') {
+                return $translation->getContent();
+            }
+        }
+
+        return null;
+    }
+
+    public function getTextFromLocale(string $locale): ?string
+    {
+        foreach ($this->getTranslations()  as $translation) {
+            if ($translation->getLocale() === $locale && $translation->getField() === 'text') {
+                return $translation->getContent();
+            }
+        }
+
+        return null;
+    }
+
+    public function getHtmlFromLocale(string $locale): ?string
+    {
+        foreach ($this->getTranslations()  as $translation) {
+            if ($translation->getLocale() === $locale && $translation->getField() === 'html') {
+                return $translation->getContent();
+            }
+        }
+
+        return null;
+    }
+
+    public function getMjmlFromLocale(string $locale): ?string
+    {
+        foreach ($this->getTranslations()  as $translation) {
+            if ($translation->getLocale() === $locale && $translation->getField() === 'mjml') {
+                return $translation->getContent();
+            }
+        }
+
+        return null;
     }
 }
