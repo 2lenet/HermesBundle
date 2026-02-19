@@ -68,6 +68,8 @@ class MailFactory
         $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
+        $mail->setSenderEmail($template->getSenderEmailFromLocale($locale));
+        $mail->setSenderName($template->getSenderNameFromLocale($locale));
         $mail->setSubject($mailDto->getStatus() ?? $template->getSubjectFromLocale($locale));
         $mail->setMjml($template->getMjml());
 

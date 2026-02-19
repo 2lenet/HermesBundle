@@ -59,6 +59,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container): void
     {
         $hasDoctrineTranslatable = false;
+        $hasStofDoctrine_extensions = false;
         foreach ($container->getExtensionConfig('doctrine') as $config) {
             if (isset($config['orm']['mappings']['translatable'])) {
                 $hasDoctrineTranslatable = true;
@@ -78,6 +79,37 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                             'alias' => 'GedmoTranslatable',
                         ],
                     ],
+                ],
+            ]);
+        }
+
+        foreach ($container->getExtensionConfig('stof_doctrine_extensions') as $config) {
+            if (isset($config['orm']['default']['translatable'])
+                && isset($config['default_locale'])
+                && isset($config['translation_fallback'])
+                && isset($config['class'])
+            ) {
+                $hasStofDoctrine_extensions = true;
+                break;
+            }
+        }
+
+        if (!$hasDoctrineTranslatable) {
+            $container->prependExtensionConfig('stof_doctrine_extensions', [
+                'default_locale' => 'en_US',
+                'translation_fallback' => true,
+                'orm' => [
+                    'default' => [
+                        'translatable' => [
+                            'tree' => true,
+                            'timestampable' => true,
+                            'blameable' => true,
+                            'loggable' => true,
+                        ],
+                    ],
+                ],
+                'class' => [
+                    'loggable' => 'App\EventListener\CustomLoggableListener',
                 ],
             ]);
         }
