@@ -24,6 +24,8 @@ class PersonalizedTemplateType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $templateType = $options['data']->getType();
+
         $builder->add('groupInformations', GroupType::class, [
             'label' => 'field.group.template_informations',
             'inherit_data' => true,
@@ -45,17 +47,34 @@ class PersonalizedTemplateType extends AbstractType
             'label' => 'field.group.template_content',
             'inherit_data' => true,
         ])
-            ->add('subject', TextType::class)
-            ->add('html', TextareaType::class, [
-                'attr' => [
-                    'rows' => 20,
-                ],
-            ])
-            ->add('text', TextareaType::class, [
-                'attr' => [
-                    'rows' => 20,
-                ],
-            ]);
+            ->add('subject', TextType::class);
+        switch ($templateType) {
+            case Template::TYPE_CKEDITOR:
+                $builder->add('html', \Lle\CruditBundle\Form\Type\CKEditorType::class, [
+                    'label' => false,
+                    'config' => ['toolbar' => 'full'],
+                    'attr' => [
+                        'rows' => 20,
+                    ],
+                ]);
+                break;
+            case Template::TYPE_MJML:
+                $builder->add('mjml', MjmlType::class);
+                break;
+            case Template::TYPE_HTML:
+            default:
+                $builder->add('html', TextareaType::class, [
+                    'attr' => [
+                        'rows' => 20,
+                    ],
+                ]);
+                break;
+        }
+        $builder->add('text', TextareaType::class, [
+            'attr' => [
+                'rows' => 20,
+            ],
+        ]);
         $builder->add('groupOptions', GroupType::class, [
             'label' => 'field.group.template_options',
             'inherit_data' => true,
