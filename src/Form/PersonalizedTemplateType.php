@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Lle\HermesBundle\Form;
 
-use Lle\CruditBundle\Form\Type\CKEditorType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
+use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Form\Type\MjmlType;
+use Lle\CruditBundle\Form\Type\GedmoTranslatableType;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

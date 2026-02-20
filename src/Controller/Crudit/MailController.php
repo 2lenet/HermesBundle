@@ -168,6 +168,8 @@ class MailController extends AbstractCrudController
 
         $nb = $this->sender->sendRecipient($recipient);
 
+        $this->em->flush();
+
         $message = $this->translator->trans('flash.mail_sent', ['%nb%' => $nb, '%nbTotal%' => 1], 'LleHermesBundle');
         $this->addFlash(FlashBrickResponse::SUCCESS, $message);
 
