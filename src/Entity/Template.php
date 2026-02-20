@@ -294,77 +294,91 @@ class Template implements MultiTenantInterface
         }
     }
 
-    public function getLibelleFromLocale(string $locale): string
+    public function getLibelleFromLocale(?string $locale): string
     {
-        foreach ($this->getTranslations() as $translation) {
-            if ($translation->getLocale() === $locale && $translation->getField() === 'libelle') {
-                return $translation->getContent();
+        if ($locale) {
+            foreach ($this->getTranslations() as $translation) {
+                if ($translation->getLocale() === $locale && $translation->getField() === 'libelle') {
+                    return $translation->getContent();
+                }
             }
         }
 
         return $this->getLibelle();
     }
 
-    public function getSubjectFromLocale(string $locale): string
+    public function getSubjectFromLocale(?string $locale): string
     {
-        foreach ($this->getTranslations() as $translation) {
-            if ($translation->getLocale() === $locale && $translation->getField() === 'subject') {
-                return $translation->getContent();
+        if ($locale) {
+            foreach ($this->getTranslations() as $translation) {
+                if ($translation->getLocale() === $locale && $translation->getField() === 'subject') {
+                    return $translation->getContent();
+                }
             }
         }
 
         return $this->getSubject();
     }
 
-    public function getSenderNameFromLocale(string $locale): ?string
+    public function getSenderNameFromLocale(?string $locale): ?string
     {
-        foreach ($this->getTranslations() as $translation) {
-            if ($translation->getLocale() === $locale && $translation->getField() === 'senderName') {
-                return $translation->getContent();
+        if ($locale) {
+            foreach ($this->getTranslations() as $translation) {
+                if ($translation->getLocale() === $locale && $translation->getField() === 'senderName') {
+                    return $translation->getContent();
+                }
             }
         }
 
         return $this->getSenderName();
     }
 
-    public function getSenderEmailFromLocale(string $locale): string
+    public function getSenderEmailFromLocale(?string $locale): string
     {
-        foreach ($this->getTranslations() as $translation) {
-            if ($translation->getLocale() === $locale && $translation->getField() === 'senderEmail') {
-                return $translation->getContent();
+        if ($locale) {
+            foreach ($this->getTranslations() as $translation) {
+                if ($translation->getLocale() === $locale && $translation->getField() === 'senderEmail') {
+                    return $translation->getContent();
+                }
             }
         }
 
         return $this->getSenderEmail();
     }
 
-    public function getTextFromLocale(string $locale): ?string
+    public function getTextFromLocale(?string $locale): ?string
     {
-        foreach ($this->getTranslations() as $translation) {
-            if ($translation->getLocale() === $locale && $translation->getField() === 'text') {
-                return $translation->getContent();
+        if ($locale) {
+            foreach ($this->getTranslations() as $translation) {
+                if ($translation->getLocale() === $locale && $translation->getField() === 'text') {
+                    return $translation->getContent();
+                }
             }
         }
 
         return $this->getText();
     }
 
-    public function getHtmlFromLocale(string $locale): ?string
+    public function getHtmlFromLocale(?string $locale): ?string
     {
-        foreach ($this->getTranslations() as $translation) {
-            if ($translation->getLocale() === $locale && $translation->getField() === 'html') {
-                return $translation->getContent();
+        if ($locale) {
+            foreach ($this->getTranslations() as $translation) {
+                if ($translation->getLocale() === $locale && $translation->getField() === 'html') {
+                    return $translation->getContent();
+                }
             }
         }
 
         return $this->getHtml();
     }
 
-    public function getMjmlFromLocale(string $locale): ?string
+    public function getMjmlFromLocale(?string $locale): ?string
     {
-        foreach ($this->getTranslations() as $translation) {
-            if ($translation->getLocale() === $locale && $translation->getField() === 'mjml') {
-                return $translation->getContent();
+        if ($locale) {
+            foreach ($this->getTranslations() as $translation) {
+                if ($translation->getLocale() === $locale && $translation->getField() === 'mjml') {
+                    return $translation->getContent();
+                }
             }
         }
 
