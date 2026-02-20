@@ -50,6 +50,9 @@ class MailFactory
         if ($mailDto->getFrom()) {
             $mail->setSenderName($mailDto->getFrom()->getName());
             $mail->setSenderEmail($mailDto->getFrom()->getAddress());
+        } else {
+            $mail->setSenderEmail($template->getSenderEmailFromLocale($locale));
+            $mail->setSenderName($template->getSenderNameFromLocale($locale));
         }
 
         $nbDest = 0;
@@ -68,8 +71,6 @@ class MailFactory
         $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
-        $mail->setSenderEmail($template->getSenderEmailFromLocale($locale));
-        $mail->setSenderName($template->getSenderNameFromLocale($locale));
         $mail->setSubject($template->getSubjectFromLocale($locale));
         $mail->setMjml($template->getMjmlFromLocale($locale));
 
