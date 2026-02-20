@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Form;
 
 use Lle\CruditBundle\Form\Type\CKEditorType;
+use Lle\CruditBundle\Form\Type\GedmoTranslatableType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Form\Type\MjmlType;
@@ -24,13 +25,13 @@ class TemplateType extends AbstractType
                 'label' => 'field.group.template_informations',
                 'inherit_data' => true,
             ])
-            ->add('libelle', TextType::class, [
+            ->add('libelle', GedmoTranslatableType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
             ->add('code', TextType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
-            ->add('senderName', TextType::class, [
+            ->add('senderName', GedmoTranslatableType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
             ->add('senderEmail', EmailType::class, [
@@ -40,16 +41,13 @@ class TemplateType extends AbstractType
                 'label' => 'field.group.template_content',
                 'inherit_data' => true,
             ])
-            ->add('subject', TextType::class);
+            ->add('subject', GedmoTranslatableType::class);
 
         switch ($templateType) {
             case Template::TYPE_CKEDITOR:
-                $builder->add('html', CKEditorType::class, [
+                $builder->add('html', GedmoTranslatableType::class, [
+                    'fields_class' => CKEditorType::class,
                     'label' => false,
-                    'config' => ['toolbar' => 'full'],
-                    'attr' => [
-                        'rows' => 20,
-                    ],
                 ]);
                 break;
             case Template::TYPE_MJML:
@@ -57,7 +55,8 @@ class TemplateType extends AbstractType
                 break;
             case Template::TYPE_HTML:
             default:
-                $builder->add('html', TextareaType::class, [
+                $builder->add('html', GedmoTranslatableType::class, [
+                    'fields_class' => TextareaType::class,
                     'attr' => [
                         'rows' => 20,
                     ],
@@ -66,7 +65,8 @@ class TemplateType extends AbstractType
         }
 
         $builder
-            ->add('text', TextareaType::class, [
+            ->add('text', GedmoTranslatableType::class, [
+                'fields_class' => TextareaType::class,
                 'attr' => [
                     'rows' => 20,
                 ],

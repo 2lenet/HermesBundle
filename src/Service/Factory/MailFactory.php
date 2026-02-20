@@ -16,17 +16,19 @@ use function Symfony\Component\Translation\t;
 class MailFactory
 {
     public function __construct(
-        protected readonly multiTenantManager $multiTenantManager,
-        protected readonly ParameterBagInterface $parameters,
-        protected readonly RecipientFactory $recipientFactory,
-        protected readonly Security $security,
+        protected multiTenantManager $multiTenantManager,
+        protected ParameterBagInterface $parameters,
+        protected RecipientFactory $recipientFactory,
+        protected Security $security,
     ) {
     }
 
     public function createMailFromDto(MailDto $mailDto, Template $template): Mail
     {
+        $locale = $mailDto->getLocale();
         $mail = new Mail();
         $mail
+            ->setLocale($locale)
             ->setTemplate($template)
             ->setCreatedAt(new \DateTime())
             ->setEntityClass($mailDto->getEntityClass())
@@ -48,6 +50,9 @@ class MailFactory
         if ($mailDto->getFrom()) {
             $mail->setSenderName($mailDto->getFrom()->getName());
             $mail->setSenderEmail($mailDto->getFrom()->getAddress());
+        } else {
+            $mail->setSenderEmail($template->getSenderEmailFromLocale($locale));
+            $mail->setSenderName($template->getSenderNameFromLocale($locale));
         }
 
         $nbDest = 0;
@@ -66,15 +71,15 @@ class MailFactory
         $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
-        $mail->setSubject($template->getSubject());
-        $mail->setMjml($template->getMjml());
+        $mail->setSubject($template->getSubjectFromLocale($locale));
+        $mail->setMjml($template->getMjmlFromLocale($locale));
 
         if ($mailDto->isSendText()) {
-            $mail->setText($template->getText());
+            $mail->setText($template->getTextFromLocale($locale));
         }
 
         if ($mailDto->isSendHtml()) {
-            $mail->setHtml($template->getHtml());
+            $mail->setHtml($template->getHtmlFromLocale($locale));
         }
 
         $mail->setSendAtDate($mailDto->getSendAt());

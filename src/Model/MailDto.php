@@ -71,6 +71,8 @@ class MailDto
 
     protected ?int $entityId = null;
 
+    protected ?string $locale;
+
     public function getSubject(): string
     {
         return $this->subject;
@@ -280,6 +282,18 @@ class MailDto
     public function setEntityId(?int $entityId): self
     {
         $this->entityId = $entityId;
+
+        return $this;
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(?string $locale): self
+    {
+        $this->locale = $locale;
 
         return $this;
     }

@@ -8,6 +8,7 @@ use Lle\CruditBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Form\Type\MjmlType;
+use Lle\CruditBundle\Form\Type\GedmoTranslatableType;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -32,16 +33,17 @@ class PersonalizedTemplateType extends AbstractType
             'label' => 'field.group.template_informations',
             'inherit_data' => true,
         ])
-            ->add('libelle', TextType::class, [
+            ->add('libelle', GedmoTranslatableType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
             ->add('code', TextType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
-            ->add('senderName', TextType::class, [
+            ->add('senderName', GedmoTranslatableType::class, [
                 'attr' => ['class' => 'col-md-6'],
             ])
-            ->add('senderEmail', EmailType::class, [
+            ->add('senderEmail', GedmoTranslatableType::class, [
+                'fields_class' => EmailType::class,
                 'attr' => ['class' => 'col-md-6'],
             ]);
 
@@ -49,30 +51,30 @@ class PersonalizedTemplateType extends AbstractType
             'label' => 'field.group.template_content',
             'inherit_data' => true,
         ])
-            ->add('subject', TextType::class);
+            ->add('subject', GedmoTranslatableType::class);
         switch ($templateType) {
             case Template::TYPE_CKEDITOR:
-                $builder->add('html', CKEditorType::class, [
-                    'label' => false,
-                    'config' => ['toolbar' => 'full'],
-                    'attr' => [
-                        'rows' => 20,
-                    ],
+                $builder->add('html', GedmoTranslatableType::class, [
+                    'fields_class' => CKEditorType::class,
                 ]);
                 break;
             case Template::TYPE_MJML:
-                $builder->add('mjml', MjmlType::class);
+                $builder->add('mjml', GedmoTranslatableType::class, [
+                    'fields_class' => MjmlType::class,
+                ]);
                 break;
             case Template::TYPE_HTML:
             default:
-                $builder->add('html', TextareaType::class, [
+                $builder->add('html', GedmoTranslatableType::class, [
+                    'fields_class' => TextareaType::class,
                     'attr' => [
                         'rows' => 20,
                     ],
                 ]);
                 break;
         }
-        $builder->add('text', TextareaType::class, [
+        $builder->add('text', GedmoTranslatableType::class, [
+            'fields_class' => TextareaType::class,
             'attr' => [
                 'rows' => 20,
             ],

@@ -58,6 +58,63 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container): void
     {
+        $hasDoctrineTranslatable = false;
+        $hasStofDoctrineExtensions = false;
+        foreach ($container->getExtensionConfig('doctrine') as $config) {
+            if (isset($config['orm']['mappings']['translatable'])) {
+                $hasDoctrineTranslatable = true;
+                break;
+            }
+        }
+
+        if (!$hasDoctrineTranslatable) {
+            $container->prependExtensionConfig('doctrine', [
+                'orm' => [
+                    'mappings' => [
+                        'translatable' => [
+                            'is_bundle' => false,
+                            'type' => 'attribute',
+                            'prefix' => 'Gedmo\Translatable\Entity',
+                            'dir' => '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity',
+                            'alias' => 'GedmoTranslatable',
+                        ],
+                    ],
+                ],
+            ]);
+        }
+
+        foreach ($container->getExtensionConfig('stof_doctrine_extensions') as $config) {
+            if (
+                isset($config['orm']['default']['translatable'])
+                && isset($config['default_locale'])
+                && isset($config['translation_fallback'])
+                && isset($config['class'])
+            ) {
+                $hasStofDoctrineExtensions = true;
+                break;
+            }
+        }
+
+        if (!$hasStofDoctrineExtensions) {
+            $container->prependExtensionConfig('stof_doctrine_extensions', [
+                'default_locale' => 'en_US',
+                'translation_fallback' => true,
+                'orm' => [
+                    'default' => [
+                        'translatable' => [
+                            'tree' => true,
+                            'timestampable' => true,
+                            'blameable' => true,
+                            'loggable' => true,
+                        ],
+                    ],
+                ],
+                'class' => [
+                    'loggable' => 'App\EventListener\CustomLoggableListener',
+                ],
+            ]);
+        }
+
         $container->prependExtensionConfig("lle_entity_file", [
             "configurations" => [
                 "attached_file" => [
