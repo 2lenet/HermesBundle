@@ -59,7 +59,7 @@ class PersonalizedTemplateType extends AbstractType
                 ]);
                 break;
             case Template::TYPE_MJML:
-                $builder->add('mjml', GemdoTranslatableTyoe::class, [
+                $builder->add('mjml', GemdoTranslatableType::class, [
                     'fields_class' => MjmlType::class,
                 ]);
                 break;
