@@ -90,7 +90,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                 && isset($config['translation_fallback'])
                 && isset($config['class'])
             ) {
-                $hasStofDoctrine_extensions = true;
+                $hasStofDoctrineExtensions = true;
                 break;
             }
         }
