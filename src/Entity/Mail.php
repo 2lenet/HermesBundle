@@ -117,8 +117,8 @@ class Mail implements MultiTenantInterface
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $mjml = null;
 
-    #[ORM\Column(type: 'text', nullable: false)]
-    protected string $locale;
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $locale;
 
     public function __construct()
     {
@@ -612,12 +612,12 @@ class Mail implements MultiTenantInterface
         $this->mjml = $mjml;
     }
 
-    public function getLocale(): string
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    public function setLocale(string $locale): self
+    public function setLocale(?string $locale): self
     {
         $this->locale = $locale;
 

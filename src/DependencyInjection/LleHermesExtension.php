@@ -59,7 +59,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container): void
     {
         $hasDoctrineTranslatable = false;
-        $hasStofDoctrine_extensions = false;
+        $hasStofDoctrineExtensions = false;
         foreach ($container->getExtensionConfig('doctrine') as $config) {
             if (isset($config['orm']['mappings']['translatable'])) {
                 $hasDoctrineTranslatable = true;
@@ -95,7 +95,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             }
         }
 
-        if (!$hasDoctrineTranslatable) {
+        if (!$hasStofDoctrineExtensions) {
             $container->prependExtensionConfig('stof_doctrine_extensions', [
                 'default_locale' => 'en_US',
                 'translation_fallback' => true,

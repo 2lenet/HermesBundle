@@ -71,7 +71,7 @@ class MailDto
 
     protected ?int $entityId = null;
 
-    protected string $locale;
+    protected ?string $locale;
 
     public function getSubject(): string
     {
@@ -286,12 +286,12 @@ class MailDto
         return $this;
     }
 
-    public function getLocale(): string
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    public function setLocale(string $locale): self
+    public function setLocale(?string $locale): self
     {
         $this->locale = $locale;
 
