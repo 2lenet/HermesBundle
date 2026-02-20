@@ -302,7 +302,7 @@ class Template implements MultiTenantInterface
             }
         }
 
-        return null;
+        return $this->getLibelle();
     }
 
     public function getSubjectFromLocale(string $locale): ?string
@@ -313,7 +313,7 @@ class Template implements MultiTenantInterface
             }
         }
 
-        return null;
+        return $this->getSubject();
     }
 
     public function getSenderNameFromLocale(string $locale): ?string
@@ -324,7 +324,7 @@ class Template implements MultiTenantInterface
             }
         }
 
-        return null;
+        return $this->getSenderName();
     }
 
     public function getSenderEmailFromLocale(string $locale): ?string
@@ -335,7 +335,7 @@ class Template implements MultiTenantInterface
             }
         }
 
-        return null;
+        return $this->getSenderEmail();
     }
 
     public function getTextFromLocale(string $locale): ?string
@@ -346,7 +346,7 @@ class Template implements MultiTenantInterface
             }
         }
 
-        return null;
+        return $this->getText();
     }
 
     public function getHtmlFromLocale(string $locale): ?string
@@ -357,7 +357,7 @@ class Template implements MultiTenantInterface
             }
         }
 
-        return null;
+        return $this->getHtml();
     }
 
     public function getMjmlFromLocale(string $locale): ?string
@@ -368,6 +368,6 @@ class Template implements MultiTenantInterface
             }
         }
 
-        return null;
+        return $this->getMjml();
     }
 }
