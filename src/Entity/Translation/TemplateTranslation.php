@@ -2,7 +2,6 @@
 
 namespace Lle\HermesBundle\Entity\Translation;
 
-
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 use Lle\HermesBundle\Entity\Template;

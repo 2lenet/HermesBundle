@@ -20,7 +20,9 @@ use Gedmo\Mapping\Annotation\Translatable;
 class Template implements MultiTenantInterface
 {
     public const string TYPE_HTML = 'html';
+
     public const string TYPE_CKEDITOR = 'ckeditor';
+
     public const string TYPE_MJML = 'mjml';
 
     #[ORM\Column(type: 'integer')]
@@ -93,7 +95,8 @@ class Template implements MultiTenantInterface
     #[ORM\OneToMany(mappedBy: 'object', targetEntity: TemplateTranslation::class, cascade: ['persist', 'remove'])]
     private Collection $translations;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->translations = new ArrayCollection();
     }
 
@@ -293,7 +296,7 @@ class Template implements MultiTenantInterface
 
     public function getLibelleFromLocale(string $locale): ?string
     {
-        foreach ($this->getTranslations()  as $translation) {
+        foreach ($this->getTranslations() as $translation) {
             if ($translation->getLocale() === $locale && $translation->getField() === 'libelle') {
                 return $translation->getContent();
             }
@@ -315,7 +318,7 @@ class Template implements MultiTenantInterface
 
     public function getSenderNameFromLocale(string $locale): ?string
     {
-        foreach ($this->getTranslations()  as $translation) {
+        foreach ($this->getTranslations() as $translation) {
             if ($translation->getLocale() === $locale && $translation->getField() === 'senderName') {
                 return $translation->getContent();
             }
@@ -326,7 +329,7 @@ class Template implements MultiTenantInterface
 
     public function getSenderEmailFromLocale(string $locale): ?string
     {
-        foreach ($this->getTranslations()  as $translation) {
+        foreach ($this->getTranslations() as $translation) {
             if ($translation->getLocale() === $locale && $translation->getField() === 'senderEmail') {
                 return $translation->getContent();
             }
@@ -337,7 +340,7 @@ class Template implements MultiTenantInterface
 
     public function getTextFromLocale(string $locale): ?string
     {
-        foreach ($this->getTranslations()  as $translation) {
+        foreach ($this->getTranslations() as $translation) {
             if ($translation->getLocale() === $locale && $translation->getField() === 'text') {
                 return $translation->getContent();
             }
@@ -348,7 +351,7 @@ class Template implements MultiTenantInterface
 
     public function getHtmlFromLocale(string $locale): ?string
     {
-        foreach ($this->getTranslations()  as $translation) {
+        foreach ($this->getTranslations() as $translation) {
             if ($translation->getLocale() === $locale && $translation->getField() === 'html') {
                 return $translation->getContent();
             }
@@ -359,7 +362,7 @@ class Template implements MultiTenantInterface
 
     public function getMjmlFromLocale(string $locale): ?string
     {
-        foreach ($this->getTranslations()  as $translation) {
+        foreach ($this->getTranslations() as $translation) {
             if ($translation->getLocale() === $locale && $translation->getField() === 'mjml') {
                 return $translation->getContent();
             }

@@ -84,7 +84,8 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
         }
 
         foreach ($container->getExtensionConfig('stof_doctrine_extensions') as $config) {
-            if (isset($config['orm']['default']['translatable'])
+            if (
+                isset($config['orm']['default']['translatable'])
                 && isset($config['default_locale'])
                 && isset($config['translation_fallback'])
                 && isset($config['class'])

@@ -154,6 +154,7 @@ class MailFactoryTest extends TestCase
         $mail->setTemplate('code');
         $mail->setStatus(MailDto::DRAFT);
         $mail->setData(['data']);
+        $mail->setLocale('en');
         $mail->setSendHtml(true);
         $mail->setSendText(false);
         $mail->setTenantId($tenantId);

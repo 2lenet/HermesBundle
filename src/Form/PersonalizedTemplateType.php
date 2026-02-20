@@ -43,7 +43,7 @@ class PersonalizedTemplateType extends AbstractType
                 'attr' => ['class' => 'col-md-6'],
             ])
             ->add('senderEmail', GedmoTranslatableType::class, [
-                'field_class' => EmailType::class,
+                'fields_class' => EmailType::class,
                 'attr' => ['class' => 'col-md-6'],
             ]);
 
@@ -59,7 +59,7 @@ class PersonalizedTemplateType extends AbstractType
                 ]);
                 break;
             case Template::TYPE_MJML:
-                $builder->add('mjml', GemdoTranslatableType::class, [
+                $builder->add('mjml', GedmoTranslatableType::class, [
                     'fields_class' => MjmlType::class,
                 ]);
                 break;
