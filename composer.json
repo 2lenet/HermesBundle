@@ -22,6 +22,7 @@
         "2lenet/entity-file-bundle": "^1.1.2",
         "doctrine/collections": "^1.0 || ^2.0",
         "doctrine/common": "^2.13 || ^3.0",
+        "doctrine/orm": "^2.11",
         "doctrine/event-manager": "^1.0 || ^2.0",
         "doctrine/persistence": "^2.0 || ^3.0",
         "symfony/validator": "^7.0 || ^8.0",
@@ -32,7 +33,8 @@
         "symfony/orm-pack": "*",
         "symfony/twig-bundle": "^7.0 || ^8.0",
         "symfony/yaml": "^7.0 || ^8.0",
-        "twig/twig": "^3.4"
+        "twig/twig": "^3.4",
+        "stof/doctrine-extensions-bundle": "^1.13"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.9",

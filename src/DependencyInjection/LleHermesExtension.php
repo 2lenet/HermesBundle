@@ -58,6 +58,50 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container): void
     {
+        $hasDoctrineTranslatable = false;
+        $hasStofDoctrineExtensions = false;
+        foreach ($container->getExtensionConfig('doctrine') as $config) {
+            if (isset($config['orm']['mappings']['translatable'])) {
+                $hasDoctrineTranslatable = true;
+                break;
+            }
+        }
+
+        if (!$hasDoctrineTranslatable) {
+            $container->prependExtensionConfig('doctrine', [
+                'orm' => [
+                    'mappings' => [
+                        'translatable' => [
+                            'is_bundle' => false,
+                            'type' => 'attribute',
+                            'prefix' => 'Gedmo\Translatable\Entity',
+                            'dir' => '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity',
+                            'alias' => 'GedmoTranslatable',
+                        ],
+                    ],
+                ],
+            ]);
+        }
+
+        foreach ($container->getExtensionConfig('stof_doctrine_extensions') as $config) {
+            if (
+                isset($config['orm']['default']['translatable'])
+            ) {
+                $hasStofDoctrineExtensions = true;
+                break;
+            }
+        }
+
+        if (!$hasStofDoctrineExtensions) {
+            $container->prependExtensionConfig('stof_doctrine_extensions', [
+                'orm' => [
+                    'default' => [
+                        'translatable' => true
+                    ],
+                ],
+            ]);
+        }
+
         $container->prependExtensionConfig("lle_entity_file", [
             "configurations" => [
                 "attached_file" => [
