@@ -186,6 +186,13 @@ class MailFactoryTest extends TestCase
         $template->setUnsubscriptions(true);
         $template->setStatistics(true);
 
+        return $template;
+    }
+
+    protected function getValueFromLocaleTest(): void
+    {
+        $template = $this->createTemplate();
+
         // translation
         $template->addTranslation(new TemplateTranslation('en', 'subject', 'test subject'));
         $template->addTranslation(new TemplateTranslation('en', 'text', 'test text'));
@@ -193,13 +200,6 @@ class MailFactoryTest extends TestCase
         $template->addTranslation(new TemplateTranslation('en', 'html', '<p>en html</p>'));
         $template->addTranslation(new TemplateTranslation('en', 'senderEmail', 'test senderEmail'));
         $template->addTranslation(new TemplateTranslation('en', 'mjml', '<mjml>test mjml</mjml>'));
-
-        return $template;
-    }
-
-    protected function getValueFromLocaleTest(): void
-    {
-        $template = $this->createTemplate();
 
         self::assertEquals('test subject', $this->mailFactory->getValueFromLocale($template, 'subject', 'en'));
         self::assertNotEquals('test subject', $this->mailFactory->getValueFromLocale($template, 'subject', 'fr'));
