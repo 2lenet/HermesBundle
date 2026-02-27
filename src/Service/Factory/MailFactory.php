@@ -10,7 +10,7 @@ use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessInterface;
 
 use function Symfony\Component\Translation\t;
 
@@ -21,7 +21,7 @@ class MailFactory
         protected ParameterBagInterface $parameters,
         protected RecipientFactory $recipientFactory,
         protected Security $security,
-        protected PropertyAccess $propertyAccessor,
+        protected PropertyAccessorInterface $propertyAccessor,
     ) {
     }
 

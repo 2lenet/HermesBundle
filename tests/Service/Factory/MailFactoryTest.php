@@ -36,7 +36,7 @@ class MailFactoryTest extends TestCase
         $parameters = new ParameterBag();
         $security = $this->createMock(Security::class);
         $recipientFactory = new RecipientFactory();
-        $propertyAccessor = new PropertyAccess();
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $this->mailFactory = new MailFactory(
             $multiTenantManager,
             $parameters,
