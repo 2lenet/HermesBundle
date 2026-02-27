@@ -47,7 +47,9 @@ class TemplateType extends AbstractType
             case Template::TYPE_CKEDITOR:
                 $builder->add('html', GedmoTranslatableType::class, [
                     'fields_class' => CKEditorType::class,
-                    'label' => false,
+                    'attr' => [
+                        'rows' => 20,
+                    ],
                 ]);
                 break;
             case Template::TYPE_MJML:

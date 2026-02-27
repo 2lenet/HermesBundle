@@ -56,6 +56,9 @@ class PersonalizedTemplateType extends AbstractType
             case Template::TYPE_CKEDITOR:
                 $builder->add('html', GedmoTranslatableType::class, [
                     'fields_class' => CKEditorType::class,
+                    'attr' => [
+                        'rows' => 20,
+                    ],
                 ]);
                 break;
             case Template::TYPE_MJML:

@@ -71,7 +71,7 @@ class MailDto
 
     protected ?int $entityId = null;
 
-    protected ?string $locale;
+    protected ?string $locale = null;
 
     public function getSubject(): string
     {

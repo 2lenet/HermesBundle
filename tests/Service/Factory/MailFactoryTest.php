@@ -15,6 +15,7 @@ use Lle\HermesBundle\Service\MultiTenantManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * Class MailFactoryTest
@@ -35,7 +36,14 @@ class MailFactoryTest extends TestCase
         $parameters = new ParameterBag();
         $security = $this->createMock(Security::class);
         $recipientFactory = new RecipientFactory();
-        $this->mailFactory = new MailFactory($multiTenantManager, $parameters, $recipientFactory, $security);
+        $propertyAccessor = new PropertyAccess();
+        $this->mailFactory = new MailFactory(
+            $multiTenantManager,
+            $parameters,
+            $recipientFactory,
+            $security,
+            $propertyAccessor
+        );
     }
 
     public function testCreateMailFromDto(): void
@@ -206,9 +214,15 @@ class MailFactoryTest extends TestCase
         self::assertNotEquals('test senderName', $this->mailFactory->getValueFromLocale($template, 'senderName', 'fr'));
 
         self::assertEquals('test senderEmail', $this->mailFactory->getValueFromLocale($template, 'senderEmail', 'en'));
-        self::assertNotEquals('test senderEmail', $this->mailFactory->getValueFromLocale($template, 'senderEmail', 'fr'));
+        self::assertNotEquals(
+            'test senderEmail',
+            $this->mailFactory->getValueFromLocale($template, 'senderEmail', 'fr')
+        );
 
         self::assertEquals('<mjml>test mjml</mjml>', $this->mailFactory->getValueFromLocale($template, 'mjml', 'en'));
-        self::assertNotEquals('<mjml>test mjml</mjml>', $this->mailFactory->getValueFromLocale($template, 'mjml', 'fr'));
+        self::assertNotEquals(
+            '<mjml>test mjml</mjml>',
+            $this->mailFactory->getValueFromLocale($template, 'mjml', 'fr')
+        );
     }
 }

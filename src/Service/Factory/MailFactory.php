@@ -90,7 +90,7 @@ class MailFactory
         return $mail;
     }
 
-    public function getValueFromLocale(Template $template, string $field, string $locale): ?string
+    public function getValueFromLocale(Template $template, string $field, ?string $locale): ?string
     {
         if ($locale) {
             foreach ($template->getTranslations() as $translation) {
