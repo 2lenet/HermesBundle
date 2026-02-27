@@ -86,9 +86,6 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
         foreach ($container->getExtensionConfig('stof_doctrine_extensions') as $config) {
             if (
                 isset($config['orm']['default']['translatable'])
-                && isset($config['default_locale'])
-                && isset($config['translation_fallback'])
-                && isset($config['class'])
             ) {
                 $hasStofDoctrineExtensions = true;
                 break;
@@ -97,20 +94,10 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
 
         if (!$hasStofDoctrineExtensions) {
             $container->prependExtensionConfig('stof_doctrine_extensions', [
-                'default_locale' => 'en_US',
-                'translation_fallback' => true,
                 'orm' => [
                     'default' => [
-                        'translatable' => [
-                            'tree' => true,
-                            'timestampable' => true,
-                            'blameable' => true,
-                            'loggable' => true,
-                        ],
+                        'translatable' => true
                     ],
-                ],
-                'class' => [
-                    'loggable' => 'App\EventListener\CustomLoggableListener',
                 ],
             ]);
         }

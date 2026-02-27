@@ -10,16 +10,18 @@ use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use function Symfony\Component\Translation\t;
 
 class MailFactory
 {
     public function __construct(
-        protected multiTenantManager $multiTenantManager,
+        protected MultiTenantManager $multiTenantManager,
         protected ParameterBagInterface $parameters,
         protected RecipientFactory $recipientFactory,
         protected Security $security,
+        protected PropertyAccess $propertyAccessor,
     ) {
     }
 
@@ -51,8 +53,8 @@ class MailFactory
             $mail->setSenderName($mailDto->getFrom()->getName());
             $mail->setSenderEmail($mailDto->getFrom()->getAddress());
         } else {
-            $mail->setSenderEmail($template->getSenderEmailFromLocale($locale));
-            $mail->setSenderName($template->getSenderNameFromLocale($locale));
+            $mail->setSenderEmail($this->getValueFromLocale($template, 'senderEmail', $locale));
+            $mail->setSenderName($this->getValueFromLocale($template, 'senderName', $locale));
         }
 
         $nbDest = 0;
@@ -71,20 +73,37 @@ class MailFactory
         $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
-        $mail->setSubject($template->getSubjectFromLocale($locale));
-        $mail->setMjml($template->getMjmlFromLocale($locale));
+        $mail->setSubject($this->getValueFromLocale($template, 'subject', $locale));
+        $mail->setMjml($this->getValueFromLocale($template, 'mjml', $locale));
 
         if ($mailDto->isSendText()) {
-            $mail->setText($template->getTextFromLocale($locale));
+            $mail->setText($this->getValueFromLocale($template, 'text', $locale));
         }
 
         if ($mailDto->isSendHtml()) {
-            $mail->setHtml($template->getHtmlFromLocale($locale));
+            $mail->setHtml($this->getValueFromLocale($template, 'html', $locale));
         }
 
         $mail->setSendAtDate($mailDto->getSendAt());
         $mail->setDsn($mailDto->getDsn());
 
         return $mail;
+    }
+
+    public function getValueFromLocale(Template $template, string $field, string $locale): ?string
+    {
+        if ($locale) {
+            foreach ($template->getTranslations() as $translation) {
+                if ($translation->getLocale() === $locale && $translation->getField() === $field) {
+                    if ($translation->getContent()) {
+                        return $translation->getContent();
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $this->propertyAccessor->getValue($template, $field);
     }
 }

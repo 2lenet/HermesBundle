@@ -20,9 +20,7 @@ use Gedmo\Mapping\Annotation\Translatable;
 class Template implements MultiTenantInterface
 {
     public const string TYPE_HTML = 'html';
-
     public const string TYPE_CKEDITOR = 'ckeditor';
-
     public const string TYPE_MJML = 'mjml';
 
     #[ORM\Column(type: 'integer')]
@@ -294,94 +292,12 @@ class Template implements MultiTenantInterface
         }
     }
 
-    public function getLibelleFromLocale(?string $locale): string
+    public function removeTranslation(TemplateTranslation $templateTranslation): void
     {
-        if ($locale) {
-            foreach ($this->getTranslations() as $translation) {
-                if ($translation->getLocale() === $locale && $translation->getField() === 'libelle') {
-                    return $translation->getContent();
-                }
+        if ($this->translations->removeElement($templateTranslation)) {
+            if ($templateTranslation->getObject() === $this) {
+                $templateTranslation->setObject(null);
             }
         }
-
-        return $this->getLibelle();
-    }
-
-    public function getSubjectFromLocale(?string $locale): string
-    {
-        if ($locale) {
-            foreach ($this->getTranslations() as $translation) {
-                if ($translation->getLocale() === $locale && $translation->getField() === 'subject') {
-                    return $translation->getContent();
-                }
-            }
-        }
-
-        return $this->getSubject();
-    }
-
-    public function getSenderNameFromLocale(?string $locale): ?string
-    {
-        if ($locale) {
-            foreach ($this->getTranslations() as $translation) {
-                if ($translation->getLocale() === $locale && $translation->getField() === 'senderName') {
-                    return $translation->getContent();
-                }
-            }
-        }
-
-        return $this->getSenderName();
-    }
-
-    public function getSenderEmailFromLocale(?string $locale): string
-    {
-        if ($locale) {
-            foreach ($this->getTranslations() as $translation) {
-                if ($translation->getLocale() === $locale && $translation->getField() === 'senderEmail') {
-                    return $translation->getContent();
-                }
-            }
-        }
-
-        return $this->getSenderEmail();
-    }
-
-    public function getTextFromLocale(?string $locale): ?string
-    {
-        if ($locale) {
-            foreach ($this->getTranslations() as $translation) {
-                if ($translation->getLocale() === $locale && $translation->getField() === 'text') {
-                    return $translation->getContent();
-                }
-            }
-        }
-
-        return $this->getText();
-    }
-
-    public function getHtmlFromLocale(?string $locale): ?string
-    {
-        if ($locale) {
-            foreach ($this->getTranslations() as $translation) {
-                if ($translation->getLocale() === $locale && $translation->getField() === 'html') {
-                    return $translation->getContent();
-                }
-            }
-        }
-
-        return $this->getHtml();
-    }
-
-    public function getMjmlFromLocale(?string $locale): ?string
-    {
-        if ($locale) {
-            foreach ($this->getTranslations() as $translation) {
-                if ($translation->getLocale() === $locale && $translation->getField() === 'mjml') {
-                    return $translation->getContent();
-                }
-            }
-        }
-
-        return $this->getMjml();
     }
 }

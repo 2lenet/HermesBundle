@@ -118,7 +118,7 @@ class Mail implements MultiTenantInterface
     protected ?string $mjml = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    protected ?string $locale;
+    protected ?string $locale = null;
 
     public function __construct()
     {
