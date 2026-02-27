@@ -126,6 +126,12 @@ class MailCrudConfig extends AbstractCrudConfig
                 ->setActions($this->recipientCrudConfig->getSublistAction()),
         );
         $tabs->add(
+            'tab.cc_recipients',
+            SublistConfig::new('ccMail', $this->recipientCrudConfig)
+                ->setFields($this->recipientCrudConfig->getSublistFields())
+                ->setActions($this->recipientCrudConfig->getSublistAction()),
+        );
+        $tabs->add(
             'tab.links',
             SublistConfig::new('mail', $this->linkCrudConfig)
                 ->setFields($this->linkCrudConfig->getSublistFields())
