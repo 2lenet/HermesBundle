@@ -58,7 +58,8 @@ class MailBuilder
             $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
         }
 
-        $from = new Address($mail->getTemplate()->getSenderEmail(), (string)$mail->getSenderName());
+
+        $from = new Address((string)$mail->getTemplate()?->getSenderEmail(), $templater->getSenderName());
         $email = new Email();
 
         if (!$recipient->getMail() && !$recipient->getCcMail()) {
