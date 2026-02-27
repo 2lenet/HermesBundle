@@ -73,7 +73,7 @@ class MailFactory
         $mail->setData($mailDto->getData());
         $mail->setTotalToSend($nbDest);
         $mail->setTotalSended(0);
-        $mail->setSubject($this->getValueFromLocale($template, 'subject', $locale));
+        $mail->setSubject((string)$this->getValueFromLocale($template, 'subject', $locale));
         $mail->setMjml($this->getValueFromLocale($template, 'mjml', $locale));
 
         if ($mailDto->isSendText()) {
