@@ -10,7 +10,7 @@ use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\PropertyAccess\PropertyAccessInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 use function Symfony\Component\Translation\t;
 

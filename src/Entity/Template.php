@@ -20,7 +20,9 @@ use Gedmo\Mapping\Annotation\Translatable;
 class Template implements MultiTenantInterface
 {
     public const string TYPE_HTML = 'html';
+
     public const string TYPE_CKEDITOR = 'ckeditor';
+
     public const string TYPE_MJML = 'mjml';
 
     #[ORM\Column(type: 'integer')]
@@ -294,10 +296,6 @@ class Template implements MultiTenantInterface
 
     public function removeTranslation(TemplateTranslation $templateTranslation): void
     {
-        if ($this->translations->removeElement($templateTranslation)) {
-            if ($templateTranslation->getObject() === $this) {
-                $templateTranslation->setObject(null);
-            }
-        }
+        $this->translations->removeElement($templateTranslation);
     }
 }
