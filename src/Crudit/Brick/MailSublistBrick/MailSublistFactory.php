@@ -12,6 +12,7 @@ use Lle\CruditBundle\Datasource\DatasourceParams;
 use Lle\CruditBundle\Dto\BrickView;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\ResourceView;
+use Lle\CruditBundle\Registry\FieldRegistry;
 use Lle\CruditBundle\Resolver\ResourceResolver;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Crudit\Datasource\MailDatasource;
@@ -24,10 +25,11 @@ class MailSublistFactory extends SublistFactory
     public function __construct(
         ResourceResolver $resourceResolver,
         RequestStack $requestStack,
+        FieldRegistry $fieldRegistry,
         protected MailCrudConfig $mailCrudConfig,
         protected MailDatasource $mailDatasource,
     ) {
-        parent::__construct($resourceResolver, $requestStack);
+        parent::__construct($resourceResolver, $requestStack, $fieldRegistry);
 
         $this->datasourceParams = new DatasourceParams();
     }
