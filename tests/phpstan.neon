@@ -16,3 +16,6 @@ parameters:
                 identifier: missingType.iterableValue
             -
                 identifier: missingType.generics
+            -
+                identifier: staticMethod.alreadyNarrowedType
+                path: ../tests/
