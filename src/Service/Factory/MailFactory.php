@@ -16,7 +16,7 @@ use function Symfony\Component\Translation\t;
 class MailFactory
 {
     public function __construct(
-        protected readonly multiTenantManager $multiTenantManager,
+        protected readonly MultiTenantManager $multiTenantManager,
         protected readonly ParameterBagInterface $parameters,
         protected readonly RecipientFactory $recipientFactory,
         protected readonly Security $security,

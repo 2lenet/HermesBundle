@@ -64,6 +64,7 @@ class MailAttachmentVoter extends Voter
     public function getTenantId(TokenInterface $token): ?int
     {
         /** @var ?MultiTenantInterface $user */
+        /** @phpstan-ignore-next-line */
         $user = $token->getUser();
 
         return $user?->getTenantId();

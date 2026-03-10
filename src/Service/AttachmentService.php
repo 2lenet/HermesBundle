@@ -68,7 +68,7 @@ class AttachmentService
     public function delete(string $path): bool
     {
         if (file_exists($path)) {
-            /** @var array $files */
+            /** @var string[] $files */
             $files = scandir($path);
             $files = array_diff($files, ['.', '..']);
             foreach ($files as $file) {

@@ -21,26 +21,6 @@ class MailRepository extends ServiceEntityRepository
         parent::__construct($registry, Mail::class);
     }
 
-    public function copyMail(Mail $mail): Mail
-    {
-        $copyMail = clone $mail;
-        $copyMail->setStatus(Mail::STATUS_DRAFT);
-        $copyMail->setSendingDate(null);
-        $copyMail->setTotalSended(0);
-        $copyMail->setTotalOpened(0);
-        $copyMail->setTotalUnsubscribed(0);
-        $copyMail->setTotalError(0);
-
-        foreach ($mail->getRecipients() as $recipient) {
-            $cloneRecipient = clone $recipient;
-            $cloneRecipient->setStatus(Mail::STATUS_DRAFT);
-            $cloneRecipient->setDateOuverture(null);
-            $copyMail->addRecipient($cloneRecipient);
-        }
-
-        return $copyMail;
-    }
-
     public function getDashboardMails(int $page = 1, int $number = 30, ?int $tenantId = null): Paginator
     {
         $qb = $this->createQueryBuilder("m")
