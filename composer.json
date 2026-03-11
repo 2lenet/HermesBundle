@@ -23,7 +23,7 @@
         "doctrine/collections": "^1.0 || ^2.0",
         "doctrine/common": "^2.13 || ^3.0",
         "doctrine/event-manager": "^1.0 || ^2.0",
-        "doctrine/persistence": "^2.0 || ^3.0 || ^4.0",
+        "doctrine/persistence": "^2.0 || ^3.0",
         "symfony/validator": "^7.0 || ^8.0",
         "symfony/dependency-injection": "^7.0 || ^8.0",
         "symfony/framework-bundle": "^7.0 || ^8.0",
