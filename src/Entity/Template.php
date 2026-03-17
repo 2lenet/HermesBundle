@@ -296,6 +296,8 @@ class Template implements MultiTenantInterface
 
     public function removeTranslation(TemplateTranslation $templateTranslation): void
     {
-        $this->translations->removeElement($templateTranslation);
+        if ($this->translations->contains($templateTranslation)) {
+            $this->translations->removeElement($templateTranslation);
+        }
     }
 }

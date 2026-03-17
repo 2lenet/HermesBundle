@@ -180,9 +180,11 @@ class MailFactoryTest extends TestCase
         $template->setLibelle('label');
         $template->setSubject('subject');
         $template->setSenderEmail('no-reply@email.com');
+        $template->setSenderName('name');
         $template->setText('text');
         $template->setCode('code');
         $template->setHtml('html');
+        $template->setMjml('mjml');
         $template->setUnsubscriptions(true);
         $template->setStatistics(true);
 
@@ -203,26 +205,32 @@ class MailFactoryTest extends TestCase
 
         self::assertEquals('test subject', $this->mailFactory->getValueFromLocale($template, 'subject', 'en'));
         self::assertNotEquals('test subject', $this->mailFactory->getValueFromLocale($template, 'subject', 'fr'));
+        self::assertEquals('subject', $this->mailFactory->getValueFromLocale($template, 'subject', null));
 
         self::assertEquals('test text', $this->mailFactory->getValueFromLocale($template, 'text', 'en'));
         self::assertNotEquals('test text', $this->mailFactory->getValueFromLocale($template, 'text', 'fr'));
+        self::assertEquals('text', $this->mailFactory->getValueFromLocale($template, 'text', null));
 
         self::assertEquals('<p>en html</p>', $this->mailFactory->getValueFromLocale($template, 'html', 'en'));
         self::assertNotEquals('<p>en html</p>', $this->mailFactory->getValueFromLocale($template, 'html', 'fr'));
+        self::assertEquals('html', $this->mailFactory->getValueFromLocale($template, 'html', null));
 
         self::assertEquals('test senderName', $this->mailFactory->getValueFromLocale($template, 'senderName', 'en'));
         self::assertNotEquals('test senderName', $this->mailFactory->getValueFromLocale($template, 'senderName', 'fr'));
+        self::assertEquals('name', $this->mailFactory->getValueFromLocale($template, 'name', null));
 
         self::assertEquals('test senderEmail', $this->mailFactory->getValueFromLocale($template, 'senderEmail', 'en'));
         self::assertNotEquals(
             'test senderEmail',
             $this->mailFactory->getValueFromLocale($template, 'senderEmail', 'fr')
         );
+        self::assertEquals('no-reply@email.com', $this->mailFactory->getValueFromLocale($template, 'senderEmail', null));
 
         self::assertEquals('<mjml>test mjml</mjml>', $this->mailFactory->getValueFromLocale($template, 'mjml', 'en'));
         self::assertNotEquals(
             '<mjml>test mjml</mjml>',
             $this->mailFactory->getValueFromLocale($template, 'mjml', 'fr')
         );
+        self::assertEquals('mjml', $this->mailFactory->getValueFromLocale($template, 'mjml', null));
     }
 }
