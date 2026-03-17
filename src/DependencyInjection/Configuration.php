@@ -18,7 +18,6 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('lle_hermes');
         $rootNode = $treeBuilder->getRootNode();
         $children = $rootNode->children();
-        /** @phpstan-ignore-next-line */
         $children
             ->scalarNode('root_dir')
                 ->isRequired()

@@ -48,6 +48,7 @@ crud:
 
 tab:
     recipients: Recipients
+    cc_recipients: CC recipients
     links: Links
     linkOpening: Opened links
     errors: Errors

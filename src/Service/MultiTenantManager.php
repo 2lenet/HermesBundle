@@ -27,6 +27,7 @@ class MultiTenantManager
     public function getTenantId(): ?int
     {
         /** @var ?MultiTenantInterface $user */
+        /** @phpstan-ignore-next-line */
         $user = $this->security->getUser();
 
         return $user?->getTenantId();
