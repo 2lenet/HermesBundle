@@ -35,7 +35,7 @@ class Error
 
     public function __toString(): string
     {
-        return $this->subject;
+        return (string)$this->subject;
     }
 
     public function getId(): ?int
