@@ -23,7 +23,7 @@ class MailTemplater
 
     public function getSubject(): string
     {
-        return $this->render($this->mail->getSubject());
+        return $this->render((string)$this->mail->getSubject());
     }
 
     public function getText(): string
