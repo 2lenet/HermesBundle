@@ -25,12 +25,12 @@ class Mail implements MultiTenantInterface
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Template::class)]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
     #[Assert\NotBlank]
-    protected ?Template $template;
+    protected ?Template $template = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
@@ -47,7 +47,7 @@ class Mail implements MultiTenantInterface
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    protected string $status;
+    protected ?string $status = null;
 
     #[ORM\Column(type: 'integer')]
     protected int $totalToSend = 0;
@@ -61,7 +61,7 @@ class Mail implements MultiTenantInterface
     #[ORM\Column(type: 'string', length: 1024)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 1024)]
-    protected string $subject;
+    protected ?string $subject = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTime $sendingDate = null;
@@ -246,7 +246,7 @@ class Mail implements MultiTenantInterface
         });
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -306,7 +306,7 @@ class Mail implements MultiTenantInterface
         return $this;
     }
 
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
@@ -364,7 +364,7 @@ class Mail implements MultiTenantInterface
         return $this;
     }
 
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
