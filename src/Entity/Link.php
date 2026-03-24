@@ -15,16 +15,16 @@ class Link
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    protected string $url;
+    protected ?string $url = null;
 
     #[ORM\ManyToOne(targetEntity: Mail::class, inversedBy: 'links', cascade: ['persist'])]
     #[Assert\NotBlank]
-    protected Mail $mail;
+    protected ?Mail $mail = null;
 
     #[ORM\OneToMany(
         targetEntity: LinkOpening::class,
@@ -41,7 +41,7 @@ class Link
 
     public function __toString(): string
     {
-        return $this->url;
+        return (string)$this->url;
     }
 
     public function getTotalOpened(): int
@@ -66,7 +66,7 @@ class Link
         return $this;
     }
 
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -78,7 +78,7 @@ class Link
         return $this;
     }
 
-    public function getMail(): Mail
+    public function getMail(): ?Mail
     {
         return $this->mail;
     }
