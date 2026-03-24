@@ -34,13 +34,13 @@ class Template implements MultiTenantInterface
     #[Translatable]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    protected string $libelle;
+    protected ?string $libelle = null;
 
     #[ORM\Column(type: 'string', length: 1024)]
     #[Translatable]
     #[Assert\NotBlank]
     #[Assert\Length(max: 1024)]
-    protected string $subject;
+    protected ?string $subject = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Translatable]
@@ -52,7 +52,7 @@ class Template implements MultiTenantInterface
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
-    protected string $senderEmail;
+    protected ?string $senderEmail = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     #[Translatable]
@@ -62,7 +62,7 @@ class Template implements MultiTenantInterface
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    protected string $code;
+    protected ?string $code = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     #[Translatable]
@@ -117,7 +117,7 @@ class Template implements MultiTenantInterface
         return $this;
     }
 
-    public function getLibelle(): string
+    public function getLibelle(): ?string
     {
         return $this->libelle;
     }
@@ -129,7 +129,7 @@ class Template implements MultiTenantInterface
         return $this;
     }
 
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
@@ -153,7 +153,7 @@ class Template implements MultiTenantInterface
         return $this;
     }
 
-    public function getSenderEmail(): string
+    public function getSenderEmail(): ?string
     {
         return $this->senderEmail;
     }
@@ -177,7 +177,7 @@ class Template implements MultiTenantInterface
         return $this;
     }
 
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
