@@ -24,7 +24,7 @@ class RecipientFactory
         $copy = new Recipient();
         $copy
             ->setToName($recipient->getToName())
-            ->setToEmail($recipient->getToEmail())
+            ->setToEmail((string)$recipient->getToEmail())
             ->setData($recipient->getData())
             ->setStatus(Recipient::STATUS_SENDING)
             ->setMail($recipient->getMail())
