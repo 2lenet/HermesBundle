@@ -39,6 +39,6 @@ class StatisticsController extends AbstractController
         $this->em->persist($linkOpening);
         $this->em->flush();
 
-        return new RedirectResponse($link->getUrl());
+        return new RedirectResponse((string)$link->getUrl());
     }
 }
