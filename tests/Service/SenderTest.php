@@ -121,7 +121,7 @@ class SenderTest extends TestCase
         $mail = new Mail();
         $mail->setId(1);
         $mail->setTemplate($template);
-        $mail->setSubject($template->getSubject());
+        $mail->setSubject((string)$template->getSubject());
         $mail->setHtml($template->getHtml());
         $mail->setText($template->getText());
         $mail->setTotalToSend(1);
