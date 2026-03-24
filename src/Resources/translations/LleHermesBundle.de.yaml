@@ -85,7 +85,7 @@ field:
     toemail: An E-Mail
     toName: An Name
     toname: An Name
-    unsubscriptions: An Abgemeldete senden
+    unsubscriptions: Abmeldung zulassen
     statistics: Statistikverfolgung aktivieren
     sendtoerrors: An fehlerhafte E-Mail-Adressen senden
     jsonattachement: Anhänge
