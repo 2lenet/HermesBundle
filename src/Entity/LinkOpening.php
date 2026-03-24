@@ -13,15 +13,15 @@ class LinkOpening
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Link::class, inversedBy: 'linkOpenings', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
-    protected Link $link;
+    protected ?Link $link = null;
 
     #[ORM\ManyToOne(targetEntity: Recipient::class, inversedBy: 'linkOpenings', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
-    protected Recipient $recipient;
+    protected ?Recipient $recipient = null;
 
     #[ORM\Column(type: 'integer')]
     protected int $nbOpenings = 0;
@@ -32,7 +32,7 @@ class LinkOpening
     #[ORM\Column(type: 'datetime', nullable: true)]
     protected ?DateTimeInterface $updatedAt = null;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -44,7 +44,7 @@ class LinkOpening
         return $this;
     }
 
-    public function getLink(): Link
+    public function getLink(): ?Link
     {
         return $this->link;
     }
@@ -56,7 +56,7 @@ class LinkOpening
         return $this;
     }
 
-    public function getRecipient(): Recipient
+    public function getRecipient(): ?Recipient
     {
         return $this->recipient;
     }
