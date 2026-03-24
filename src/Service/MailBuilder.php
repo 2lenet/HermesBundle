@@ -63,16 +63,16 @@ class MailBuilder
         $email = new Email();
 
         if (!$recipient->getMail() && !$recipient->getCcMail()) {
-            throw new NoRecipientException($mail->getId());
+            throw new NoRecipientException($mail->getId() ?? 0);
         }
 
         if ($recipient->getMail()) {
-            $to = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
+            $to = new Address((string)$recipient->getToEmail(), $recipient->getToName() ?? "");
             $email->to($to);
         }
 
         if ($recipient->getCcMail()) {
-            $cc = new Address($recipient->getToEmail(), $recipient->getToName() ?? "");
+            $cc = new Address((string)$recipient->getToEmail(), $recipient->getToName() ?? "");
             $email->addCc($cc);
         }
 
