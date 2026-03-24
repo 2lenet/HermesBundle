@@ -15,7 +15,7 @@ class EmailError
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private ?int $id;
 
     #[ORM\Column(type: 'integer')]
     private int $nbError = 0;
@@ -24,7 +24,7 @@ class EmailError
     #[Assert\Length(max: 255)]
     #[Assert\Email]
     #[Assert\NotBlank]
-    private string $email;
+    private ?string $email = null;
 
     #[ORM\OneToMany(targetEntity: Error::class, mappedBy: 'emailError')]
     private Collection $errors;
@@ -70,7 +70,7 @@ class EmailError
         return $this;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
