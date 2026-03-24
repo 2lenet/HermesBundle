@@ -14,24 +14,24 @@ class UnsubscribeEmail
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     #[Assert\Email]
-    private string $email;
+    private ?string $email = null;
 
     #[ORM\Column(type: 'datetime')]
     #[Assert\NotBlank]
-    private DateTime $unsubscribeDate;
+    private ?DateTime $unsubscribeDate = null;
 
     public function __toString(): string
     {
-        return $this->email;
+        return (string)$this->email;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -43,7 +43,7 @@ class UnsubscribeEmail
         return $this;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -55,7 +55,7 @@ class UnsubscribeEmail
         return $this;
     }
 
-    public function getUnsubscribeDate(): DateTime
+    public function getUnsubscribeDate(): ?DateTime
     {
         return $this->unsubscribeDate;
     }
