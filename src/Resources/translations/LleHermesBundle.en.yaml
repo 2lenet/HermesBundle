@@ -85,7 +85,7 @@ field:
     toemail: To email
     toName: To name
     toname: To name
-    unsubscriptions: Send to unsubscribed
+    unsubscriptions: Allow unsubscriptions
     statistics: Enable statistics tracking
     sendtoerrors: Send to emails in error
     jsonattachement: Attachments
