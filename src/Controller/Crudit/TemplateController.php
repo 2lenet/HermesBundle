@@ -91,9 +91,9 @@ class TemplateController extends AbstractCrudController
             return $this->redirectToRoute('lle_hermes_crudit_template_index');
         }
 
-        $newTemplate = $this->templateRepository->duplicateTemplate($template, $template->getCode())
+        $newTemplate = $this->templateRepository->duplicateTemplate($template, (string)$template->getCode())
             ->setTenantId($entity->getId())
-            ->setLibelle($template->getLibelle());
+            ->setLibelle((string)$template->getLibelle());
 
         $this->em->persist($newTemplate);
         $this->em->flush();
