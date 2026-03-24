@@ -14,16 +14,16 @@ class Error
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'datetime')]
     #[Assert\NotBlank]
-    private DateTime $date;
+    private ?DateTime $date = null;
 
     #[ORM\Column(type: 'string', length: 1024)]
     #[Assert\NotBlank]
     #[Assert\Length(max: 1024)]
-    private string $subject;
+    private ?string $subject = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $content = null;
@@ -31,14 +31,14 @@ class Error
     #[ORM\ManyToOne(targetEntity: EmailError::class, inversedBy: 'errors')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank]
-    private EmailError $emailError;
+    private ?EmailError $emailError = null;
 
     public function __toString(): string
     {
         return $this->subject;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -50,7 +50,7 @@ class Error
         return $this;
     }
 
-    public function getDate(): DateTime
+    public function getDate(): ?DateTime
     {
         return $this->date;
     }
@@ -62,7 +62,7 @@ class Error
         return $this;
     }
 
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
@@ -86,7 +86,7 @@ class Error
         return $this;
     }
 
-    public function getEmailError(): EmailError
+    public function getEmailError(): ?EmailError
     {
         return $this->emailError;
     }
