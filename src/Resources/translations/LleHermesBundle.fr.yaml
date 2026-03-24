@@ -86,7 +86,7 @@ field:
     toemail: À email
     toName: À nom
     toname: À nom
-    unsubscriptions: Envoyer aux désinscrits
+    unsubscriptions: Permettre de se désinscrire
     statistics: Activer le suivi des statistiques
     sendtoerrors: Envoyer aux mails en erreur
     jsonattachement: Pièces jointes
