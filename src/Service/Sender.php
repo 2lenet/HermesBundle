@@ -64,7 +64,7 @@ class Sender
         foreach ($recipients as $recipient) {
             $mail = $recipient->getMail() ?? $recipient->getCcMail();
             if (!$mail) {
-                throw new NoMailFoundException($recipient->getId());
+                throw new NoMailFoundException($recipient->getId() ?? 0);
             }
 
             $template = $mail->getTemplate();
@@ -73,7 +73,7 @@ class Sender
             if ($template && $template->isUnsubscriptions()) {
                 if (
                     in_array(
-                        strtolower($recipient->getToEmail()),
+                        strtolower((string)$recipient->getToEmail()),
                         $unsubscribedEmails
                     )
                 ) {
@@ -179,7 +179,7 @@ class Sender
     {
         $mail = $recipient->getMail() ?? $recipient->getCcMail();
         if (!$mail) {
-            throw new NoMailFoundException($recipient->getId());
+            throw new NoMailFoundException($recipient->getId() ?? 0);
         }
 
         if ($this->send($mail, $recipient, false)) {
