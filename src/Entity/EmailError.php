@@ -36,7 +36,7 @@ class EmailError
 
     public function __toString(): string
     {
-        return $this->email;
+        return (string)$this->email;
     }
 
     public function incrementNbError(): EmailError
