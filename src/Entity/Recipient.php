@@ -24,7 +24,7 @@ class Recipient implements MultiTenantInterface
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    protected int $id;
+    protected ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
@@ -34,7 +34,7 @@ class Recipient implements MultiTenantInterface
     #[Assert\Length(max: 255)]
     #[Assert\Email]
     #[Assert\NotBlank]
-    protected string $toEmail;
+    protected ?string $toEmail = null;
 
     #[ORM\Column(type: 'json')]
     protected array $data = [];
@@ -42,7 +42,7 @@ class Recipient implements MultiTenantInterface
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
-    protected string $status;
+    protected ?string $status = null;
 
     #[ORM\ManyToOne(targetEntity: Mail::class, inversedBy: 'recipients', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
@@ -67,7 +67,6 @@ class Recipient implements MultiTenantInterface
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $errorMessage = null;
 
-
     public function __construct()
     {
         $this->linkOpenings = new ArrayCollection();
@@ -89,7 +88,7 @@ class Recipient implements MultiTenantInterface
         return $total;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -113,7 +112,7 @@ class Recipient implements MultiTenantInterface
         return $this;
     }
 
-    public function getToEmail(): string
+    public function getToEmail(): ?string
     {
         return $this->toEmail;
     }
@@ -137,7 +136,7 @@ class Recipient implements MultiTenantInterface
         return $this;
     }
 
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
