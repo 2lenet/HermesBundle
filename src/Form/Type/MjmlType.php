@@ -18,7 +18,7 @@ class MjmlType extends AbstractType
             $data = json_decode($event->getData(), true);
 
             /** @var FormInterface $parentForm */
-            $parentForm = $event->getForm()->getParent();
+            $parentForm = $event->getForm()->getParent()->getParent();
             /** @var Template $template */
             $template = $parentForm->getData();
             $template->setHtml($data['html']['html']);

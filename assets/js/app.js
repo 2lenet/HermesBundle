@@ -16,6 +16,12 @@ window.addEventListener('load', () => {
             noticeOnUnload: false,
         });
 
+        editor.RichTextEditor.add('insertUnorderedList', {
+            icon: '•',
+            attributes: { title: 'Bulleted List' },
+            result: rte => rte.exec('insertUnorderedList'),
+        });
+
         function update() {
             let mjml = editor.getHtml();
 

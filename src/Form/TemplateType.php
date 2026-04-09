@@ -53,7 +53,9 @@ class TemplateType extends AbstractType
                 ]);
                 break;
             case Template::TYPE_MJML:
-                $builder->add('mjml', MjmlType::class);
+                $builder->add('mjml', GedmoTranslatableType::class, [
+                    'fields_class' => MjmlType::class,
+                ]);
                 break;
             case Template::TYPE_HTML:
             default:
