@@ -17,12 +17,12 @@ class MjmlType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = json_decode($event->getData(), true);
 
-            /** @var FormInterface $parentForm */
             if ($event->getForm()->getParent() instanceof FormInterface) {
                 $parentForm = $event->getForm()->getParent()->getParent();
             } else {
                 $parentForm = $event->getForm()->getParent();
             }
+            /** @var FormInterface $parentForm */
             /** @var Template $template */
             $template = $parentForm->getData();
             $template->setHtml($data['html']['html']);
