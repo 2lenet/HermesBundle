@@ -16,6 +16,21 @@ window.addEventListener('load', () => {
             noticeOnUnload: false,
         });
 
+        editor.RichTextEditor.add('indent', {
+            icon: '→',
+            attributes: { title: 'Indent' },
+            result: rte => rte.exec('indent'),
+        });
+        editor.RichTextEditor.add('outdent', {
+            icon: '←',
+            attributes: { title: 'Outdent' },
+            result: rte => rte.exec('outdent'),
+        });
+        editor.RichTextEditor.add('insertOrderedList', {
+            icon: '1.',
+            attributes: { title: 'Numbered List' },
+            result: rte => rte.exec('insertOrderedList'),
+        });
         editor.RichTextEditor.add('insertUnorderedList', {
             icon: '•',
             attributes: { title: 'Bulleted List' },
