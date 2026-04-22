@@ -75,6 +75,11 @@ class EmailErrorCrudConfig extends AbstractCrudConfig
         ];
     }
 
+    public function getDefaultSort(): array
+    {
+        return [['id', 'DESC']];
+    }
+
     public function getRootRoute(): string
     {
         return 'lle_hermes_crudit_emailerror';
