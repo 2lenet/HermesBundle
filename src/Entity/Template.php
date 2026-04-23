@@ -32,13 +32,11 @@ class Template implements MultiTenantInterface
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Translatable]
-    #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     protected ?string $libelle = null;
 
     #[ORM\Column(type: 'string', length: 1024)]
     #[Translatable]
-    #[Assert\NotBlank]
     #[Assert\Length(max: 1024)]
     protected ?string $subject = null;
 
