@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormTypeInterface;
 
 class PersonalizedTemplateType extends AbstractType
 {
@@ -108,6 +109,9 @@ class PersonalizedTemplateType extends AbstractType
             ]);
     }
 
+    /**
+     * @param class-string<FormTypeInterface> $fieldClass
+     */
     protected function addTranslatable(
         FormBuilderInterface $builder,
         string $name,
