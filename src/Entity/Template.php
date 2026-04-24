@@ -32,11 +32,13 @@ class Template implements MultiTenantInterface
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Translatable]
+    #[HermesAssert\RequiredTranslatableField]
     #[Assert\Length(max: 255)]
     protected ?string $libelle = null;
 
     #[ORM\Column(type: 'string', length: 1024)]
     #[Translatable]
+    #[HermesAssert\RequiredTranslatableField]
     #[Assert\Length(max: 1024)]
     protected ?string $subject = null;
 
@@ -47,7 +49,7 @@ class Template implements MultiTenantInterface
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Translatable]
-    #[Assert\NotBlank]
+    #[HermesAssert\RequiredTranslatableField]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
     protected ?string $senderEmail = null;

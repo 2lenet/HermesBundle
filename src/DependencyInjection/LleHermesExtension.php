@@ -40,6 +40,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             'lle_hermes.attachment_nb_days_before_deletion',
             $processedConfig['attachment_nb_days_before_deletion']
         );
+        $container->setParameter('lle_hermes.translatable_mail', $processedConfig['translatable_mail']);
 
         // Load the templates for the Hermes form types
         if ($container->hasParameter('twig.form.resources')) {
@@ -58,6 +59,32 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container): void
     {
+        $container->prependExtensionConfig("lle_entity_file", [
+            "configurations" => [
+                "attached_file" => [
+                    "class" => "Lle\\HermesBundle\\Entity\\Template",
+                    "storage_adapter" => "lle_entity_file.storage.default",
+                    "role" => "PUBLIC_ACCESS",
+                ],
+                "mail_attached_file" => [
+                    "class" => "Lle\\HermesBundle\\Entity\\Mail",
+                    "storage_adapter" => "lle_entity_file.storage.default",
+                    "role" => "ROLE_HERMES_MAIL_READATTACHMENT",
+                ],
+            ],
+        ]);
+
+        $translatableMail = true;
+        foreach ($container->getExtensionConfig($this->getAlias()) as $config) {
+            if (isset($config['translatable_mail'])) {
+                $translatableMail = (bool) $config['translatable_mail'];
+            }
+        }
+
+        if (!$translatableMail) {
+            return;
+        }
+
         $hasDoctrineTranslatable = false;
         $hasStofDoctrineExtensions = false;
         foreach ($container->getExtensionConfig('doctrine') as $config) {
@@ -101,20 +128,5 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                 ],
             ]);
         }
-
-        $container->prependExtensionConfig("lle_entity_file", [
-            "configurations" => [
-                "attached_file" => [
-                    "class" => "Lle\\HermesBundle\\Entity\\Template",
-                    "storage_adapter" => "lle_entity_file.storage.default",
-                    "role" => "PUBLIC_ACCESS",
-                ],
-                "mail_attached_file" => [
-                    "class" => "Lle\\HermesBundle\\Entity\\Mail",
-                    "storage_adapter" => "lle_entity_file.storage.default",
-                    "role" => "ROLE_HERMES_MAIL_READATTACHMENT",
-                ],
-            ],
-        ]);
     }
 }

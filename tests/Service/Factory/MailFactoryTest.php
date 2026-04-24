@@ -42,7 +42,8 @@ class MailFactoryTest extends TestCase
             $parameters,
             $recipientFactory,
             $security,
-            $propertyAccessor
+            $propertyAccessor,
+            true,
         );
     }
 

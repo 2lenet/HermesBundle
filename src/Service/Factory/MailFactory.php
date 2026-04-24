@@ -8,6 +8,7 @@ use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -22,6 +23,8 @@ class MailFactory
         protected RecipientFactory $recipientFactory,
         protected Security $security,
         protected PropertyAccessorInterface $propertyAccessor,
+        #[Autowire(param: 'lle_hermes.translatable_mail')]
+        protected bool $translatableMail = true,
     ) {
     }
 
@@ -92,7 +95,7 @@ class MailFactory
 
     public function getValueFromLocale(Template $template, string $field, ?string $locale): ?string
     {
-        if ($locale) {
+        if ($this->translatableMail && $locale) {
             foreach ($template->getTranslations() as $translation) {
                 if ($translation->getLocale() === $locale && $translation->getField() === $field) {
                     if ($translation->getContent()) {
