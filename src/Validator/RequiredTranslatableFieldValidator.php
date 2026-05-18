@@ -14,10 +14,7 @@ class RequiredTranslatableFieldValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, RequiredTranslatableField::class);
         }
 
-        if (is_string($value) && trim($value) !== '') {
-            return;
-        }
-        if ($value !== null && !is_string($value)) {
+        if ($value !== null && (!is_string($value) || trim($value) !== '')) {
             return;
         }
 
