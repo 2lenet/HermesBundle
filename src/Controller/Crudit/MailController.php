@@ -216,8 +216,8 @@ class MailController extends AbstractCrudController
     #[Route('/batch-resend', name: 'lle_hermes_crudit_mail_batch_resend')]
     public function batchResend(Request $request): RedirectResponse
     {
-        $ids = array_filter(explode(',', (string)$request->get('ids')));
-        $allPage = $request->get('all_page');
+        $ids = array_filter(explode(',', (string)$request->query->get('ids')));
+        $allPage = $request->query->get('all_page');
 
         if ($allPage) {
             $mails = $this->config->getDatasource()->list(
