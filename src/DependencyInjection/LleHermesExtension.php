@@ -92,6 +92,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             }
 
             if (!$hasDoctrineTranslatable) {
+                $translatableDir = '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity';
                 $container->prependExtensionConfig('doctrine', [
                     'orm' => [
                         'mappings' => [
@@ -99,7 +100,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                                 'is_bundle' => false,
                                 'type' => 'attribute',
                                 'prefix' => 'Gedmo\Translatable\Entity',
-                                'dir' => '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity',
+                                'dir' => $translatableDir,
                                 'alias' => 'GedmoTranslatable',
                             ],
                         ],
