@@ -3,7 +3,6 @@
 namespace Lle\HermesBundle\Form;
 
 use Lle\CruditBundle\Form\Type\CKEditorType;
-use Lle\CruditBundle\Form\Type\GedmoTranslatableType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Form\Type\MjmlType;
@@ -14,14 +13,16 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormTypeInterface;
 
 class TemplateType extends AbstractType
 {
+    use TranslatableFieldsTrait;
+
     public function __construct(
         #[Autowire(param: 'lle_hermes.translatable_mail')]
-        protected bool $translatableMail = true,
+        bool $translatableMail = true,
     ) {
+        $this->translatableMail = $translatableMail;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -100,26 +101,6 @@ class TemplateType extends AbstractType
                 'required' => false,
                 'label' => 'field.custombounceemail',
             ]);
-    }
-
-    /**
-     * @param class-string<FormTypeInterface> $fieldClass
-     */
-    protected function addTranslatable(
-        FormBuilderInterface $builder,
-        string $name,
-        string $fieldClass,
-        array $options = [],
-    ): void {
-        if ($this->translatableMail) {
-            $builder->add($name, GedmoTranslatableType::class, array_merge($options, [
-                'fields_class' => $fieldClass,
-            ]));
-
-            return;
-        }
-
-        $builder->add($name, $fieldClass, $options);
     }
 
     public function getName(): string

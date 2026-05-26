@@ -8,7 +8,6 @@ use Lle\CruditBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Form\Type\MjmlType;
-use Lle\CruditBundle\Form\Type\GedmoTranslatableType;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
@@ -18,15 +17,17 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormTypeInterface;
 
 class PersonalizedTemplateType extends AbstractType
 {
+    use TranslatableFieldsTrait;
+
     public function __construct(
         protected MultiTenantManager $multiTenantManager,
         #[Autowire(param: 'lle_hermes.translatable_mail')]
-        protected bool $translatableMail = true,
+        bool $translatableMail = true,
     ) {
+        $this->translatableMail = $translatableMail;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -107,26 +108,6 @@ class PersonalizedTemplateType extends AbstractType
                 'data' => $this->multiTenantManager->getTenantId(),
                 'label' => false
             ]);
-    }
-
-    /**
-     * @param class-string<FormTypeInterface> $fieldClass
-     */
-    protected function addTranslatable(
-        FormBuilderInterface $builder,
-        string $name,
-        string $fieldClass,
-        array $options = [],
-    ): void {
-        if ($this->translatableMail) {
-            $builder->add($name, GedmoTranslatableType::class, array_merge($options, [
-                'fields_class' => $fieldClass,
-            ]));
-
-            return;
-        }
-
-        $builder->add($name, $fieldClass, $options);
     }
 
     public function getName(): string
