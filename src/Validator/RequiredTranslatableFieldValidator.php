@@ -20,7 +20,7 @@ class RequiredTranslatableFieldValidator extends ConstraintValidator
         if (!$constraint instanceof RequiredTranslatableField) {
             throw new UnexpectedTypeException($constraint, RequiredTranslatableField::class);
         }
-        
+
         if ($this->translatableMail || ($value !== null && (!is_string($value) || trim($value) !== ''))) {
             return;
         }
