@@ -41,7 +41,7 @@ class PersonalizedTemplateType extends AbstractType
 
         $this->addTranslatable($builder, 'libelle', TextType::class, [
             'attr' => ['class' => 'col-md-6'],
-        ]);
+        ], required: true);
 
         $builder->add('code', TextType::class, [
             'attr' => ['class' => 'col-md-6'],
@@ -52,14 +52,14 @@ class PersonalizedTemplateType extends AbstractType
         ]);
         $this->addTranslatable($builder, 'senderEmail', EmailType::class, [
             'attr' => ['class' => 'col-md-6'],
-        ]);
+        ], required: true);
 
         $builder->add('groupContent', GroupType::class, [
             'label' => 'field.group.template_content',
             'inherit_data' => true,
         ]);
 
-        $this->addTranslatable($builder, 'subject', TextType::class);
+        $this->addTranslatable($builder, 'subject', TextType::class, required: true);
 
         switch ($templateType) {
             case Template::TYPE_CKEDITOR:

@@ -20,15 +20,19 @@ trait TranslatableFieldsTrait
         string $name,
         string $fieldClass,
         array $options = [],
+        bool $required = false,
     ): void {
         if ($this->translatableMail) {
+            // `required` is propagated to the default-locale sub-field by GedmoTranslatableType,
+            // ensuring the main property is filled when the field is mandatory in DB.
             $builder->add($name, GedmoTranslatableType::class, array_merge($options, [
                 'fields_class' => $fieldClass,
+                'required' => $required,
             ]));
 
             return;
         }
 
-        $builder->add($name, $fieldClass, $options);
+        $builder->add($name, $fieldClass, array_merge(['required' => $required], $options));
     }
 }
