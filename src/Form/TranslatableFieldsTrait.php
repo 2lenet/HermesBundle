@@ -43,7 +43,7 @@ trait TranslatableFieldsTrait
                     static function (FormEvent $event): void {
                         $form = $event->getForm();
                         $entity = $form->getParent()?->getData();
-                        if ($entity === null || !method_exists($entity, 'getTranslations')) {
+                        if (!is_object($entity) || !method_exists($entity, 'getTranslations')) {
                             return;
                         }
 
