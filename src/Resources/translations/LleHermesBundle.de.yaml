@@ -127,6 +127,7 @@ status:
     sent: Gesendet
     unsubscribed: Abgemeldet
     cancelled: Abgebrochen
+    retry: Erneuter Versuch
 
 menu:
     lle_hermes:
