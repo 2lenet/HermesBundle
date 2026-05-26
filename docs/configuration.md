@@ -57,3 +57,15 @@ lle_hermes:
 ```
 
 Make sure that those repositories exist and have the correct rights !
+
+## Retry on send failure
+
+When sending fails with a transport or RFC error, the recipient is put in `retry` status with a scheduled `retryAt` date instead of being immediately marked as `error`. Delays are progressive: 1 minute for the first retry, 1 hour for the second, then 1 day for every subsequent attempt (capped). The maximum number of retries (default `3`) can be configured:
+
+```yaml
+# config/packages/lle_hermes.yaml
+lle_hermes:
+    recipient_max_retry: 3
+```
+
+Once the recipient has been retried this many times without success, it is set to the final `error` status.
