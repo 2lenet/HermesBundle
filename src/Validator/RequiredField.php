@@ -6,9 +6,9 @@ use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute]
-class RequiredTranslatableField extends Constraint
+class RequiredField extends Constraint
 {
-    public string $message = 'validator.required_translatable_field.error';
+    public string $message = 'validator.required_field.error';
 
     #[HasNamedArguments]
     public function __construct(

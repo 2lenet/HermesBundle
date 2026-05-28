@@ -188,5 +188,5 @@ modal:
 validator:
     twig_syntax:
         error: The template has syntax errors
-    required_translatable_field:
-        error: This field is required in the default language.
+    required_field:
+        error: This field is required.

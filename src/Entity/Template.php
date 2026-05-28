@@ -30,15 +30,15 @@ class Template implements MultiTenantInterface
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Translatable]
-    #[HermesAssert\RequiredTranslatableField]
+    #[HermesAssert\RequiredField]
     #[Assert\Length(max: 255)]
     protected ?string $libelle = null;
 
-    #[ORM\Column(type: 'string', length: 1024)]
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     #[Translatable]
-    #[HermesAssert\RequiredTranslatableField]
+    #[HermesAssert\RequiredField]
     #[Assert\Length(max: 1024)]
     protected ?string $subject = null;
 
@@ -47,9 +47,9 @@ class Template implements MultiTenantInterface
     #[Assert\Length(max: 255)]
     protected ?string $senderName = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Translatable]
-    #[HermesAssert\RequiredTranslatableField]
+    #[HermesAssert\RequiredField]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
     protected ?string $senderEmail = null;

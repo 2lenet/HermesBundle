@@ -190,5 +190,5 @@ modal:
 validator:
     twig_syntax:
         error: Le modèle présente des erreurs de syntaxe
-    required_translatable_field:
-        error: Ce champ doit être renseigné dans la langue par défaut.
+    required_field:
+        error: Ce champ est requis.
