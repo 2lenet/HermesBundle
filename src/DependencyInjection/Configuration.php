@@ -57,6 +57,9 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->scalarNode('attachment_nb_days_before_deletion')
                 ->defaultValue(365)
+            ->end()
+            ->booleanNode('translatable_mail')
+                ->defaultTrue()
             ->end();
 
         return $treeBuilder;

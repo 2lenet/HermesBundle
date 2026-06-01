@@ -190,3 +190,5 @@ modal:
 validator:
     twig_syntax:
         error: Le modèle présente des erreurs de syntaxe
+    required_field:
+        error: Ce champ est requis.

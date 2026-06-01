@@ -40,6 +40,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             'lle_hermes.attachment_nb_days_before_deletion',
             $processedConfig['attachment_nb_days_before_deletion']
         );
+        $container->setParameter('lle_hermes.translatable_mail', $processedConfig['translatable_mail']);
 
         // Load the templates for the Hermes form types
         if ($container->hasParameter('twig.form.resources')) {
@@ -58,50 +59,6 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container): void
     {
-        $hasDoctrineTranslatable = false;
-        $hasStofDoctrineExtensions = false;
-        foreach ($container->getExtensionConfig('doctrine') as $config) {
-            if (isset($config['orm']['mappings']['translatable'])) {
-                $hasDoctrineTranslatable = true;
-                break;
-            }
-        }
-
-        if (!$hasDoctrineTranslatable) {
-            $container->prependExtensionConfig('doctrine', [
-                'orm' => [
-                    'mappings' => [
-                        'translatable' => [
-                            'is_bundle' => false,
-                            'type' => 'attribute',
-                            'prefix' => 'Gedmo\Translatable\Entity',
-                            'dir' => '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity',
-                            'alias' => 'GedmoTranslatable',
-                        ],
-                    ],
-                ],
-            ]);
-        }
-
-        foreach ($container->getExtensionConfig('stof_doctrine_extensions') as $config) {
-            if (
-                isset($config['orm']['default']['translatable'])
-            ) {
-                $hasStofDoctrineExtensions = true;
-                break;
-            }
-        }
-
-        if (!$hasStofDoctrineExtensions) {
-            $container->prependExtensionConfig('stof_doctrine_extensions', [
-                'orm' => [
-                    'default' => [
-                        'translatable' => true
-                    ],
-                ],
-            ]);
-        }
-
         $container->prependExtensionConfig("lle_entity_file", [
             "configurations" => [
                 "attached_file" => [
@@ -116,5 +73,59 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                 ],
             ],
         ]);
+
+        $translatableMail = true;
+        foreach ($container->getExtensionConfig($this->getAlias()) as $config) {
+            if (isset($config['translatable_mail'])) {
+                $translatableMail = (bool) $config['translatable_mail'];
+            }
+        }
+
+        if ($translatableMail) {
+            $hasDoctrineTranslatable = false;
+            $hasStofDoctrineExtensions = false;
+            foreach ($container->getExtensionConfig('doctrine') as $config) {
+                if (isset($config['orm']['mappings']['translatable'])) {
+                    $hasDoctrineTranslatable = true;
+                    break;
+                }
+            }
+
+            if (!$hasDoctrineTranslatable) {
+                $translatableDir = '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity';
+                $container->prependExtensionConfig('doctrine', [
+                    'orm' => [
+                        'mappings' => [
+                            'translatable' => [
+                                'is_bundle' => false,
+                                'type' => 'attribute',
+                                'prefix' => 'Gedmo\Translatable\Entity',
+                                'dir' => $translatableDir,
+                                'alias' => 'GedmoTranslatable',
+                            ],
+                        ],
+                    ],
+                ]);
+            }
+
+            foreach ($container->getExtensionConfig('stof_doctrine_extensions') as $config) {
+                if (
+                    isset($config['orm']['default']['translatable'])
+                ) {
+                    $hasStofDoctrineExtensions = true;
+                    break;
+                }
+            }
+
+            if (!$hasStofDoctrineExtensions) {
+                $container->prependExtensionConfig('stof_doctrine_extensions', [
+                    'orm' => [
+                        'default' => [
+                            'translatable' => true
+                        ],
+                    ],
+                ]);
+            }
+        }
     }
 }

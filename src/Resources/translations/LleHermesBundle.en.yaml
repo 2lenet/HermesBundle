@@ -188,3 +188,5 @@ modal:
 validator:
     twig_syntax:
         error: The template has syntax errors
+    required_field:
+        error: This field is required.

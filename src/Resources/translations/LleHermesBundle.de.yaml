@@ -188,3 +188,5 @@ modal:
 validator:
     twig_syntax:
         error: Die Vorlage hat Syntaxfehler
+    required_field:
+        error: Dieses Feld ist erforderlich.

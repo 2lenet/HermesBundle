@@ -3,10 +3,10 @@
 namespace Lle\HermesBundle\Form;
 
 use Lle\CruditBundle\Form\Type\CKEditorType;
-use Lle\CruditBundle\Form\Type\GedmoTranslatableType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Form\Type\MjmlType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -16,6 +16,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class TemplateType extends AbstractType
 {
+    use TranslatableFieldsTrait;
+
+    public function __construct(
+        #[Autowire(param: 'lle_hermes.translatable_mail')]
+        bool $translatableMail = true,
+    ) {
+        $this->translatableMail = $translatableMail;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $templateType = $options['data']->getType();
@@ -24,57 +33,52 @@ class TemplateType extends AbstractType
             ->add('groupInformations', GroupType::class, [
                 'label' => 'field.group.template_informations',
                 'inherit_data' => true,
-            ])
-            ->add('libelle', GedmoTranslatableType::class, [
-                'attr' => ['class' => 'col-md-6'],
-            ])
-            ->add('code', TextType::class, [
-                'attr' => ['class' => 'col-md-6'],
-            ])
-            ->add('senderName', GedmoTranslatableType::class, [
-                'attr' => ['class' => 'col-md-6'],
-            ])
-            ->add('senderEmail', EmailType::class, [
-                'attr' => ['class' => 'col-md-6'],
-            ])
-            ->add('groupContent', GroupType::class, [
-                'label' => 'field.group.template_content',
-                'inherit_data' => true,
-            ])
-            ->add('subject', GedmoTranslatableType::class);
+            ]);
+
+        $this->addTranslatable($builder, 'libelle', TextType::class, [
+            'attr' => ['class' => 'col-md-6'],
+        ], required: true);
+
+        $builder->add('code', TextType::class, [
+            'attr' => ['class' => 'col-md-6'],
+        ]);
+
+        $this->addTranslatable($builder, 'senderName', TextType::class, [
+            'attr' => ['class' => 'col-md-6'],
+        ]);
+        $this->addTranslatable($builder, 'senderEmail', EmailType::class, [
+            'attr' => ['class' => 'col-md-6'],
+        ], required: true);
+
+        $builder->add('groupContent', GroupType::class, [
+            'label' => 'field.group.template_content',
+            'inherit_data' => true,
+        ]);
+
+        $this->addTranslatable($builder, 'subject', TextType::class, required: true);
 
         switch ($templateType) {
             case Template::TYPE_CKEDITOR:
-                $builder->add('html', GedmoTranslatableType::class, [
-                    'fields_class' => CKEditorType::class,
-                    'attr' => [
-                        'rows' => 20,
-                    ],
+                $this->addTranslatable($builder, 'html', CKEditorType::class, [
+                    'attr' => ['rows' => 20],
                 ]);
                 break;
             case Template::TYPE_MJML:
-                $builder->add('mjml', GedmoTranslatableType::class, [
-                    'fields_class' => MjmlType::class,
-                ]);
+                $this->addTranslatable($builder, 'mjml', MjmlType::class);
                 break;
             case Template::TYPE_HTML:
             default:
-                $builder->add('html', GedmoTranslatableType::class, [
-                    'fields_class' => TextareaType::class,
-                    'attr' => [
-                        'rows' => 20,
-                    ],
+                $this->addTranslatable($builder, 'html', TextareaType::class, [
+                    'attr' => ['rows' => 20],
                 ]);
                 break;
         }
 
+        $this->addTranslatable($builder, 'text', TextareaType::class, [
+            'attr' => ['rows' => 20],
+        ]);
+
         $builder
-            ->add('text', GedmoTranslatableType::class, [
-                'fields_class' => TextareaType::class,
-                'attr' => [
-                    'rows' => 20,
-                ],
-            ])
             ->add('groupOptions', GroupType::class, [
                 'label' => 'field.group.template_options',
                 'inherit_data' => true,
