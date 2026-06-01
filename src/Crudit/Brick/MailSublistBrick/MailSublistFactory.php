@@ -43,6 +43,11 @@ class MailSublistFactory extends SublistFactory
     {
         $view = new BrickView($brickConfigurator);
         if ($brickConfigurator instanceof MailSublistConfig) {
+            $request = $this->getRequest();
+            $sessionKey = $brickConfigurator->getCrudConfig()->getDatasourceParamsKey()
+                . "_sublist_" . $this->mailCrudConfig->getName() . $request->attributes->get("id");
+            $this->datasourceParams = $this->mailCrudConfig->getDatasourceParams($request, $sessionKey);
+
             $view
                 ->setTemplate($brickConfigurator->getTemplate() ?? '@LleCrudit/brick/sublist_items')
                 ->setConfig($this->getConfig($brickConfigurator))
