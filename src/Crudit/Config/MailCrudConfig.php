@@ -9,6 +9,7 @@ use Lle\CruditBundle\Brick\TabBrick\TabConfig;
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Dto\Action\EditAction;
 use Lle\CruditBundle\Dto\Action\ItemAction;
+use Lle\CruditBundle\Dto\Action\ListAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Path;
@@ -23,6 +24,8 @@ class MailCrudConfig extends AbstractCrudConfig
     public const string ACTION_SEND = 'send';
     public const string ACTION_SEND_TEST = 'send_test';
     public const string ACTION_CANCEL = 'cancel';
+    public const string ACTION_RESEND = 'resend';
+    public const string ACTION_BATCH_RESEND = 'batch_resend';
 
     public function __construct(
         MailDatasource $datasource,
@@ -152,6 +155,15 @@ class MailCrudConfig extends AbstractCrudConfig
         $actions = parent::getListActions();
         unset($actions[CrudConfigInterface::ACTION_ADD]);
 
+        $actions[self::ACTION_BATCH_RESEND] = ListAction::new(
+            'action.batch.resend',
+            Path::new('lle_hermes_crudit_mail_batch_resend'),
+            Icon::new('paper-plane'),
+        )
+            ->setIsBatch()
+            ->setRole('ROLE_HERMES_MAIL_BATCH_RESEND')
+            ->setCssClass('btn btn-sm crudit-batch-dropdown-item dropdown-item crudit-action');
+
         return $actions;
     }
 
@@ -194,6 +206,16 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_SENDING))
             ->setRole('ROLE_HERMES_MAIL_CANCEL')
             ->setCssClass('btn btn-danger btn-sm')
+            ->setConfirmModal(true);
+
+        $actions[self::ACTION_RESEND] = ItemAction::new(
+            'action.resend',
+            Path::new('lle_hermes_crudit_mail_resend'),
+            Icon::new('paper-plane'),
+        )
+            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_ERROR))
+            ->setRole('ROLE_HERMES_MAIL_RESEND')
+            ->setCssClass('btn btn-warning btn-sm')
             ->setConfirmModal(true);
 
         return $actions;
@@ -241,6 +263,16 @@ class MailCrudConfig extends AbstractCrudConfig
             ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_SENDING))
             ->setRole('ROLE_HERMES_MAIL_CANCEL')
             ->setCssClass('btn btn-danger btn-sm ms-1')
+            ->setConfirmModal(true);
+
+        $actions[self::ACTION_RESEND] = ItemAction::new(
+            'action.resend',
+            Path::new('lle_hermes_crudit_mail_resend'),
+            Icon::new('paper-plane'),
+        )
+            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_ERROR))
+            ->setRole('ROLE_HERMES_MAIL_RESEND')
+            ->setCssClass('btn btn-warning btn-sm ms-1')
             ->setConfirmModal(true);
 
         $actions[CrudConfigInterface::ACTION_DELETE] = $parentActions[CrudConfigInterface::ACTION_DELETE];

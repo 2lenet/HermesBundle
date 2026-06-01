@@ -9,6 +9,8 @@ action:
     sendmailtest: Envoyer un mail de test
     resend: Renvoyer
     cancel: Annuler
+    batch:
+        resend: Renvoyer en masse
 
 crudit:
     action: Actions
@@ -176,6 +178,8 @@ flash:
         recipient: Aucun destinataire trouvé
     no_mail: Aucun mail trouvé
     mail_cancelled: Le mail a bien été annulé
+    mail_resent: '%nb% destinataire(s) remis dans la pile d''envoi'
+    no_recipient_to_resend: Aucun destinataire en erreur à renvoyer
 
 modal:
     action:
@@ -184,6 +188,9 @@ modal:
     confirm:
         action:
             cancel: Êtes-vous sûr de vouloir annnuler l'envoi de ce mail ?
+            resend: Êtes-vous sûr de vouloir renvoyer les destinataires en erreur dans la pile d'envoi ?
+            batch:
+                resend: Êtes-vous sûr de vouloir renvoyer les éléments sélectionnés dans la pile d'envoi ?
     message:
         sendTestMail: Envoyer un mail de test à
 
