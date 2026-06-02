@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\Service;
 
+use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -133,7 +134,7 @@ class Sender
 
             return true;
         } catch (TransportExceptionInterface | RfcComplianceException $e) {
-            $recipient->setStatus(Recipient::STATUS_ERROR);
+            $this->handleSendFailure($recipient);
             $this->errorLogger
                 ->logError('Transport or RFC error with message : ' . $e->getMessage(), $recipient);
 
@@ -151,6 +152,10 @@ class Sender
     {
         $this->em->flush();
 
+        $totalRetry = $mail->getRecipients()->filter(function (Recipient $recipient) {
+            return $recipient->getStatus() === Recipient::STATUS_RETRY;
+        })->count();
+
         $mail
             ->setTotalSended($mail->getRecipients()->filter(function (Recipient $recipient) {
                 return $recipient->getStatus() === Recipient::STATUS_SENT;
@@ -166,13 +171,43 @@ class Sender
         $totalRecipientsToSend = $mail->getTotalToSend() - $mail->getTotalUnsubscribed();
         $totalRecipientsSent = $mail->getTotalSended() + $mail->getTotalError();
 
-        if ($mail->getTotalError() === $totalRecipientsToSend) {
-            $mail->setStatus(Mail::STATUS_ERROR);
-        } elseif ($totalRecipientsSent === $totalRecipientsToSend) {
-            $mail->setStatus(Mail::STATUS_SENT);
+        if ($totalRetry === 0) {
+            if ($mail->getTotalError() === $totalRecipientsToSend) {
+                $mail->setStatus(Mail::STATUS_ERROR);
+            } elseif ($totalRecipientsSent === $totalRecipientsToSend) {
+                $mail->setStatus(Mail::STATUS_SENT);
+            }
         }
 
         $this->em->flush();
+    }
+
+    protected function handleSendFailure(Recipient $recipient): void
+    {
+        /** @var int $maxRetry */
+        $maxRetry = $this->parameters->get('lle_hermes.recipient_max_retry');
+        $currentRetryCount = $recipient->getRetryCount();
+
+        if ($currentRetryCount < $maxRetry) {
+            $newRetryCount = $currentRetryCount + 1;
+            $recipient
+                ->setStatus(Recipient::STATUS_RETRY)
+                ->setRetryCount($newRetryCount);
+
+            $mail = $recipient->getMail() ?? $recipient->getCcMail();
+            $mail?->setSendAtDate((new DateTime())->add($this->computeRetryDelay($newRetryCount)));
+        } else {
+            $recipient->setStatus(Recipient::STATUS_ERROR);
+        }
+    }
+
+    protected function computeRetryDelay(int $retryCount): DateInterval
+    {
+        return match (true) {
+            $retryCount <= 1 => new DateInterval('PT1M'),
+            $retryCount === 2 => new DateInterval('PT1H'),
+            default => new DateInterval('P1D'),
+        };
     }
 
     public function sendRecipient(Recipient $recipient): int

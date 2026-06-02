@@ -23,6 +23,7 @@ class RecipientFilterSet extends AbstractFilterSet
                 'status.cancelled' => Recipient::STATUS_CANCELLED,
                 'status.unsubscribed' => Recipient::STATUS_UNSUBSCRIBED,
                 'status.error' => Recipient::STATUS_ERROR,
+                'status.retry' => Recipient::STATUS_RETRY,
             ]),
             PeriodeFilterType::new('mail:sendingDate'),
             PeriodeFilterType::new('openDate'),

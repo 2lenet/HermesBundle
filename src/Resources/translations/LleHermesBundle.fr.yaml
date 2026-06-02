@@ -130,6 +130,7 @@ status:
     sent: Envoyé
     unsubscribed: Désinscrit
     cancelled: Annulé
+    retry: Nouvelle tentative
 
 menu:
     lle_hermes:

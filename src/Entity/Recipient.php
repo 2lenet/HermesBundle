@@ -20,6 +20,7 @@ class Recipient implements MultiTenantInterface
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_UNSUBSCRIBED = 'unsubscribed';
     public const STATUS_ERROR = 'error';
+    public const STATUS_RETRY = 'retry';
 
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]
@@ -66,6 +67,9 @@ class Recipient implements MultiTenantInterface
 
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $errorMessage = null;
+
+    #[ORM\Column(type: 'integer')]
+    protected int $retryCount = 0;
 
     public function __construct()
     {
@@ -240,6 +244,18 @@ class Recipient implements MultiTenantInterface
     public function setErrorMessage(?string $errorMessage): self
     {
         $this->errorMessage = $errorMessage;
+
+        return $this;
+    }
+
+    public function getRetryCount(): int
+    {
+        return $this->retryCount;
+    }
+
+    public function setRetryCount(int $retryCount): self
+    {
+        $this->retryCount = $retryCount;
 
         return $this;
     }

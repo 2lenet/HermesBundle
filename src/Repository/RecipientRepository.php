@@ -29,12 +29,12 @@ class RecipientRepository extends ServiceEntityRepository
             ->leftJoin('r.mail', 'm')
             ->leftJoin('r.ccMail', 'cc')
             ->andWhere(
-                '(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status = :status_r AND m.status = :status_m'
+                '(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status IN (:status_r) AND m.status = :status_m'
             )
             ->orWhere(
-                '(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status = :status_r AND cc.status = :status_m'
+                '(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status IN (:status_r) AND cc.status = :status_m'
             )
-            ->setParameter('status_r', $recipientStatus)
+            ->setParameter('status_r', [$recipientStatus, Recipient::STATUS_RETRY])
             ->setParameter('status_m', $mailStatus)
             ->setParameter('now', new \DateTime())
             ->setMaxResults($limit)

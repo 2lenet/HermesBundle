@@ -43,6 +43,70 @@ class SenderTest extends TestCase
         self::assertEquals(1, $sender->sendAllMails());
     }
 
+    public function testHandleSendFailureProgressivelyRetries(): void
+    {
+        $parameterBag = $this->createMock(ParameterBagInterface::class);
+        $parameterBag->method('get')->willReturnMap([
+            ['lle_hermes.recipient_max_retry', 3],
+        ]);
+
+        $sender = new Sender(
+            $this->getMockEntityManager(),
+            $this->getMockEmailErrorRepository(),
+            $this->getMockMailer(),
+            $this->getMockMailBuilder(),
+            $parameterBag,
+            $this->createMock(RecipientRepository::class),
+            $this->createMock(UnsubscribeEmailRepository::class),
+            $this->getMockErrorLogger(),
+        );
+
+        $reflection = new \ReflectionClass(Sender::class);
+        $handleSendFailure = $reflection->getMethod('handleSendFailure');
+        $handleSendFailure->setAccessible(true);
+
+        $mail = new Mail();
+        $recipient = new Recipient();
+        $recipient->setMail($mail);
+        $recipient->setToEmail('john.doe@test.com');
+        $recipient->setStatus(Recipient::STATUS_SENDING);
+
+        // 1st failure → RETRY, mail rescheduled +1 min
+        $before = new \DateTime();
+        $handleSendFailure->invoke($sender, $recipient);
+        self::assertSame(Recipient::STATUS_RETRY, $recipient->getStatus());
+        self::assertSame(1, $recipient->getRetryCount());
+        $sendAtDate = $mail->getSendAtDate();
+        self::assertNotNull($sendAtDate);
+        $expected = (clone $before)->add(new \DateInterval('PT1M'));
+        self::assertEqualsWithDelta($expected->getTimestamp(), $sendAtDate->getTimestamp(), 5);
+
+        // 2nd failure → RETRY, mail rescheduled +1 hour
+        $before = new \DateTime();
+        $handleSendFailure->invoke($sender, $recipient);
+        self::assertSame(Recipient::STATUS_RETRY, $recipient->getStatus());
+        self::assertSame(2, $recipient->getRetryCount());
+        $sendAtDate = $mail->getSendAtDate();
+        self::assertNotNull($sendAtDate);
+        $expected = (clone $before)->add(new \DateInterval('PT1H'));
+        self::assertEqualsWithDelta($expected->getTimestamp(), $sendAtDate->getTimestamp(), 5);
+
+        // 3rd failure → RETRY, mail rescheduled +1 day
+        $before = new \DateTime();
+        $handleSendFailure->invoke($sender, $recipient);
+        self::assertSame(Recipient::STATUS_RETRY, $recipient->getStatus());
+        self::assertSame(3, $recipient->getRetryCount());
+        $sendAtDate = $mail->getSendAtDate();
+        self::assertNotNull($sendAtDate);
+        $expected = (clone $before)->add(new \DateInterval('P1D'));
+        self::assertEqualsWithDelta($expected->getTimestamp(), $sendAtDate->getTimestamp(), 5);
+
+        // 4th failure → ERROR
+        $handleSendFailure->invoke($sender, $recipient);
+        self::assertSame(Recipient::STATUS_ERROR, $recipient->getStatus());
+        self::assertSame(3, $recipient->getRetryCount());
+    }
+
     protected function getMockMailer(): MailerInterface
     {
         return $this->createMock(MailerInterface::class);

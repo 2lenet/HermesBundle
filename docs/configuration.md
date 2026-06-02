@@ -126,3 +126,15 @@ All keys live under the `lle_hermes` root in `config/packages/lle_hermes.yaml`:
 | `tenant_class` | string\|null | no | `null` | FQCN of the tenant entity when multi-tenant is enabled. |
 | `attachment_nb_days_before_deletion` | int | no | `365` | Retention of mail attachments before cleanup. |
 | `translatable_mail` | bool | no | `true` | Enable Gedmo translatable fields on `Template`. See above. |
+
+## Retry on send failure
+
+When sending fails with a transport or RFC error, the recipient is put in `retry` status and the mail's `sendAtDate` is pushed back instead of the recipient being immediately marked as `error`. Delays are progressive: 1 minute for the first retry, 1 hour for the second, then 1 day for every subsequent attempt (capped). The maximum number of retries (default `3`) can be configured:
+
+```yaml
+# config/packages/lle_hermes.yaml
+lle_hermes:
+    recipient_max_retry: 3
+```
+
+Once the recipient has been retried this many times without success, it is set to the final `error` status.
