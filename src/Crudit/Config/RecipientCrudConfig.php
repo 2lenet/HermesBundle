@@ -6,6 +6,7 @@ namespace Lle\HermesBundle\Crudit\Config;
 
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Dto\Action\ItemAction;
+use Lle\CruditBundle\Dto\Action\ListAction;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Path;
@@ -72,6 +73,15 @@ class RecipientCrudConfig extends AbstractCrudConfig
     {
         $actions = parent::getListActions();
         unset($actions[CrudConfigInterface::ACTION_ADD]);
+
+        $actions[] = ListAction::new(
+            'action.batch.resend',
+            Path::new('lle_hermes_crudit_recipient_batch_resend'),
+            Icon::new('paper-plane'),
+        )
+            ->setIsBatch()
+            ->setRole('ROLE_HERMES_RECIPIENT_BATCH_RESEND')
+            ->setCssClass('btn btn-sm crudit-batch-dropdown-item dropdown-item crudit-action');
 
         return $actions;
     }

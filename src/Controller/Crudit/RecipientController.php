@@ -12,11 +12,14 @@ use Lle\HermesBundle\Crudit\Config\RecipientCrudConfig;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Service\Factory\RecipientFactory;
+use Lle\HermesBundle\Service\MailResender;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/recipient')]
 class RecipientController extends AbstractCrudController
@@ -30,6 +33,8 @@ class RecipientController extends AbstractCrudController
         protected EntityManagerInterface $em,
         protected MultiTenantManager $multiTenantManager,
         protected RecipientFactory $recipientFactory,
+        protected MailResender $mailResender,
+        protected TranslatorInterface $translator,
     ) {
         $this->config = $config;
     }
@@ -77,6 +82,43 @@ class RecipientController extends AbstractCrudController
 
         $mail->setStatus(Mail::STATUS_SENDING);
         $this->em->flush();
+
+        return $this->redirectToRoute($this->config->getRootRoute() . '_index');
+    }
+
+    #[IsGranted('ROLE_HERMES_RECIPIENT_BATCH_RESEND')]
+    #[Route('/batch-resend', name: 'lle_hermes_crudit_recipient_batch_resend')]
+    public function batchResend(Request $request): RedirectResponse
+    {
+        $ids = array_filter(explode(',', (string)$request->query->get('ids')));
+        $allPage = $request->query->get('all_page');
+
+        if ($allPage) {
+            $recipients = $this->config->getDatasource()->list(
+                $this->config->getDatasourceParams($request)->setLimit(0)
+            );
+        } else {
+            $recipients = $this->em->getRepository(Recipient::class)->findBy(['id' => $ids]);
+        }
+
+        $owned = [];
+        foreach ($recipients as $recipient) {
+            $mail = $recipient->getMail() ?? $recipient->getCcMail();
+            if ($mail && $this->multiTenantManager->isOwner($mail)) {
+                $owned[] = $recipient;
+            }
+        }
+
+        $nb = $this->mailResender->resendRecipients($owned);
+
+        if ($nb === 0) {
+            $this->addFlash('warning', $this->translator->trans('flash.no_recipient_to_resend', [], 'LleHermesBundle'));
+        } else {
+            $this->addFlash(
+                FlashBrickResponse::SUCCESS,
+                $this->translator->trans('flash.mail_resent', ['%nb%' => $nb], 'LleHermesBundle')
+            );
+        }
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }

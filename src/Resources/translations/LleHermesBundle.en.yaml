@@ -9,6 +9,8 @@ action:
     sendmailtest: Send a test mail
     resend: Resend
     cancel: Cancel
+    batch:
+        resend: Bulk resend
 
 crudit:
     action: Actions
@@ -174,6 +176,8 @@ flash:
         recipient: No recipient found
     no_mail: No mail found
     mail_cancelled: The mail has been successfully cancelled
+    mail_resent: '%nb% recipient(s) will be resent'
+    no_recipient_to_resend: No recipient in error to resend
 
 modal:
     action:
@@ -182,6 +186,9 @@ modal:
     confirm:
         action:
             cancel: Are you sure you want to cancel sending this mail ?
+            resend: Are you sure you want to requeue the recipients in error for sending ?
+            batch:
+                resend: Are you sure you want to requeue the selected items for sending ?
     message:
         sendTestMail: Send a test mail to
 
