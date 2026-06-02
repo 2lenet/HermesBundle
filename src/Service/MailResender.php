@@ -68,6 +68,8 @@ class MailResender
             }
         }
 
+        $this->em->flush();
+
         $nbRequeued = 0;
         foreach ($mailsToRequeue as $mail) {
             $mail->setStatus(Mail::STATUS_SENDING);
