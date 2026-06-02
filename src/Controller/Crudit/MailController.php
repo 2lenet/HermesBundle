@@ -207,7 +207,15 @@ class MailController extends AbstractCrudController
         }
 
         $nb = $this->mailResender->resend($mail);
-        $this->flashResendResult($nb);
+
+        if ($nb === 0) {
+            $this->addFlash('warning', $this->translator->trans('flash.no_recipient_to_resend', [], 'LleHermesBundle'));
+        } else {
+            $this->addFlash(
+                FlashBrickResponse::SUCCESS,
+                $this->translator->trans('flash.mail_resent', ['%nb%' => $nb], 'LleHermesBundle')
+            );
+        }
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
@@ -235,21 +243,15 @@ class MailController extends AbstractCrudController
             $nb += $this->mailResender->resend($mail);
         }
 
-        $this->flashResendResult($nb);
-
-        return $this->redirectToRoute($this->config->getRootRoute() . '_index');
-    }
-
-    protected function flashResendResult(int $nb): void
-    {
         if ($nb === 0) {
-            $message = $this->translator->trans('flash.no_recipient_to_resend', [], 'LleHermesBundle');
-            $this->addFlash('warning', $message);
-
-            return;
+            $this->addFlash('warning', $this->translator->trans('flash.no_recipient_to_resend', [], 'LleHermesBundle'));
+        } else {
+            $this->addFlash(
+                FlashBrickResponse::SUCCESS,
+                $this->translator->trans('flash.mail_resent', ['%nb%' => $nb], 'LleHermesBundle')
+            );
         }
 
-        $message = $this->translator->trans('flash.mail_resent', ['%nb%' => $nb], 'LleHermesBundle');
-        $this->addFlash(FlashBrickResponse::SUCCESS, $message);
+        return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
 }

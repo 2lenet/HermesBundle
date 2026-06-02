@@ -176,7 +176,7 @@ flash:
         recipient: Kein Empfänger gefunden
     no_mail: Keine E-Mail gefunden
     mail_cancelled: Die E-Mail wurde erfolgreich gelöscht
-    mail_resent: '%nb% Empfänger erneut in die Versandwarteschlange eingereiht'
+    mail_resent: '%nb% Empfänger werden erneut gesendet'
     no_recipient_to_resend: Keine fehlerhaften Empfänger zum erneuten Senden
 
 modal:

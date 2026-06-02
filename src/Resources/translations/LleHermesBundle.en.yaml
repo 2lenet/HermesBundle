@@ -176,7 +176,7 @@ flash:
         recipient: No recipient found
     no_mail: No mail found
     mail_cancelled: The mail has been successfully cancelled
-    mail_resent: '%nb% recipient(s) requeued for sending'
+    mail_resent: '%nb% recipient(s) will be resent'
     no_recipient_to_resend: No recipient in error to resend
 
 modal:

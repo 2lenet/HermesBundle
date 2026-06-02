@@ -21,11 +21,10 @@ class MailResender
     {
         $nb = 0;
         foreach ($mail->getRecipients() as $recipient) {
-            if ($recipient->getStatus() !== Recipient::STATUS_ERROR) {
+            if (!$this->resendRecipient($recipient)) {
                 continue;
             }
 
-            $this->em->persist($this->recipientFactory->copy($recipient));
             $nb++;
 
             if ($nb % 1000 === 0) {
@@ -51,17 +50,17 @@ class MailResender
         $mailsToRequeue = [];
 
         foreach ($recipients as $recipient) {
-            if ($recipient->getStatus() !== Recipient::STATUS_ERROR) {
-                continue;
-            }
-
             $mail = $recipient->getMail() ?? $recipient->getCcMail();
-            if (!$mail) {
+            $mailId = $mail?->getId();
+            if (!$mail || !$mailId) {
                 continue;
             }
 
-            $this->em->persist($this->recipientFactory->copy($recipient));
-            $mailsToRequeue[(int)$mail->getId()] = $mail;
+            if (!$this->resendRecipient($recipient)) {
+                continue;
+            }
+
+            $mailsToRequeue[$mailId] = $mail;
             $nb++;
 
             if ($nb % 1000 === 0) {
@@ -69,12 +68,29 @@ class MailResender
             }
         }
 
+        $nbRequeued = 0;
         foreach ($mailsToRequeue as $mail) {
             $mail->setStatus(Mail::STATUS_SENDING);
+            $nbRequeued++;
+
+            if ($nbRequeued % 1000 === 0) {
+                $this->em->flush();
+            }
         }
 
         $this->em->flush();
 
         return $nb;
+    }
+
+    private function resendRecipient(Recipient $recipient): bool
+    {
+        if ($recipient->getStatus() !== Recipient::STATUS_ERROR) {
+            return false;
+        }
+
+        $this->em->persist($this->recipientFactory->copy($recipient));
+
+        return true;
     }
 }

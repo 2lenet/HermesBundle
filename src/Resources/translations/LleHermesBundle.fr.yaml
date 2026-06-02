@@ -10,7 +10,7 @@ action:
     resend: Renvoyer
     cancel: Annuler
     batch:
-        resend: Renvoyer en masse
+        resend: Renvoyer massivement
 
 crudit:
     action: Actions
@@ -178,7 +178,7 @@ flash:
         recipient: Aucun destinataire trouvé
     no_mail: Aucun mail trouvé
     mail_cancelled: Le mail a bien été annulé
-    mail_resent: '%nb% destinataire(s) remis dans la pile d''envoi'
+    mail_resent: '%nb% destinataire(s) vont être renvoyés'
     no_recipient_to_resend: Aucun destinataire en erreur à renvoyer
 
 modal:
