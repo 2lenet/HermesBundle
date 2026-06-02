@@ -127,7 +127,6 @@ class Sender
 
             $mailer->send($this->mailBuilder->buildMail($mail, $recipient));
             $recipient->setStatus(Recipient::STATUS_SENT);
-            $recipient->setRetryAt(null);
 
             if ($updateSendingDate) {
                 $mail->setSendingDate(new DateTime());
@@ -193,11 +192,12 @@ class Sender
             $newRetryCount = $currentRetryCount + 1;
             $recipient
                 ->setStatus(Recipient::STATUS_RETRY)
-                ->setRetryCount($newRetryCount)
-                ->setRetryAt((new DateTime())->add($this->computeRetryDelay($newRetryCount)));
+                ->setRetryCount($newRetryCount);
+
+            $mail = $recipient->getMail() ?? $recipient->getCcMail();
+            $mail?->setSendAtDate((new DateTime())->add($this->computeRetryDelay($newRetryCount)));
         } else {
             $recipient->setStatus(Recipient::STATUS_ERROR);
-            $recipient->setRetryAt(null);
         }
     }
 

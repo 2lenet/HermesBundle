@@ -71,9 +71,6 @@ class Recipient implements MultiTenantInterface
     #[ORM\Column(type: 'integer')]
     protected int $retryCount = 0;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    protected ?DateTime $retryAt = null;
-
     public function __construct()
     {
         $this->linkOpenings = new ArrayCollection();
@@ -259,18 +256,6 @@ class Recipient implements MultiTenantInterface
     public function setRetryCount(int $retryCount): self
     {
         $this->retryCount = $retryCount;
-
-        return $this;
-    }
-
-    public function getRetryAt(): ?DateTime
-    {
-        return $this->retryAt;
-    }
-
-    public function setRetryAt(?DateTime $retryAt): self
-    {
-        $this->retryAt = $retryAt;
 
         return $this;
     }

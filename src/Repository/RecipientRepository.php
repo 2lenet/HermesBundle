@@ -25,23 +25,18 @@ class RecipientRepository extends ServiceEntityRepository
      */
     public function findRecipientsSending(string $recipientStatus, string $mailStatus, int $limit): array
     {
-        $now = new \DateTime();
-
         return $this->createQueryBuilder('r')
             ->leftJoin('r.mail', 'm')
             ->leftJoin('r.ccMail', 'cc')
             ->andWhere(
-                '(m.sendAtDate IS NULL OR m.sendAtDate < :now)
-                 AND (m.status = :status_m OR cc.status = :status_m)
-                 AND (
-                    r.status = :status_r
-                    OR (r.status = :status_retry AND r.retryAt <= :now)
-                 )'
+                '(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status IN (:status_r) AND m.status = :status_m'
             )
-            ->setParameter('status_r', $recipientStatus)
-            ->setParameter('status_retry', Recipient::STATUS_RETRY)
+            ->orWhere(
+                '(m.sendAtDate IS NULL OR m.sendAtDate < :now) AND r.status IN (:status_r) AND cc.status = :status_m'
+            )
+            ->setParameter('status_r', [$recipientStatus, Recipient::STATUS_RETRY])
             ->setParameter('status_m', $mailStatus)
-            ->setParameter('now', $now)
+            ->setParameter('now', new \DateTime())
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
