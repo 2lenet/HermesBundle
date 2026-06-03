@@ -27,7 +27,7 @@ class MailSublistConfig extends SublistConfig
         ?CrudConfigInterface $subCrudConfig = null,
         array $options = []
     ): self {
-        return new static($fieldname, $subCrudConfig, $options);
+        return new self($fieldname, $subCrudConfig, $options);
     }
 
     public function setSubCrudConfig(CrudConfigInterface $subCrudConfig): self

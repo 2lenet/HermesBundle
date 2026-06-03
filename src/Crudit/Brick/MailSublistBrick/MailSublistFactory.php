@@ -45,7 +45,7 @@ class MailSublistFactory extends SublistFactory
         if ($brickConfigurator instanceof MailSublistConfig) {
             $brickConfigurator->setSubCrudConfig($this->mailCrudConfig);
             $config = $brickConfigurator->getConfig($this->getRequest());
-            $this->datasourceParams = $brickConfigurator->getDatasourceParams();
+            $this->datasourceParams = $brickConfigurator->getDatasourceParams() ?? $this->datasourceParams;
 
             $view
                 ->setTemplate($brickConfigurator->getTemplate() ?? '@LleCrudit/brick/sublist_items')
