@@ -43,9 +43,13 @@ class MailSublistFactory extends SublistFactory
     {
         $view = new BrickView($brickConfigurator);
         if ($brickConfigurator instanceof MailSublistConfig) {
+            $brickConfigurator->setSubCrudConfig($this->mailCrudConfig);
+            $config = $brickConfigurator->getConfig($this->getRequest());
+            $this->datasourceParams = $brickConfigurator->getDatasourceParams() ?? $this->datasourceParams;
+
             $view
                 ->setTemplate($brickConfigurator->getTemplate() ?? '@LleCrudit/brick/sublist_items')
-                ->setConfig($this->getConfig($brickConfigurator))
+                ->setConfig($config)
                 ->setPath($this->getPath($brickConfigurator))
                 ->setData([
                     'lines' => $this->getLines($brickConfigurator),
@@ -53,26 +57,6 @@ class MailSublistFactory extends SublistFactory
         }
 
         return $view;
-    }
-
-    public function getConfig(MailSublistConfig $brickConfigurator): array
-    {
-        return [
-            'fields' => $this->mailCrudConfig->getFields(CrudConfigInterface::INDEX),
-            'actions' => $this->mailCrudConfig->getItemActions(),
-            'batch_actions' => [],
-            'name' => $this->mailCrudConfig->getName(),
-            'title' => $brickConfigurator->getTitle(),
-            'titleCss' => $brickConfigurator->getTitleCss(),
-            'datasource_params' => $this->datasourceParams,
-            'detail' => null,
-            'hidden_action' => false,
-            'bulk' => false,
-            'sort' => ['name' => 'id', 'direction' => 'ASC'],
-            'canModifyNbEntityPerPage' => false,
-            'choices_nb_items' => $this->mailCrudConfig->getChoicesNbItems(),
-            'translation_domain' => $this->mailCrudConfig->getTranslationDomain(),
-        ];
     }
 
     /** @return ResourceView[] */
