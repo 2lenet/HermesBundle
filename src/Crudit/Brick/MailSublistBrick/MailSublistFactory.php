@@ -43,7 +43,8 @@ class MailSublistFactory extends SublistFactory
     {
         $view = new BrickView($brickConfigurator);
         if ($brickConfigurator instanceof MailSublistConfig) {
-            $brickConfigurator->setSubCrudConfig($this->mailCrudConfig);
+            $customConfig = $brickConfigurator->getCustomSubCrudConfig();
+            $brickConfigurator->setSubCrudConfig($customConfig ?? $this->mailCrudConfig);
             $config = $brickConfigurator->getConfig($this->getRequest());
             $this->datasourceParams = $brickConfigurator->getDatasourceParams() ?? $this->datasourceParams;
 
@@ -77,12 +78,13 @@ class MailSublistFactory extends SublistFactory
         $this->datasourceParams->setCount($this->mailDatasource->count($this->datasourceParams));
         $resources = $this->mailDatasource->list($this->datasourceParams);
 
+        $crudConfig = $brickConfigurator->getSubCrudConfig();
         foreach ($resources as $resource) {
             $lines[] = $this->resourceResolver->resolve(
                 $resource,
-                $this->mailCrudConfig->getFields(CrudConfigInterface::INDEX),
+                $crudConfig->getFields(CrudConfigInterface::INDEX),
                 $brickConfigurator->getDatasource(),
-                $this->mailCrudConfig,
+                $crudConfig,
             );
         }
 

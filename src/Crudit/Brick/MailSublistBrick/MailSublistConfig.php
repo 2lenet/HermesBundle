@@ -10,16 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MailSublistConfig extends SublistConfig
 {
+    protected ?CrudConfigInterface $customSubCrudConfig = null;
+
     public function __construct(
         string $fieldname = 'mails',
         ?CrudConfigInterface $subCrudConfig = null,
         array $options = []
     ) {
-        $this->options = $options;
         $this->setFieldname($fieldname);
-        if ($subCrudConfig !== null) {
-            $this->subCrudConfig = $subCrudConfig;
-        }
+        $this->customSubCrudConfig = $subCrudConfig;
+        $this->setOptions($options);
     }
 
     public static function new(
@@ -35,6 +35,11 @@ class MailSublistConfig extends SublistConfig
         $this->subCrudConfig = $subCrudConfig;
 
         return $this;
+    }
+
+    public function getCustomSubCrudConfig(): ?CrudConfigInterface
+    {
+        return $this->customSubCrudConfig;
     }
 
     public function getConfig(Request $request): array
