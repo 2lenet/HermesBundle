@@ -7,7 +7,7 @@ use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
 use Lle\HermesBundle\Exception\NoMailFoundException;
 use Lle\HermesBundle\Model\MailDto;
-use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Repository\TemplateRepositoryInterface;
 use Lle\HermesBundle\Service\AttachmentService;
 use Lle\HermesBundle\Service\Factory\MailFactory;
 
@@ -18,7 +18,7 @@ class Mailer
         protected EntityManagerInterface $em,
         protected MailFactory $mailFactory,
         protected MultiTenantManager $multiTenantManager,
-        protected TemplateRepository $templateRepository,
+        protected TemplateRepositoryInterface $templateRepository,
         protected Sender $sender,
     ) {
     }

@@ -1,19 +1,23 @@
 <?php
 
-namespace Lle\HermesBundle\Entity;
+namespace Lle\HermesBundle\Translatable;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation\Translatable;
 use Lle\HermesBundle\Contracts\TemplateInterface;
-use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Repository\TranslatableTemplateRepository;
+use Lle\HermesBundle\Translatable\Translation\TemplateTranslation;
 use Lle\HermesBundle\Validator as HermesAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass: TemplateRepository::class)]
+#[ORM\Entity(repositoryClass: TranslatableTemplateRepository::class)]
+#[Gedmo\TranslationEntity(class: TemplateTranslation::class)]
 #[ORM\Table(name: 'lle_hermes_template')]
 #[ORM\Index(name: 'tenant_id_idx', columns: ['tenant_id'])]
-class Template implements TemplateInterface
+class TranslatableTemplate implements TemplateInterface
 {
     public const string TYPE_HTML = 'html';
 
@@ -27,26 +31,31 @@ class Template implements TemplateInterface
     protected ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Translatable]
     #[HermesAssert\RequiredField]
     #[Assert\Length(max: 255)]
     protected ?string $libelle = null;
 
     #[ORM\Column(type: 'string', length: 1024, nullable: true)]
+    #[Translatable]
     #[HermesAssert\RequiredField]
     #[Assert\Length(max: 1024)]
     protected ?string $subject = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Translatable]
     #[Assert\Length(max: 255)]
     protected ?string $senderName = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Translatable]
     #[HermesAssert\RequiredField]
     #[Assert\Length(max: 255)]
     #[Assert\Email]
     protected ?string $senderEmail = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Translatable]
     #[HermesAssert\TwigSyntax]
     protected ?string $text = null;
 
@@ -56,6 +65,7 @@ class Template implements TemplateInterface
     protected ?string $code = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Translatable]
     #[HermesAssert\TwigSyntax]
     protected ?string $html = null;
 
@@ -79,7 +89,16 @@ class Template implements TemplateInterface
     protected string $type = self::TYPE_HTML;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Translatable]
     protected ?string $mjml = null;
+
+    #[ORM\OneToMany(mappedBy: 'object', targetEntity: TemplateTranslation::class, cascade: ['persist', 'remove'])]
+    private Collection $translations;
+
+    public function __construct()
+    {
+        $this->translations = new ArrayCollection();
+    }
 
     public function __toString(): string
     {
@@ -264,6 +283,21 @@ class Template implements TemplateInterface
 
     public function getTranslations(): Collection
     {
-        return new ArrayCollection();
+        return $this->translations;
+    }
+
+    public function addTranslation(TemplateTranslation $templateTranslation): void
+    {
+        if (!$this->translations->contains($templateTranslation)) {
+            $this->translations[] = $templateTranslation;
+            $templateTranslation->setObject($this);
+        }
+    }
+
+    public function removeTranslation(TemplateTranslation $templateTranslation): void
+    {
+        if ($this->translations->contains($templateTranslation)) {
+            $this->translations->removeElement($templateTranslation);
+        }
     }
 }

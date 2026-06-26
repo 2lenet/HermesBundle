@@ -2,11 +2,17 @@
 
 namespace Lle\HermesBundle\DependencyInjection;
 
+use Lle\HermesBundle\Contracts\TemplateInterface;
+use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Repository\TemplateRepositoryInterface;
+use Lle\HermesBundle\Repository\TranslatableTemplateRepository;
+use Lle\HermesBundle\Translatable\TranslatableTemplate;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Class LleHermesExtension
@@ -43,6 +49,13 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
         );
         $container->setParameter('lle_hermes.translatable_mail', $processedConfig['translatable_mail']);
 
+        $translatableMail = $processedConfig['translatable_mail'];
+        $templateClass = $translatableMail ? TranslatableTemplate::class : Template::class;
+        $repoClass = $translatableMail ? TranslatableTemplateRepository::class : TemplateRepository::class;
+
+        $container->setParameter('lle_hermes.template_class', $templateClass);
+        $container->setAlias(TemplateRepositoryInterface::class, $repoClass)->setPublic(false);
+
         // Load the templates for the Hermes form types
         if ($container->hasParameter('twig.form.resources')) {
             /** @var array $parameter */
@@ -60,21 +73,6 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container): void
     {
-        $container->prependExtensionConfig("lle_entity_file", [
-            "configurations" => [
-                "attached_file" => [
-                    "class" => "Lle\\HermesBundle\\Entity\\Template",
-                    "storage_adapter" => "lle_entity_file.storage.default",
-                    "role" => "PUBLIC_ACCESS",
-                ],
-                "mail_attached_file" => [
-                    "class" => "Lle\\HermesBundle\\Entity\\Mail",
-                    "storage_adapter" => "lle_entity_file.storage.default",
-                    "role" => "ROLE_HERMES_MAIL_READATTACHMENT",
-                ],
-            ],
-        ]);
-
         $translatableMail = true;
         foreach ($container->getExtensionConfig($this->getAlias()) as $config) {
             if (isset($config['translatable_mail'])) {
@@ -82,7 +80,49 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             }
         }
 
+        $templateClass = $translatableMail
+            ? 'Lle\\HermesBundle\\Translatable\\TranslatableTemplate'
+            : 'Lle\\HermesBundle\\Entity\\Template';
+
+        $container->prependExtensionConfig('lle_entity_file', [
+            'configurations' => [
+                'attached_file' => [
+                    'class' => $templateClass,
+                    'storage_adapter' => 'lle_entity_file.storage.default',
+                    'role' => 'PUBLIC_ACCESS',
+                ],
+                'mail_attached_file' => [
+                    'class' => 'Lle\\HermesBundle\\Entity\\Mail',
+                    'storage_adapter' => 'lle_entity_file.storage.default',
+                    'role' => 'ROLE_HERMES_MAIL_READATTACHMENT',
+                ],
+            ],
+        ]);
+
+        $container->prependExtensionConfig('doctrine', [
+            'orm' => [
+                'resolve_target_entities' => [
+                    'Lle\\HermesBundle\\Contracts\\TemplateInterface' => $templateClass,
+                ],
+            ],
+        ]);
+
         if ($translatableMail) {
+            $translatableDir = dirname(__DIR__) . '/Translatable';
+            $container->prependExtensionConfig('doctrine', [
+                'orm' => [
+                    'mappings' => [
+                        'LleHermesTranslatable' => [
+                            'is_bundle' => false,
+                            'type' => 'attribute',
+                            'dir' => $translatableDir,
+                            'prefix' => 'Lle\\HermesBundle\\Translatable',
+                            'alias' => 'LleHermesTranslatable',
+                        ],
+                    ],
+                ],
+            ]);
+
             $hasDoctrineTranslatable = false;
             $hasStofDoctrineExtensions = false;
             foreach ($container->getExtensionConfig('doctrine') as $config) {
@@ -93,7 +133,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             }
 
             if (!$hasDoctrineTranslatable) {
-                $translatableDir = '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity';
+                $translatableGedmoDir = '%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity';
                 $container->prependExtensionConfig('doctrine', [
                     'orm' => [
                         'mappings' => [
@@ -101,7 +141,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                                 'is_bundle' => false,
                                 'type' => 'attribute',
                                 'prefix' => 'Gedmo\Translatable\Entity',
-                                'dir' => $translatableDir,
+                                'dir' => $translatableGedmoDir,
                                 'alias' => 'GedmoTranslatable',
                             ],
                         ],
@@ -110,9 +150,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
             }
 
             foreach ($container->getExtensionConfig('stof_doctrine_extensions') as $config) {
-                if (
-                    isset($config['orm']['default']['translatable'])
-                ) {
+                if (isset($config['orm']['default']['translatable'])) {
                     $hasStofDoctrineExtensions = true;
                     break;
                 }
@@ -122,7 +160,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                 $container->prependExtensionConfig('stof_doctrine_extensions', [
                     'orm' => [
                         'default' => [
-                            'translatable' => true
+                            'translatable' => true,
                         ],
                     ],
                 ]);
