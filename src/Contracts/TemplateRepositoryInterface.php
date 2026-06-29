@@ -1,9 +1,8 @@
 <?php
 
-namespace Lle\HermesBundle\Repository;
+namespace Lle\HermesBundle\Contracts;
 
 use Doctrine\Persistence\ObjectRepository;
-use Lle\HermesBundle\Contracts\TemplateInterface;
 
 interface TemplateRepositoryInterface extends ObjectRepository
 {

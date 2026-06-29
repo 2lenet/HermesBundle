@@ -11,7 +11,7 @@ use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
 use Lle\HermesBundle\Form\TemplateType;
-use Lle\HermesBundle\Repository\TemplateRepositoryInterface;
+use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;

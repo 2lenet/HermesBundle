@@ -5,6 +5,7 @@ namespace Lle\HermesBundle\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Lle\HermesBundle\Contracts\TemplateInterface;
+use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
 use Lle\HermesBundle\Translatable\TranslatableTemplate;
 
 /**

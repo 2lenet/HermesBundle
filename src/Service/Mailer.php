@@ -8,7 +8,7 @@ use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
 use Lle\HermesBundle\Exception\NoMailFoundException;
 use Lle\HermesBundle\Model\MailDto;
-use Lle\HermesBundle\Repository\TemplateRepositoryInterface;
+use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
 use Lle\HermesBundle\Service\AttachmentService;
 use Lle\HermesBundle\Service\Factory\MailFactory;
 

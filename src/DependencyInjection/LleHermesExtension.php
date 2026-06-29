@@ -5,7 +5,7 @@ namespace Lle\HermesBundle\DependencyInjection;
 use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Repository\TemplateRepository;
-use Lle\HermesBundle\Repository\TemplateRepositoryInterface;
+use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
 use Lle\HermesBundle\Repository\TranslatableTemplateRepository;
 use Lle\HermesBundle\Translatable\TranslatableTemplate;
 use Symfony\Component\Config\FileLocator;
