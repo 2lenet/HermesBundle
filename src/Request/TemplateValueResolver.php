@@ -11,6 +11,9 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class TemplateValueResolver implements ValueResolverInterface
 {
+    /**
+     * @param class-string<TemplateInterface> $templateClass
+     */
     public function __construct(
         private readonly EntityManagerInterface $em,
         #[Autowire(param: 'lle_hermes.template_class')]

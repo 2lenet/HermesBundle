@@ -125,7 +125,6 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
         }
 
         if ($translatableMail) {
-
             $hasDoctrineTranslatable = false;
             $hasStofDoctrineExtensions = false;
             foreach ($container->getExtensionConfig('doctrine') as $config) {

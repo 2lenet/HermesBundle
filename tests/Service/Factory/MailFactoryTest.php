@@ -229,7 +229,7 @@ class MailFactoryTest extends TestCase
 
         self::assertEquals('test senderName', $this->mailFactory->getValueFromLocale($template, 'senderName', 'en'));
         self::assertNotEquals('test senderName', $this->mailFactory->getValueFromLocale($template, 'senderName', 'fr'));
-        self::assertEquals('name', $this->mailFactory->getValueFromLocale($template, 'name', null));
+        self::assertEquals('name', $this->mailFactory->getValueFromLocale($template, 'senderName', null));
 
         self::assertEquals('test senderEmail', $this->mailFactory->getValueFromLocale($template, 'senderEmail', 'en'));
         self::assertNotEquals(

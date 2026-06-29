@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Exception\TemplateNotFoundException;
 use Lle\HermesBundle\Exception\NoMailFoundException;
@@ -43,6 +44,7 @@ class Mailer
             throw new TemplateNotFoundException($mail->getTemplate());
         }
 
+        assert($template instanceof TemplateInterface);
         $mailObj = $this->mailFactory->createMailFromDto($mail, $template);
 
         $mailObj->setStatus(Mail::STATUS_DRAFT);
