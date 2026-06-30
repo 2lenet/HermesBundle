@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\DependencyInjection\Compiler;
 
+use Lle\HermesBundle\Entity\Template;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -14,7 +15,7 @@ class ExcludeTemplateMappingPass implements CompilerPassInterface
             return;
         }
 
-        $templatePath = realpath(dirname(__DIR__) . '/../Entity/Template.php');
+        $templatePath = (new \ReflectionClass(Template::class))->getFileName();
         if ($templatePath === false) {
             return;
         }
