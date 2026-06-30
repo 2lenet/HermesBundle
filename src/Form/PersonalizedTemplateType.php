@@ -17,6 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PersonalizedTemplateType extends AbstractType
 {
@@ -26,6 +27,8 @@ class PersonalizedTemplateType extends AbstractType
         protected MultiTenantManager $multiTenantManager,
         #[Autowire(param: 'lle_hermes.translatable_mail')]
         bool $translatableMail = true,
+        #[Autowire(param: 'lle_hermes.template_class')]
+        private string $templateClass = Template::class,
     ) {
         $this->translatableMail = $translatableMail;
     }
@@ -87,14 +90,14 @@ class PersonalizedTemplateType extends AbstractType
             'inherit_data' => true,
         ])
             ->add('unsubscriptions', CheckboxType::class, [
-                "required" => false,
-                "label" => "field.unsubscriptions",
-                "translation_domain" => "LleHermesBundle",
+                'required' => false,
+                'label' => 'field.unsubscriptions',
+                'translation_domain' => 'LleHermesBundle',
             ])
             ->add('statistics', CheckboxType::class, [
-                "required" => false,
-                "label" => "field.statistics",
-                "translation_domain" => "LleHermesBundle",
+                'required' => false,
+                'label' => 'field.statistics',
+                'translation_domain' => 'LleHermesBundle',
             ])
             ->add('sendToErrors', CheckboxType::class, [
                 'required' => false,
@@ -106,8 +109,13 @@ class PersonalizedTemplateType extends AbstractType
             ])
             ->add('tenantId', HiddenType::class, [
                 'data' => $this->multiTenantManager->getTenantId(),
-                'label' => false
+                'label' => false,
             ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['data_class' => $this->templateClass]);
     }
 
     public function getName(): string

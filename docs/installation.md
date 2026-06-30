@@ -50,3 +50,21 @@ Make sure you've set the correct permissions in the [Crudit](https://github.com/
 
 To configure the bundle, refer to this following instructions : [Configuration](configuration.md).
 
+## Upgrading from a version without `TranslatableTemplate`
+
+If you were using the `Template` entity directly in your application (type-hints, `instanceof` checks, Doctrine queries), you must replace those references with `TemplateInterface`:
+
+```php
+// Before
+use Lle\HermesBundle\Entity\Template;
+
+public function myMethod(Template $template): void {}
+
+// After
+use Lle\HermesBundle\Contracts\TemplateInterface;
+
+public function myMethod(TemplateInterface $template): void {}
+```
+
+No database migration is required: both modes use the same `lle_hermes_template` table.
+

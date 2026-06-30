@@ -8,11 +8,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
+use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
-use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Form\TemplateType;
-use Lle\HermesBundle\Repository\TemplateRepository;
+use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
 use Lle\HermesBundle\Service\MultiTenantManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,9 +27,11 @@ class TemplateController extends AbstractCrudController
     public function __construct(
         TemplateCrudConfig $config,
         protected readonly EntityManagerInterface $em,
-        protected readonly TemplateRepository $templateRepository,
+        protected readonly TemplateRepositoryInterface $templateRepository,
         protected readonly TranslatorInterface $translator,
         protected readonly MultiTenantManager $multiTenantManager,
+        #[Autowire(param: 'lle_hermes.template_class')]
+        protected readonly string $templateClass,
     ) {
         $this->config = $config;
     }
@@ -38,7 +41,8 @@ class TemplateController extends AbstractCrudController
     {
         $type = $request->query->getString('type');
 
-        $template = new Template();
+        /** @var TemplateInterface $template */
+        $template = new ($this->templateClass)();
         $template->setType($type);
 
         $form = $this->createForm(TemplateType::class, $template)->handleRequest($request);
@@ -55,7 +59,7 @@ class TemplateController extends AbstractCrudController
     }
 
     #[Route('/duplicate/{id}', name: 'lle_hermes_template_duplicate', methods: ['GET'])]
-    public function duplicate(Template $template): Response
+    public function duplicate(TemplateInterface $template): Response
     {
         $this->denyAccessUnlessGranted('ROLE_HERMES_TEMPLATE_DUPLICATE');
 
@@ -76,8 +80,8 @@ class TemplateController extends AbstractCrudController
     }
 
 
-    #[Route('/copy-for-tenant/{id}', name:'lle_hermes_crudit_template_copyfortenant', methods:['GET'])]
-    public function copyForTenant(Template $template, Request $request): Response
+    #[Route('/copy-for-tenant/{id}', name: 'lle_hermes_crudit_template_copyfortenant', methods: ['GET'])]
+    public function copyForTenant(TemplateInterface $template, Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_HERMES_TEMPLATE_COPYFORTENANT');
 

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Lle\HermesBundle\Contracts\MultiTenantInterface;
+use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Repository\MailRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -27,10 +28,10 @@ class Mail implements MultiTenantInterface
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Template::class)]
+    #[ORM\ManyToOne(targetEntity: TemplateInterface::class)]
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
     #[Assert\NotBlank]
-    protected ?Template $template = null;
+    protected ?TemplateInterface $template = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
@@ -258,12 +259,12 @@ class Mail implements MultiTenantInterface
         return $this;
     }
 
-    public function getTemplate(): ?Template
+    public function getTemplate(): ?TemplateInterface
     {
         return $this->template;
     }
 
-    public function setTemplate(?Template $template): Mail
+    public function setTemplate(?TemplateInterface $template): Mail
     {
         $this->template = $template;
 

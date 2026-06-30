@@ -6,19 +6,19 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
-use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Translatable\TranslatableTemplate;
 
 /**
- * @method Template|null find($id, $lockMode = null, $lockVersion = null)
- * @method Template|null findOneBy(array $criteria, array $orderBy = null)
- * @method Template[]    findAll()
- * @method Template[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TranslatableTemplate|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TranslatableTemplate|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TranslatableTemplate[]    findAll()
+ * @method TranslatableTemplate[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TemplateRepository extends ServiceEntityRepository implements TemplateRepositoryInterface
+class TranslatableTemplateRepository extends ServiceEntityRepository implements TemplateRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Template::class);
+        parent::__construct($registry, TranslatableTemplate::class);
     }
 
     public function duplicateTemplate(TemplateInterface $template, string $code): TemplateInterface

@@ -2,8 +2,8 @@
 
 namespace Lle\HermesBundle\Service\Factory;
 
+use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Entity\Mail;
-use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Contracts\MultiTenantInterface;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Service\MultiTenantManager;
@@ -28,7 +28,7 @@ class MailFactory
     ) {
     }
 
-    public function createMailFromDto(MailDto $mailDto, Template $template): Mail
+    public function createMailFromDto(MailDto $mailDto, TemplateInterface $template): Mail
     {
         $locale = $mailDto->getLocale();
         $mail = new Mail();
@@ -93,7 +93,7 @@ class MailFactory
         return $mail;
     }
 
-    public function getValueFromLocale(Template $template, string $field, ?string $locale): ?string
+    public function getValueFromLocale(TemplateInterface $template, string $field, ?string $locale): ?string
     {
         if ($this->translatableMail && $locale) {
             foreach ($template->getTranslations() as $translation) {

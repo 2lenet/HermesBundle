@@ -3,10 +3,12 @@
 namespace App\Tests\Service\Factory;
 
 use Lle\HermesBundle\Contracts\MultiTenantInterface;
+use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
-use Lle\HermesBundle\Entity\Translation\TemplateTranslation;
+use Lle\HermesBundle\Translatable\TranslatableTemplate;
+use Lle\HermesBundle\Translatable\Translation\TemplateTranslation;
 use Lle\HermesBundle\Model\ContactDto;
 use Lle\HermesBundle\Model\MailDto;
 use Lle\HermesBundle\Service\Factory\MailFactory;
@@ -56,7 +58,7 @@ class MailFactoryTest extends TestCase
 
         self::assertInstanceOf(Mail::class, $mail);
 
-        self::assertInstanceOf(Template::class, $mail->getTemplate());
+        self::assertInstanceOf(TemplateInterface::class, $mail->getTemplate());
         self::assertEquals(1, $mail->getTemplate()->getId());
         self::assertEquals('label', $mail->getTemplate()->getLibelle());
         self::assertEquals('subject', $mail->getTemplate()->getSubject());
@@ -108,7 +110,7 @@ class MailFactoryTest extends TestCase
 
         self::assertInstanceOf(Mail::class, $mail);
 
-        self::assertInstanceOf(Template::class, $mail->getTemplate());
+        self::assertInstanceOf(TemplateInterface::class, $mail->getTemplate());
         self::assertEquals(1, $mail->getTemplate()->getId());
         self::assertEquals('label', $mail->getTemplate()->getLibelle());
         self::assertEquals('subject', $mail->getTemplate()->getSubject());
@@ -192,9 +194,18 @@ class MailFactoryTest extends TestCase
         return $template;
     }
 
-    protected function getValueFromLocaleTest(): void
+    public function testGetValueFromLocale(): void
     {
-        $template = $this->createTemplate();
+        $template = new TranslatableTemplate();
+        $template->setId(1);
+        $template->setLibelle('label');
+        $template->setSubject('subject');
+        $template->setSenderEmail('no-reply@email.com');
+        $template->setSenderName('name');
+        $template->setText('text');
+        $template->setCode('code');
+        $template->setHtml('html');
+        $template->setMjml('mjml');
 
         // translation
         $template->addTranslation(new TemplateTranslation('en', 'subject', 'test subject'));
@@ -218,7 +229,7 @@ class MailFactoryTest extends TestCase
 
         self::assertEquals('test senderName', $this->mailFactory->getValueFromLocale($template, 'senderName', 'en'));
         self::assertNotEquals('test senderName', $this->mailFactory->getValueFromLocale($template, 'senderName', 'fr'));
-        self::assertEquals('name', $this->mailFactory->getValueFromLocale($template, 'name', null));
+        self::assertEquals('name', $this->mailFactory->getValueFromLocale($template, 'senderName', null));
 
         self::assertEquals('test senderEmail', $this->mailFactory->getValueFromLocale($template, 'senderEmail', 'en'));
         self::assertNotEquals(

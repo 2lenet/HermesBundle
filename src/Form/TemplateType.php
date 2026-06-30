@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TemplateType extends AbstractType
 {
@@ -21,6 +22,8 @@ class TemplateType extends AbstractType
     public function __construct(
         #[Autowire(param: 'lle_hermes.translatable_mail')]
         bool $translatableMail = true,
+        #[Autowire(param: 'lle_hermes.template_class')]
+        private string $templateClass = Template::class,
     ) {
         $this->translatableMail = $translatableMail;
     }
@@ -84,14 +87,14 @@ class TemplateType extends AbstractType
                 'inherit_data' => true,
             ])
             ->add('unsubscriptions', CheckboxType::class, [
-                "required" => false,
-                "label" => "field.unsubscriptions",
-                "translation_domain" => "LleHermesBundle",
+                'required' => false,
+                'label' => 'field.unsubscriptions',
+                'translation_domain' => 'LleHermesBundle',
             ])
             ->add('statistics', CheckboxType::class, [
-                "required" => false,
-                "label" => "field.statistics",
-                "translation_domain" => "LleHermesBundle",
+                'required' => false,
+                'label' => 'field.statistics',
+                'translation_domain' => 'LleHermesBundle',
             ])
             ->add('sendToErrors', CheckboxType::class, [
                 'required' => false,
@@ -101,6 +104,11 @@ class TemplateType extends AbstractType
                 'required' => false,
                 'label' => 'field.custombounceemail',
             ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(['data_class' => $this->templateClass]);
     }
 
     public function getName(): string

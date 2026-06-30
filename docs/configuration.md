@@ -58,6 +58,29 @@ lle_hermes:
 
 Make sure that those repositories exist and have the correct rights !
 
+## Template entity
+
+Regardless of the `translatable_mail` setting, the bundle exposes a single contract for the template entity: `Lle\HermesBundle\Contracts\TemplateInterface`. Doctrine resolves it to the correct concrete class at runtime.
+
+Always use `TemplateInterface` when type-hinting in your application code — never import `Template` or `TranslatableTemplate` directly:
+
+```php
+use Lle\HermesBundle\Contracts\TemplateInterface;
+use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
+
+class MyService
+{
+    public function __construct(
+        private TemplateRepositoryInterface $templateRepository,
+    ) {}
+
+    public function doSomething(TemplateInterface $template): void
+    {
+        // ...
+    }
+}
+```
+
 ## Translatable templates
 
 By default, the bundle uses [Gedmo Translatable](https://github.com/doctrine-extensions/DoctrineExtensions/blob/main/doc/translatable.md) to make the `Template` translatable fields (`libelle`, `senderName`, `senderEmail`, `subject`, `html`, `mjml`, `text`) editable per locale. When enabled, the bundle automatically prepends the required `doctrine` (mapping for `Gedmo\Translatable\Entity`) and `stof_doctrine_extensions` (translatable listener) configurations.
