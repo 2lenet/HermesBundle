@@ -17,6 +17,7 @@ use Lle\CruditBundle\Resolver\ResourceResolver;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
 use Lle\HermesBundle\Crudit\Datasource\MailDatasource;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MailSublistFactory extends SublistFactory
 {
@@ -26,10 +27,11 @@ class MailSublistFactory extends SublistFactory
         ResourceResolver $resourceResolver,
         RequestStack $requestStack,
         FieldRegistry $fieldRegistry,
+        TranslatorInterface $translator,
         protected MailCrudConfig $mailCrudConfig,
         protected MailDatasource $mailDatasource,
     ) {
-        parent::__construct($resourceResolver, $requestStack, $fieldRegistry);
+        parent::__construct($resourceResolver, $requestStack, $fieldRegistry, $translator);
 
         $this->datasourceParams = new DatasourceParams();
     }
