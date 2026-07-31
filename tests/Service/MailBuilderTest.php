@@ -7,6 +7,7 @@ use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Service\ConsentManager;
 use Lle\HermesBundle\Service\MailBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -56,6 +57,7 @@ class MailBuilderTest extends TestCase
             $this->createMock(RouterInterface::class),
             $twig,
             $this->createMock(EntityFileLoader::class),
+            $this->createMock(ConsentManager::class),
         );
 
         $email = $builder->buildMail($mail, $recipient);

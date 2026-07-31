@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="mt-5 text-center">
+        <p class="h5">
+            {% if value %}
+                {{ 'text.consentAccepted'|trans({}, 'LleHermesBundle') }}
+            {% else %}
+                {{ 'text.consentRefused'|trans({}, 'LleHermesBundle') }}
+            {% endif %}
+        </p>
+    </div>
+{% endblock %}

@@ -110,6 +110,9 @@ field:
     date: Datum
     content: Inhalt
     custombounceemail: Benutzerdefinierte Bounce-E-Mail
+    type: Typ
+    value: Wert
+    datetime: Datum
     data: Daten
     errormessage: Fehlermeldung
 
@@ -159,6 +162,12 @@ text:
     unsubscribtionConfirmed: Abmeldung bestätigt, Sie können dieses Fenster schließen
     unsubscribtionCancelled: Abmeldung abgebrochen, Sie können dieses Fenster schließen
     alreadyUnsubscribe: Sie haben sich bereits abgemeldet, Sie können dieses Fenster schließen
+    consentAccepted: Ihre Einwilligung wurde gespeichert, Sie können dieses Fenster schließen
+    consentRefused: Ihre Ablehnung wurde gespeichert, Sie können dieses Fenster schließen
+    consentQuestion: Möchten Sie das statistische Tracking unserer E-Mails für die folgende E-Mail-Adresse erlauben?
+    activateConsent: Tracking aktivieren
+    deactivateConsent: Tracking deaktivieren
+    consentPrivacyPolicyDefault: "Wir verwenden einen Tracking-Pixel, um das Öffnen unserer E-Mails zu messen. Weitere Informationen finden Sie in der Datenschutzerklärung dieser Website."
     percentMailSent: '%nb%% gesendet'
     percentMailUnsubscribed: '%nb%% abgemeldet'
     percentMailError: '%nb%% Fehler'
