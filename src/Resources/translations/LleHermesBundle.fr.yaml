@@ -135,6 +135,10 @@ status:
     cancelled: Annulé
     retry: Nouvelle tentative
 
+consent:
+    type:
+        pixel: Pixel
+
 menu:
     lle_hermes:
         hermes: Hermès

@@ -23,14 +23,14 @@ class ConsentManager
 
     public function hasConsent(string $email, string $type): bool
     {
-        $consent = $this->consentRepository->findOneByEmailAndType($email, $type);
+        $consent = $this->consentRepository->findOneBy(['email' => $email, 'type' => $type]);
 
         return !$consent || $consent->isValue();
     }
 
     public function setConsent(string $email, string $type, bool $value): Consent
     {
-        $consent = $this->consentRepository->findOneByEmailAndType($email, $type);
+        $consent = $this->consentRepository->findOneBy(['email' => $email, 'type' => $type]);
 
         if (!$consent) {
             $consent = new Consent();

@@ -18,9 +18,4 @@ class ConsentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Consent::class);
     }
-
-    public function findOneByEmailAndType(string $email, string $type): ?Consent
-    {
-        return $this->findOneBy(['email' => $email, 'type' => $type]);
-    }
 }

@@ -4,40 +4,34 @@ namespace Lle\HermesBundle\Controller;
 
 use Lle\HermesBundle\Entity\Consent;
 use Lle\HermesBundle\Service\ConsentManager;
+use Lle\HermesBundle\Service\ConsentTokenManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ConsentController extends AbstractController
 {
-    protected string $secret;
-
     public function __construct(
         protected readonly ConsentManager $consentManager,
-        ParameterBagInterface $parameters,
+        protected readonly ConsentTokenManager $tokenManager,
     ) {
-        /** @var string $secret */
-        $secret = $parameters->get('lle_hermes.app_secret');
-        $this->secret = $secret;
     }
 
     #[Route(
-        '/consent/{email}/{value}/{token}',
+        '/consent/{email}/{token}',
         name: 'consent_manage',
-        requirements: ['value' => '0|1'],
         methods: ['GET'],
     )]
-    public function manage(string $email, string $value, string $token): Response
+    public function manage(string $email, string $token): Response
     {
-        if (!$this->isTokenValid($email, $value, $token)) {
+        if (!$this->tokenManager->isTokenValid($email, $token)) {
             return $this->render('@LleHermes/consent/error.html.twig');
         }
 
         return $this->render('@LleHermes/consent/index.html.twig', [
             'email' => $email,
-            'acceptUrl' => $this->generateConfirmUrl($email, '1'),
-            'refuseUrl' => $this->generateConfirmUrl($email, '0'),
+            'acceptUrl' => $this->generateConfirmUrl($email, true),
+            'refuseUrl' => $this->generateConfirmUrl($email, false),
         ]);
     }
 
@@ -49,27 +43,23 @@ class ConsentController extends AbstractController
     )]
     public function confirm(string $email, string $value, string $token): Response
     {
-        if (!$this->isTokenValid($email, $value, $token)) {
+        $boolValue = $value === '1';
+
+        if (!$this->tokenManager->isConfirmTokenValid($email, $boolValue, $token)) {
             return $this->render('@LleHermes/consent/error.html.twig');
         }
 
-        $boolValue = $value === '1';
         $this->consentManager->setConsent($email, Consent::TYPE_PIXEL, $boolValue);
 
         return $this->render('@LleHermes/consent/confirm.html.twig', ['value' => $boolValue]);
     }
 
-    private function generateConfirmUrl(string $email, string $value): string
+    private function generateConfirmUrl(string $email, bool $value): string
     {
         return $this->generateUrl('confirm_consent', [
             'email' => $email,
-            'value' => $value,
-            'token' => md5($email . $value . $this->secret),
+            'value' => $value ? '1' : '0',
+            'token' => $this->tokenManager->getConfirmToken($email, $value),
         ]);
-    }
-
-    private function isTokenValid(string $email, string $value, string $token): bool
-    {
-        return $token === md5($email . $value . $this->secret);
     }
 }

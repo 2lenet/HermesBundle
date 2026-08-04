@@ -134,6 +134,10 @@ status:
     cancelled: Abgebrochen
     retry: Erneuter Versuch
 
+consent:
+    type:
+        pixel: Pixel
+
 menu:
     lle_hermes:
         hermes: Hermes

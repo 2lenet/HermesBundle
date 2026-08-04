@@ -28,6 +28,7 @@ class MailBuilder
         protected readonly Environment $twig,
         protected EntityFileLoader $entityFileLoader,
         protected readonly ConsentManager $consentManager,
+        protected readonly ConsentTokenManager $consentTokenManager,
     ) {
         /** @var string $secret */
         $secret = $parameters->get('lle_hermes.app_secret');
@@ -64,7 +65,7 @@ class MailBuilder
         if ($mail->getTemplate()?->hasStatistics()) {
             $hasConsent = $this->consentManager->hasConsent((string) $recipient->getToEmail(), Consent::TYPE_PIXEL);
             $templater->addData([
-                'CONSENT_LINK' => $this->getConsentLink($recipient, !$hasConsent),
+                'CONSENT_LINK' => $this->getConsentLink($recipient),
                 'consent_value' => $hasConsent,
             ]);
         }
@@ -135,15 +136,14 @@ class MailBuilder
         return $link;
     }
 
-    private function getConsentLink(Recipient $recipient, bool $value): string
+    private function getConsentLink(Recipient $recipient): string
     {
         $email = (string) $recipient->getToEmail();
-        $valueParam = $value ? '1' : '0';
-        $token = md5($email . $valueParam . $this->secret);
+        $token = $this->consentTokenManager->getToken($email);
 
         return $this->router->generate(
             'consent_manage',
-            ['email' => $email, 'value' => $valueParam, 'token' => $token],
+            ['email' => $email, 'token' => $token],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
     }
