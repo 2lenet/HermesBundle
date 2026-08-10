@@ -30,8 +30,16 @@ class ConsentController extends AbstractController
 
         return $this->render('@LleHermes/consent/index.html.twig', [
             'email' => $email,
-            'acceptUrl' => $this->generateConfirmUrl($email, true),
-            'refuseUrl' => $this->generateConfirmUrl($email, false),
+            'acceptUrl' => $this->generateUrl('confirm_consent', [
+                'email' => $email,
+                'value' => '1',
+                'token' => $this->tokenManager->getConfirmToken($email, true)
+            ]),
+            'refuseUrl' => $this->generateUrl('confirm_consent', [
+                'email' => $email,
+                'value' => '0',
+                'token' => $this->tokenManager->getConfirmToken($email, false)
+            ]),
         ]);
     }
 
@@ -52,14 +60,5 @@ class ConsentController extends AbstractController
         $this->consentManager->setConsent($email, Consent::TYPE_PIXEL, $boolValue);
 
         return $this->render('@LleHermes/consent/confirm.html.twig', ['value' => $boolValue]);
-    }
-
-    private function generateConfirmUrl(string $email, bool $value): string
-    {
-        return $this->generateUrl('confirm_consent', [
-            'email' => $email,
-            'value' => $value ? '1' : '0',
-            'token' => $this->tokenManager->getConfirmToken($email, $value),
-        ]);
     }
 }
