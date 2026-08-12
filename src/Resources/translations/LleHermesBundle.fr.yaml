@@ -111,6 +111,9 @@ field:
     date: Date
     content: Contenu
     custombounceemail: E-mail bounce personnalisé
+    type: Type
+    value: Valeur
+    datetime: Date
     data: Données
     errormessage: Message d'erreur
 
@@ -131,6 +134,10 @@ status:
     unsubscribed: Désinscrit
     cancelled: Annulé
     retry: Nouvelle tentative
+
+consent:
+    type:
+        pixel: Pixel
 
 menu:
     lle_hermes:
@@ -160,6 +167,12 @@ text:
     unsubscribtionConfirmed: Désinscription confirmée, vous pouvez fermer cette fenêtre
     unsubscribtionCancelled: Désinscription annulée, vous pouvez fermer cette fenêtre
     alreadyUnsubscribe: Vous êtes déjà désinscrit, vous pouvez fermer cette fenêtre
+    consentAccepted: Votre consentement a été enregistré, vous pouvez fermer cette fenêtre
+    consentRefused: Votre refus a été enregistré, vous pouvez fermer cette fenêtre
+    consentQuestion: Souhaitez-vous autoriser le suivi statistique de nos emails pour l'adresse email suivante ?
+    activateConsent: Activer le suivi
+    deactivateConsent: Désactiver le suivi
+    consentPrivacyPolicyDefault: "Nous utilisons un pixel de suivi pour mesurer l'ouverture de nos emails. Consultez la politique de confidentialité de ce site pour plus d'informations."
     percentMailSent: '%nb%% envoyés'
     percentMailUnsubscribed: '%nb%% désinscrits'
     percentMailError: '%nb%% erreurs'

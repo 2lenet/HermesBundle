@@ -110,6 +110,9 @@ field:
     date: Date
     content: Content
     custombounceemail: Custom bounce email
+    type: Type
+    value: Value
+    datetime: Date
     data: Data
     errormessage: Error message
 
@@ -130,6 +133,10 @@ status:
     unsubscribed: Unsubscribed
     cancelled: Cancelled
     retry: Retry
+
+consent:
+    type:
+        pixel: Pixel
 
 menu:
     lle_hermes:
@@ -159,6 +166,12 @@ text:
     unsubscribtionConfirmed: Unsubscription confirmed, you can close this window
     unsubscribtionCancelled: Unsubscription cancelled, you can close this window
     alreadyUnsubscribe: You are already unsubscribed, you can close this window
+    consentAccepted: Your consent has been recorded, you can close this window
+    consentRefused: Your refusal has been recorded, you can close this window
+    consentQuestion: Do you want to allow statistical tracking of our emails for the following email address?
+    activateConsent: Enable tracking
+    deactivateConsent: Disable tracking
+    consentPrivacyPolicyDefault: "We use a tracking pixel to measure the opening of our emails. Please refer to this site's privacy policy for more information."
     percentMailSent: '%nb%% sent'
     percentMailUnsubscribed: '%nb%% unsubscribed'
     percentMailError: '%nb%% errors'
