@@ -156,7 +156,11 @@ class MailBuilder
 
                     $route = $this->router->generate(
                         'statistics',
-                        ['recipient' => $recipient->getId(), 'link' => $link->getId()],
+                        [
+                            'recipient' => $recipient->getId(),
+                            'link' => $link->getId(),
+                            'fallback' => htmlspecialchars_decode($matches[2]),
+                        ],
                         UrlGeneratorInterface::ABSOLUTE_URL
                     );
 
