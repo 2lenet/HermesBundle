@@ -5,6 +5,7 @@ namespace Lle\HermesBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Crudit\Config\MailCrudConfig;
+use Lle\HermesBundle\Entity\Consent;
 use Lle\HermesBundle\Entity\Link;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
@@ -26,6 +27,8 @@ class MailBuilder
         protected readonly RouterInterface $router,
         protected readonly Environment $twig,
         protected EntityFileLoader $entityFileLoader,
+        protected readonly ConsentManager $consentManager,
+        protected readonly ConsentTokenManager $consentTokenManager,
     ) {
         /** @var string $secret */
         $secret = $parameters->get('lle_hermes.app_secret');
@@ -58,6 +61,14 @@ class MailBuilder
             $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
         }
 
+        $hasConsent = null;
+        if ($mail->getTemplate()?->hasStatistics()) {
+            $hasConsent = $this->consentManager->hasConsent((string) $recipient->getToEmail(), Consent::TYPE_PIXEL);
+            $templater->addData([
+                'CONSENT_LINK' => $this->getConsentLink($recipient),
+                'consent_value' => $hasConsent,
+            ]);
+        }
 
         $from = new Address((string)$mail->getTemplate()?->getSenderEmail(), $templater->getSenderName());
         $replyTo = $mail->getSenderEmail()
@@ -90,10 +101,11 @@ class MailBuilder
 
         $html = $templater->getHtml();
 
-        // Generate confirmation of receipt link
-        $html = $this->generateReceiptConfirmationLink($html, $recipient);
-
         if ($mail->getTemplate()?->hasStatistics()) {
+            if ($hasConsent) {
+                $html = $this->generateReceiptConfirmationLink($html, $recipient);
+            }
+
             $html = $this->generateStatsLinks($html, $mail, $recipient);
         }
 
@@ -127,6 +139,18 @@ class MailBuilder
         return $link;
     }
 
+    private function getConsentLink(Recipient $recipient): string
+    {
+        $email = (string) $recipient->getToEmail();
+        $token = $this->consentTokenManager->getToken($email);
+
+        return $this->router->generate(
+            'consent_manage',
+            ['email' => $email, 'token' => $token],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+    }
+
     private function generateReceiptConfirmationLink(string $html, Recipient $recipient): string
     {
         $route = $this->router->generate(
@@ -147,7 +171,11 @@ class MailBuilder
         return preg_replace_callback(
             '/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/s',
             function ($matches) use ($mail, $recipient) {
-                if (!str_contains($matches[2], '/hermes/unsubscribe')) {
+                if (
+                    !str_contains($matches[2], '/hermes/unsubscribe')
+                    && !str_contains($matches[2], '/hermes/consent')
+                    && $matches[2] !== ''
+                ) {
                     $link = $this->em->getRepository(Link::class)->findOneBy(['mail' => $mail, 'url' => $matches[2]]);
                     if (!$link) {
                         $link = new Link();
@@ -159,7 +187,11 @@ class MailBuilder
 
                     $route = $this->router->generate(
                         'statistics',
-                        ['recipient' => $recipient->getId(), 'link' => $link->getId()],
+                        [
+                            'recipient' => $recipient->getId(),
+                            'link' => $link->getId(),
+                            'fallback' => htmlspecialchars_decode($matches[2]),
+                        ],
                         UrlGeneratorInterface::ABSOLUTE_URL
                     );
 

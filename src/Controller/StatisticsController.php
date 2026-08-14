@@ -9,6 +9,7 @@ use Lle\HermesBundle\Entity\LinkOpening;
 use Lle\HermesBundle\Entity\Recipient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 class StatisticsController extends AbstractController
@@ -19,8 +20,20 @@ class StatisticsController extends AbstractController
     }
 
     #[Route('/statistics/{recipient}/{link}', name: 'statistics', methods: ['GET'])]
-    public function statistics(Recipient $recipient, Link $link): RedirectResponse
+    public function statistics(Request $request, ?Recipient $recipient = null, ?Link $link = null): RedirectResponse
     {
+        $fallback = $request->query->get('fallback');
+
+        // If the recipient or the link doesn't exists anymore :
+        // redirect to the fallback URL if provided, otherwise throw a 404
+        if (!$recipient || !$link) {
+            if (!$fallback) {
+                throw $this->createNotFoundException();
+            }
+
+            return new RedirectResponse((string)$fallback);
+        }
+
         $linkOpeningRepository = $this->em->getRepository(LinkOpening::class);
         $linkOpening = $linkOpeningRepository->findByLinkAndRecipient($link, $recipient);
 
