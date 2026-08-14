@@ -110,6 +110,8 @@ class MailBuilderTest extends TestCase
             $this->createMock(RouterInterface::class),
             $twig,
             $this->createMock(EntityFileLoader::class),
+            $this->createMock(ConsentManager::class),
+            $this->createMock(ConsentTokenManager::class),
         );
 
         $email = $builder->buildMail($mail, $recipient);
@@ -162,6 +164,8 @@ class MailBuilderTest extends TestCase
             $this->createMock(RouterInterface::class),
             $twig,
             $this->createMock(EntityFileLoader::class),
+            $this->createMock(ConsentManager::class),
+            $this->createMock(ConsentTokenManager::class),
         );
 
         $email = $builder->buildMail($mail, $recipient);
