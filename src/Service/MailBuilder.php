@@ -60,6 +60,9 @@ class MailBuilder
 
 
         $from = new Address((string)$mail->getTemplate()?->getSenderEmail(), $templater->getSenderName());
+        $replyTo = $mail->getSenderEmail()
+            ? new Address($mail->getSenderEmail(), (string)$mail->getSenderName())
+            : $from;
         $email = new Email();
 
         if (!$recipient->getMail() && !$recipient->getCcMail()) {
@@ -78,7 +81,7 @@ class MailBuilder
 
         $email
             ->from($from)
-            ->replyTo($from)
+            ->replyTo($replyTo)
             ->subject($templater->getSubject());
 
         if ($returnPath) {
