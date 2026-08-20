@@ -23,6 +23,10 @@ trait TranslatableFieldsTrait
         bool $required = false,
     ): void {
         if ($this->translatableMail) {
+            $attr = $options['attr'] ?? [];
+            $attr['class'] = trim(($attr['class'] ?? '') . ' gedmo-translatable');
+            $options['attr'] = $attr;
+
             $builder->add($name, GedmoTranslatableType::class, array_merge($options, [
                 'fields_class' => $fieldClass,
                 'required' => $required,
