@@ -1,1 +1,23 @@
-{% extends '@LleHermes/consent/_index_page.html.twig' %}
+{% extends '@LleHermes/consent/_message_page.html.twig' %}
+
+{% block consent_message %}
+    {% block consent_header %}
+        <p class="h5">
+            {{ 'text.consentQuestion'|trans({}, 'LleHermesBundle') }}
+        </p>
+        <p>
+            {{ email }}
+        </p>
+    {% endblock %}
+
+    {% block consent_content %}
+        {% include '@LleHermes/consent/_privacy_policy.html.twig' %}
+    {% endblock %}
+
+    {% block consent_buttons %}
+        <p>
+            <a href="{{ acceptUrl }}" class="btn btn-primary">{{ 'text.activateConsent'|trans({}, 'LleHermesBundle') }}</a>
+            <a href="{{ refuseUrl }}" class="btn btn-primary">{{ 'text.deactivateConsent'|trans({}, 'LleHermesBundle') }}</a>
+        </p>
+    {% endblock %}
+{% endblock %}
