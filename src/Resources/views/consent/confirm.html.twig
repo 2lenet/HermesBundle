@@ -1,13 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends '@LleHermes/consent/_message_page.html.twig' %}
 
-{% block body %}
-    <div class="mt-5 text-center">
-        <p class="h5">
-            {% if value %}
-                {{ 'text.consentAccepted'|trans({}, 'LleHermesBundle') }}
-            {% else %}
-                {{ 'text.consentRefused'|trans({}, 'LleHermesBundle') }}
-            {% endif %}
-        </p>
-    </div>
+{% block consent_message %}
+    <p class="h5">
+        {% if value %}
+            {{ 'text.consentAccepted'|trans({}, 'LleHermesBundle') }}
+        {% else %}
+            {{ 'text.consentRefused'|trans({}, 'LleHermesBundle') }}
+        {% endif %}
+    </p>
 {% endblock %}
