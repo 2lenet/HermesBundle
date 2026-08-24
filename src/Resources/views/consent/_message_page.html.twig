@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="{% block consent_wrapper_class %}mt-5 text-center{% endblock %}">
+        {% block consent_message %}{% endblock %}
+    </div>
+{% endblock %}
