@@ -32,3 +32,11 @@ Afterwards, visit the [documentation](docs/index.md) to find out how to set up a
 
 HermesBundle is released under the under terms of the [MIT License](https://github.com/2lenet/HermesBundle/blob/main/LICENSE).
 
+## Consent
+To include a consent management link in an email, add an anchor with `{{ CONSENT_LINK }}` as its `href` in the template:
+
+```html
+<a href="{{ CONSENT_LINK }}">Consent</a>
+```
+
+You also need to enable the _statistics_ boolean on the Template (note: this flag also enables link-click statistics). The template context additionally exposes `consent_value` (bool), indicating whether the recipient has already given consent.
