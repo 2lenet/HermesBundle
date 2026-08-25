@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Crudit\Datasource\Filterset;
 
 use Lle\CruditBundle\Datasource\AbstractFilterSet;
+use Lle\CruditBundle\Filter\FilterType\BooleanFilterType;
 use Lle\CruditBundle\Filter\FilterType\ChoiceFilterType;
 use Lle\CruditBundle\Filter\FilterType\PeriodeFilterType;
 use Lle\CruditBundle\Filter\FilterType\StringFilterType;
@@ -17,8 +18,9 @@ class ConsentFilterSet extends AbstractFilterSet
         return [
             StringFilterType::new('email'),
             ChoiceFilterType::new('type', [
-                'consent.type.pixel' => Consent::TYPE_PIXEL,
+                'consent.type.pixel' => Consent::TYPE_TRACKING,
             ]),
+            BooleanFilterType::new('value'),
             PeriodeFilterType::new('datetime'),
         ];
     }
