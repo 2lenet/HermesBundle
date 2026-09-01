@@ -35,6 +35,7 @@ You need to add these routes to the `config/package/security.yaml` file for trac
 
 security:
     access_control:
+        - { path: ^/hermes/consent, roles: PUBLIC_ACCESS }
         - { path: ^/hermes/mailOpened, roles: PUBLIC_ACCESS }
         - { path: ^/hermes/statistics, roles: PUBLIC_ACCESS }
         - { path: ^/hermes/unsubscribe, roles: PUBLIC_ACCESS }
