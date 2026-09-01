@@ -63,7 +63,7 @@ class MailBuilder
 
         $hasConsent = null;
         if ($mail->getTemplate()?->hasStatistics()) {
-            $hasConsent = $this->consentManager->hasConsent((string) $recipient->getToEmail(), Consent::TYPE_PIXEL);
+            $hasConsent = $this->consentManager->hasConsent((string) $recipient->getToEmail(), Consent::TYPE_TRACKING);
             $templater->addData([
                 'CONSENT_LINK' => $this->getConsentLink($recipient),
                 'consent_value' => $hasConsent,
@@ -101,11 +101,8 @@ class MailBuilder
 
         $html = $templater->getHtml();
 
-        if ($mail->getTemplate()?->hasStatistics()) {
-            if ($hasConsent) {
-                $html = $this->generateReceiptConfirmationLink($html, $recipient);
-            }
-
+        if ($mail->getTemplate()?->hasStatistics() && $hasConsent) {
+            $html = $this->generateReceiptConfirmationLink($html, $recipient);
             $html = $this->generateStatsLinks($html, $mail, $recipient);
         }
 
