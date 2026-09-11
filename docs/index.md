@@ -14,6 +14,7 @@ It depends on [Symfony Mailer](https://github.com/symfony/mailer).
 
 - [Create templates](templating.md)
 - [Create and send mails](usage.md)
+- [Send translatable mails](translatable.md)
 - [Add attachments](attachments.md)
 - [Enable multitenant](multitenant.md)
 - [Sublist](sublist.md)
