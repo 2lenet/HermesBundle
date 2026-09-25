@@ -1,0 +1,5 @@
+{% if view.resource.typeTemplate %}
+    {{ view.resource.typeTemplate.label }}
+{% else %}
+    {{ 'field.allTypes'|trans({}, 'LleHermesBundle') }}
+{% endif %}

@@ -7,6 +7,7 @@ use Lle\EntityFileBundle\Service\EntityFileLoader;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Entity\TypeTemplate;
 use Lle\HermesBundle\Service\ConsentManager;
 use Lle\HermesBundle\Service\ConsentTokenManager;
 use Lle\HermesBundle\Service\MailBuilder;
@@ -68,6 +69,60 @@ class MailBuilderTest extends TestCase
         $returnPath = $email->getReturnPath();
 
         $this->assertEquals('bounce@2le.net', $returnPath->getAddress());
+    }
+
+    public function testUnsubscribeLinkContainsTemplateType(): void
+    {
+        $typeTemplate = new TypeTemplate();
+        $typeTemplate->setCode('COMMERCIAL')->setLabel('Commercial');
+
+        $template = new Template();
+        $template
+            ->setLibelle('mail')
+            ->setSubject('mail')
+            ->setCode('MAIL')
+            ->setSenderEmail('mail@2le.net')
+            ->setText('hi')
+            ->setHtml('hi in html')
+            ->setUnsubscriptions(true)
+            ->setTypeTemplate($typeTemplate);
+
+        $recipient = new Recipient();
+        $recipient
+            ->setId(1)
+            ->setToEmail('recipient@2le.net')
+            ->setStatus(Recipient::STATUS_SENDING);
+
+        $mail = new Mail();
+        $mail
+            ->setId(1)
+            ->setTemplate($template)
+            ->setSubject('')
+            ->setStatus(Mail::STATUS_SENDING);
+        $recipient->setMail($mail);
+
+        $bag = $this->createMock(ParameterBagInterface::class);
+        $bag->method('get')->willReturn('parameter@2le.net');
+
+        $router = $this->createMock(RouterInterface::class);
+        $router->expects(self::once())
+            ->method('generate')
+            ->with('unsubscribe', self::callback(function (array $parameters): bool {
+                return $parameters['email'] === 'recipient@2le.net' && $parameters['type'] === 'COMMERCIAL';
+            }))
+            ->willReturn('https://domain/hermes/unsubscribe');
+
+        $builder = new MailBuilder(
+            $this->createMock(EntityManagerInterface::class),
+            $bag,
+            $router,
+            new Environment($this->createMock(LoaderInterface::class)),
+            $this->createMock(EntityFileLoader::class),
+            $this->createMock(ConsentManager::class),
+            $this->createMock(ConsentTokenManager::class),
+        );
+
+        $builder->buildMail($mail, $recipient);
     }
 
     public function testReplyToUsesMailSenderWhenSet(): void

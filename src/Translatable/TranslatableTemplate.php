@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Mapping\Annotation\Translatable;
 use Lle\HermesBundle\Contracts\TemplateInterface;
+use Lle\HermesBundle\Entity\TypeTemplate;
 use Lle\HermesBundle\Repository\TranslatableTemplateRepository;
 use Lle\HermesBundle\Translatable\Translation\TemplateTranslation;
 use Lle\HermesBundle\Validator as HermesAssert;
@@ -91,6 +92,10 @@ class TranslatableTemplate implements TemplateInterface
     #[ORM\Column(type: 'text', nullable: true)]
     #[Translatable]
     protected ?string $mjml = null;
+
+    #[ORM\ManyToOne(targetEntity: TypeTemplate::class, inversedBy: 'templates')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    protected ?TypeTemplate $typeTemplate = null;
 
     #[ORM\OneToMany(mappedBy: 'object', targetEntity: TemplateTranslation::class, cascade: ['persist', 'remove'])]
     private Collection $translations;
@@ -279,6 +284,18 @@ class TranslatableTemplate implements TemplateInterface
     public function setMjml(?string $mjml): void
     {
         $this->mjml = $mjml;
+    }
+
+    public function getTypeTemplate(): ?TypeTemplate
+    {
+        return $this->typeTemplate;
+    }
+
+    public function setTypeTemplate(?TypeTemplate $typeTemplate): static
+    {
+        $this->typeTemplate = $typeTemplate;
+
+        return $this;
     }
 
     public function getTranslations(): Collection

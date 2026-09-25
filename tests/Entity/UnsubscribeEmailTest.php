@@ -3,6 +3,7 @@
 namespace App\Tests\Entity;
 
 use DateTime;
+use Lle\HermesBundle\Entity\TypeTemplate;
 use Lle\HermesBundle\Entity\UnsubscribeEmail;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
@@ -28,6 +29,11 @@ class UnsubscribeEmailTest extends TestCase
         $date = new DateTime();
         $unsubcribeEmail->setUnsubscribeDate($date);
         self::assertEquals($date, $unsubcribeEmail->getUnsubscribeDate());
+
+        self::assertNull($unsubcribeEmail->getTypeTemplate());
+        $typeTemplate = new TypeTemplate();
+        $unsubcribeEmail->setTypeTemplate($typeTemplate);
+        self::assertSame($typeTemplate, $unsubcribeEmail->getTypeTemplate());
 
         $validator = Validation::createValidatorBuilder()->getValidator();
 

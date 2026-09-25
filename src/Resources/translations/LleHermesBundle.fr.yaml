@@ -18,6 +18,7 @@ crudit:
 crud:
     title:
         list:
+            hermes_typetemplate: Types de template
             hermes_template: Templates
             hermes_mail: Mails
             hermes_recipient: Destinataires
@@ -25,6 +26,7 @@ crud:
             hermes_email_error: Emails en erreur
             hermes_unsubscribe_email: Désinscrits
         show:
+            hermes_typetemplate: Type de template %entity%
             hermes_template: Modèle %entity%
             hermes_mail: Mail %entity%
             hermes_recipient: Destinataire %entity%
@@ -34,9 +36,11 @@ crud:
             hermes_unsubscribe_email: Désinscrit %entity%
             hermes_personalized_template: Template %entity%
         edit:
+            hermes_typetemplate: Édition type de template %entity%
             hermes_template: Édition modèle %entity%
             hermes_personalized_template: Édition modèle  %entity%
         new:
+            hermes_typetemplate: Création type de template
             hermes_template: Création modèle
             hermes_personalized_template: Création modèle
     action:
@@ -46,9 +50,11 @@ crud:
         send_mail: Voulez-vous vraiment envoyer cet email à %nb% destinataires ? Cette action est définitive.
         choose_type: Choisissez un type de modèle
     canDelete:
+        type_template: Ce type est utilisé par des templates
         mail: Le mail est en cours d'envoi
 
 tab:
+    templates: Templates
     recipients: Destinataires
     cc_recipients: Destinataires CC
     links: Liens
@@ -61,6 +67,12 @@ export:
     excel: Excel
 
 field:
+    label: Libellé
+    typetemplate: Type de template
+    typetemplate_help: Permet au destinataire de se désinscrire uniquement de ce type d'emails
+    unsubscriptionsallowed: Désinscription possible
+    unsubscriptionsallowed_help: Le type est proposé sur la page de désinscription
+    allTypes: Tous les types
     code: Code
     libelle: Libellé
     mail: Mail
@@ -160,6 +172,11 @@ pagination:
     limit: "Nombre de mails"
 
 text:
+    unsubscribeTypesQuestion: "Je souhaite continuer à recevoir les emails suivants à l'adresse :"
+    unsubscribeReceivedType: "Vous avez reçu cet email dans la catégorie « %type% », elle a été décochée."
+    unsubscribeAll: Ne plus recevoir aucun email
+    saveUnsubscriptions: Enregistrer mes choix
+    unsubscriptionsSaved: Vos choix ont été enregistrés, vous pouvez fermer cette fenêtre
     confirmUnsubscribtionQuestion: Souhaitez-vous réellement désinscrire l'adresse email suivante ?
     confirmUnsubscribtion: Oui, se désinscrire
     cancelUnsubscribtion: Non, annuler

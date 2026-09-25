@@ -51,6 +51,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
         $unsubscriptions = Field::new('unsubscriptions');
         $statistics = Field::new('statistics');
         $customBounceEmail = Field::new('customBounceEmail');
+        $typeTemplate = Field::new('typeTemplate');
 
         if ($key == CrudConfigInterface::INDEX) {
             return [
@@ -60,6 +61,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
                 $senderEmail,
                 $code,
                 $unsubscriptions,
+                $typeTemplate,
                 $statistics,
             ];
         }
@@ -73,6 +75,7 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $code,
             $html,
             $unsubscriptions,
+            $typeTemplate,
             $statistics,
             $customBounceEmail,
         ];

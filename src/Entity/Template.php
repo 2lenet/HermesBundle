@@ -81,6 +81,10 @@ class Template implements TemplateInterface
     #[ORM\Column(type: 'text', nullable: true)]
     protected ?string $mjml = null;
 
+    #[ORM\ManyToOne(targetEntity: TypeTemplate::class, inversedBy: 'templates')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    protected ?TypeTemplate $typeTemplate = null;
+
     public function __toString(): string
     {
         return sprintf('%s %s', $this->code, $this->getSubject());
@@ -260,6 +264,18 @@ class Template implements TemplateInterface
     public function setMjml(?string $mjml): void
     {
         $this->mjml = $mjml;
+    }
+
+    public function getTypeTemplate(): ?TypeTemplate
+    {
+        return $this->typeTemplate;
+    }
+
+    public function setTypeTemplate(?TypeTemplate $typeTemplate): static
+    {
+        $this->typeTemplate = $typeTemplate;
+
+        return $this;
     }
 
     public function getTranslations(): Collection

@@ -9,6 +9,7 @@ use Lle\HermesBundle\Entity\Consent;
 use Lle\HermesBundle\Entity\Link;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
+use Lle\HermesBundle\Entity\TypeTemplate;
 use Lle\HermesBundle\Exception\NoRecipientException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
@@ -58,7 +59,8 @@ class MailBuilder
         $context->setScheme('https');
 
         if ($mail->getTemplate()?->isUnsubscriptions()) {
-            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient)]);
+            $typeTemplate = $mail->getTemplate()->getTypeTemplate();
+            $templater->addData(['UNSUBSCRIBE_LINK' => $this->getUnsubscribeLink($recipient, $typeTemplate)]);
         }
 
         $hasConsent = null;
@@ -127,12 +129,18 @@ class MailBuilder
         return $this->attachBase64Img($email, $domain);
     }
 
-    private function getUnsubscribeLink(Recipient $recipient): string
+    private function getUnsubscribeLink(Recipient $recipient, ?TypeTemplate $typeTemplate): string
     {
         $token = md5($recipient->getToEmail() . $this->secret);
+        $parameters = ['email' => $recipient->getToEmail(), 'token' => $token];
+        if ($typeTemplate) {
+            // Preselects the type of the received email on the unsubscribe page
+            $parameters['type'] = $typeTemplate->getCode();
+        }
+
         $link = $this->router->generate(
             'unsubscribe',
-            ['email' => $recipient->getToEmail(), 'token' => $token],
+            $parameters,
             UrlGeneratorInterface::ABSOLUTE_URL
         );
 

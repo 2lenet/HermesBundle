@@ -17,6 +17,7 @@ It depends on [Symfony Mailer](https://github.com/symfony/mailer).
 - [Add attachments](attachments.md)
 - [Enable multitenant](multitenant.md)
 - [Sublist](sublist.md)
+- [Unsubscriptions](unsubscribe.md)
 - [Errors management](bounce.md)
 - [List of available commands](commands.md)
 
