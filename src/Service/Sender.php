@@ -12,6 +12,7 @@ use Lle\HermesBundle\Exception\NoMailFoundException;
 use Lle\HermesBundle\Repository\EmailErrorRepository;
 use Lle\HermesBundle\Repository\RecipientRepository;
 use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Mailer as SymfonyMailer;
@@ -36,6 +37,7 @@ class Sender
         protected readonly RecipientRepository $recipientRepository,
         protected readonly UnsubscribeEmailRepository $unsubscribeEmailRepository,
         protected readonly ErrorLogger $errorLogger,
+        protected readonly ?LoggerInterface $logger = null,
     ) {
     }
 
@@ -79,6 +81,10 @@ class Sender
                     )
                 ) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
+                    $this->logger?->info(
+                        'Email not sent: recipient unsubscribed',
+                        $this->errorLogger->buildContext($recipient)
+                    );
                     $this->updateMail($mail);
 
                     continue;
@@ -127,6 +133,7 @@ class Sender
 
             $mailer->send($this->mailBuilder->buildMail($mail, $recipient));
             $recipient->setStatus(Recipient::STATUS_SENT);
+            $this->logger?->info('Email sent', $this->errorLogger->buildContext($recipient));
 
             if ($updateSendingDate) {
                 $mail->setSendingDate(new DateTime());
@@ -136,13 +143,13 @@ class Sender
         } catch (TransportExceptionInterface | RfcComplianceException $e) {
             $this->handleSendFailure($recipient);
             $this->errorLogger
-                ->logError('Transport or RFC error with message : ' . $e->getMessage(), $recipient);
+                ->logError('Transport or RFC error with message : ' . $e->getMessage(), $recipient, $e);
 
             return false;
         } catch (Exception $e) {
             $recipient->setStatus(Recipient::STATUS_ERROR);
-            $this->errorLogger->logError('Generic error with message : ' . $e->getMessage(), $recipient);
             $mail->setStatus(Mail::STATUS_ERROR);
+            $this->errorLogger->logError('Generic error with message : ' . $e->getMessage(), $recipient, $e);
 
             return false;
         }

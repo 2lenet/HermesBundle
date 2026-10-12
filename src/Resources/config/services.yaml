@@ -17,6 +17,12 @@ services:
             - '@parameter_bag'
             - '@Lle\HermesBundle\Repository\RecipientRepository'
             - '@Lle\HermesBundle\Repository\UnsubscribeEmailRepository'
+        tags:
+            - { name: monolog.logger, channel: hermes }
+
+    Lle\HermesBundle\Service\ErrorLogger:
+        tags:
+            - { name: monolog.logger, channel: hermes }
 
     Lle\HermesBundle\Request\TemplateValueResolver:
         autowire: true

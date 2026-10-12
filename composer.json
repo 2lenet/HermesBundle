@@ -25,6 +25,7 @@
         "doctrine/orm": "^2.11 || ^3.0",
         "doctrine/event-manager": "^1.0 || ^2.0",
         "doctrine/persistence": "^2.0 || ^3.0 || ^4.0",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
         "symfony/validator": "^7.0 || ^8.0",
         "symfony/dependency-injection": "^7.0 || ^8.0",
         "symfony/framework-bundle": "^7.0 || ^8.0",
