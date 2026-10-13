@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UnsubscribeEmailRepository::class)]
 #[ORM\Table(name: 'lle_hermes_unsubscribe_email')]
+#[ORM\UniqueConstraint(name: 'email_type_template_unique', columns: ['email', 'type_template_id'])]
 class UnsubscribeEmail
 {
     #[ORM\Id]
@@ -25,6 +26,10 @@ class UnsubscribeEmail
     #[ORM\Column(type: 'datetime')]
     #[Assert\NotBlank]
     private ?DateTime $unsubscribeDate = null;
+
+    #[ORM\ManyToOne(targetEntity: TypeTemplate::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
+    private ?TypeTemplate $typeTemplate = null;
 
     public function __toString(): string
     {
@@ -63,6 +68,18 @@ class UnsubscribeEmail
     public function setUnsubscribeDate(DateTime $unsubscribeDate): UnsubscribeEmail
     {
         $this->unsubscribeDate = $unsubscribeDate;
+
+        return $this;
+    }
+
+    public function getTypeTemplate(): ?TypeTemplate
+    {
+        return $this->typeTemplate;
+    }
+
+    public function setTypeTemplate(?TypeTemplate $typeTemplate): UnsubscribeEmail
+    {
+        $this->typeTemplate = $typeTemplate;
 
         return $this;
     }

@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="{% block unsubscribe_wrapper_class %}mt-5 container{% endblock %}">
+        {% block unsubscribe_header %}
+            <p class="h5 text-center">
+                {{ 'text.unsubscribeTypesQuestion'|trans({}, 'LleHermesBundle') }}
+            </p>
+            <p class="text-center">
+                {{ email }}
+            </p>
+            {% if receivedTypeTemplate %}
+                <p class="text-center text-muted">
+                    {{ 'text.unsubscribeReceivedType'|trans({'%type%': receivedTypeTemplate.label}, 'LleHermesBundle') }}
+                </p>
+            {% endif %}
+        {% endblock %}
+
+        <form method="post" action="{{ path('save_unsubscribe', {
+            'email': email,
+            'token': token,
+            'type': receivedTypeTemplate ? receivedTypeTemplate.code : null,
+        }) }}">
+            {% block unsubscribe_choices %}
+                <div class="mx-auto my-4" style="width: fit-content;">
+                    {% for item in choices %}
+                        {% set typeTemplate = item.typeTemplate %}
+                        <div class="form-check mb-2">
+                            <input type="checkbox" class="form-check-input" name="subscribed[]"
+                                   id="type_{{ typeTemplate.id }}" value="{{ typeTemplate.id }}"
+                                   {% if item.subscribed %}checked{% endif %}>
+                            <label class="form-check-label" for="type_{{ typeTemplate.id }}">
+                                {{ typeTemplate.label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endblock %}
+
+            {% block unsubscribe_all %}
+                <hr class="mx-auto w-50">
+                <div class="mx-auto my-4" style="width: fit-content;">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="unsubscribeAll" value="1"
+                               id="unsubscribe_all" {% if unsubscribedFromAll %}checked{% endif %}>
+                        <label class="form-check-label" for="unsubscribe_all">
+                            {{ 'text.unsubscribeAll'|trans({}, 'LleHermesBundle') }}
+                        </label>
+                    </div>
+                </div>
+                <script>
+                    (function () {
+                        const unsubscribeAll = document.getElementById('unsubscribe_all');
+                        const types = document.querySelectorAll('input[name="subscribed[]"]');
+                        const toggle = () => types.forEach((type) => type.disabled = unsubscribeAll.checked);
+                        unsubscribeAll.addEventListener('change', toggle);
+                        toggle();
+                    })();
+                </script>
+            {% endblock %}
+
+            {% block unsubscribe_buttons %}
+                <p class="text-center">
+                    <button type="submit" class="btn btn-primary">
+                        {{ 'text.saveUnsubscriptions'|trans({}, 'LleHermesBundle') }}
+                    </button>
+                </p>
+            {% endblock %}
+        </form>
+    </div>
+{% endblock %}

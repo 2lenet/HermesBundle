@@ -20,13 +20,42 @@ class UnsubscribeEmailRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return string[]
+     * @return array<array{email: string, typeTemplateId: int|null}>
      */
     public function findEmailsUnsubscribed(): array
     {
-        return $this->createQueryBuilder('entity')
-            ->select('entity.email as email')
+        return $this->createQueryBuilder('unsubscribeEmail')
+            ->select('unsubscribeEmail.email as email', 'IDENTITY(unsubscribeEmail.typeTemplate) as typeTemplateId')
             ->getQuery()
             ->getScalarResult();
+    }
+
+    public function findGlobalByEmail(string $email): ?UnsubscribeEmail
+    {
+        return $this->createQueryBuilder('unsubscribeEmail')
+            ->andWhere('unsubscribeEmail.email = :email')
+            ->andWhere('unsubscribeEmail.typeTemplate IS NULL')
+            ->setParameter('email', $email)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findByTypeForEmail(string $email): array
+    {
+        /** @var UnsubscribeEmail[] $unsubscriptions */
+        $unsubscriptions = $this->createQueryBuilder('unsubscribeEmail')
+            ->andWhere('unsubscribeEmail.email = :email')
+            ->andWhere('unsubscribeEmail.typeTemplate IS NOT NULL')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getResult();
+
+        $indexed = [];
+        foreach ($unsubscriptions as $unsubscription) {
+            $indexed[(int)$unsubscription->getTypeTemplate()?->getId()] = $unsubscription;
+        }
+
+        return $indexed;
     }
 }

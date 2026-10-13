@@ -29,12 +29,15 @@ class UnsubscribeEmailCrudConfig extends AbstractCrudConfig
     {
         $email = Field::new('email');
         $unsubscribeDate = Field::new('unsubscribeDate');
+        $typeTemplate = Field::new('typeTemplate')
+            ->setTemplate('@LleHermes/crud/_unsubscribe_type_template.html.twig');
 
         switch ($key) {
             case CrudConfigInterface::INDEX:
             case CrudConfigInterface::SHOW:
                 $fields = [
                     $email,
+                    $typeTemplate,
                     $unsubscribeDate,
                 ];
                 break;

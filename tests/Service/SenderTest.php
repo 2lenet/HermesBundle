@@ -107,6 +107,53 @@ class SenderTest extends TestCase
         self::assertSame(3, $recipient->getRetryCount());
     }
 
+    public function testGetUnsubscribedEmailsGroupsByEmail(): void
+    {
+        $repository = $this->createMock(UnsubscribeEmailRepository::class);
+        $repository->method('findEmailsUnsubscribed')->willReturn([
+            ['email' => 'Global@Email.com', 'typeTemplateId' => null],
+            ['email' => 'typed@email.com', 'typeTemplateId' => 2],
+            ['email' => 'typed@email.com', 'typeTemplateId' => '3'],
+        ]);
+
+        self::assertSame([
+            'global@email.com' => ['global' => true, 'types' => []],
+            'typed@email.com' => ['global' => false, 'types' => [2, 3]],
+        ], $this->getSender($repository)->getUnsubscribedEmails());
+    }
+
+    public function testIsUnsubscribed(): void
+    {
+        $sender = $this->getSender($this->createMock(UnsubscribeEmailRepository::class));
+        $unsubscribedEmails = [
+            'global@email.com' => ['global' => true, 'types' => []],
+            'typed@email.com' => ['global' => false, 'types' => [2]],
+        ];
+
+        // Global unsubscription blocks every template, typed or not
+        self::assertTrue($sender->isUnsubscribed($unsubscribedEmails, 'GLOBAL@email.com', 2));
+        self::assertTrue($sender->isUnsubscribed($unsubscribedEmails, 'global@email.com', null));
+        // Typed unsubscription only blocks templates of that type
+        self::assertTrue($sender->isUnsubscribed($unsubscribedEmails, 'typed@email.com', 2));
+        self::assertFalse($sender->isUnsubscribed($unsubscribedEmails, 'typed@email.com', 3));
+        self::assertFalse($sender->isUnsubscribed($unsubscribedEmails, 'typed@email.com', null));
+        self::assertFalse($sender->isUnsubscribed($unsubscribedEmails, 'other@email.com', 2));
+    }
+
+    protected function getSender(UnsubscribeEmailRepository $unsubscribeEmailRepository): Sender
+    {
+        return new Sender(
+            $this->getMockEntityManager(),
+            $this->getMockEmailErrorRepository(),
+            $this->getMockMailer(),
+            $this->getMockMailBuilder(),
+            $this->getMockParameterBag(),
+            $this->createMock(RecipientRepository::class),
+            $unsubscribeEmailRepository,
+            $this->getMockErrorLogger(),
+        );
+    }
+
     protected function getMockMailer(): MailerInterface
     {
         return $this->createMock(MailerInterface::class);
@@ -156,7 +203,7 @@ class SenderTest extends TestCase
         $repository = $this->createMock(UnsubscribeEmailRepository::class);
         $repository->expects(self::exactly(1))
             ->method('findEmailsUnsubscribed')
-            ->willReturn(['unsubscribe@email.com']);
+            ->willReturn([['email' => 'unsubscribe@email.com', 'typeTemplateId' => null]]);
 
         return $repository;
     }
