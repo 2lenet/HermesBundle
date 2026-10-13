@@ -20,8 +20,6 @@ use Twig\Environment;
 
 class MailBuilder
 {
-    protected readonly string $secret;
-
     public function __construct(
         protected readonly EntityManagerInterface $em,
         protected readonly ParameterBagInterface $parameters,
@@ -30,10 +28,8 @@ class MailBuilder
         protected EntityFileLoader $entityFileLoader,
         protected readonly ConsentManager $consentManager,
         protected readonly ConsentTokenManager $consentTokenManager,
+        protected readonly UnsubscribeManager $unsubscribeManager,
     ) {
-        /** @var string $secret */
-        $secret = $parameters->get('lle_hermes.app_secret');
-        $this->secret = $secret;
     }
 
     /**
@@ -131,20 +127,18 @@ class MailBuilder
 
     private function getUnsubscribeLink(Recipient $recipient, ?TypeTemplate $typeTemplate): string
     {
-        $token = md5($recipient->getToEmail() . $this->secret);
-        $parameters = ['email' => $recipient->getToEmail(), 'token' => $token];
-        if ($typeTemplate) {
-            // Preselects the type of the received email on the unsubscribe page
-            $parameters['type'] = $typeTemplate->getCode();
-        }
+        $email = (string)$recipient->getToEmail();
 
-        $link = $this->router->generate(
+        // The type preselects the type of the received email on the unsubscribe page
+        return $this->router->generate(
             'unsubscribe',
-            $parameters,
+            [
+                'email' => $email,
+                'token' => $this->unsubscribeManager->getToken($email, $typeTemplate),
+                'type' => $typeTemplate?->getCode(),
+            ],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
-
-        return $link;
     }
 
     private function getConsentLink(Recipient $recipient): string

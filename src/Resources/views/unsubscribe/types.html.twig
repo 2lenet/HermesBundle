@@ -16,7 +16,11 @@
             {% endif %}
         {% endblock %}
 
-        <form method="post" action="{{ path('save_unsubscribe', {'email': email, 'token': token}) }}">
+        <form method="post" action="{{ path('save_unsubscribe', {
+            'email': email,
+            'token': token,
+            'type': receivedTypeTemplate ? receivedTypeTemplate.code : null,
+        }) }}">
             {% block unsubscribe_choices %}
                 <div class="mx-auto my-4" style="width: fit-content;">
                     {% for item in choices %}

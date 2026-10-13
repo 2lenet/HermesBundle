@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Crudit\Config;
 
 use Lle\CruditBundle\Brick\SublistBrick\SublistConfig;
-use Lle\CruditBundle\Brick\TabBrick\TabConfig;
 use Lle\CruditBundle\Contracts\CrudConfigInterface;
 use Lle\CruditBundle\Dto\Field\Field;
 use Lle\HermesBundle\Crudit\Datasource\TypeTemplateDatasource;
@@ -25,10 +24,9 @@ class TypeTemplateCrudConfig extends AbstractCrudConfig
     }
 
     /**
-     * @param string $key
      * @return Field[]
      */
-    public function getFields($key): array
+    public function getFields(string $key): array
     {
         $label = Field::new('label');
         $code = Field::new('code');
@@ -41,21 +39,13 @@ class TypeTemplateCrudConfig extends AbstractCrudConfig
         ];
     }
 
-    public function getTabConfig(): ?TabConfig
+    public function getTabs(): array
     {
-        $tabs = parent::getTabConfig();
-        if (!$tabs) {
-            $tabs = TabConfig::new();
-        }
-
-        $tabs->add(
-            'tab.templates',
-            SublistConfig::new('typeTemplate', $this->templateCrudConfig)
+        return [
+            'tab.templates' => SublistConfig::new('typeTemplate', $this->templateCrudConfig)
                 ->setFields($this->templateCrudConfig->getFields(CrudConfigInterface::INDEX))
                 ->setActions($this->templateCrudConfig->getItemActions()),
-        );
-
-        return $tabs;
+        ];
     }
 
     public function getRootRoute(): string

@@ -24,18 +24,18 @@ class UnsubscribeEmailRepository extends ServiceEntityRepository
      */
     public function findEmailsUnsubscribed(): array
     {
-        return $this->createQueryBuilder('entity')
-            ->select('entity.email as email', 'IDENTITY(entity.typeTemplate) as typeTemplateId')
+        return $this->createQueryBuilder('unsubscribeEmail')
+            ->select('unsubscribeEmail.email as email', 'IDENTITY(unsubscribeEmail.typeTemplate) as typeTemplateId')
             ->getQuery()
             ->getScalarResult();
     }
 
     public function findGlobalByEmail(string $email): ?UnsubscribeEmail
     {
-        return $this->createQueryBuilder('entity')
-            ->andWhere('LOWER(entity.email) = :email')
-            ->andWhere('entity.typeTemplate IS NULL')
-            ->setParameter('email', strtolower($email))
+        return $this->createQueryBuilder('unsubscribeEmail')
+            ->andWhere('unsubscribeEmail.email = :email')
+            ->andWhere('unsubscribeEmail.typeTemplate IS NULL')
+            ->setParameter('email', $email)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
@@ -44,10 +44,10 @@ class UnsubscribeEmailRepository extends ServiceEntityRepository
     public function findByTypeForEmail(string $email): array
     {
         /** @var UnsubscribeEmail[] $unsubscriptions */
-        $unsubscriptions = $this->createQueryBuilder('entity')
-            ->andWhere('LOWER(entity.email) = :email')
-            ->andWhere('entity.typeTemplate IS NOT NULL')
-            ->setParameter('email', strtolower($email))
+        $unsubscriptions = $this->createQueryBuilder('unsubscribeEmail')
+            ->andWhere('unsubscribeEmail.email = :email')
+            ->andWhere('unsubscribeEmail.typeTemplate IS NOT NULL')
+            ->setParameter('email', $email)
             ->getQuery()
             ->getResult();
 

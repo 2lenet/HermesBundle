@@ -11,6 +11,7 @@ use Lle\HermesBundle\Entity\TypeTemplate;
 use Lle\HermesBundle\Service\ConsentManager;
 use Lle\HermesBundle\Service\ConsentTokenManager;
 use Lle\HermesBundle\Service\MailBuilder;
+use Lle\HermesBundle\Service\UnsubscribeManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
@@ -61,6 +62,7 @@ class MailBuilderTest extends TestCase
             $this->createMock(EntityFileLoader::class),
             $this->createMock(ConsentManager::class),
             $this->createMock(ConsentTokenManager::class),
+            $this->createMock(UnsubscribeManager::class),
         );
 
         $email = $builder->buildMail($mail, $recipient);
@@ -108,9 +110,17 @@ class MailBuilderTest extends TestCase
         $router->expects(self::once())
             ->method('generate')
             ->with('unsubscribe', self::callback(function (array $parameters): bool {
-                return $parameters['email'] === 'recipient@2le.net' && $parameters['type'] === 'COMMERCIAL';
+                return $parameters['email'] === 'recipient@2le.net'
+                    && $parameters['type'] === 'COMMERCIAL'
+                    && $parameters['token'] === 'signed-token';
             }))
             ->willReturn('https://domain/hermes/unsubscribe');
+
+        $unsubscribeManager = $this->createMock(UnsubscribeManager::class);
+        $unsubscribeManager->expects(self::once())
+            ->method('getToken')
+            ->with('recipient@2le.net', $typeTemplate)
+            ->willReturn('signed-token');
 
         $builder = new MailBuilder(
             $this->createMock(EntityManagerInterface::class),
@@ -120,6 +130,7 @@ class MailBuilderTest extends TestCase
             $this->createMock(EntityFileLoader::class),
             $this->createMock(ConsentManager::class),
             $this->createMock(ConsentTokenManager::class),
+            $unsubscribeManager,
         );
 
         $builder->buildMail($mail, $recipient);
@@ -167,6 +178,7 @@ class MailBuilderTest extends TestCase
             $this->createMock(EntityFileLoader::class),
             $this->createMock(ConsentManager::class),
             $this->createMock(ConsentTokenManager::class),
+            $this->createMock(UnsubscribeManager::class),
         );
 
         $email = $builder->buildMail($mail, $recipient);
@@ -221,6 +233,7 @@ class MailBuilderTest extends TestCase
             $this->createMock(EntityFileLoader::class),
             $this->createMock(ConsentManager::class),
             $this->createMock(ConsentTokenManager::class),
+            $this->createMock(UnsubscribeManager::class),
         );
 
         $email = $builder->buildMail($mail, $recipient);
