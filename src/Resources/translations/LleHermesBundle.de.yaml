@@ -35,6 +35,7 @@ crud:
             hermes_personalized_template: Vorlage %entity%
         edit:
             hermes_template: Vorlage %entity% bearbeiten
+            hermes_mail: E-Mail %entity% bearbeiten
             hermes_personalized_template: Vorlage %entity% bearbeiten
         new:
             hermes_template: Vorlage erstellen

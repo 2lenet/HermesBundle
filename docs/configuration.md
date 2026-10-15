@@ -152,12 +152,14 @@ All keys live under the `lle_hermes` root in `config/packages/lle_hermes.yaml`:
 
 ## Retry on send failure
 
-When sending fails with a transport or RFC error, the recipient is put in `retry` status and the mail's `sendAtDate` is pushed back instead of the recipient being immediately marked as `error`. Delays are progressive: 1 minute for the first retry, 1 hour for the second, then 1 day for every subsequent attempt (capped). The maximum number of retries (default `3`) can be configured:
+When sending fails with a transport error, the recipient is put in `retry` status and the mail's `sendAtDate` is pushed back instead of the recipient being immediately marked as `error`. Delays are progressive: 1 minute for the first retry, 1 hour for the second, then 1 day for every subsequent attempt (capped). The maximum number of retries (default `3`) can be configured:
 
 ```yaml
 # config/packages/lle_hermes.yaml
 lle_hermes:
     recipient_max_retry: 3
 ```
+
+An address with an invalid format (`RfcComplianceException`) is not retried: the recipient is marked as `error` immediately.
 
 Once the recipient has been retried this many times without success, it is set to the final `error` status.
