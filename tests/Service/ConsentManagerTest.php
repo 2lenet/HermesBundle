@@ -17,7 +17,7 @@ class ConsentManagerTest extends TestCase
 
         $manager = new ConsentManager($this->createMock(EntityManagerInterface::class), $repository);
 
-        $this->assertTrue($manager->hasConsent('recipient@2le.net', Consent::TYPE_PIXEL));
+        $this->assertTrue($manager->hasConsent('recipient@2le.net', Consent::TYPE_TRACKING));
     }
 
     public function testHasConsentReturnsStoredValue(): void
@@ -30,7 +30,7 @@ class ConsentManagerTest extends TestCase
 
         $manager = new ConsentManager($this->createMock(EntityManagerInterface::class), $repository);
 
-        $this->assertFalse($manager->hasConsent('recipient@2le.net', Consent::TYPE_PIXEL));
+        $this->assertFalse($manager->hasConsent('recipient@2le.net', Consent::TYPE_TRACKING));
     }
 
     public function testSetConsentCreatesConsentWhenNoneExists(): void
@@ -44,10 +44,10 @@ class ConsentManagerTest extends TestCase
 
         $manager = new ConsentManager($em, $repository);
 
-        $consent = $manager->setConsent('recipient@2le.net', Consent::TYPE_PIXEL, false);
+        $consent = $manager->setConsent('recipient@2le.net', Consent::TYPE_TRACKING, false);
 
         $this->assertSame('recipient@2le.net', $consent->getEmail());
-        $this->assertSame(Consent::TYPE_PIXEL, $consent->getType());
+        $this->assertSame(Consent::TYPE_TRACKING, $consent->getType());
         $this->assertFalse($consent->isValue());
     }
 
@@ -55,7 +55,7 @@ class ConsentManagerTest extends TestCase
     {
         $consent = new Consent();
         $consent->setEmail('recipient@2le.net');
-        $consent->setType(Consent::TYPE_PIXEL);
+        $consent->setType(Consent::TYPE_TRACKING);
         $consent->setValue(true);
 
         $repository = $this->createMock(ConsentRepository::class);
@@ -67,7 +67,7 @@ class ConsentManagerTest extends TestCase
 
         $manager = new ConsentManager($em, $repository);
 
-        $result = $manager->setConsent('recipient@2le.net', Consent::TYPE_PIXEL, false);
+        $result = $manager->setConsent('recipient@2le.net', Consent::TYPE_TRACKING, false);
 
         $this->assertSame($consent, $result);
         $this->assertFalse($result->isValue());
