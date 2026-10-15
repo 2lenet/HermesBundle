@@ -35,6 +35,7 @@ crud:
             hermes_personalized_template: Template %entity%
         edit:
             hermes_template: Edit template %entity%
+            hermes_mail: Edit mail %entity%
             hermes_personalized_template: Edit template %entity%
         new:
             hermes_template: Create template

@@ -15,6 +15,7 @@ use Lle\HermesBundle\Service\Sender;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Exception\RfcComplianceException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -105,6 +106,42 @@ class SenderTest extends TestCase
         $handleSendFailure->invoke($sender, $recipient);
         self::assertSame(Recipient::STATUS_ERROR, $recipient->getStatus());
         self::assertSame(3, $recipient->getRetryCount());
+    }
+
+    public function testSendSetsErrorWithoutRetryOnInvalidAddress(): void
+    {
+        $mailBuilder = $this->createMock(MailBuilder::class);
+        $mailBuilder->method('buildMail')
+            ->willThrowException(new RfcComplianceException('Email "contactcastelhouse.fr" is invalid.'));
+
+        $parameterBag = $this->createMock(ParameterBagInterface::class);
+        $parameterBag->method('get')->willReturnMap([
+            ['lle_hermes.recipient_max_retry', 3],
+        ]);
+
+        $sender = new Sender(
+            $this->getMockEntityManager(),
+            $this->getMockEmailErrorRepository(),
+            $this->getMockMailer(),
+            $mailBuilder,
+            $parameterBag,
+            $this->createMock(RecipientRepository::class),
+            $this->createMock(UnsubscribeEmailRepository::class),
+            $this->getMockErrorLogger(),
+        );
+
+        $mail = new Mail();
+        $recipient = new Recipient();
+        $recipient->setCcMail($mail);
+        $recipient->setToEmail('contactcastelhouse.fr');
+        $recipient->setStatus(Recipient::STATUS_SENDING);
+
+        $send = (new \ReflectionClass(Sender::class))->getMethod('send');
+
+        self::assertFalse($send->invoke($sender, $mail, $recipient));
+        self::assertSame(Recipient::STATUS_ERROR, $recipient->getStatus());
+        self::assertSame(0, $recipient->getRetryCount());
+        self::assertNull($mail->getSendAtDate());
     }
 
     protected function getMockMailer(): MailerInterface
