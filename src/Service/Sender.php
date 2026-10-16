@@ -165,10 +165,16 @@ class Sender
             }
 
             return true;
-        } catch (TransportExceptionInterface | RfcComplianceException $e) {
+        } catch (RfcComplianceException $e) {
+            // Invalid address format: retrying cannot succeed
+            $recipient->setStatus(Recipient::STATUS_ERROR);
+            $this->errorLogger->logError('RFC error with message : ' . $e->getMessage(), $recipient);
+
+            return false;
+        } catch (TransportExceptionInterface $e) {
             $this->handleSendFailure($recipient);
             $this->errorLogger
-                ->logError('Transport or RFC error with message : ' . $e->getMessage(), $recipient);
+                ->logError('Transport error with message : ' . $e->getMessage(), $recipient);
 
             return false;
         } catch (Exception $e) {

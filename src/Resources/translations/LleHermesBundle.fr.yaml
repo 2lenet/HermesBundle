@@ -38,6 +38,7 @@ crud:
         edit:
             hermes_typetemplate: Édition type de template %entity%
             hermes_template: Édition modèle %entity%
+            hermes_mail: Édition mail %entity%
             hermes_personalized_template: Édition modèle  %entity%
         new:
             hermes_typetemplate: Création type de template
