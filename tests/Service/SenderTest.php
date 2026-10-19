@@ -240,7 +240,7 @@ class SenderTest extends TestCase
         $repository = $this->createMock(UnsubscribeEmailRepository::class);
         $repository->expects(self::exactly(1))
             ->method('findEmailsUnsubscribed')
-            ->willReturn(['unsubscribe@email.com']);
+            ->willReturn([['email' => 'unsubscribe@email.com', 'typeTemplateId' => null]]);
 
         return $repository;
     }

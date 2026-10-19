@@ -24,13 +24,12 @@
             {% block unsubscribe_choices %}
                 <div class="mx-auto my-4" style="width: fit-content;">
                     {% for item in choices %}
-                        {% set typeTemplate = item.typeTemplate %}
                         <div class="form-check mb-2">
-                            <input type="checkbox" class="form-check-input" name="subscribed[]"
-                                   id="type_{{ typeTemplate.id }}" value="{{ typeTemplate.id }}"
+                            <input type="checkbox" class="form-check-input" name="subscribedTypes[]"
+                                   id="type_{{ item.typeTemplate.id }}" value="{{ item.typeTemplate.id }}"
                                    {% if item.subscribed %}checked{% endif %}>
-                            <label class="form-check-label" for="type_{{ typeTemplate.id }}">
-                                {{ typeTemplate.label }}
+                            <label class="form-check-label" for="type_{{ item.typeTemplate.id }}">
+                                {{ item.typeTemplate.label }}
                             </label>
                         </div>
                     {% endfor %}
@@ -51,7 +50,7 @@
                 <script>
                     (function () {
                         const unsubscribeAll = document.getElementById('unsubscribe_all');
-                        const types = document.querySelectorAll('input[name="subscribed[]"]');
+                        const types = document.querySelectorAll('input[name="subscribedTypes[]"]');
                         const toggle = () => types.forEach((type) => type.disabled = unsubscribeAll.checked);
                         unsubscribeAll.addEventListener('change', toggle);
                         toggle();

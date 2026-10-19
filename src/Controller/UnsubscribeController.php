@@ -93,16 +93,19 @@ class UnsubscribeController extends AbstractController
             return $this->render('@LleHermes/unsubscribe/saved.html.twig');
         }
 
+        // Saving the types without "unsubscribe from all" cancels a previous global unsubscription
         if ($globalUnsubscription) {
             $this->em->remove($globalUnsubscription);
         }
 
-        $subscribedIds = array_map('intval', $request->request->all('subscribed'));
+        // Checked types are the ones still received: an unchecked type is unsubscribed,
+        // a checked type that was unsubscribed is subscribed again
+        $subscribedTypeIds = array_map('intval', $request->request->all('subscribedTypes'));
         $unsubscriptions = $this->unsubscribeEmailRepository->findByTypeForEmail($email);
 
         foreach ($this->typeTemplateRepository->findUnsubscribable() as $typeTemplate) {
             $typeTemplateId = (int)$typeTemplate->getId();
-            $isSubscribed = in_array($typeTemplateId, $subscribedIds, true);
+            $isSubscribed = in_array($typeTemplateId, $subscribedTypeIds, true);
             $unsubscription = $unsubscriptions[$typeTemplateId] ?? null;
 
             if (!$isSubscribed && !$unsubscription) {
