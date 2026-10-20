@@ -3,6 +3,7 @@
 namespace App\Tests\Entity;
 
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Entity\TypeTemplate;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validation;
 
@@ -53,6 +54,11 @@ class TemplateTest extends TestCase
         self::assertFalse($template->hasSendToErrors());
         $template->setSendToErrors(true);
         self::assertTrue($template->hasSendToErrors());
+
+        self::assertNull($template->getTypeTemplate());
+        $typeTemplate = new TypeTemplate();
+        $template->setTypeTemplate($typeTemplate);
+        self::assertSame($typeTemplate, $template->getTypeTemplate());
         $validator = Validation::createValidatorBuilder()->getValidator();
 
         $errors = $validator->validate($template);

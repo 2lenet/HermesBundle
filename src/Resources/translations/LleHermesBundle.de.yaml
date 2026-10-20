@@ -18,6 +18,7 @@ crudit:
 crud:
     title:
         list:
+            hermes_typetemplate: Vorlagentypen
             hermes_template: Vorlagen
             hermes_mail: E-Mails
             hermes_recipient: Empfänger
@@ -25,6 +26,7 @@ crud:
             hermes_emailerror: Fehlerhafte E-Mails
             hermes_unsubscribe_email: Abgemeldet
         show:
+            hermes_typetemplate: Vorlagentyp %entity%
             hermes_template: Vorlage %entity%
             hermes_mail: E-Mail %entity%
             hermes_recipient: Empfänger %entity%
@@ -34,10 +36,12 @@ crud:
             hermes_unsubscribe_email: Abgemeldet %entity%
             hermes_personalized_template: Vorlage %entity%
         edit:
+            hermes_typetemplate: Vorlagentyp %entity% bearbeiten
             hermes_template: Vorlage %entity% bearbeiten
             hermes_mail: E-Mail %entity% bearbeiten
             hermes_personalized_template: Vorlage %entity% bearbeiten
         new:
+            hermes_typetemplate: Neuer Vorlagentyp
             hermes_template: Vorlage erstellen
             hermes_personalized_template: Vorlage erstellen
     action:
@@ -47,9 +51,11 @@ crud:
         send_mail: Möchten Sie diese E-Mail wirklich an %nb% Empfänger senden? Diese Aktion ist endgültig.
         choose_type: Wählen Sie einen Modelltyp aus
     canDelete:
+        type_template: Dieser Typ wird von Vorlagen verwendet
         mail: Die E-Mail wird gesendet
 
 tab:
+    templates: Vorlagen
     recipients: Empfänger
     cc_recipients: CC Empfänger
     links: Links
@@ -62,6 +68,12 @@ export:
     excel: Excel
 
 field:
+    label: Bezeichnung
+    typetemplate: Vorlagentyp
+    typetemplate_help: Ermöglicht dem Empfänger, sich nur von dieser Art von E-Mails abzumelden
+    unsubscriptionsallowed: Abmeldung möglich
+    unsubscriptionsallowed_help: Der Typ wird auf der Abmeldeseite angeboten
+    allTypes: Alle Typen
     code: Code
     libelle: Bezeichnung
     mail: E-Mail
@@ -160,6 +172,11 @@ pagination:
     limit: "Anzahl der E-Mails"
 
 text:
+    unsubscribeTypesQuestion: "Ich möchte weiterhin folgende E-Mails erhalten an:"
+    unsubscribeReceivedType: "Sie haben diese E-Mail in der Kategorie „%type%“ erhalten, sie wurde abgewählt."
+    unsubscribeAll: Keine E-Mails mehr erhalten
+    saveUnsubscriptions: Meine Auswahl speichern
+    unsubscriptionsSaved: Ihre Auswahl wurde gespeichert, Sie können dieses Fenster schließen
     confirmUnsubscribtionQuestion: Möchten Sie die folgende E-Mail-Adresse wirklich abmelden?
     confirmUnsubscribtion: Ja, abmelden
     cancelUnsubscribtion: Nein, abbrechen

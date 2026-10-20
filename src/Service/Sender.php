@@ -73,9 +73,10 @@ class Sender
             // Unsubscriptions are disabled depending on whether the email template takes them into account or not.
             if ($template && $template->isUnsubscriptions()) {
                 if (
-                    in_array(
-                        strtolower((string)$recipient->getToEmail()),
-                        $unsubscribedEmails
+                    $this->isUnsubscribed(
+                        $unsubscribedEmails,
+                        (string)$recipient->getToEmail(),
+                        $template->getTypeTemplate()?->getId()
                     )
                 ) {
                     $recipient->setStatus(Recipient::STATUS_UNSUBSCRIBED);
@@ -107,12 +108,43 @@ class Sender
         return $nb;
     }
 
+    /**
+     * @return array<string, array{global: bool, types: int[]}> indexed by lowercase email
+     */
     public function getUnsubscribedEmails(): array
     {
-        $unsubscribedArray = $this->unsubscribeEmailRepository->findEmailsUnsubscribed();
-        $emails = array_column($unsubscribedArray, 'email');
+        $unsubscribedEmails = [];
+        foreach ($this->unsubscribeEmailRepository->findEmailsUnsubscribed() as $row) {
+            $email = strtolower($row['email']);
+            $unsubscribedEmails[$email] ??= ['global' => false, 'types' => []];
 
-        return array_map('strtolower', $emails);
+            if ($row['typeTemplateId'] === null) {
+                $unsubscribedEmails[$email]['global'] = true;
+            } else {
+                $unsubscribedEmails[$email]['types'][] = (int)$row['typeTemplateId'];
+            }
+        }
+
+        return $unsubscribedEmails;
+    }
+
+    /**
+     * An email is unsubscribed from every template, or only from some template types.
+     *
+     * @param array<string, array{global: bool, types: int[]}> $unsubscribedEmails
+     */
+    public function isUnsubscribed(array $unsubscribedEmails, string $email, ?int $typeTemplateId): bool
+    {
+        $unsubscription = $unsubscribedEmails[strtolower($email)] ?? null;
+        if (!$unsubscription) {
+            return false;
+        }
+
+        if ($unsubscription['global']) {
+            return true;
+        }
+
+        return $typeTemplateId !== null && in_array($typeTemplateId, $unsubscription['types'], true);
     }
 
     protected function send(Mail $mail, Recipient $recipient, bool $updateSendingDate = true): bool

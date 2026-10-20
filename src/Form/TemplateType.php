@@ -5,7 +5,9 @@ namespace Lle\HermesBundle\Form;
 use Lle\CruditBundle\Form\Type\CKEditorType;
 use Lle\CruditBundle\Form\Type\GroupType;
 use Lle\HermesBundle\Entity\Template;
+use Lle\HermesBundle\Entity\TypeTemplate;
 use Lle\HermesBundle\Form\Type\MjmlType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -89,6 +91,13 @@ class TemplateType extends AbstractType
             ->add('unsubscriptions', CheckboxType::class, [
                 'required' => false,
                 'label' => 'field.unsubscriptions',
+                'translation_domain' => 'LleHermesBundle',
+            ])
+            ->add('typeTemplate', EntityType::class, [
+                'class' => TypeTemplate::class,
+                'required' => false,
+                'label' => 'field.typetemplate',
+                'help' => 'field.typetemplate_help',
                 'translation_domain' => 'LleHermesBundle',
             ])
             ->add('statistics', CheckboxType::class, [

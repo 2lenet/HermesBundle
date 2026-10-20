@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Contracts;
 
 use Doctrine\Common\Collections\Collection;
+use Lle\HermesBundle\Entity\TypeTemplate;
 
 interface TemplateInterface extends MultiTenantInterface
 {
@@ -67,6 +68,10 @@ interface TemplateInterface extends MultiTenantInterface
     public function getMjml(): ?string;
 
     public function setMjml(?string $mjml): void;
+
+    public function getTypeTemplate(): ?TypeTemplate;
+
+    public function setTypeTemplate(?TypeTemplate $typeTemplate): static;
 
     public function getTranslations(): Collection;
 }

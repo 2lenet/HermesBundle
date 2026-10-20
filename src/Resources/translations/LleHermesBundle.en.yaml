@@ -18,6 +18,7 @@ crudit:
 crud:
     title:
         list:
+            hermes_typetemplate: Template types
             hermes_template: Templates
             hermes_mail: Mails
             hermes_recipient: Recipients
@@ -25,6 +26,7 @@ crud:
             hermes_emailerror: Error emails
             hermes_unsubscribe_email: Unsubscribed
         show:
+            hermes_typetemplate: Template type %entity%
             hermes_template: Template %entity%
             hermes_mail: Mail %entity%
             hermes_recipient: Recipient %entity%
@@ -34,10 +36,12 @@ crud:
             hermes_unsubscribe_email: Unsubscribed %entity%
             hermes_personalized_template: Template %entity%
         edit:
+            hermes_typetemplate: Edit template type %entity%
             hermes_template: Edit template %entity%
             hermes_mail: Edit mail %entity%
             hermes_personalized_template: Edit template %entity%
         new:
+            hermes_typetemplate: New template type
             hermes_template: Create template
             hermes_personalized_template: Create template
     action:
@@ -47,9 +51,11 @@ crud:
         send_mail: Do you really want to send this email to %nb% recipients? This action is final.
         choose_type: Choose a template type
     canDelete:
+        type_template: This type is used by templates
         mail: The email is being sent
 
 tab:
+    templates: Templates
     recipients: Recipients
     cc_recipients: CC recipients
     links: Links
@@ -62,6 +68,12 @@ export:
     excel: Excel
 
 field:
+    label: Label
+    typetemplate: Template type
+    typetemplate_help: Lets recipients unsubscribe from this type of email only
+    unsubscriptionsallowed: Unsubscription allowed
+    unsubscriptionsallowed_help: The type is listed on the unsubscribe page
+    allTypes: All types
     code: Code
     libelle: Label
     mail: Mail
@@ -160,6 +172,11 @@ pagination:
     limit: "Number of mails"
 
 text:
+    unsubscribeTypesQuestion: "I want to keep receiving the following emails at:"
+    unsubscribeReceivedType: "You received this email in the \"%type%\" category, it has been unchecked."
+    unsubscribeAll: Stop receiving any email
+    saveUnsubscriptions: Save my choices
+    unsubscriptionsSaved: Your choices have been saved, you can close this window
     confirmUnsubscribtionQuestion: Do you really want to unsubscribe the following email address?
     confirmUnsubscribtion: Yes, unsubscribe
     cancelUnsubscribtion: No, cancel
