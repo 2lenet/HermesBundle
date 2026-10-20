@@ -256,6 +256,14 @@ class Mail implements MultiTenantInterface
         return in_array($this->status, [self::STATUS_ERROR, self::STATUS_PARTIALLY_SENT], true);
     }
 
+    /**
+     * A recipient can be resent unless the mail is still a draft or has been cancelled
+     */
+    public function canResendRecipients(): bool
+    {
+        return !in_array($this->status, [self::STATUS_DRAFT, self::STATUS_CANCELLED], true);
+    }
+
     public function getSendingRecipients(): Collection
     {
         return $this->getAllRecipients()->filter(function (Recipient $recipient) {

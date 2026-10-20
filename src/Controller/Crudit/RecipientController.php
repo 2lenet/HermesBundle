@@ -74,7 +74,12 @@ class RecipientController extends AbstractCrudController
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
 
-        $this->mailResender->forceResend($recipient);
+        if (!$this->mailResender->forceResend($recipient)) {
+            $this->addFlash(
+                FlashBrickResponse::ERROR,
+                $this->translator->trans('flash.recipient_not_resendable', [], 'LleHermesBundle')
+            );
+        }
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }

@@ -43,6 +43,26 @@ class MailTrackerTest extends TestCase
         self::assertEquals(1, $this->mail->getTotalOpened());
     }
 
+    public function testUpdateTotalOpenedByCcRecipient(): void
+    {
+        $ccRecipient = $this->createRecipient($this->mail);
+        $ccRecipient->setMail(null);
+        $this->mail->addCcRecipient($ccRecipient);
+
+        self::assertSame(1, $this->mailTracker->updateTotalOpened($ccRecipient));
+        self::assertSame(1, $this->mail->getTotalOpened());
+        self::assertNotNull($ccRecipient->getOpenDate());
+    }
+
+    public function testUpdateTotalOpenedWithoutMail(): void
+    {
+        $recipient = $this->createRecipient($this->mail);
+        $recipient->setMail(null);
+
+        self::assertSame(0, $this->mailTracker->updateTotalOpened($recipient));
+        self::assertNotNull($recipient->getOpenDate());
+    }
+
     protected function createMail(): Mail
     {
         $mail = new Mail();

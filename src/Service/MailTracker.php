@@ -4,7 +4,6 @@ namespace Lle\HermesBundle\Service;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Repository\RecipientRepository;
 
@@ -27,8 +26,11 @@ class MailTracker
         $recipient->setOpenDate(new DateTime());
         $this->em->flush();
 
-        /** @var Mail $mail */
-        $mail = $recipient->getMail();
+        $mail = $recipient->getMail() ?? $recipient->getCcMail();
+        if (!$mail) {
+            return 0;
+        }
+
         $recipientsOpen = $this->recipientRepository->countOpenRecipients($mail);
 
         $mail->setTotalOpened($recipientsOpen);

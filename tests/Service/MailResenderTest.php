@@ -82,7 +82,7 @@ class MailResenderTest extends TestCase
         $mail->addRecipient($main);
         $mail->addCcRecipient((new Recipient())->setToEmail('cc@email.com')->setStatus(Recipient::STATUS_SENT));
 
-        $this->getMailResender()->forceResend($main);
+        self::assertTrue($this->getMailResender()->forceResend($main));
 
         self::assertSame(Recipient::STATUS_RESENT, $main->getStatus());
         self::assertSame(Mail::STATUS_SENDING, $mail->getStatus());
@@ -122,7 +122,7 @@ class MailResenderTest extends TestCase
         $recipient = (new Recipient())->setToEmail('to@email.com')->setStatus($status);
         $mail->addRecipient($recipient);
 
-        $this->getMailResender()->forceResend($recipient);
+        self::assertTrue($this->getMailResender()->forceResend($recipient));
 
         self::assertSame(Recipient::STATUS_RESENT, $recipient->getStatus());
         self::assertCount(1, $this->persisted);
@@ -153,6 +153,47 @@ class MailResenderTest extends TestCase
         self::assertSame(0, $this->getMailResender()->resend($mail));
         self::assertSame($mailStatus, $mail->getStatus());
         self::assertSame(Recipient::STATUS_ERROR, $recipient->getStatus());
+        self::assertSame([], $this->persisted);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function draftOrCancelledProvider(): array
+    {
+        return [
+            'draft' => [Mail::STATUS_DRAFT],
+            'cancelled' => [Mail::STATUS_CANCELLED],
+        ];
+    }
+
+    /**
+     * @dataProvider draftOrCancelledProvider
+     */
+    public function testForceResendIsRefusedForDraftOrCancelledMail(string $mailStatus): void
+    {
+        $mail = new Mail();
+        $mail->setStatus($mailStatus);
+        $recipient = (new Recipient())->setToEmail('to@email.com')->setStatus(Recipient::STATUS_SENT);
+        $mail->addRecipient($recipient);
+
+        self::assertFalse($this->getMailResender()->forceResend($recipient));
+        self::assertSame(Recipient::STATUS_SENT, $recipient->getStatus());
+        self::assertSame($mailStatus, $mail->getStatus());
+        self::assertSame([], $this->persisted);
+    }
+
+    public function testResendRecipientsIgnoresCancelledMail(): void
+    {
+        $mail = new Mail();
+        $mail->setId(1);
+        $mail->setStatus(Mail::STATUS_CANCELLED);
+        $recipient = (new Recipient())->setToEmail('to@email.com')->setStatus(Recipient::STATUS_ERROR);
+        $mail->addRecipient($recipient);
+
+        self::assertSame(0, $this->getMailResender()->resendRecipients([$recipient]));
+        self::assertSame(Recipient::STATUS_ERROR, $recipient->getStatus());
+        self::assertSame(Mail::STATUS_CANCELLED, $mail->getStatus());
         self::assertSame([], $this->persisted);
     }
 

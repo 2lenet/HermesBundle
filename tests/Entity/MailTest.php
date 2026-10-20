@@ -50,6 +50,32 @@ class MailTest extends TestCase
         self::assertSame(25.0, $mail->getTotalLinkOpeningRate());
     }
 
+    /**
+     * @return array<string, array{string, bool}>
+     */
+    public static function canResendRecipientsProvider(): array
+    {
+        return [
+            'draft' => [Mail::STATUS_DRAFT, false],
+            'cancelled' => [Mail::STATUS_CANCELLED, false],
+            'sending' => [Mail::STATUS_SENDING, true],
+            'sent' => [Mail::STATUS_SENT, true],
+            'partially sent' => [Mail::STATUS_PARTIALLY_SENT, true],
+            'error' => [Mail::STATUS_ERROR, true],
+        ];
+    }
+
+    /**
+     * @dataProvider canResendRecipientsProvider
+     */
+    public function testCanResendRecipients(string $status, bool $expected): void
+    {
+        $mail = new Mail();
+        $mail->setStatus($status);
+
+        self::assertSame($expected, $mail->canResendRecipients());
+    }
+
     public function testMailCreate(): void
     {
         $mail = new Mail();
