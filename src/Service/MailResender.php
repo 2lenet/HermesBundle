@@ -19,8 +19,12 @@ class MailResender
 
     public function resend(Mail $mail): int
     {
+        if (!$mail->canBeResent()) {
+            return 0;
+        }
+
         $nb = 0;
-        foreach ($mail->getRecipients() as $recipient) {
+        foreach ($mail->getAllRecipients() as $recipient) {
             if (!$this->resendRecipient($recipient)) {
                 continue;
             }
@@ -42,6 +46,26 @@ class MailResender
     }
 
     /**
+     * Resends to a single recipient, whatever its status, unless the mail is a draft or cancelled
+     */
+    public function forceResend(Recipient $recipient): bool
+    {
+        $mail = $recipient->getMail() ?? $recipient->getCcMail();
+        if (!$mail || !$mail->canResendRecipients()) {
+            return false;
+        }
+
+        // The original is excluded from the mail totals and no longer sent, the copy takes over
+        $recipient->setStatus(Recipient::STATUS_RESENT);
+        $this->em->persist($this->recipientFactory->copy($recipient));
+
+        $mail->setStatus(Mail::STATUS_SENDING);
+        $this->em->flush();
+
+        return true;
+    }
+
+    /**
      * @param iterable<Recipient> $recipients
      */
     public function resendRecipients(iterable $recipients): int
@@ -52,7 +76,7 @@ class MailResender
         foreach ($recipients as $recipient) {
             $mail = $recipient->getMail() ?? $recipient->getCcMail();
             $mailId = $mail?->getId();
-            if (!$mail || !$mailId) {
+            if (!$mail || !$mailId || !$mail->canResendRecipients()) {
                 continue;
             }
 
@@ -91,6 +115,7 @@ class MailResender
             return false;
         }
 
+        $recipient->setStatus(Recipient::STATUS_RESENT);
         $this->em->persist($this->recipientFactory->copy($recipient));
 
         return true;

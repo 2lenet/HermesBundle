@@ -143,9 +143,11 @@ status:
     draft: Entwurf
     sending: Senden
     sent: Gesendet
+    partially_sent: Teilweise gesendet
     unsubscribed: Abgemeldet
     cancelled: Abgebrochen
     retry: Erneuter Versuch
+    resent: Erneut gesendet
 
 consent:
     type:
@@ -210,6 +212,7 @@ flash:
     mail_cancelled: Die E-Mail wurde erfolgreich gelöscht
     mail_resent: '%nb% Empfänger werden erneut gesendet'
     no_recipient_to_resend: Keine fehlerhaften Empfänger zum erneuten Senden
+    recipient_not_resendable: Ein Empfänger einer Entwurfs- oder abgebrochenen E-Mail kann nicht erneut gesendet werden
 
 modal:
     action:

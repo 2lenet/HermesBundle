@@ -12,6 +12,7 @@ use Lle\CruditBundle\Dto\Icon;
 use Lle\CruditBundle\Dto\Path;
 use Lle\CruditBundle\Field\DoctrineEntityField;
 use Lle\HermesBundle\Crudit\Datasource\RecipientDatasource;
+use Lle\HermesBundle\Entity\Recipient;
 
 class RecipientCrudConfig extends AbstractCrudConfig
 {
@@ -106,6 +107,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
             new Path('lle_hermes_crudit_recipient_resend'),
             Icon::new('paper-plane')
         )
+            ->setDisplayIf(fn(Recipient $recipient) => $this->canBeResent($recipient))
             ->setRole('ROLE_HERMES_RECIPIENT_RESEND')
             ->setCssClass('btn btn-success btn-sm ms-1')
             ->setConfirmModal(true);
@@ -124,6 +126,7 @@ class RecipientCrudConfig extends AbstractCrudConfig
             new Path('lle_hermes_crudit_recipient_resend'),
             Icon::new('paper-plane')
         )
+            ->setDisplayIf(fn(Recipient $recipient) => $this->canBeResent($recipient))
             ->setRole('ROLE_HERMES_RECIPIENT_RESEND')
             ->setCssClass('btn btn-success btn-sm')
             ->setConfirmModal(true);
@@ -160,5 +163,12 @@ class RecipientCrudConfig extends AbstractCrudConfig
     public function getRootRoute(): string
     {
         return 'lle_hermes_crudit_recipient';
+    }
+
+    protected function canBeResent(Recipient $recipient): bool
+    {
+        $mail = $recipient->getMail() ?? $recipient->getCcMail();
+
+        return $mail !== null && $mail->canResendRecipients();
     }
 }

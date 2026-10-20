@@ -143,9 +143,11 @@ status:
     draft: Draft
     sending: Sending
     sent: Sent
+    partially_sent: Partially sent
     unsubscribed: Unsubscribed
     cancelled: Cancelled
     retry: Retry
+    resent: Resent
 
 consent:
     type:
@@ -210,6 +212,7 @@ flash:
     mail_cancelled: The mail has been successfully cancelled
     mail_resent: '%nb% recipient(s) will be resent'
     no_recipient_to_resend: No recipient in error to resend
+    recipient_not_resendable: A recipient of a draft or cancelled mail cannot be resent
 
 modal:
     action:

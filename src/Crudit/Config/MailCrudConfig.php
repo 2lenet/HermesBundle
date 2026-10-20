@@ -213,7 +213,7 @@ class MailCrudConfig extends AbstractCrudConfig
             Path::new('lle_hermes_crudit_mail_resend'),
             Icon::new('paper-plane'),
         )
-            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_ERROR))
+            ->setDisplayIf((fn(Mail $mail) => $mail->canBeResent()))
             ->setRole('ROLE_HERMES_MAIL_RESEND')
             ->setCssClass('btn btn-warning btn-sm')
             ->setConfirmModal(true);
@@ -270,7 +270,7 @@ class MailCrudConfig extends AbstractCrudConfig
             Path::new('lle_hermes_crudit_mail_resend'),
             Icon::new('paper-plane'),
         )
-            ->setDisplayIf((fn(Mail $mail) => $mail->getStatus() === Mail::STATUS_ERROR))
+            ->setDisplayIf((fn(Mail $mail) => $mail->canBeResent()))
             ->setRole('ROLE_HERMES_MAIL_RESEND')
             ->setCssClass('btn btn-warning btn-sm ms-1')
             ->setConfirmModal(true);

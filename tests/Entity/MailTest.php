@@ -3,6 +3,8 @@
 namespace App\Tests\Entity;
 
 use DateTime;
+use Lle\HermesBundle\Entity\Link;
+use Lle\HermesBundle\Entity\LinkOpening;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
@@ -18,6 +20,62 @@ use Symfony\Component\Validator\Validation;
  */
 class MailTest extends TestCase
 {
+    public function testAllRecipientsIncludeCcRecipients(): void
+    {
+        $mail = new Mail();
+        $recipient = (new Recipient())->setToEmail('to@email.com')->setStatus(Recipient::STATUS_SENDING);
+        $ccRecipient = (new Recipient())->setToEmail('cc@email.com')->setStatus(Recipient::STATUS_SENDING);
+        $sentCcRecipient = (new Recipient())->setToEmail('cc2@email.com')->setStatus(Recipient::STATUS_SENT);
+        $mail->addRecipient($recipient);
+        $mail->addCcRecipient($ccRecipient);
+        $mail->addCcRecipient($sentCcRecipient);
+
+        self::assertSame([$recipient, $ccRecipient, $sentCcRecipient], $mail->getAllRecipients()->toArray());
+        self::assertSame([$recipient, $ccRecipient], array_values($mail->getSendingRecipients()->toArray()));
+    }
+
+    public function testTotalLinkOpeningRateIsBasedOnTotalToSend(): void
+    {
+        $mail = new Mail();
+        $link = new Link();
+        $link->addLinkOpening(new LinkOpening());
+        $mail->addLink($link);
+
+        self::assertSame(0.0, (float)$mail->getTotalLinkOpeningRate());
+
+        // Only one recipient in the collection, but CC recipients count as well
+        $mail->addRecipient((new Recipient())->setToEmail('to@email.com'));
+        $mail->setTotalToSend(4);
+
+        self::assertSame(25.0, $mail->getTotalLinkOpeningRate());
+    }
+
+    /**
+     * @return array<string, array{string, bool}>
+     */
+    public static function canResendRecipientsProvider(): array
+    {
+        return [
+            'draft' => [Mail::STATUS_DRAFT, false],
+            'cancelled' => [Mail::STATUS_CANCELLED, false],
+            'sending' => [Mail::STATUS_SENDING, true],
+            'sent' => [Mail::STATUS_SENT, true],
+            'partially sent' => [Mail::STATUS_PARTIALLY_SENT, true],
+            'error' => [Mail::STATUS_ERROR, true],
+        ];
+    }
+
+    /**
+     * @dataProvider canResendRecipientsProvider
+     */
+    public function testCanResendRecipients(string $status, bool $expected): void
+    {
+        $mail = new Mail();
+        $mail->setStatus($status);
+
+        self::assertSame($expected, $mail->canResendRecipients());
+    }
+
     public function testMailCreate(): void
     {
         $mail = new Mail();

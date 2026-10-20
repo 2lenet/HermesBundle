@@ -73,6 +73,6 @@ class Mailer
     {
         $mailObj = $this->create($mail, $status);
 
-        $this->sender->sendAllRecipients($mailObj->getRecipients()->toArray());
+        $this->sender->sendAllRecipients($mailObj->getAllRecipients()->toArray());
     }
 }

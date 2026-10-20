@@ -144,9 +144,11 @@ status:
     draft: Brouillon
     sending: En cours
     sent: Envoyé
+    partially_sent: Partiellement envoyé
     unsubscribed: Désinscrit
     cancelled: Annulé
     retry: Nouvelle tentative
+    resent: Renvoyé
 
 consent:
     type:
@@ -212,6 +214,7 @@ flash:
     mail_cancelled: Le mail a bien été annulé
     mail_resent: '%nb% destinataire(s) vont être renvoyés'
     no_recipient_to_resend: Aucun destinataire en erreur à renvoyer
+    recipient_not_resendable: Impossible de renvoyer un destinataire d'un mail en brouillon ou annulé
 
 modal:
     action:

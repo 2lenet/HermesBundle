@@ -46,9 +46,12 @@ class RecipientRepository extends ServiceEntityRepository
     {
         $result = $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
-            ->where('r.mail = :mail')
+            ->where('r.mail = :mail OR r.ccMail = :mail')
             ->andWhere('r.openDate IS NOT NULL')
+            // A resent recipient is replaced by its copy, so it is not counted twice
+            ->andWhere('r.status != :resent')
             ->setParameter('mail', $mail)
+            ->setParameter('resent', Recipient::STATUS_RESENT)
             ->getQuery()
             ->getSingleScalarResult();
 

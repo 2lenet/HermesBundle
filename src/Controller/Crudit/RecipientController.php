@@ -9,9 +9,7 @@ use Lle\CruditBundle\Brick\BrickResponse\FlashBrickResponse;
 use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Crudit\Config\RecipientCrudConfig;
-use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
-use Lle\HermesBundle\Service\Factory\RecipientFactory;
 use Lle\HermesBundle\Service\MailResender;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +30,6 @@ class RecipientController extends AbstractCrudController
         RecipientCrudConfig $config,
         protected EntityManagerInterface $em,
         protected MultiTenantManager $multiTenantManager,
-        protected RecipientFactory $recipientFactory,
         protected MailResender $mailResender,
         protected TranslatorInterface $translator,
     ) {
@@ -64,7 +61,7 @@ class RecipientController extends AbstractCrudController
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
 
-        $mail = $recipient->getMail();
+        $mail = $recipient->getMail() ?? $recipient->getCcMail();
         if (!$mail) {
             $this->addFlash(FlashBrickResponse::ERROR, 'flash.no_mail');
 
@@ -77,11 +74,12 @@ class RecipientController extends AbstractCrudController
             return $this->redirectToRoute($this->config->getRootRoute() . '_index');
         }
 
-        $copy = $this->recipientFactory->copy($recipient);
-        $this->em->persist($copy);
-
-        $mail->setStatus(Mail::STATUS_SENDING);
-        $this->em->flush();
+        if (!$this->mailResender->forceResend($recipient)) {
+            $this->addFlash(
+                FlashBrickResponse::ERROR,
+                $this->translator->trans('flash.recipient_not_resendable', [], 'LleHermesBundle')
+            );
+        }
 
         return $this->redirectToRoute($this->config->getRootRoute() . '_index');
     }
