@@ -20,7 +20,7 @@ class MailResender
     public function resend(Mail $mail): int
     {
         $nb = 0;
-        foreach ($mail->getRecipients() as $recipient) {
+        foreach ($mail->getAllRecipients() as $recipient) {
             if (!$this->resendRecipient($recipient)) {
                 continue;
             }

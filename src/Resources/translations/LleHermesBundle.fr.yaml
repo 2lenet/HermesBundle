@@ -144,6 +144,7 @@ status:
     draft: Brouillon
     sending: En cours
     sent: Envoyé
+    partially_sent: Partiellement envoyé
     unsubscribed: Désinscrit
     cancelled: Annulé
     retry: Nouvelle tentative

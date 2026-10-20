@@ -18,6 +18,20 @@ use Symfony\Component\Validator\Validation;
  */
 class MailTest extends TestCase
 {
+    public function testAllRecipientsIncludeCcRecipients(): void
+    {
+        $mail = new Mail();
+        $recipient = (new Recipient())->setToEmail('to@email.com')->setStatus(Recipient::STATUS_SENDING);
+        $ccRecipient = (new Recipient())->setToEmail('cc@email.com')->setStatus(Recipient::STATUS_SENDING);
+        $sentCcRecipient = (new Recipient())->setToEmail('cc2@email.com')->setStatus(Recipient::STATUS_SENT);
+        $mail->addRecipient($recipient);
+        $mail->addCcRecipient($ccRecipient);
+        $mail->addCcRecipient($sentCcRecipient);
+
+        self::assertSame([$recipient, $ccRecipient, $sentCcRecipient], $mail->getAllRecipients()->toArray());
+        self::assertSame([$recipient, $ccRecipient], array_values($mail->getSendingRecipients()->toArray()));
+    }
+
     public function testMailCreate(): void
     {
         $mail = new Mail();

@@ -191,6 +191,70 @@ class SenderTest extends TestCase
         self::assertNull($mail->getSendAtDate());
     }
 
+    /**
+     * @return array<string, array{string, string[], string, int, int}>
+     */
+    public static function updateMailProvider(): array
+    {
+        return [
+            'main sent, cc in error' => [
+                Recipient::STATUS_SENT,
+                [Recipient::STATUS_ERROR, Recipient::STATUS_ERROR],
+                Mail::STATUS_PARTIALLY_SENT,
+                1,
+                2,
+            ],
+            'main in error, cc sent' => [
+                Recipient::STATUS_ERROR,
+                [Recipient::STATUS_SENT, Recipient::STATUS_SENT],
+                Mail::STATUS_PARTIALLY_SENT,
+                2,
+                1,
+            ],
+            'all sent' => [Recipient::STATUS_SENT, [Recipient::STATUS_SENT], Mail::STATUS_SENT, 2, 0],
+            'all in error' => [Recipient::STATUS_ERROR, [Recipient::STATUS_ERROR], Mail::STATUS_ERROR, 0, 2],
+            'cc still retrying' => [Recipient::STATUS_SENT, [Recipient::STATUS_RETRY], Mail::STATUS_SENDING, 1, 0],
+        ];
+    }
+
+    /**
+     * @dataProvider updateMailProvider
+     * @param string[] $ccStatuses
+     */
+    public function testUpdateMailTakesCcRecipientsIntoAccount(
+        string $mainStatus,
+        array $ccStatuses,
+        string $expectedStatus,
+        int $expectedSent,
+        int $expectedError,
+    ): void {
+        $sender = new Sender(
+            $this->getMockEntityManager(),
+            $this->getMockEmailErrorRepository(),
+            $this->getMockMailer(),
+            $this->getMockMailBuilder(),
+            $this->getMockParameterBag(),
+            $this->createMock(RecipientRepository::class),
+            $this->createMock(UnsubscribeEmailRepository::class),
+            $this->getMockErrorLogger(),
+        );
+
+        $mail = new Mail();
+        $mail->setStatus(Mail::STATUS_SENDING);
+        $mail->addRecipient((new Recipient())->setToEmail('to@email.com')->setStatus($mainStatus));
+        foreach ($ccStatuses as $key => $ccStatus) {
+            $mail->addCcRecipient((new Recipient())->setToEmail('cc' . $key . '@email.com')->setStatus($ccStatus));
+        }
+
+        $updateMail = (new \ReflectionClass(Sender::class))->getMethod('updateMail');
+        $updateMail->invoke($sender, $mail);
+
+        self::assertSame($expectedStatus, $mail->getStatus());
+        self::assertSame(1 + count($ccStatuses), $mail->getTotalToSend());
+        self::assertSame($expectedSent, $mail->getTotalSended());
+        self::assertSame($expectedError, $mail->getTotalError());
+    }
+
     protected function getMockMailer(): MailerInterface
     {
         return $this->createMock(MailerInterface::class);

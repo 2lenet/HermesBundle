@@ -21,6 +21,7 @@ class MailFilterSet extends AbstractFilterSet
                 'status.draft' => Mail::STATUS_DRAFT,
                 'status.sending' => Mail::STATUS_SENDING,
                 'status.sent' => Mail::STATUS_SENT,
+                'status.partially_sent' => Mail::STATUS_PARTIALLY_SENT,
                 'status.cancelled' => Mail::STATUS_CANCELLED,
                 'status.error' => Mail::STATUS_ERROR,
             ]),

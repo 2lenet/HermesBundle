@@ -143,6 +143,7 @@ status:
     draft: Draft
     sending: Sending
     sent: Sent
+    partially_sent: Partially sent
     unsubscribed: Unsubscribed
     cancelled: Cancelled
     retry: Retry

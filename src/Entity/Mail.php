@@ -20,6 +20,7 @@ class Mail implements MultiTenantInterface
     public const STATUS_DRAFT = 'draft';
     public const STATUS_SENDING = 'sending';
     public const STATUS_SENT = 'sent';
+    public const STATUS_PARTIALLY_SENT = 'partially_sent';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_ERROR = 'error';
 
@@ -240,9 +241,24 @@ class Mail implements MultiTenantInterface
         return round($openinglinks / $this->recipients->count() * 100, 2);
     }
 
+    /**
+     * Main recipients and CC recipients
+     *
+     * @return Collection<int, Recipient>
+     */
+    public function getAllRecipients(): Collection
+    {
+        return new ArrayCollection(array_merge($this->recipients->toArray(), $this->ccRecipients->toArray()));
+    }
+
+    public function canBeResent(): bool
+    {
+        return in_array($this->status, [self::STATUS_ERROR, self::STATUS_PARTIALLY_SENT], true);
+    }
+
     public function getSendingRecipients(): Collection
     {
-        return $this->recipients->filter(function (Recipient $recipient) {
+        return $this->getAllRecipients()->filter(function (Recipient $recipient) {
             return $recipient->getStatus() === Recipient::STATUS_SENDING;
         });
     }

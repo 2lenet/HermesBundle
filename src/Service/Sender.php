@@ -190,21 +190,23 @@ class Sender
     {
         $this->em->flush();
 
-        $totalRetry = $mail->getRecipients()->filter(function (Recipient $recipient) {
+        $allRecipients = $mail->getAllRecipients();
+
+        $totalRetry = $allRecipients->filter(function (Recipient $recipient) {
             return $recipient->getStatus() === Recipient::STATUS_RETRY;
         })->count();
 
         $mail
-            ->setTotalSended($mail->getRecipients()->filter(function (Recipient $recipient) {
+            ->setTotalSended($allRecipients->filter(function (Recipient $recipient) {
                 return $recipient->getStatus() === Recipient::STATUS_SENT;
             })->count())
-            ->setTotalUnsubscribed($mail->getRecipients()->filter(function (Recipient $recipient) {
+            ->setTotalUnsubscribed($allRecipients->filter(function (Recipient $recipient) {
                 return $recipient->getStatus() === Recipient::STATUS_UNSUBSCRIBED;
             })->count())
-            ->setTotalError($mail->getRecipients()->filter(function (Recipient $recipient) {
+            ->setTotalError($allRecipients->filter(function (Recipient $recipient) {
                 return $recipient->getStatus() === Recipient::STATUS_ERROR;
             })->count())
-            ->setTotalToSend($mail->getRecipients()->count());
+            ->setTotalToSend($allRecipients->count());
 
         $totalRecipientsToSend = $mail->getTotalToSend() - $mail->getTotalUnsubscribed();
         $totalRecipientsSent = $mail->getTotalSended() + $mail->getTotalError();
@@ -213,7 +215,7 @@ class Sender
             if ($mail->getTotalError() === $totalRecipientsToSend) {
                 $mail->setStatus(Mail::STATUS_ERROR);
             } elseif ($totalRecipientsSent === $totalRecipientsToSend) {
-                $mail->setStatus(Mail::STATUS_SENT);
+                $mail->setStatus($mail->getTotalError() > 0 ? Mail::STATUS_PARTIALLY_SENT : Mail::STATUS_SENT);
             }
         }
 
