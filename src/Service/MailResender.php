@@ -19,6 +19,10 @@ class MailResender
 
     public function resend(Mail $mail): int
     {
+        if (!$mail->canBeResent()) {
+            return 0;
+        }
+
         $nb = 0;
         foreach ($mail->getAllRecipients() as $recipient) {
             if (!$this->resendRecipient($recipient)) {
@@ -39,6 +43,21 @@ class MailResender
         $this->em->flush();
 
         return $nb;
+    }
+
+    /**
+     * Resends to a single recipient, whatever its status
+     */
+    public function forceResend(Recipient $recipient): void
+    {
+        // The original is excluded from the mail totals and no longer sent, the copy takes over
+        $recipient->setStatus(Recipient::STATUS_RESENT);
+        $this->em->persist($this->recipientFactory->copy($recipient));
+
+        $mail = $recipient->getMail() ?? $recipient->getCcMail();
+        $mail?->setStatus(Mail::STATUS_SENDING);
+
+        $this->em->flush();
     }
 
     /**
@@ -91,6 +110,7 @@ class MailResender
             return false;
         }
 
+        $recipient->setStatus(Recipient::STATUS_RESENT);
         $this->em->persist($this->recipientFactory->copy($recipient));
 
         return true;

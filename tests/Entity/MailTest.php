@@ -3,6 +3,8 @@
 namespace App\Tests\Entity;
 
 use DateTime;
+use Lle\HermesBundle\Entity\Link;
+use Lle\HermesBundle\Entity\LinkOpening;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Recipient;
 use Lle\HermesBundle\Entity\Template;
@@ -30,6 +32,22 @@ class MailTest extends TestCase
 
         self::assertSame([$recipient, $ccRecipient, $sentCcRecipient], $mail->getAllRecipients()->toArray());
         self::assertSame([$recipient, $ccRecipient], array_values($mail->getSendingRecipients()->toArray()));
+    }
+
+    public function testTotalLinkOpeningRateIsBasedOnTotalToSend(): void
+    {
+        $mail = new Mail();
+        $link = new Link();
+        $link->addLinkOpening(new LinkOpening());
+        $mail->addLink($link);
+
+        self::assertSame(0.0, (float)$mail->getTotalLinkOpeningRate());
+
+        // Only one recipient in the collection, but CC recipients count as well
+        $mail->addRecipient((new Recipient())->setToEmail('to@email.com'));
+        $mail->setTotalToSend(4);
+
+        self::assertSame(25.0, $mail->getTotalLinkOpeningRate());
     }
 
     public function testMailCreate(): void

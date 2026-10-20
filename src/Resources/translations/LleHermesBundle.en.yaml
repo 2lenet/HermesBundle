@@ -147,6 +147,7 @@ status:
     unsubscribed: Unsubscribed
     cancelled: Cancelled
     retry: Retry
+    resent: Resent
 
 consent:
     type:

@@ -98,8 +98,6 @@ class Sender
 
             if ($this->send($mail, $recipient)) {
                 $nb++;
-            } else {
-                print("error sending to " . $recipient);
             }
 
             $this->updateMail($mail);
@@ -190,7 +188,9 @@ class Sender
     {
         $this->em->flush();
 
-        $allRecipients = $mail->getAllRecipients();
+        $allRecipients = $mail->getAllRecipients()->filter(function (Recipient $recipient) {
+            return $recipient->getStatus() !== Recipient::STATUS_RESENT;
+        });
 
         $totalRetry = $allRecipients->filter(function (Recipient $recipient) {
             return $recipient->getStatus() === Recipient::STATUS_RETRY;
@@ -257,12 +257,6 @@ class Sender
             throw new NoMailFoundException($recipient->getId() ?? 0);
         }
 
-        if ($this->send($mail, $recipient, false)) {
-            return 1;
-        } else {
-            print("error sending to " . $recipient);
-        }
-
-        return 0;
+        return $this->send($mail, $recipient, false) ? 1 : 0;
     }
 }

@@ -234,11 +234,11 @@ class Mail implements MultiTenantInterface
             $openinglinks += $link->getLinkOpenings()->count();
         }
 
-        if ($this->recipients->count() === 0) {
+        if ($this->totalToSend === 0) {
             return 0;
         }
 
-        return round($openinglinks / $this->recipients->count() * 100, 2);
+        return round($openinglinks / $this->totalToSend * 100, 2);
     }
 
     /**

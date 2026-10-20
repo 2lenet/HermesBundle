@@ -21,6 +21,7 @@ class Recipient implements MultiTenantInterface
     public const STATUS_UNSUBSCRIBED = 'unsubscribed';
     public const STATUS_ERROR = 'error';
     public const STATUS_RETRY = 'retry';
+    public const STATUS_RESENT = 'resent';
 
     #[ORM\Column(type: 'integer')]
     #[ORM\Id]

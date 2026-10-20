@@ -148,6 +148,7 @@ status:
     unsubscribed: Désinscrit
     cancelled: Annulé
     retry: Nouvelle tentative
+    resent: Renvoyé
 
 consent:
     type:

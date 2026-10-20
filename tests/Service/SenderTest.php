@@ -14,7 +14,9 @@ use Lle\HermesBundle\Service\MailBuilder;
 use Lle\HermesBundle\Service\Sender;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
@@ -194,7 +196,7 @@ class SenderTest extends TestCase
     /**
      * @return array<string, array{string, string[], string, int, int}>
      */
-    public static function updateMailProvider(): array
+    public static function sendAllRecipientsProvider(): array
     {
         return [
             'main sent, cc in error' => [
@@ -218,41 +220,76 @@ class SenderTest extends TestCase
     }
 
     /**
-     * @dataProvider updateMailProvider
+     * Expected recipient statuses are obtained by making the sending fail for the recipients concerned
+     *
+     * @dataProvider sendAllRecipientsProvider
      * @param string[] $ccStatuses
      */
-    public function testUpdateMailTakesCcRecipientsIntoAccount(
+    public function testSendAllRecipientsTakesCcRecipientsIntoAccount(
         string $mainStatus,
         array $ccStatuses,
         string $expectedStatus,
         int $expectedSent,
         int $expectedError,
     ): void {
-        $sender = new Sender(
-            $this->getMockEntityManager(),
-            $this->getMockEmailErrorRepository(),
-            $this->getMockMailer(),
-            $this->getMockMailBuilder(),
-            $this->getMockParameterBag(),
-            $this->createMock(RecipientRepository::class),
-            $this->createMock(UnsubscribeEmailRepository::class),
-            $this->getMockErrorLogger(),
-        );
-
         $mail = new Mail();
         $mail->setStatus(Mail::STATUS_SENDING);
-        $mail->addRecipient((new Recipient())->setToEmail('to@email.com')->setStatus($mainStatus));
+        $outcomes = ['to@email.com' => $mainStatus];
+        $mail->addRecipient((new Recipient())->setToEmail('to@email.com')->setStatus(Recipient::STATUS_SENDING));
         foreach ($ccStatuses as $key => $ccStatus) {
-            $mail->addCcRecipient((new Recipient())->setToEmail('cc' . $key . '@email.com')->setStatus($ccStatus));
+            $outcomes['cc' . $key . '@email.com'] = $ccStatus;
+            $mail->addCcRecipient(
+                (new Recipient())->setToEmail('cc' . $key . '@email.com')->setStatus(Recipient::STATUS_SENDING)
+            );
         }
 
-        $updateMail = (new \ReflectionClass(Sender::class))->getMethod('updateMail');
-        $updateMail->invoke($sender, $mail);
+        $sender = $this->getSenderWithOutcomes($outcomes);
+        $sender->sendAllRecipients($mail->getAllRecipients()->toArray());
 
+        foreach ($mail->getAllRecipients() as $recipient) {
+            self::assertSame($outcomes[(string)$recipient->getToEmail()] ?? null, $recipient->getStatus());
+        }
         self::assertSame($expectedStatus, $mail->getStatus());
         self::assertSame(1 + count($ccStatuses), $mail->getTotalToSend());
         self::assertSame($expectedSent, $mail->getTotalSended());
         self::assertSame($expectedError, $mail->getTotalError());
+    }
+
+    /**
+     * Sender whose sending ends up with the given recipient status, indexed by email:
+     * an invalid address gives an error, a transport error gives a retry.
+     *
+     * @param array<string, string> $outcomes
+     */
+    protected function getSenderWithOutcomes(array $outcomes): Sender
+    {
+        $mailBuilder = $this->createMock(MailBuilder::class);
+        $mailBuilder->method('buildMail')->willReturnCallback(
+            function (Mail $mail, Recipient $recipient) use ($outcomes): Email {
+                return match ($outcomes[$recipient->getToEmail()] ?? Recipient::STATUS_SENT) {
+                    Recipient::STATUS_ERROR => throw new RfcComplianceException('Invalid address'),
+                    Recipient::STATUS_RETRY => throw new TransportException('Transport error'),
+                    default => new Email(),
+                };
+            }
+        );
+
+        $parameterBag = $this->createMock(ParameterBagInterface::class);
+        $parameterBag->method('get')->willReturnMap([
+            ['lle_hermes.recipient_max_retry', 3],
+            ['lle_hermes.recipient_error_retry', 3],
+        ]);
+
+        return new Sender(
+            $this->getMockEntityManager(),
+            $this->getMockEmailErrorRepository(),
+            $this->getMockMailer(),
+            $mailBuilder,
+            $parameterBag,
+            $this->createMock(RecipientRepository::class),
+            $this->createMock(UnsubscribeEmailRepository::class),
+            $this->getMockErrorLogger(),
+        );
     }
 
     protected function getMockMailer(): MailerInterface
