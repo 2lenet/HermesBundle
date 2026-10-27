@@ -15,6 +15,8 @@ use Lle\HermesBundle\Service\UnsubscribeManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\HtmlToTextConverter\HtmlToTextConverterInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
@@ -242,5 +244,91 @@ class MailBuilderTest extends TestCase
         $replyTo = $email->getReplyTo()[0];
 
         $this->assertEquals('no-reply@2le.net', $replyTo->getAddress());
+    }
+
+    public function testTextIsGeneratedFromRenderedHtml(): void
+    {
+        $converter = $this->createMock(HtmlToTextConverterInterface::class);
+        $converter->expects(self::once())
+            ->method('convert')
+            ->with('<p>Bonjour Somia, <a href="https://2le.net">voir</a></p>', 'utf-8')
+            ->willReturn('Bonjour Somia, [voir](https://2le.net)');
+
+        $email = $this->buildMailWithContent(
+            'Old text',
+            '<p>Bonjour {{ name }}, <a href="https://2le.net">voir</a></p>',
+            $converter,
+        );
+
+        $this->assertEquals('Bonjour Somia, [voir](https://2le.net)', $email->getTextBody());
+    }
+
+    public function testTextIsKeptWithoutHtml(): void
+    {
+        $converter = $this->createMock(HtmlToTextConverterInterface::class);
+        $converter->expects(self::never())->method('convert');
+
+        $email = $this->buildMailWithContent('Hello {{ name }}', '', $converter);
+
+        $this->assertEquals('Hello Somia', $email->getTextBody());
+    }
+
+    public function testDefaultConverterGeneratesText(): void
+    {
+        $email = $this->buildMailWithContent(
+            '',
+            '<html><head><style>p {}</style></head><body><p>Bonjour {{ name }}</p></body></html>',
+        );
+
+        $this->assertStringContainsString('Bonjour Somia', (string)$email->getTextBody());
+        $this->assertStringNotContainsString('<p>', (string)$email->getTextBody());
+        $this->assertStringNotContainsString('p {}', (string)$email->getTextBody());
+    }
+
+    private function buildMailWithContent(
+        string $text,
+        string $html,
+        ?HtmlToTextConverterInterface $converter = null,
+    ): Email {
+        $template = new Template();
+        $template
+            ->setLibelle('mail')
+            ->setSubject('mail')
+            ->setCode('MAIL')
+            ->setSenderEmail('mail@2le.net');
+
+        $recipient = new Recipient();
+        $recipient
+            ->setId(1)
+            ->setToEmail('recipient@2le.net')
+            ->setStatus(Recipient::STATUS_SENDING);
+
+        $mail = new Mail();
+        $mail
+            ->setId(1)
+            ->setTemplate($template)
+            ->setSubject('')
+            ->setText($text)
+            ->setHtml($html)
+            ->setData(['name' => 'Somia'])
+            ->setStatus(Mail::STATUS_SENDING);
+        $recipient->setMail($mail);
+
+        $bag = $this->createMock(ParameterBagInterface::class);
+        $bag->method('get')->willReturn('parameter@2le.net');
+
+        $builder = new MailBuilder(
+            $this->createMock(EntityManagerInterface::class),
+            $bag,
+            $this->createMock(RouterInterface::class),
+            new Environment($this->createMock(LoaderInterface::class)),
+            $this->createMock(EntityFileLoader::class),
+            $this->createMock(ConsentManager::class),
+            $this->createMock(ConsentTokenManager::class),
+            $this->createMock(UnsubscribeManager::class),
+            $converter,
+        );
+
+        return $builder->buildMail($mail, $recipient);
     }
 }
