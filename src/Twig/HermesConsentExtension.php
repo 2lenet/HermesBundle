@@ -23,6 +23,6 @@ class HermesConsentExtension extends AbstractExtension
 
     public function hasConsent(string $email): bool
     {
-        return $this->consentManager->hasConsent($email, Consent::TYPE_PIXEL);
+        return $this->consentManager->hasConsent($email, Consent::TYPE_TRACKING);
     }
 }

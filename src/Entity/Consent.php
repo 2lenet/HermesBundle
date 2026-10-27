@@ -10,7 +10,7 @@ use Lle\HermesBundle\Repository\ConsentRepository;
 #[ORM\Table(name: 'lle_hermes_consent')]
 class Consent
 {
-    public const string TYPE_PIXEL = 'PIXEL';
+    public const string TYPE_TRACKING = 'TRACKING';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,8 +20,8 @@ class Consent
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(type: 'string', length: 255, options: ['default' => self::TYPE_PIXEL])]
-    private ?string $type = self::TYPE_PIXEL;
+    #[ORM\Column(type: 'string', length: 255, options: ['default' => self::TYPE_TRACKING])]
+    private ?string $type = self::TYPE_TRACKING;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?DateTime $datetime = null;
