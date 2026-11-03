@@ -98,4 +98,57 @@ class HtmlToTextConverterTest extends TestCase
         self::assertSame($first, $converter->convert($html, 'utf-8'));
         self::assertStringContainsString('[Jean](https://helyon.fr/a)', $first);
     }
+
+    public function testUnusualHtmlFallsBackWithoutException(): void
+    {
+        $converter = new HtmlToTextConverter();
+
+        self::assertSame('', $converter->convert('<!-- x -->', 'utf-8'));
+        self::assertSame('', $converter->convert('<', 'utf-8'));
+    }
+
+    public function testXmlDeclarationIsRemoved(): void
+    {
+        $text = (new HtmlToTextConverter())->convert(
+            '<?xml version="1.0" encoding="UTF-8"?><html><body><p>Bonjour</p></body></html>',
+            'utf-8'
+        );
+
+        self::assertSame('Bonjour', $text);
+    }
+
+    public function testHeadingsAndQuotesHaveNoMarkdownSyntax(): void
+    {
+        $text = (new HtmlToTextConverter())->convert(
+            '<h1>Titre</h1><h2>Sous-titre</h2><h3>Section</h3><p>Texte</p>'
+            . '<blockquote><p>Citation</p></blockquote>',
+            'utf-8'
+        );
+
+        self::assertSame("Titre\n\nSous-titre\n\nSection\n\nTexte\n\nCitation", $text);
+    }
+
+    public function testLinkShowingItsUrlIsRenderedAsTheUrl(): void
+    {
+        $text = (new HtmlToTextConverter())->convert(
+            '<p>Site : <a href="https://helyon.fr">https://helyon.fr</a></p>'
+            . '<p>Contact : <a href="mailto:contact@helyon.fr">contact@helyon.fr</a></p>',
+            'utf-8'
+        );
+
+        self::assertSame("Site : https://helyon.fr\n\nContact : contact@helyon.fr", $text);
+    }
+
+    public function testCodePreAndHorizontalRuleHaveNoMarkdownSyntax(): void
+    {
+        $text = (new HtmlToTextConverter())->convert(
+            '<p>Votre code : <code>ABC-123</code></p>'
+            . '<hr>'
+            . "<pre>Ligne 1\nLigne 2</pre>"
+            . '<p>Fin</p>',
+            'utf-8'
+        );
+
+        self::assertSame("Votre code : ABC-123\n\nLigne 1\nLigne 2\n\nFin", $text);
+    }
 }

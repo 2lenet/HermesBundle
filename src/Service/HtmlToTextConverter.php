@@ -4,8 +4,12 @@ namespace Lle\HermesBundle\Service;
 
 use League\HTMLToMarkdown\HtmlConverter;
 use Lle\HermesBundle\Service\HtmlToText\BlockConverter;
+use Lle\HermesBundle\Service\HtmlToText\HorizontalRuleConverter;
+use Lle\HermesBundle\Service\HtmlToText\InlineConverter;
 use Lle\HermesBundle\Service\HtmlToText\LinkConverter;
 use Lle\HermesBundle\Service\HtmlToText\PlainTextConverter;
+use Lle\HermesBundle\Service\HtmlToText\PreformattedConverter;
+use Symfony\Component\Mime\HtmlToTextConverter\DefaultHtmlToTextConverter;
 use Symfony\Component\Mime\HtmlToTextConverter\HtmlToTextConverterInterface;
 
 /**
@@ -19,7 +23,16 @@ class HtmlToTextConverter implements HtmlToTextConverterInterface
 
     public function convert(string $html, string $charset): string
     {
-        $text = $this->getConverter()->convert($html);
+        // An XML declaration would be kept as text
+        $html = (string)preg_replace('/^\s*<\?xml[^>]*\?>/i', '', $html);
+
+        try {
+            $text = $this->getConverter()->convert($html);
+        } catch (\InvalidArgumentException | \RuntimeException) {
+            // Unusual HTML (only a comment...): the text version must not prevent the mail from being sent
+            return trim((new DefaultHtmlToTextConverter())->convert($html, $charset));
+        }
+
         // Spaces left at line start/end by the whitespace between blocks
         $text = (string)preg_replace('/^[ \t]+|[ \t]+$/m', '', $text);
         // Blank lines left by removed elements and nested blocks
@@ -47,6 +60,9 @@ class HtmlToTextConverter implements HtmlToTextConverterInterface
             $environment->addConverter(new PlainTextConverter());
             $environment->addConverter(new BlockConverter());
             $environment->addConverter(new LinkConverter());
+            $environment->addConverter(new InlineConverter());
+            $environment->addConverter(new PreformattedConverter());
+            $environment->addConverter(new HorizontalRuleConverter());
         }
 
         return $this->converter;

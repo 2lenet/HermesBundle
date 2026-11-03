@@ -25,6 +25,15 @@ Here is the link to reset your password : {{ url }}
 Each variables defined in the templates must be set in `MailDto::$data` or in `ContactDto::$data` unless that an exception will be thrown.
 To add data to your mail, see: [Usage](usage.md "Add data to the mail").
 
+## Text version
+
+The text version of the mail is generated automatically from the rendered HTML:
+links are kept as `[text](url)`, images are removed and the layout tables are rendered as paragraphs.
+
+The `text` field has been removed from the template and mail forms.
+A text set on the template or the mail is now ignored as soon as the mail has an HTML content;
+it is only used for mails without HTML.
+
 ## Base64 images
 
 If the template contains images base64 encoded, they will be stored on the server and replaced by a classic image in the mail content.

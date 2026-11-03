@@ -24,8 +24,15 @@ class LinkConverter implements ConverterInterface, ConfigurationAwareInterface
 
     public function convert(ElementInterface $element): string
     {
-        if (trim($element->getValue()) === '') {
+        $text = trim($element->getValue());
+        if ($text === '') {
             return '';
+        }
+
+        // A link showing its URL is rendered as the URL, instead of <url>
+        $href = $element->getAttribute('href');
+        if ($href === $text || $href === 'mailto:' . $text) {
+            return $text;
         }
 
         return $this->linkConverter->convert($element);

@@ -19,6 +19,9 @@ class BlockConverter implements ConverterInterface
      */
     public function getSupportedTags(): array
     {
-        return ['p', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th'];
+        return [
+            'p', 'blockquote', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'table', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th',
+        ];
     }
 }
