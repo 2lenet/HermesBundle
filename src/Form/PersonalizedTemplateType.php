@@ -81,10 +81,6 @@ class PersonalizedTemplateType extends AbstractType
                 break;
         }
 
-        $this->addTranslatable($builder, 'text', TextareaType::class, [
-            'attr' => ['rows' => 20],
-        ]);
-
         $builder->add('groupOptions', GroupType::class, [
             'label' => 'field.group.template_options',
             'inherit_data' => true,

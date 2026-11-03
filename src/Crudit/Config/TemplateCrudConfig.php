@@ -43,7 +43,6 @@ class TemplateCrudConfig extends AbstractCrudConfig
         $subject = Field::new('subject');
         $senderName = Field::new('senderName');
         $senderEmail = Field::new('senderEmail');
-        $text = Field::new('text');
         $code = Field::new('code');
         $html = Field::new('html')
             ->setTemplate('@LleHermes/crud/_template_html.html.twig')
@@ -71,7 +70,6 @@ class TemplateCrudConfig extends AbstractCrudConfig
             $subject,
             $senderName,
             $senderEmail,
-            $text,
             $code,
             $html,
             $unsubscriptions,

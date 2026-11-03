@@ -43,14 +43,6 @@ class MailType extends AbstractType
                 ]);
                 break;
         }
-
-        $builder->add('text', TextareaType::class, [
-            "label" => "field.text",
-            "translation_domain" => "LleHermesBundle",
-            'attr' => [
-                'rows' => 20,
-            ],
-        ]);
     }
 
 

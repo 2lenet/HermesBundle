@@ -14,12 +14,15 @@ use Lle\HermesBundle\Exception\NoRecipientException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\HtmlToTextConverter\HtmlToTextConverterInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
 class MailBuilder
 {
+    protected readonly HtmlToTextConverterInterface $htmlToTextConverter;
+
     public function __construct(
         protected readonly EntityManagerInterface $em,
         protected readonly ParameterBagInterface $parameters,
@@ -29,7 +32,9 @@ class MailBuilder
         protected readonly ConsentManager $consentManager,
         protected readonly ConsentTokenManager $consentTokenManager,
         protected readonly UnsubscribeManager $unsubscribeManager,
+        ?HtmlToTextConverterInterface $htmlToTextConverter = null,
     ) {
+        $this->htmlToTextConverter = $htmlToTextConverter ?? new HtmlToTextConverter();
     }
 
     /**
@@ -99,6 +104,12 @@ class MailBuilder
 
         $html = $templater->getHtml();
 
+        // The text version is generated from the rendered HTML, before the stats links are added.
+        // The typed text is only kept for mails without HTML.
+        $text = trim($html) !== ''
+            ? $this->htmlToTextConverter->convert($html, 'utf-8')
+            : $templater->getText();
+
         if ($mail->getTemplate()?->hasStatistics()) {
             if ($hasConsent) {
                 $html = $this->generateReceiptConfirmationLink($html, $recipient);
@@ -107,7 +118,7 @@ class MailBuilder
             $html = $this->generateStatsLinks($html, $mail, $recipient);
         }
 
-        $email->text($templater->getText());
+        $email->text($text);
 
         $email->html($html);
 
