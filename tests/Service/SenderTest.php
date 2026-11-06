@@ -12,6 +12,7 @@ use Lle\HermesBundle\Repository\UnsubscribeEmailRepository;
 use Lle\HermesBundle\Service\ErrorLogger;
 use Lle\HermesBundle\Service\MailBuilder;
 use Lle\HermesBundle\Service\Sender;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
@@ -21,7 +22,9 @@ use Symfony\Component\Mime\Exception\RfcComplianceException;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
+use Twig\Error\SyntaxError;
 use Twig\Loader\LoaderInterface;
+use Twig\Sandbox\SecurityNotAllowedFilterError;
 
 /**
  * Class SenderTest
@@ -191,6 +194,55 @@ class SenderTest extends TestCase
         self::assertSame(Recipient::STATUS_ERROR, $recipient->getStatus());
         self::assertSame(0, $recipient->getRetryCount());
         self::assertNull($mail->getSendAtDate());
+    }
+
+    /**
+     * @return array<string, array{\Throwable, string}>
+     */
+    public static function templateErrorProvider(): array
+    {
+        return [
+            'forbidden construct' => [
+                new SecurityNotAllowedFilterError('Filter "map" is not allowed.', 'map'),
+                'Template error: Filter "map" is not allowed.',
+            ],
+            'syntax error' => [
+                new SyntaxError('Unexpected end of template.'),
+                'Template error: Unexpected end of template.',
+            ],
+        ];
+    }
+
+    #[DataProvider('templateErrorProvider')]
+    public function testTemplateErrorFailsTheRecipientOnlyWithoutRetry(\Throwable $error, string $message): void
+    {
+        $mailBuilder = $this->createMock(MailBuilder::class);
+        $mailBuilder->method('buildMail')->willThrowException($error);
+        $sender = new Sender(
+            $this->getMockEntityManager(),
+            $this->getMockEmailErrorRepository(),
+            $this->getMockMailer(),
+            $mailBuilder,
+            $this->getMockParameterBag(),
+            $this->createMock(RecipientRepository::class),
+            $this->createMock(UnsubscribeEmailRepository::class),
+            new ErrorLogger($this->getMockEntityManager()),
+        );
+        $mail = new Mail();
+        $mail->setStatus(Mail::STATUS_SENDING);
+        $recipient = new Recipient();
+        $recipient->setMail($mail);
+        $recipient->setToEmail('guest@example.com');
+        $recipient->setStatus(Recipient::STATUS_SENDING);
+        $send = (new \ReflectionClass(Sender::class))->getMethod('send');
+
+        $sent = $send->invoke($sender, $mail, $recipient);
+
+        self::assertFalse($sent);
+        self::assertSame(Recipient::STATUS_ERROR, $recipient->getStatus());
+        self::assertSame($message, $recipient->getErrorMessage());
+        self::assertSame(0, $recipient->getRetryCount());
+        self::assertSame(Mail::STATUS_SENDING, $mail->getStatus());
     }
 
     /**

@@ -7,9 +7,19 @@ use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Repository\TemplateRepository;
 use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
 use Lle\HermesBundle\Repository\TranslatableTemplateRepository;
+use Lle\HermesBundle\Service\MailBuilder;
 use Lle\HermesBundle\Translatable\TranslatableTemplate;
+use Lle\HermesBundle\Twig\HermesConsentExtension;
+use Lle\HermesBundle\Twig\HermesExtension;
+use Lle\HermesBundle\Twig\MailSecurityPolicyFactory;
+use Lle\HermesBundle\Twig\MailTwigEnvironment;
+use Lle\HermesBundle\Validator\TwigSyntaxValidator;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
+use Twig\Sandbox\SecurityPolicy;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -22,6 +32,27 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
  */
 class LleHermesExtension extends Extension implements PrependExtensionInterface
 {
+    public const MAIL_TWIG_SERVICE = 'lle_hermes.mail_twig';
+
+    /**
+     * Extensions of the application kept in the mail environment when they exist: routing for
+     * `url()`/`path()`, translation for `trans`, Intl for `format_currency` and friends.
+     */
+    public const OPTIONAL_MAIL_TWIG_EXTENSIONS = [
+        'twig.extension.routing',
+        'twig.extension.trans',
+        'twig.extension.intl',
+    ];
+
+    /**
+     * Services rendering or compiling mail templates, all given the mail environment.
+     */
+    public const MAIL_TWIG_CONSUMERS = [
+        MailBuilder::class,
+        HermesExtension::class,
+        TwigSyntaxValidator::class,
+    ];
+
     public function load(array $configs, ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -56,6 +87,8 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('lle_hermes.template_class', $templateClass);
         $container->setAlias(TemplateRepositoryInterface::class, $repoClass)->setPublic(false);
 
+        $this->registerMailTwigEnvironment($container, $processedConfig['mail_twig']);
+
         // Load the templates for the Hermes form types
         if ($container->hasParameter('twig.form.resources')) {
             /** @var array $parameter */
@@ -68,6 +101,45 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
                     $parameter
                 )
             );
+        }
+    }
+
+    /**
+     * @param array{
+     *     extensions: string[],
+     *     sandbox: array{
+     *         enabled: bool,
+     *         allowed_tags: string[],
+     *         allowed_filters: string[],
+     *         allowed_functions: string[],
+     *     },
+     * } $config
+     */
+    private function registerMailTwigEnvironment(ContainerBuilder $container, array $config): void
+    {
+        $extensions = [new Reference(HermesConsentExtension::class)];
+        foreach (self::OPTIONAL_MAIL_TWIG_EXTENSIONS as $serviceId) {
+            $extensions[] = new Reference($serviceId, ContainerInterface::IGNORE_ON_INVALID_REFERENCE);
+        }
+        foreach ($config['extensions'] as $serviceId) {
+            $extensions[] = new Reference($serviceId);
+        }
+
+        $securityPolicy = null;
+        $sandbox = $config['sandbox'];
+        if ($sandbox['enabled']) {
+            $securityPolicy = (new Definition(SecurityPolicy::class))
+                ->setFactory([MailSecurityPolicyFactory::class, 'create'])
+                ->setArguments([$sandbox['allowed_tags'], $sandbox['allowed_filters'], $sandbox['allowed_functions']]);
+        }
+
+        $container->register(MailTwigEnvironment::class, MailTwigEnvironment::class)
+            ->setArguments([$extensions, $securityPolicy]);
+        $container->setAlias(self::MAIL_TWIG_SERVICE, MailTwigEnvironment::class)->setPublic(true);
+
+        $mailTwig = new Reference(MailTwigEnvironment::class);
+        foreach (self::MAIL_TWIG_CONSUMERS as $serviceId) {
+            $container->getDefinition($serviceId)->setArgument('$twig', $mailTwig);
         }
     }
 

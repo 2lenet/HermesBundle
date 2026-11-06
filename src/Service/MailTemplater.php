@@ -41,23 +41,29 @@ class MailTemplater
         return $this->render((string)$this->mail->getTemplate()?->getSenderName());
     }
 
+    /**
+     * An unknown variable renders as an empty string. When the given environment is strict (an
+     * application environment rather than `MailTwigEnvironment`), strictness is lifted for the
+     * rendering only and restored afterwards, even if the rendering fails.
+     */
     private function render(string $string, bool $decodeHtml = true): string
     {
-        $this->twig->disableStrictVariables();
-
-        $result = $this->twig
-            ->createTemplate($string)
-            ->render($this->data);
-
-        if ($decodeHtml) {
-            $result = html_entity_decode($result);
+        $wasStrict = $this->twig->isStrictVariables();
+        if ($wasStrict) {
+            $this->twig->disableStrictVariables();
         }
 
-        if ($this->twig->isDebug()) {
-            $this->twig->enableStrictVariables();
+        try {
+            $result = $this->twig
+                ->createTemplate($string)
+                ->render($this->data);
+        } finally {
+            if ($wasStrict) {
+                $this->twig->enableStrictVariables();
+            }
         }
 
-        return $result;
+        return $decodeHtml ? html_entity_decode($result) : $result;
     }
 
     public function getData(): array
