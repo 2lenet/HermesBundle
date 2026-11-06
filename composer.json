@@ -34,7 +34,7 @@
         "symfony/orm-pack": "*",
         "symfony/twig-bundle": "^7.0 || ^8.0",
         "symfony/yaml": "^7.0 || ^8.0",
-        "twig/twig": "^3.4",
+        "twig/twig": "^3.28",
         "stof/doctrine-extensions-bundle": "^1.13"
     },
     "require-dev": {

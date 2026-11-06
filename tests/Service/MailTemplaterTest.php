@@ -8,6 +8,7 @@ use Lle\HermesBundle\Service\MailTemplater;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
 
 /**
@@ -52,6 +53,32 @@ class MailTemplaterTest extends TestCase
     public function testGetSenderName(): void
     {
         self::assertEquals('sender', $this->mailTemplater->getSenderName());
+    }
+
+    public function testRestoresStrictVariablesOfASharedEnvironment(): void
+    {
+        $twig = new Environment(new ArrayLoader(), ['strict_variables' => true, 'debug' => false]);
+        $mail = $this->createMail();
+        $mail->setSubject('[{{ unknown }}]');
+        $router = $this->createMock(RouterInterface::class);
+        $templater = new MailTemplater($mail, $twig, $router);
+
+        $subject = $templater->getSubject();
+
+        self::assertSame('[]', $subject);
+        self::assertTrue($twig->isStrictVariables());
+    }
+
+    public function testLeavesNonStrictEnvironmentNonStrict(): void
+    {
+        $twig = new Environment(new ArrayLoader(), ['strict_variables' => false, 'debug' => true]);
+        $mail = $this->createMail();
+        $router = $this->createMock(RouterInterface::class);
+        $templater = new MailTemplater($mail, $twig, $router);
+
+        $templater->getSubject();
+
+        self::assertFalse($twig->isStrictVariables());
     }
 
     protected function createMail(): Mail

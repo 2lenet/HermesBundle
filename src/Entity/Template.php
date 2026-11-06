@@ -34,10 +34,12 @@ class Template implements TemplateInterface
     #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     #[HermesAssert\RequiredField]
     #[Assert\Length(max: 1024)]
+    #[HermesAssert\TwigSyntax]
     protected ?string $subject = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
+    #[HermesAssert\TwigSyntax]
     protected ?string $senderName = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

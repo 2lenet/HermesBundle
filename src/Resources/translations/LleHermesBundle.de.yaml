@@ -230,5 +230,6 @@ modal:
 validator:
     twig_syntax:
         error: Die Vorlage hat Syntaxfehler
+        forbidden: "Die Vorlage verwendet eine nicht erlaubte Anweisung: {{ error }}"
     required_field:
         error: Dieses Feld ist erforderlich.
