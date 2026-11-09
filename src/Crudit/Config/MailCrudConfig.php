@@ -280,6 +280,11 @@ class MailCrudConfig extends AbstractCrudConfig
         return $actions;
     }
 
+    public function getCssClassColumnsForm(): string
+    {
+        return 'col-12';
+    }
+
     public function getDefaultSort(): array
     {
         return [['id', 'DESC']];
