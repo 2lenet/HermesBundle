@@ -119,6 +119,12 @@ lle_hermes:
             allowed_tags: []
 ```
 
+Extensions declaring runtime callables (`new TwigFilter('foo', [FooRuntime::class, 'foo'])`) work as in the
+application: the application runtime loader is kept.
+
+To check the templates and the mails not sent yet against the current configuration (after adding or tightening an
+allow-list, before deploying), run `bin/console lle:hermes:check-templates`.
+
 The `allowed_*` lists are added to the bundle defaults, which are always kept. Only allow functions that cannot reveal
 more than the template data: a function reading the database, the configuration or the environment is readable by
 anyone who can edit a template.

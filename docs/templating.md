@@ -48,7 +48,8 @@ the router: they are only available when the application provides them.
 
 A template using anything else is refused when it is saved (validation error naming the construct) and, if it reaches
 the sending anyway, the recipient is put in `error` with the reason (see [Configuration](configuration.md "Retry on
-send failure")). To allow more, see [Configuration](configuration.md "Mail templates Twig environment").
+send failure")). The back office screens (dashboard, mail page) show `Template error: <reason>` in place of the
+subject or body. `bin/console lle:hermes:check-templates` lists every refused template. To allow more, see [Configuration](configuration.md "Mail templates Twig environment").
 
 ## Text version
 

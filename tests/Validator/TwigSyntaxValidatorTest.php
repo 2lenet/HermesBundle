@@ -22,6 +22,8 @@ class TwigSyntaxValidatorTest extends TestCase
         {{ booking.arrival|date('d/m/Y') }} {{ booking.reference }}
         TWIG;
 
+    public static int $trackedCalls = 0;
+
     public function testAcceptsATemplateWithAllowedConstructs(): void
     {
         $violations = $this->validate(self::TEMPLATE_USING_DATA);
@@ -74,15 +76,28 @@ class TwigSyntaxValidatorTest extends TestCase
         self::assertCount(0, $violations);
     }
 
+    public function testDoesNotRunTheTemplate(): void
+    {
+        self::$trackedCalls = 0;
+
+        $violations = $this->validate('{{ track() }}');
+
+        self::assertCount(0, $violations);
+        self::assertSame(0, self::$trackedCalls);
+    }
+
     private function validate(string $template): ConstraintViolationListInterface
     {
         $dataHungryFunction = new class extends AbstractExtension {
             public function getFunctions(): array
             {
-                return [new TwigFunction('needs_data', static fn (array $data): int => count($data))];
+                return [
+                    new TwigFunction('needs_data', static fn (array $data): int => count($data)),
+                    new TwigFunction('track', static fn (): int => ++TwigSyntaxValidatorTest::$trackedCalls),
+                ];
             }
         };
-        $policy = MailSecurityPolicyFactory::create([], [], ['needs_data']);
+        $policy = MailSecurityPolicyFactory::create([], [], ['needs_data', 'track']);
         $twigSyntaxValidator = new TwigSyntaxValidator(new MailTwigEnvironment([$dataHungryFunction], $policy));
         $validator = Validation::createValidatorBuilder()
             ->setConstraintValidatorFactory(new ConstraintValidatorFactory([

@@ -83,6 +83,18 @@ class MailTwigConfigurationTest extends TestCase
         self::assertNull($container->getDefinition(MailTwigEnvironment::class)->getArgument(1));
     }
 
+    public function testMailTwigEnvironmentGetsTheApplicationRuntimeLoader(): void
+    {
+        $container = $this->load([]);
+
+        $runtimeLoader = $container->getDefinition(MailTwigEnvironment::class)->getArgument(2);
+
+        self::assertEquals(
+            new Reference(LleHermesExtension::TWIG_RUNTIME_LOADER, ContainerInterface::IGNORE_ON_INVALID_REFERENCE),
+            $runtimeLoader,
+        );
+    }
+
     public function testMailServicesUseTheMailTwigEnvironment(): void
     {
         $container = $this->load([]);

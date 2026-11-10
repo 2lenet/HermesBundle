@@ -5,6 +5,7 @@ namespace App\Tests\Service;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Service\MailTemplater;
+use Lle\HermesBundle\Twig\MailTwigEnvironment;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -79,6 +80,50 @@ class MailTemplaterTest extends TestCase
         $templater->getSubject();
 
         self::assertFalse($twig->isStrictVariables());
+    }
+
+    public function testDeprecatesAnEnvironmentOtherThanTheMailOne(): void
+    {
+        $twig = new Environment(new ArrayLoader());
+        $mail = $this->createMail();
+        $router = $this->createMock(RouterInterface::class);
+
+        $deprecations = $this->collectDeprecations(static fn () => new MailTemplater($mail, $twig, $router));
+
+        self::assertCount(1, $deprecations);
+        self::assertStringContainsString(MailTwigEnvironment::class, $deprecations[0]);
+    }
+
+    public function testDoesNotDeprecateTheMailEnvironment(): void
+    {
+        $twig = new MailTwigEnvironment();
+        $mail = $this->createMail();
+        $router = $this->createMock(RouterInterface::class);
+
+        $deprecations = $this->collectDeprecations(static fn () => new MailTemplater($mail, $twig, $router));
+
+        self::assertSame([], $deprecations);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function collectDeprecations(callable $callable): array
+    {
+        $deprecations = [];
+        set_error_handler(static function (int $level, string $message) use (&$deprecations): bool {
+            $deprecations[] = $message;
+
+            return true;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $callable();
+        } finally {
+            restore_error_handler();
+        }
+
+        return $deprecations;
     }
 
     protected function createMail(): Mail

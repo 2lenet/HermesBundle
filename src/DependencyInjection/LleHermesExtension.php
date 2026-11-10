@@ -18,11 +18,11 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
-use Twig\Sandbox\SecurityPolicy;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
+use Twig\Sandbox\SecurityPolicy;
 
 /**
  * Class LleHermesExtension
@@ -43,6 +43,12 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
         'twig.extension.trans',
         'twig.extension.intl',
     ];
+
+    /**
+     * Runtime loader of the application, kept so that project extensions declaring runtime
+     * callables (`[FooRuntime::class, 'method']`) work in the mail environment.
+     */
+    public const TWIG_RUNTIME_LOADER = 'twig.runtime_loader';
 
     /**
      * Services rendering or compiling mail templates, all given the mail environment.
@@ -134,7 +140,11 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
         }
 
         $container->register(MailTwigEnvironment::class, MailTwigEnvironment::class)
-            ->setArguments([$extensions, $securityPolicy]);
+            ->setArguments([
+                $extensions,
+                $securityPolicy,
+                new Reference(self::TWIG_RUNTIME_LOADER, ContainerInterface::IGNORE_ON_INVALID_REFERENCE),
+            ]);
         $container->setAlias(self::MAIL_TWIG_SERVICE, MailTwigEnvironment::class)->setPublic(true);
 
         $mailTwig = new Reference(MailTwigEnvironment::class);
