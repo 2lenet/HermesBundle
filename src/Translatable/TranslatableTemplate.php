@@ -41,11 +41,13 @@ class TranslatableTemplate implements TemplateInterface
     #[Translatable]
     #[HermesAssert\RequiredField]
     #[Assert\Length(max: 1024)]
+    #[HermesAssert\TwigSyntax]
     protected ?string $subject = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     #[Translatable]
     #[Assert\Length(max: 255)]
+    #[HermesAssert\TwigSyntax]
     protected ?string $senderName = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

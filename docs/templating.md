@@ -22,8 +22,34 @@ Hello {{ user.fullName }},
 Here is the link to reset your password : {{ url }}
 ```
 
-Each variables defined in the templates must be set in `MailDto::$data` or in `ContactDto::$data` unless that an exception will be thrown.
+The variables come from `MailDto::$data` and `ContactDto::$data`. A variable that is not set renders as an empty
+string: no exception is thrown.
 To add data to your mail, see: [Usage](usage.md "Add data to the mail").
+
+## Allowed Twig (sandbox)
+
+Templates are written from the back office, so they are not compiled with the application Twig environment: they
+are rendered by a dedicated environment (`lle_hermes.mail_twig`, class `MailTwigEnvironment`) which has no global
+(`app` does not exist), cannot read template files (`include`, `source`) and only knows a short list of extensions.
+On top of that, every template is **sandboxed**: only the following constructs are allowed.
+
+| Kind | Allowed by default |
+| --- | --- |
+| Tags | `if` (with `elseif` / `else`), `for`, `set` |
+| Filters | `abs`, `capitalize`, `date`, `default`, `e`, `escape`, `first`, `format`, `join`, `keys`, `last`, `length`, `lower`, `merge`, `nl2br`, `number_format`, `raw`, `replace`, `reverse`, `round`, `slice`, `split`, `striptags`, `title`, `trim`, `upper`, `url_encode`, `format_currency`, `format_date`, `format_datetime`, `format_number`, `format_time`, `trans` |
+| Functions | `date`, `max`, `min`, `range`, `path`, `url`, `hermes_has_consent` |
+| Tests | `defined`, `empty`, `null`/`none`, `even`, `odd`, `same as`, `divisible by`, `iterable`, `true`… (all but `constant`) |
+
+Mail data are stored as JSON, so every key you pass is readable (`{{ booking.reference }}`). Calling a method or
+reading a property of an **object** is refused.
+
+`format_*` filters need `twig/intl-extra` (with `twig/extra-bundle`), `trans` needs the translator, `path`/`url` need
+the router: they are only available when the application provides them.
+
+A template using anything else is refused when it is saved (validation error naming the construct) and, if it reaches
+the sending anyway, the recipient is put in `error` with the reason (see [Configuration](configuration.md "Retry on
+send failure")). The back office screens (dashboard, mail page) show `Template error: <reason>` in place of the
+subject or body. `bin/console lle:hermes:check-templates` lists every refused template. To allow more, see [Configuration](configuration.md "Mail templates Twig environment").
 
 ## Text version
 

@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Service;
 
 use Lle\HermesBundle\Entity\Mail;
+use Lle\HermesBundle\Twig\MailTwigEnvironment;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
@@ -12,6 +13,9 @@ use Twig\Environment;
  */
 class MailTemplater
 {
+    public const PACKAGE = '2lenet/hermes-bundle';
+    public const DEPRECATED_SINCE = '1.15';
+
     protected array $data = [];
 
     public function __construct(
@@ -19,6 +23,17 @@ class MailTemplater
         protected Environment $twig,
         protected RouterInterface $router,
     ) {
+        if (!$twig instanceof MailTwigEnvironment) {
+            trigger_deprecation(
+                self::PACKAGE,
+                self::DEPRECATED_SINCE,
+                'Passing a Twig environment other than "%s" to "%s" is deprecated: the template is not sandboxed. '
+                . 'Use the "%s" service. The constructor will require it in 2.0.',
+                MailTwigEnvironment::class,
+                self::class,
+                MailTwigEnvironment::class,
+            );
+        }
     }
 
     public function getSubject(): string
@@ -41,23 +56,29 @@ class MailTemplater
         return $this->render((string)$this->mail->getTemplate()?->getSenderName());
     }
 
-    private function render(string $string, bool $decodeHtml = true): string
+    /**
+     * An unknown variable renders as an empty string. When the given environment is strict (an
+     * application environment rather than `MailTwigEnvironment`), strictness is lifted for the
+     * rendering only and restored afterwards, even if the rendering fails.
+     */
+    protected function render(string $string, bool $decodeHtml = true): string
     {
-        $this->twig->disableStrictVariables();
-
-        $result = $this->twig
-            ->createTemplate($string)
-            ->render($this->data);
-
-        if ($decodeHtml) {
-            $result = html_entity_decode($result);
+        $wasStrict = $this->twig->isStrictVariables();
+        if ($wasStrict) {
+            $this->twig->disableStrictVariables();
         }
 
-        if ($this->twig->isDebug()) {
-            $this->twig->enableStrictVariables();
+        try {
+            $result = $this->twig
+                ->createTemplate($string)
+                ->render($this->data);
+        } finally {
+            if ($wasStrict) {
+                $this->twig->enableStrictVariables();
+            }
         }
 
-        return $result;
+        return $decodeHtml ? html_entity_decode($result) : $result;
     }
 
     public function getData(): array

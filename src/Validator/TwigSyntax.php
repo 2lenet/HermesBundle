@@ -10,6 +10,9 @@ class TwigSyntax extends Constraint
 {
     public string $message = 'validator.twig_syntax.error';
 
+    /** Construct refused by the mail sandbox; `{{ error }}` names it. */
+    public string $forbiddenMessage = 'validator.twig_syntax.forbidden';
+
     #[HasNamedArguments]
     public function __construct(
         ?array $groups = null,
