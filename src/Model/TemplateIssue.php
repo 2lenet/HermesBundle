@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Lle\HermesBundle\Model;
 
 /**
- * A mail template field that cannot be rendered by the mail Twig environment.
+ * A mail template field that cannot be rendered by the mail Twig environment. Mails sharing the same
+ * refused content are reported once: `$id` is the first of them, `$occurrences` their number.
  */
 class TemplateIssue
 {
@@ -14,6 +15,7 @@ class TemplateIssue
         protected ?int $id,
         protected string $field,
         protected string $error,
+        protected int $occurrences = 1,
     ) {
     }
 
@@ -35,5 +37,15 @@ class TemplateIssue
     public function getError(): string
     {
         return $this->error;
+    }
+
+    public function getOccurrences(): int
+    {
+        return $this->occurrences;
+    }
+
+    public function addOccurrence(): void
+    {
+        $this->occurrences++;
     }
 }

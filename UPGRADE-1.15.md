@@ -18,7 +18,8 @@ template when it was saved.
 **before** updating Hermes on a project, and complete the allow-list in the same deployment if needed.
 
 Run this read-only query on each production database and look for tags, filters and functions that are not in the
-default list ([Mail templating](docs/templating.md#allowed-twig-sandbox)), and for any `app.`, `include`, `source`:
+default list ([Mail templating](docs/templating.md#allowed-twig-sandbox)), and for any `app.`, `include`, `source`.
+The query is written for MySQL / MariaDB:
 
 ```sql
 SELECT 'template' AS source, t.code AS ref, t.tenant_id,
@@ -50,7 +51,13 @@ bin/console lle:hermes:check-templates
 
 It checks templates, template translations and mails that may still be sent (`draft`, `sending`, `error`,
 `partially_sent`) without rendering them, prints the refused fields with the reason and exits with a failure code if
-any. Fix them, or allow the construct, until it succeeds.
+any. Mails sharing the same content (most of them reuse the content of their template) are reported once, with their
+number of occurrences; mails are read by batches, so the command can run on a large `lle_hermes_mail` table. Fix them,
+or allow the construct, until it succeeds.
+
+Like the template validator, the command does not render templates: it reports syntax errors and constructs refused by
+the sandbox, not what only fails at rendering — an unknown route given to `url()`, a method or property read on an
+object. Mail data are stored as JSON, so objects only concern code calling `MailTemplater` directly.
 
 ## Behaviour changes
 

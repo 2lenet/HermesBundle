@@ -7,7 +7,6 @@ namespace Lle\HermesBundle\Tests\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
-use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Model\TemplateIssue;
 use Lle\HermesBundle\Repository\MailRepository;
@@ -30,7 +29,7 @@ class MailTemplateAuditorTest extends TestCase
     public function testReportsNothingWhenEveryTemplateIsAllowed(): void
     {
         $template = $this->createTemplate(1, self::VALID);
-        $mail = $this->createMail(10, self::VALID);
+        $mail = $this->createMailRow(10, self::VALID);
         $auditor = $this->createAuditor([$template], [$mail]);
 
         $issues = $auditor->audit();
@@ -42,7 +41,7 @@ class MailTemplateAuditorTest extends TestCase
     {
         $template = $this->createTemplate(1, self::VALID);
         $template->setHtml(self::FORBIDDEN_FILTER);
-        $mail = $this->createMail(10, self::FORBIDDEN_FUNCTION);
+        $mail = $this->createMailRow(10, self::FORBIDDEN_FUNCTION);
         $auditor = $this->createAuditor([$template], [$mail]);
 
         $issues = $auditor->audit();
@@ -69,8 +68,8 @@ class MailTemplateAuditorTest extends TestCase
     {
         $mailRepository = $this->createMock(MailRepository::class);
         $mailRepository->expects(self::once())
-            ->method('findBy')
-            ->with(['status' => MailTemplateAuditor::MAIL_STATUSES_TO_CHECK])
+            ->method('findContentsByStatus')
+            ->with(MailTemplateAuditor::MAIL_STATUSES_TO_CHECK, 0, MailTemplateAuditor::MAIL_BATCH_SIZE)
             ->willReturn([]);
         $auditor = new MailTemplateAuditor(
             $this->createTwig(),
@@ -83,6 +82,57 @@ class MailTemplateAuditorTest extends TestCase
         $issues = $auditor->audit();
 
         self::assertSame([], $issues);
+    }
+
+    public function testReadsMailsByBatchesUntilTheLastOne(): void
+    {
+        $firstBatch = [];
+        for ($id = 1; $id <= MailTemplateAuditor::MAIL_BATCH_SIZE; $id++) {
+            $firstBatch[] = $this->createMailRow($id, self::VALID);
+        }
+        $lastBatch = [$this->createMailRow(MailTemplateAuditor::MAIL_BATCH_SIZE + 1, self::FORBIDDEN_FUNCTION)];
+        $mailRepository = $this->createMock(MailRepository::class);
+        $mailRepository->expects(self::exactly(2))
+            ->method('findContentsByStatus')
+            ->willReturnCallback(
+                static fn (array $statuses, int $afterId): array => $afterId === 0 ? $firstBatch : $lastBatch,
+            );
+        $auditor = new MailTemplateAuditor(
+            $this->createTwig(),
+            $this->createTemplateRepository([]),
+            $mailRepository,
+            $this->createMock(EntityManagerInterface::class),
+            false,
+        );
+
+        $issues = $auditor->audit();
+
+        self::assertEquals([
+            new TemplateIssue(
+                MailTemplateAuditor::SOURCE_MAIL,
+                MailTemplateAuditor::MAIL_BATCH_SIZE + 1,
+                'subject',
+                self::FORBIDDEN_FUNCTION_ERROR,
+            ),
+        ], $issues);
+    }
+
+    public function testGroupsMailsSharingTheSameRefusedContent(): void
+    {
+        $mails = [
+            $this->createMailRow(10, self::FORBIDDEN_FUNCTION),
+            $this->createMailRow(11, self::FORBIDDEN_FUNCTION),
+            $this->createMailRow(12, self::FORBIDDEN_FILTER),
+            $this->createMailRow(13, self::FORBIDDEN_FUNCTION),
+        ];
+        $auditor = $this->createAuditor([], $mails);
+
+        $issues = $auditor->audit();
+
+        self::assertEquals([
+            new TemplateIssue(MailTemplateAuditor::SOURCE_MAIL, 10, 'subject', self::FORBIDDEN_FUNCTION_ERROR, 3),
+            new TemplateIssue(MailTemplateAuditor::SOURCE_MAIL, 12, 'subject', self::FORBIDDEN_FILTER_ERROR),
+        ], $issues);
     }
 
     public function testChecksTemplateTranslationsWhenMailsAreTranslatable(): void
@@ -115,8 +165,8 @@ class MailTemplateAuditorTest extends TestCase
     }
 
     /**
-     * @param Template[] $templates
-     * @param Mail[]     $mails
+     * @param Template[]                                   $templates
+     * @param array<int, array<string, int|string|null>> $mails
      */
     private function createAuditor(array $templates, array $mails): MailTemplateAuditor
     {
@@ -146,14 +196,23 @@ class MailTemplateAuditorTest extends TestCase
     }
 
     /**
-     * @param Mail[] $mails
+     * @param array<int, array<string, int|string|null>> $mails
      */
     private function createMailRepository(array $mails): MailRepository
     {
         $mailRepository = $this->createMock(MailRepository::class);
-        $mailRepository->method('findBy')->willReturn($mails);
+        $mailRepository->method('findContentsByStatus')
+            ->willReturnCallback(static fn (array $statuses, int $afterId): array => $afterId === 0 ? $mails : []);
 
         return $mailRepository;
+    }
+
+    /**
+     * @return array{id: int, subject: string, text: null, html: null}
+     */
+    private function createMailRow(int $id, string $subject): array
+    {
+        return ['id' => $id, 'subject' => $subject, 'text' => null, 'html' => null];
     }
 
     private function createTemplate(int $id, string $subject): Template
@@ -163,14 +222,5 @@ class MailTemplateAuditorTest extends TestCase
         $template->setSubject($subject);
 
         return $template;
-    }
-
-    private function createMail(int $id, string $subject): Mail
-    {
-        $mail = new Mail();
-        $mail->setId($id);
-        $mail->setSubject($subject);
-
-        return $mail;
     }
 }

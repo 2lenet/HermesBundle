@@ -36,8 +36,25 @@ class MailTemplateAuditor
         Mail::STATUS_PARTIALLY_SENT,
     ];
 
+    /** Mails read at once: the table may hold a lot of mails in error. */
+    public const MAIL_BATCH_SIZE = 200;
+
+    /** Twig fields of a mail, as returned by `MailRepository::findContentsByStatus()`. */
+    public const MAIL_FIELDS = ['subject', 'text', 'html'];
+
+    public const MAIL_ID = 'id';
+    public const CONTENT_HASH_ALGORITHM = 'xxh128';
+
     public const LINE_FORMAT = '%s (line %d)';
     public const TRANSLATION_FIELD_FORMAT = '%s (%s)';
+
+    /**
+     * Error of each content already checked, by hash: most mails reuse the content of their template,
+     * which is then compiled once.
+     *
+     * @var array<string, ?string>
+     */
+    protected array $checkedContents = [];
 
     public function __construct(
         protected MailTwigEnvironment $twig,
@@ -54,6 +71,7 @@ class MailTemplateAuditor
      */
     public function audit(): array
     {
+        $this->checkedContents = [];
         $issues = [];
 
         /** @var TemplateInterface $template */
@@ -83,16 +101,47 @@ class MailTemplateAuditor
             }
         }
 
-        foreach ($this->mailRepository->findBy(['status' => self::MAIL_STATUSES_TO_CHECK]) as $mail) {
-            $fields = [
-                'subject' => $mail->getSubject(),
-                'text' => $mail->getText(),
-                'html' => $mail->getHtml(),
-            ];
-            $issues = [...$issues, ...$this->checkFields(self::SOURCE_MAIL, $mail->getId(), $fields)];
-        }
+        return [...$issues, ...$this->auditMails()];
+    }
 
-        return $issues;
+    /**
+     * Mails sharing the same refused content are reported once, with their number of occurrences.
+     *
+     * @return TemplateIssue[]
+     */
+    protected function auditMails(): array
+    {
+        /** @var array<string, TemplateIssue> $issues */
+        $issues = [];
+        $afterId = 0;
+
+        do {
+            $mails = $this->mailRepository->findContentsByStatus(
+                self::MAIL_STATUSES_TO_CHECK,
+                $afterId,
+                self::MAIL_BATCH_SIZE,
+            );
+
+            foreach ($mails as $mail) {
+                foreach (self::MAIL_FIELDS as $field) {
+                    $content = $mail[$field];
+                    $error = $this->check($content);
+                    if ($error === null) {
+                        continue;
+                    }
+
+                    $key = $field . $this->hash((string) $content);
+                    if (isset($issues[$key])) {
+                        $issues[$key]->addOccurrence();
+                    } else {
+                        $issues[$key] = new TemplateIssue(self::SOURCE_MAIL, $mail[self::MAIL_ID], $field, $error);
+                    }
+                }
+                $afterId = $mail[self::MAIL_ID];
+            }
+        } while (count($mails) === self::MAIL_BATCH_SIZE);
+
+        return array_values($issues);
     }
 
     /**
@@ -104,18 +153,40 @@ class MailTemplateAuditor
     {
         $issues = [];
         foreach ($fields as $field => $value) {
-            if ($value === null || $value === '') {
-                continue;
-            }
-
-            try {
-                $this->twig->checkTemplate($value);
-            } catch (TwigError $exception) {
-                $issues[] = new TemplateIssue($source, $id, $field, $this->describe($exception));
+            $error = $this->check($value);
+            if ($error !== null) {
+                $issues[] = new TemplateIssue($source, $id, $field, $error);
             }
         }
 
         return $issues;
+    }
+
+    /**
+     * @return ?string the reason why the mail Twig environment refuses the content, null if it accepts it
+     */
+    protected function check(?string $content): ?string
+    {
+        if ($content === null || $content === '') {
+            return null;
+        }
+
+        $hash = $this->hash($content);
+        if (!array_key_exists($hash, $this->checkedContents)) {
+            try {
+                $this->twig->checkTemplate($content);
+                $this->checkedContents[$hash] = null;
+            } catch (TwigError $exception) {
+                $this->checkedContents[$hash] = $this->describe($exception);
+            }
+        }
+
+        return $this->checkedContents[$hash];
+    }
+
+    protected function hash(string $content): string
+    {
+        return hash(self::CONTENT_HASH_ALGORITHM, $content);
     }
 
     protected function describe(TwigError $exception): string

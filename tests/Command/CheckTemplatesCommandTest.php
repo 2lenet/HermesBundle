@@ -40,6 +40,18 @@ class CheckTemplatesCommandTest extends TestCase
         self::assertStringContainsString(self::ERROR, $display);
     }
 
+    public function testShowsHowManyMailsShareARefusedContent(): void
+    {
+        $issue = new TemplateIssue(MailTemplateAuditor::SOURCE_MAIL, 40, 'html', self::ERROR, 500);
+        $commandTester = $this->createCommandTester([$issue]);
+
+        $commandTester->execute([]);
+
+        $display = $commandTester->getDisplay();
+        self::assertStringContainsString(CheckTemplatesCommand::OCCURRENCES_HEADER, $display);
+        self::assertStringContainsString('500', $display);
+    }
+
     /**
      * @param TemplateIssue[] $issues
      */

@@ -20,10 +20,13 @@ class CheckTemplatesCommand extends Command
 {
     public const NAME = 'lle:hermes:check-templates';
     public const DESCRIPTION = 'Check the mail templates and the mails not sent yet against the mail Twig sandbox';
-    public const SUCCESS_MESSAGE = 'Every mail template is allowed.';
+    public const SUCCESS_MESSAGE = 'No template uses a forbidden construct or an invalid syntax.';
+    public const LIMITS_NOTE = 'Errors that only happen at rendering (unknown route, method or property of an '
+        . 'object…) are not checked: they are reported on the recipient when sending.';
     public const FAILURE_MESSAGE = '%d template field(s) refused: fix them or allow the construct in '
         . '"lle_hermes.mail_twig.sandbox".';
-    public const HEADERS = ['Source', 'Id', 'Field', 'Error'];
+    public const OCCURRENCES_HEADER = 'Occurrences';
+    public const HEADERS = ['Source', 'Id', 'Field', 'Error', self::OCCURRENCES_HEADER];
 
     public function __construct(protected MailTemplateAuditor $mailTemplateAuditor)
     {
@@ -37,13 +40,20 @@ class CheckTemplatesCommand extends Command
 
         if ($issues === []) {
             $io->success(self::SUCCESS_MESSAGE);
+            $io->note(self::LIMITS_NOTE);
 
             return Command::SUCCESS;
         }
 
         $rows = [];
         foreach ($issues as $issue) {
-            $rows[] = [$issue->getSource(), $issue->getId(), $issue->getField(), $issue->getError()];
+            $rows[] = [
+                $issue->getSource(),
+                $issue->getId(),
+                $issue->getField(),
+                $issue->getError(),
+                $issue->getOccurrences(),
+            ];
         }
         $io->table(self::HEADERS, $rows);
         $io->error(sprintf(self::FAILURE_MESSAGE, count($issues)));
