@@ -57,7 +57,7 @@ class ConsentController extends AbstractController
             return $this->render('@LleHermes/consent/error.html.twig');
         }
 
-        $this->consentManager->setConsent($email, Consent::TYPE_TRACKING, $boolValue);
+        $this->consentManager->setConsent($email, Consent::TYPE_PIXEL, $boolValue);
 
         return $this->render('@LleHermes/consent/confirm.html.twig', ['value' => $boolValue]);
     }

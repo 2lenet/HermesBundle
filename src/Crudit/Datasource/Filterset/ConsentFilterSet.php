@@ -18,7 +18,7 @@ class ConsentFilterSet extends AbstractFilterSet
         return [
             StringFilterType::new('email'),
             ChoiceFilterType::new('type', [
-                'consent.type.pixel' => Consent::TYPE_TRACKING,
+                'consent.type.pixel' => Consent::TYPE_PIXEL,
             ]),
             BooleanFilterType::new('value'),
             PeriodeFilterType::new('datetime'),
