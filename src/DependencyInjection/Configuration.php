@@ -47,8 +47,18 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('bounce_password')
                 ->isRequired()
             ->end()
-            ->scalarNode('menu_icons')
+            ->booleanNode('menu_icons')
                 ->defaultTrue()
+                // Used to be a scalar node, so a quoted `'false'` was accepted (and read as true). Such strings are
+                // now read as the boolean they spell; anything else (an env placeholder, a real boolean) is untouched.
+                ->beforeNormalization()
+                    ->ifString()
+                    ->then(static function (string $value): bool|string {
+                        $parsed = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+                        return $parsed ?? $value;
+                    })
+                ->end()
             ->end()
             ->enumNode('menu_icon_style')
                 ->values([HermesMenuProvider::ICON_STYLE_IMAGE, HermesMenuProvider::ICON_STYLE_FONTAWESOME])

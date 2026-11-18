@@ -43,7 +43,7 @@ class HermesMenuProvider implements MenuProviderInterface
      * shows one Font Awesome icon per sub-entry (see rootIcon() for the main one). `menu_icons: false` removes the
      * icons whatever the style.
      */
-    protected function icon(mixed $hasIcons, string $fontAwesomeIcon): ?Icon
+    protected function icon(bool $hasIcons, string $fontAwesomeIcon): ?Icon
     {
         if (!$hasIcons) {
             return null;
@@ -59,7 +59,7 @@ class HermesMenuProvider implements MenuProviderInterface
     /**
      * Icon of the main (dropdown) entry: the Hermes logo, as an image, in both styles.
      */
-    protected function rootIcon(mixed $hasIcons): ?Icon
+    protected function rootIcon(bool $hasIcons): ?Icon
     {
         if (!$hasIcons) {
             return null;
@@ -77,7 +77,7 @@ class HermesMenuProvider implements MenuProviderInterface
 
     public function getMenuEntry(): iterable
     {
-        $hasIcons = $this->parameters->get('lle_hermes.menu_icons');
+        $hasIcons = (bool) $this->parameters->get('lle_hermes.menu_icons');
 
         /** @var LinkElement $menu */
         $menu = LinkElement::new(
