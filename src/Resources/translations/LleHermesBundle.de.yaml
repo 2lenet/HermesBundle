@@ -45,6 +45,7 @@ crud:
             hermes_mail: E-Mail %entity% bearbeiten
             hermes_personalized_template: Vorlage %entity% bearbeiten
         new:
+            hermes_mail: Mail erstellen
             hermes_typetemplate: Neuer Vorlagentyp
             hermes_template: Vorlage erstellen
             hermes_personalized_template: Vorlage erstellen
@@ -100,6 +101,7 @@ field:
     sendingRate: Senderate
     mailStatistics: E-Mail-Statistiken
     html: HTML
+    mjml: MJML
     text: Text
     subject: Betreff
     toEmail: An E-Mail
@@ -238,6 +240,7 @@ modal:
         send: Senden
     confirm:
         action:
+            delete: Sind Sie sicher, dass Sie dieses Element löschen möchten?
             cancel: Sind Sie sicher, dass Sie den Versand dieser E-Mail abbrechen möchten ?
             resend: Sind Sie sicher, dass Sie die fehlerhaften Empfänger erneut in die Versandwarteschlange einreihen möchten ?
             batch:

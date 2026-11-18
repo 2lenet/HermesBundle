@@ -41,17 +41,25 @@ class TemplateType extends AbstractType
             ]);
 
         $this->addTranslatable($builder, 'libelle', TextType::class, [
+            'label' => 'field.libelle',
+            'translation_domain' => 'LleHermesBundle',
             'attr' => ['class' => 'col-md-6'],
         ], required: true);
 
         $builder->add('code', TextType::class, [
+            'label' => 'field.code',
+            'translation_domain' => 'LleHermesBundle',
             'attr' => ['class' => 'col-md-6'],
         ]);
 
         $this->addTranslatable($builder, 'senderName', TextType::class, [
+            'label' => 'field.sendername',
+            'translation_domain' => 'LleHermesBundle',
             'attr' => ['class' => 'col-md-6'],
         ]);
         $this->addTranslatable($builder, 'senderEmail', EmailType::class, [
+            'label' => 'field.senderemail',
+            'translation_domain' => 'LleHermesBundle',
             'attr' => ['class' => 'col-md-6'],
         ], required: true);
 
@@ -61,23 +69,31 @@ class TemplateType extends AbstractType
         ]);
 
         $this->addTranslatable($builder, 'subject', TextType::class, [
+            'label' => 'field.subject',
+            'translation_domain' => 'LleHermesBundle',
             'attr' => ['class' => 'col-md-12'],
         ], required: true);
 
         switch ($templateType) {
             case Template::TYPE_CKEDITOR:
                 $this->addTranslatable($builder, 'html', CKEditorType::class, [
+                    'label' => 'field.html',
+                    'translation_domain' => 'LleHermesBundle',
                     'attr' => ['rows' => 20, 'class' => 'col-md-12'],
                 ]);
                 break;
             case Template::TYPE_MJML:
                 $this->addTranslatable($builder, 'mjml', MjmlType::class, [
+                    'label' => 'field.mjml',
+                    'translation_domain' => 'LleHermesBundle',
                     'attr' => ['class' => 'col-md-12'],
                 ]);
                 break;
             case Template::TYPE_HTML:
             default:
                 $this->addTranslatable($builder, 'html', TextareaType::class, [
+                    'label' => 'field.html',
+                    'translation_domain' => 'LleHermesBundle',
                     'attr' => ['rows' => 20, 'class' => 'col-md-12'],
                 ]);
                 break;

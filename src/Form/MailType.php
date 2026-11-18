@@ -32,11 +32,16 @@ class MailType extends AbstractType
                 ]);
                 break;
             case Template::TYPE_MJML:
-                $builder->add('mjml', MjmlType::class);
+                $builder->add('mjml', MjmlType::class, [
+                    'label' => 'field.mjml',
+                    'translation_domain' => 'LleHermesBundle',
+                ]);
                 break;
             case Template::TYPE_HTML:
             default:
                 $builder->add('html', TextareaType::class, [
+                    'label' => 'field.html',
+                    'translation_domain' => 'LleHermesBundle',
                     'attr' => [
                         'rows' => 20,
                     ],

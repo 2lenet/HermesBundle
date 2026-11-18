@@ -45,6 +45,7 @@ crud:
             hermes_mail: Édition mail %entity%
             hermes_personalized_template: Édition modèle  %entity%
         new:
+            hermes_mail: Création mail
             hermes_typetemplate: Création type de template
             hermes_template: Création modèle
             hermes_personalized_template: Création modèle
@@ -101,6 +102,7 @@ field:
     sendingRate: Taux d'envoi
     mailStatistics: Statistiques du mail
     html: HTML
+    mjml: MJML
     text: Texte
     subject: Sujet
     toEmail: À email
@@ -238,6 +240,7 @@ modal:
         send: Envoyer
     confirm:
         action:
+            delete: Êtes-vous sûr de vouloir supprimer cet élément ?
             cancel: Êtes-vous sûr de vouloir annnuler l'envoi de ce mail ?
             resend: Êtes-vous sûr de vouloir renvoyer les destinataires en erreur dans la pile d'envoi ?
             batch:
