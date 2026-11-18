@@ -62,21 +62,25 @@ class PersonalizedTemplateType extends AbstractType
             'inherit_data' => true,
         ]);
 
-        $this->addTranslatable($builder, 'subject', TextType::class, required: true);
+        $this->addTranslatable($builder, 'subject', TextType::class, [
+            'attr' => ['class' => 'col-md-12'],
+        ], required: true);
 
         switch ($templateType) {
             case Template::TYPE_CKEDITOR:
                 $this->addTranslatable($builder, 'html', CKEditorType::class, [
-                    'attr' => ['rows' => 20],
+                    'attr' => ['rows' => 20, 'class' => 'col-md-12'],
                 ]);
                 break;
             case Template::TYPE_MJML:
-                $this->addTranslatable($builder, 'mjml', MjmlType::class);
+                $this->addTranslatable($builder, 'mjml', MjmlType::class, [
+                    'attr' => ['class' => 'col-md-12'],
+                ]);
                 break;
             case Template::TYPE_HTML:
             default:
                 $this->addTranslatable($builder, 'html', TextareaType::class, [
-                    'attr' => ['rows' => 20],
+                    'attr' => ['rows' => 20, 'class' => 'col-md-12'],
                 ]);
                 break;
         }
