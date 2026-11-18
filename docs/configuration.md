@@ -34,6 +34,17 @@ lle_hermes:
     menu_icons: false
 ```
 
+Icons are images by default (the Hermes logo on every entry). To get a Font Awesome icon on each sub-entry and the
+Hermes logo on the main one, set the style:
+
+```yaml
+# config/packages/lle_hermes.yaml
+lle_hermes:
+    menu_icon_style: fontawesome   # 'image' (default) or 'fontawesome'
+```
+
+`menu_icon_style` has no effect when `menu_icons` is `false`.
+
 ## File storage
 
 ### Images converted from base64
@@ -145,6 +156,7 @@ All keys live under the `lle_hermes` root in `config/packages/lle_hermes.yaml`:
 | `attachment_path` | string | no | `/data/hermes/attachments/` | Filesystem path where attachments are stored. |
 | `upload_path` | string | no | `/upload/images/` | Path where images decoded from base64 are written. |
 | `menu_icons` | bool | no | `true` | Show icons in the Crudit menu entries. |
+| `menu_icon_style` | `image`\|`fontawesome` | no | `image` | Icon shown when `menu_icons` is on: the Hermes logo on every entry (default, unchanged), or the Hermes logo (PNG) on the main entry and one Font Awesome icon per sub-entry. |
 | `recipient_error_retry` | int | no | `3` | Max `EmailError.nbError` value before a recipient is skipped by templates with `sendToErrors=false`. |
 | `tenant_class` | string\|null | no | `null` | FQCN of the tenant entity when multi-tenant is enabled. |
 | `attachment_nb_days_before_deletion` | int | no | `365` | Retention of mail attachments before cleanup. |

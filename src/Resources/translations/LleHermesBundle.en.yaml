@@ -18,12 +18,15 @@ crudit:
 crud:
     title:
         list:
+            hermes_consent: Consents
+            hermes_link: Links
+            hermes_error: Errors
+            hermes_email_error: Error emails
             hermes_typetemplate: Template types
             hermes_template: Templates
             hermes_mail: Mails
             hermes_recipient: Recipients
             hermes_personalized_template: Personalized templates
-            hermes_emailerror: Error emails
             hermes_unsubscribe_email: Unsubscribed
         show:
             hermes_typetemplate: Template type %entity%
@@ -35,6 +38,7 @@ crud:
             hermes_error: Error %entity%
             hermes_unsubscribe_email: Unsubscribed %entity%
             hermes_personalized_template: Template %entity%
+            hermes_consent: Consent %entity%
         edit:
             hermes_typetemplate: Edit template type %entity%
             hermes_template: Edit template %entity%
@@ -66,6 +70,8 @@ tab:
 export:
     csv: Csv
     excel: Excel
+    xls: Excel
+    pdf: PDF
 
 field:
     label: Label
@@ -109,7 +115,7 @@ field:
     url: URL
     nbopenings: Opening number
     nbuniqueopenings: Unique opening number
-    nbopeningsLinks: Link opening number
+    nbopeningsLinks: Number of link openings
     linkOpeningRate: Link opening rate
     firstLinkOpening: First opening date
     lastLinkOpening: Last opening date
@@ -128,6 +134,17 @@ field:
     datetime: Date
     data: Data
     errormessage: Error message
+    alltypes: All types
+    'mail:sendingdate': Sending date
+    totalopened: Opening rate
+    sendingrate: Sending rate
+    mailstatistics: Mail statistics
+    totallinkopening: Number of links opened
+    nbopeningslinks: Number of link openings
+    linkopeningrate: Link opening rate
+    firstlinkopening: First opening date
+    lastlinkopening: Last opening date
+    sendatdate: Scheduled at
 
 title:
     dashboard: Dashboard
@@ -195,6 +212,7 @@ text:
     percentMailSent: '%nb%% sent'
     percentMailUnsubscribed: '%nb%% unsubscribed'
     percentMailError: '%nb%% errors'
+    deleted: Deleted
     template:
         type_html: HTML
         type_ckeditor: CKEditor

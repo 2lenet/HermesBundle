@@ -60,6 +60,7 @@ class ConsentCrudConfig extends AbstractCrudConfig
     public function getItemActions(): array
     {
         $actions = parent::getItemActions();
+        unset($actions[CrudConfigInterface::ACTION_SHOW]);
         unset($actions[CrudConfigInterface::ACTION_EDIT]);
 
         return $actions;
