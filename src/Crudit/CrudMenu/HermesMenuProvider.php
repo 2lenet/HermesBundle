@@ -40,25 +40,39 @@ class HermesMenuProvider implements MenuProviderInterface
 
     /**
      * The "image" style (default, kept for existing projects) shows the Hermes logo on every entry; "fontawesome"
-     * shows the Hermes logo on the main entry and one Font Awesome icon per sub-entry. `menu_icons: false` removes the icons whatever the style.
+     * shows one Font Awesome icon per sub-entry (see rootIcon() for the main one). `menu_icons: false` removes the
+     * icons whatever the style.
      */
-    protected function icon(mixed $hasIcons, ?string $fontAwesomeIcon): ?Icon
+    protected function icon(mixed $hasIcons, string $fontAwesomeIcon): ?Icon
     {
         if (!$hasIcons) {
             return null;
         }
 
-        if (
-            $this->parameters->has('lle_hermes.menu_icon_style')
-            && self::ICON_STYLE_FONTAWESOME === $this->parameters->get('lle_hermes.menu_icon_style')
-        ) {
-            // The entry without a Font Awesome icon is the main one: it carries the Hermes logo.
-            return null === $fontAwesomeIcon
-                ? Icon::new(self::LOGO_ICON, Icon::TYPE_IMG)
-                : Icon::new($fontAwesomeIcon);
+        if ($this->isFontAwesomeStyle()) {
+            return Icon::new($fontAwesomeIcon);
         }
 
         return Icon::new(self::IMAGE_ICON, Icon::TYPE_IMG);
+    }
+
+    /**
+     * Icon of the main (dropdown) entry: the Hermes logo, as an image, in both styles.
+     */
+    protected function rootIcon(mixed $hasIcons): ?Icon
+    {
+        if (!$hasIcons) {
+            return null;
+        }
+
+        return Icon::new($this->isFontAwesomeStyle() ? self::LOGO_ICON : self::IMAGE_ICON, Icon::TYPE_IMG);
+    }
+
+    private function isFontAwesomeStyle(): bool
+    {
+        // The extension always defines the parameter; the check only protects a container built without it.
+        return $this->parameters->has('lle_hermes.menu_icon_style')
+            && self::ICON_STYLE_FONTAWESOME === $this->parameters->get('lle_hermes.menu_icon_style');
     }
 
     public function getMenuEntry(): iterable
@@ -69,7 +83,7 @@ class HermesMenuProvider implements MenuProviderInterface
         $menu = LinkElement::new(
             'menu.lle_hermes',
             Path::new('lle_hermes_dashboard'),
-            $this->icon($hasIcons, null),
+            $this->rootIcon($hasIcons),
         )->setRole('ROLE_HERMES_DASHBOARD');
 
         $menu->addChild(

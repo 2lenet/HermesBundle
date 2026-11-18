@@ -21,7 +21,6 @@ crud:
             hermes_consent: Consentements
             hermes_link: Liens
             hermes_error: Erreurs
-            hermes_emailerror: Emails en erreur
             hermes_typetemplate: Types de template
             hermes_template: Templates
             hermes_mail: Mails
@@ -36,10 +35,10 @@ crud:
             hermes_mail: Mail %entity%
             hermes_recipient: Destinataire %entity%
             hermes_link: Lien %entity%
-            hermes_emailerror: Email en erreur %entity%
             hermes_error: Erreur %entity%
             hermes_unsubscribe_email: Désinscrit %entity%
             hermes_personalized_template: Template %entity%
+            hermes_consent: Consentement %entity%
         edit:
             hermes_typetemplate: Édition type de template %entity%
             hermes_template: Édition modèle %entity%
@@ -117,7 +116,7 @@ field:
     url: URL
     nbopenings: Nombre d'ouvertures
     nbuniqueopenings: Nb. d'ouvertures uniques
-    nbopeningsLinks: Nombre d'ouverture de liens
+    nbopeningsLinks: Nombre d'ouvertures de liens
     linkOpeningRate: Taux d'ouverture de liens
     firstLinkOpening: Date de première ouverture
     lastLinkOpening: Date de dernière ouverture
@@ -142,7 +141,7 @@ field:
     sendingrate: Taux d'envoi
     mailstatistics: Statistiques du mail
     totallinkopening: Nombre de liens ouverts
-    nbopeningslinks: Nombre d'ouverture de liens
+    nbopeningslinks: Nombre d'ouvertures de liens
     linkopeningrate: Taux d'ouverture de liens
     firstlinkopening: Date de première ouverture
     lastlinkopening: Date de dernière ouverture

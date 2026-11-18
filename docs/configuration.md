@@ -32,8 +32,18 @@ By default, the bundle automatically add icons in the menu, you can remove them 
 # config/packages/lle_hermes.yaml
 lle_hermes:
     menu_icons: false
-    menu_icon_style: fontawesome   # 'image' (default, Hermes logo) or 'fontawesome'
 ```
+
+Icons are images by default (the Hermes logo on every entry). To get a Font Awesome icon on each sub-entry and the
+Hermes logo on the main one, set the style:
+
+```yaml
+# config/packages/lle_hermes.yaml
+lle_hermes:
+    menu_icon_style: fontawesome   # 'image' (default) or 'fontawesome'
+```
+
+`menu_icon_style` has no effect when `menu_icons` is `false`.
 
 ## File storage
 

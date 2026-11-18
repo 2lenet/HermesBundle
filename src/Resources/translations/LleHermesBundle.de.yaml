@@ -27,10 +27,8 @@ crud:
             hermes_mail: E-Mails
             hermes_recipient: Empfänger
             hermes_personalized_template: Personalisierte Vorlagen
-            hermes_emailerror: Fehlerhafte E-Mails
             hermes_unsubscribe_email: Abgemeldet
         show:
-            hermes_emailerror: Fehlerhafte E-Mail %entity%
             hermes_typetemplate: Vorlagentyp %entity%
             hermes_template: Vorlage %entity%
             hermes_mail: E-Mail %entity%
@@ -40,6 +38,7 @@ crud:
             hermes_error: Fehler %entity%
             hermes_unsubscribe_email: Abgemeldet %entity%
             hermes_personalized_template: Vorlage %entity%
+            hermes_consent: Einwilligung %entity%
         edit:
             hermes_typetemplate: Vorlagentyp %entity% bearbeiten
             hermes_template: Vorlage %entity% bearbeiten

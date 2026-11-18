@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\DependencyInjection;
 
+use Lle\HermesBundle\Crudit\CrudMenu\HermesMenuProvider;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -50,8 +51,8 @@ class Configuration implements ConfigurationInterface
                 ->defaultTrue()
             ->end()
             ->enumNode('menu_icon_style')
-                ->values(['image', 'fontawesome'])
-                ->defaultValue('image')
+                ->values([HermesMenuProvider::ICON_STYLE_IMAGE, HermesMenuProvider::ICON_STYLE_FONTAWESOME])
+                ->defaultValue(HermesMenuProvider::ICON_STYLE_IMAGE)
             ->end()
             ->scalarNode('recipient_error_retry')
                 ->defaultValue(3)
