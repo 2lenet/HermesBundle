@@ -53,6 +53,22 @@ class ConfigurationTest extends TestCase
         self::assertTrue($this->process(['menu_icons' => 'true'])['menu_icons']);
     }
 
+    /**
+     * The scalar node accepted 0 and 1 too.
+     */
+    public function testZeroAndOneAreReadAsBooleans(): void
+    {
+        self::assertFalse($this->process(['menu_icons' => 0])['menu_icons']);
+        self::assertTrue($this->process(['menu_icons' => 1])['menu_icons']);
+    }
+
+    public function testOtherIntegersAreRefused(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        $this->process(['menu_icons' => 2]);
+    }
+
     public function testAnythingElseIsRefused(): void
     {
         $this->expectException(InvalidConfigurationException::class);

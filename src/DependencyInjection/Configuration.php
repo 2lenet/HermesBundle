@@ -49,11 +49,12 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->booleanNode('menu_icons')
                 ->defaultTrue()
-                // Used to be a scalar node, so a quoted `'false'` was accepted (and read as true). Such strings are
-                // now read as the boolean they spell; anything else (an env placeholder, a real boolean) is untouched.
+                // Used to be a scalar node, so a quoted `'false'` or `0`/`1` were accepted (the quoted string was read
+                // as true). Such values are now read as the boolean they spell; anything else (an env placeholder, a
+                // real boolean) is untouched.
                 ->beforeNormalization()
-                    ->ifString()
-                    ->then(static function (string $value): bool|string {
+                    ->ifTrue(static fn (mixed $value): bool => is_string($value) || is_int($value))
+                    ->then(static function (string|int $value): bool|string|int {
                         $parsed = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
                         return $parsed ?? $value;
