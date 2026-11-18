@@ -2,6 +2,7 @@
 
 namespace Lle\HermesBundle\DependencyInjection;
 
+use Lle\HermesBundle\Crudit\CrudMenu\HermesMenuProvider;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -46,8 +47,23 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('bounce_password')
                 ->isRequired()
             ->end()
-            ->scalarNode('menu_icons')
+            ->booleanNode('menu_icons')
                 ->defaultTrue()
+                // Used to be a scalar node, so a quoted `'false'` or `0`/`1` were accepted (the quoted string was read
+                // as true). Such values are now read as the boolean they spell; anything else (an env placeholder, a
+                // real boolean) is untouched.
+                ->beforeNormalization()
+                    ->ifTrue(static fn (mixed $value): bool => is_string($value) || is_int($value))
+                    ->then(static function (string|int $value): bool|string|int {
+                        $parsed = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+                        return $parsed ?? $value;
+                    })
+                ->end()
+            ->end()
+            ->enumNode('menu_icon_style')
+                ->values([HermesMenuProvider::ICON_STYLE_IMAGE, HermesMenuProvider::ICON_STYLE_FONTAWESOME])
+                ->defaultValue(HermesMenuProvider::ICON_STYLE_IMAGE)
             ->end()
             ->scalarNode('recipient_error_retry')
                 ->defaultValue(3)

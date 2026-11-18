@@ -66,7 +66,6 @@ class SenderTest extends TestCase
 
         $reflection = new \ReflectionClass(Sender::class);
         $handleSendFailure = $reflection->getMethod('handleSendFailure');
-        $handleSendFailure->setAccessible(true);
 
         $mail = new Mail();
         $recipient = new Recipient();
