@@ -18,6 +18,10 @@ crudit:
 crud:
     title:
         list:
+            hermes_consent: Consentements
+            hermes_link: Liens
+            hermes_error: Erreurs
+            hermes_emailerror: Emails en erreur
             hermes_typetemplate: Types de template
             hermes_template: Templates
             hermes_mail: Mails
@@ -26,6 +30,7 @@ crud:
             hermes_email_error: Emails en erreur
             hermes_unsubscribe_email: Désinscrits
         show:
+            hermes_email_error: Email en erreur %entity%
             hermes_typetemplate: Type de template %entity%
             hermes_template: Modèle %entity%
             hermes_mail: Mail %entity%
@@ -66,6 +71,8 @@ tab:
 export:
     csv: Csv
     excel: Excel
+    xls: Excel
+    pdf: PDF
 
 field:
     label: Libellé
@@ -129,6 +136,16 @@ field:
     datetime: Date
     data: Données
     errormessage: Message d'erreur
+    alltypes: Tous les types
+    'mail:sendingdate': Date d'envoi
+    totalopened: Taux d'ouverture
+    sendingrate: Taux d'envoi
+    mailstatistics: Statistiques du mail
+    totallinkopening: Nombre de liens ouverts
+    nbopeningslinks: Nombre d'ouverture de liens
+    linkopeningrate: Taux d'ouverture de liens
+    firstlinkopening: Date de première ouverture
+    lastlinkopening: Date de dernière ouverture
 
 title:
     dashboard: Tableau de bord

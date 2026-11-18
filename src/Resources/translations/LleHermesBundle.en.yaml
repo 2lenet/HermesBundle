@@ -18,6 +18,10 @@ crudit:
 crud:
     title:
         list:
+            hermes_consent: Consents
+            hermes_link: Links
+            hermes_error: Errors
+            hermes_email_error: Error emails
             hermes_typetemplate: Template types
             hermes_template: Templates
             hermes_mail: Mails
@@ -26,6 +30,7 @@ crud:
             hermes_emailerror: Error emails
             hermes_unsubscribe_email: Unsubscribed
         show:
+            hermes_emailerror: Error email %entity%
             hermes_typetemplate: Template type %entity%
             hermes_template: Template %entity%
             hermes_mail: Mail %entity%
@@ -66,6 +71,8 @@ tab:
 export:
     csv: Csv
     excel: Excel
+    xls: Excel
+    pdf: PDF
 
 field:
     label: Label
@@ -128,6 +135,17 @@ field:
     datetime: Date
     data: Data
     errormessage: Error message
+    alltypes: All types
+    'mail:sendingdate': Sending date
+    totalopened: Opening rate
+    sendingrate: Sending rate
+    mailstatistics: Mail statistics
+    totallinkopening: Number of links opened
+    nbopeningslinks: Link opening number
+    linkopeningrate: Link opening rate
+    firstlinkopening: First opening date
+    lastlinkopening: Last opening date
+    sendatdate: Scheduled at
 
 title:
     dashboard: Dashboard
@@ -195,6 +213,7 @@ text:
     percentMailSent: '%nb%% sent'
     percentMailUnsubscribed: '%nb%% unsubscribed'
     percentMailError: '%nb%% errors'
+    deleted: Deleted
     template:
         type_html: HTML
         type_ckeditor: CKEditor
