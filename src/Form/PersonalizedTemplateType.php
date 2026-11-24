@@ -39,6 +39,7 @@ class PersonalizedTemplateType extends AbstractType
 
         $builder->add('groupInformations', GroupType::class, [
             'label' => 'field.group.template_informations',
+            'translation_domain' => 'LleHermesBundle',
             'inherit_data' => true,
         ]);
 
@@ -67,6 +68,7 @@ class PersonalizedTemplateType extends AbstractType
 
         $builder->add('groupContent', GroupType::class, [
             'label' => 'field.group.template_content',
+            'translation_domain' => 'LleHermesBundle',
             'inherit_data' => true,
         ]);
 
@@ -103,6 +105,7 @@ class PersonalizedTemplateType extends AbstractType
 
         $builder->add('groupOptions', GroupType::class, [
             'label' => 'field.group.template_options',
+            'translation_domain' => 'LleHermesBundle',
             'inherit_data' => true,
         ])
             ->add('unsubscriptions', CheckboxType::class, [
@@ -118,10 +121,12 @@ class PersonalizedTemplateType extends AbstractType
             ->add('sendToErrors', CheckboxType::class, [
                 'required' => false,
                 'label' => 'field.sendtoerrors',
+                'translation_domain' => 'LleHermesBundle',
             ])
             ->add('customBounceEmail', TextType::class, [
                 'required' => false,
                 'label' => 'field.custombounceemail',
+                'translation_domain' => 'LleHermesBundle',
             ])
             ->add('tenantId', HiddenType::class, [
                 'data' => $this->multiTenantManager->getTenantId(),

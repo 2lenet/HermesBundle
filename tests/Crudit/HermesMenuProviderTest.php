@@ -89,4 +89,19 @@ class HermesMenuProviderTest extends TestCase
             }
         }
     }
+
+    public function testEntriesAreTranslatedInTheBundleDomain(): void
+    {
+        $parameters = new ParameterBag(['lle_hermes.menu_icons' => false, 'lle_hermes.tenant_class' => null]);
+        $root = [...(new HermesMenuProvider($parameters))->getMenuEntry()][0];
+        self::assertInstanceOf(LinkElement::class, $root);
+
+        self::assertSame('LleHermesBundle', $root->getTranslationDomain());
+        self::assertNotEmpty($root->getChildren());
+        foreach ($root->getChildren() as $child) {
+            self::assertInstanceOf(LinkElement::class, $child);
+            self::assertSame('LleHermesBundle', $child->getTranslationDomain());
+            self::assertSame('menu.' . $child->getId(), $child->getLibelle());
+        }
+    }
 }

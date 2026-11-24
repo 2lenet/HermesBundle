@@ -10,7 +10,6 @@ use Lle\CruditBundle\Controller\AbstractCrudController;
 use Lle\CruditBundle\Controller\TraitCrudController;
 use Lle\HermesBundle\Contracts\TemplateInterface;
 use Lle\HermesBundle\Crudit\Config\TemplateCrudConfig;
-use Lle\HermesBundle\Form\TemplateType;
 use Lle\HermesBundle\Contracts\TemplateRepositoryInterface;
 use Lle\HermesBundle\Service\MultiTenantManager;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -36,28 +35,6 @@ class TemplateController extends AbstractCrudController
         $this->config = $config;
     }
 
-    #[Route('/new')]
-    public function new(Request $request): Response
-    {
-        $type = $request->query->getString('type');
-
-        /** @var TemplateInterface $template */
-        $template = new ($this->templateClass)();
-        $template->setType($type);
-
-        $form = $this->createForm(TemplateType::class, $template)->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($template);
-            $this->em->flush();
-
-            return $this->redirectToRoute('lle_hermes_crudit_template_show', ['id' => $template->getId()]);
-        }
-
-        return $this->render('@LleHermes/crud/template/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
     #[Route('/duplicate/{id}', name: 'lle_hermes_template_duplicate', methods: ['GET'])]
     public function duplicate(TemplateInterface $template): Response
     {
@@ -78,7 +55,6 @@ class TemplateController extends AbstractCrudController
 
         return $this->redirectToRoute('lle_hermes_crudit_template_index');
     }
-
 
     #[Route('/copy-for-tenant/{id}', name: 'lle_hermes_crudit_template_copyfortenant', methods: ['GET'])]
     public function copyForTenant(TemplateInterface $template, Request $request): Response

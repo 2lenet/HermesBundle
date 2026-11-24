@@ -52,8 +52,8 @@ Templates without type, and templates whose type does not allow unsubscription, 
   by type.
 - A type used by templates cannot be deleted. Deleting a type also deletes the unsubscriptions from this type.
 
-> Add the `menu.lle_hermes_typetemplate` key to your application's translations for the menu label, like the other
-> Hermes menu entries.
+> The `menu.lle_hermes_typetemplate` menu label is translated by the bundle (`LleHermesBundle` domain). A project can
+> override it in its own `LleHermesBundle` translations.
 
 ## Migration
 

@@ -173,8 +173,16 @@ consent:
         pixel: Pixel
 
 menu:
-    lle_hermes:
-        hermes: Hermes
+    lle_hermes: Hermes
+    lle_hermes_dashboard: Dashboard
+    lle_hermes_template: Templates
+    lle_hermes_typetemplate: Template types
+    lle_hermes_personalized_template: Personalized templates
+    lle_hermes_recipient: Recipients
+    lle_hermes_mail: Mails
+    lle_hermes_emailerror: Mails in error
+    lle_hermes_unsubscribeemail: Unsubscriptions
+    lle_hermes_consent: Consents
 
 pagination:
     first: "First"

@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class HermesMenuProvider implements MenuProviderInterface
 {
+    private const TRANSLATION_DOMAIN = 'LleHermesBundle';
+
     public const ICON_STYLE_IMAGE = 'image';
     public const ICON_STYLE_FONTAWESOME = 'fontawesome';
 
@@ -36,6 +38,15 @@ class HermesMenuProvider implements MenuProviderInterface
     public function __construct(
         protected readonly ParameterBagInterface $parameters,
     ) {
+    }
+
+    /**
+     * The labels are translated by Crudit, in the bundle's own domain: a project overrides them with its own
+     * LleHermesBundle translations.
+     */
+    protected function link(string $key, Path $path, ?Icon $icon = null, ?string $role = null): LinkElement
+    {
+        return LinkElement::new($key, $path, $icon, $role)->setTranslationDomain(self::TRANSLATION_DOMAIN);
     }
 
     /**
@@ -80,14 +91,14 @@ class HermesMenuProvider implements MenuProviderInterface
         $hasIcons = (bool) $this->parameters->get('lle_hermes.menu_icons');
 
         /** @var LinkElement $menu */
-        $menu = LinkElement::new(
+        $menu = $this->link(
             'menu.lle_hermes',
             Path::new('lle_hermes_dashboard'),
             $this->rootIcon($hasIcons),
         )->setRole('ROLE_HERMES_DASHBOARD');
 
         $menu->addChild(
-            LinkElement::new(
+            $this->link(
                 'menu.lle_hermes_dashboard',
                 Path::new('lle_hermes_dashboard'),
                 $this->icon($hasIcons, self::ICON_DASHBOARD),
@@ -95,7 +106,7 @@ class HermesMenuProvider implements MenuProviderInterface
             )
         );
         $menu->addChild(
-            LinkElement::new(
+            $this->link(
                 'menu.lle_hermes_typetemplate',
                 Path::new('lle_hermes_crudit_typetemplate_index'),
                 $this->icon($hasIcons, self::ICON_TYPETEMPLATE),
@@ -103,7 +114,7 @@ class HermesMenuProvider implements MenuProviderInterface
             ),
         );
         $menu->addChild(
-            LinkElement::new(
+            $this->link(
                 'menu.lle_hermes_template',
                 Path::new('lle_hermes_crudit_template_index'),
                 $this->icon($hasIcons, self::ICON_TEMPLATE),
@@ -112,7 +123,7 @@ class HermesMenuProvider implements MenuProviderInterface
         );
         if ($this->parameters->get('lle_hermes.tenant_class')) {
             $menu->addChild(
-                LinkElement::new(
+                $this->link(
                     'menu.lle_hermes_personalized_template',
                     Path::new('lle_hermes_crudit_personalizedtemplate_index'),
                     $this->icon($hasIcons, self::ICON_PERSONALIZED),
@@ -121,7 +132,7 @@ class HermesMenuProvider implements MenuProviderInterface
             );
         }
         $menu->addChild(
-            LinkElement::new(
+            $this->link(
                 'menu.lle_hermes_mail',
                 Path::new('lle_hermes_crudit_mail_index'),
                 $this->icon($hasIcons, self::ICON_MAIL),
@@ -129,7 +140,7 @@ class HermesMenuProvider implements MenuProviderInterface
             )
         );
         $menu->addChild(
-            LinkElement::new(
+            $this->link(
                 'menu.lle_hermes_recipient',
                 Path::new('lle_hermes_crudit_recipient_index'),
                 $this->icon($hasIcons, self::ICON_RECIPIENT),
@@ -137,7 +148,7 @@ class HermesMenuProvider implements MenuProviderInterface
             )
         );
         $menu->addChild(
-            LinkElement::new(
+            $this->link(
                 'menu.lle_hermes_emailerror',
                 Path::new('lle_hermes_crudit_emailerror_index'),
                 $this->icon($hasIcons, self::ICON_EMAILERROR),
@@ -145,7 +156,7 @@ class HermesMenuProvider implements MenuProviderInterface
             )
         );
         $menu->addChild(
-            LinkElement::new(
+            $this->link(
                 'menu.lle_hermes_unsubscribeemail',
                 Path::new('lle_hermes_crudit_unsubscribeemail_index'),
                 $this->icon($hasIcons, self::ICON_UNSUBSCRIBE),
@@ -153,7 +164,7 @@ class HermesMenuProvider implements MenuProviderInterface
             ),
         );
         $menu->addChild(
-            LinkElement::new(
+            $this->link(
                 'menu.lle_hermes_consent',
                 Path::new('lle_hermes_crudit_consent_index'),
                 $this->icon($hasIcons, self::ICON_CONSENT),
