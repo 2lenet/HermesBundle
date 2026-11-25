@@ -116,7 +116,9 @@ class HermesMenuProviderTest extends TestCase
             $parameters['lle_hermes.menu_separator'] = $separator;
         }
 
-        return [...(new HermesMenuProvider(new ParameterBag($parameters)))->getMenuEntry()];
+        $entries = (new HermesMenuProvider(new ParameterBag($parameters)))->getMenuEntry();
+
+        return iterator_to_array($entries, false);
     }
 
     public function testThereIsNoSeparatorByDefault(): void
