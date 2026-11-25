@@ -4,6 +4,7 @@ namespace Lle\HermesBundle\Crudit\CrudMenu;
 
 use Lle\CruditBundle\Contracts\MenuProviderInterface;
 use Lle\CruditBundle\Dto\Icon;
+use Lle\CruditBundle\Dto\Layout\HorizontalSeparatorElement;
 use Lle\CruditBundle\Dto\Layout\LinkElement;
 use Lle\CruditBundle\Dto\Path;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -16,6 +17,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  */
 class HermesMenuProvider implements MenuProviderInterface
 {
+    private const ROLE_DASHBOARD = 'ROLE_HERMES_DASHBOARD';
     private const TRANSLATION_DOMAIN = 'LleHermesBundle';
 
     public const ICON_STYLE_IMAGE = 'image';
@@ -86,6 +88,13 @@ class HermesMenuProvider implements MenuProviderInterface
             && self::ICON_STYLE_FONTAWESOME === $this->parameters->get('lle_hermes.menu_icon_style');
     }
 
+    /** A separator above the menu is opt-in (`menu_separator`), so that existing projects keep their menu as is. */
+    private function hasSeparator(): bool
+    {
+        return $this->parameters->has('lle_hermes.menu_separator')
+            && true === $this->parameters->get('lle_hermes.menu_separator');
+    }
+
     public function getMenuEntry(): iterable
     {
         $hasIcons = (bool) $this->parameters->get('lle_hermes.menu_icons');
@@ -95,7 +104,7 @@ class HermesMenuProvider implements MenuProviderInterface
             'menu.lle_hermes',
             Path::new('lle_hermes_dashboard'),
             $this->rootIcon($hasIcons),
-        )->setRole('ROLE_HERMES_DASHBOARD');
+        )->setRole(self::ROLE_DASHBOARD);
 
         $menu->addChild(
             $this->link(
@@ -171,6 +180,14 @@ class HermesMenuProvider implements MenuProviderInterface
                 'ROLE_HERMES_CONSENT_INDEX',
             ),
         );
+
+        if ($this->hasSeparator()) {
+            // Same role as the main entry, so that the separator only shows when the menu does.
+            return [
+                HorizontalSeparatorElement::new()->setRole(self::ROLE_DASHBOARD),
+                $menu,
+            ];
+        }
 
         return [
             $menu,

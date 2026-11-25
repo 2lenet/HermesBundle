@@ -37,6 +37,12 @@ class ConfigurationTest extends TestCase
         self::assertSame('image', $config['menu_icon_style']);
     }
 
+    public function testTheMenuSeparatorIsOffByDefault(): void
+    {
+        self::assertFalse($this->process()['menu_separator']);
+        self::assertTrue($this->process(['menu_separator' => true])['menu_separator']);
+    }
+
     public function testMenuIconsAcceptBooleans(): void
     {
         self::assertFalse($this->process(['menu_icons' => false])['menu_icons']);

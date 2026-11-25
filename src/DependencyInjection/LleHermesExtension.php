@@ -41,6 +41,7 @@ class LleHermesExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('lle_hermes.bounce_password', $processedConfig['bounce_password']);
         $container->setParameter('lle_hermes.menu_icons', $processedConfig['menu_icons']);
         $container->setParameter('lle_hermes.menu_icon_style', $processedConfig['menu_icon_style']);
+        $container->setParameter('lle_hermes.menu_separator', $processedConfig['menu_separator']);
         $container->setParameter('lle_hermes.recipient_error_retry', $processedConfig['recipient_error_retry']);
         $container->setParameter('lle_hermes.recipient_max_retry', $processedConfig['recipient_max_retry']);
         $container->setParameter('lle_hermes.tenant_class', $processedConfig['tenant_class']);

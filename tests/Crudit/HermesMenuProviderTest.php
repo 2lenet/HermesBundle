@@ -3,6 +3,7 @@
 namespace App\Tests\Crudit;
 
 use Lle\CruditBundle\Dto\Icon;
+use Lle\CruditBundle\Dto\Layout\HorizontalSeparatorElement;
 use Lle\CruditBundle\Dto\Layout\LinkElement;
 use Lle\HermesBundle\Crudit\CrudMenu\HermesMenuProvider;
 use PHPUnit\Framework\TestCase;
@@ -103,5 +104,38 @@ class HermesMenuProviderTest extends TestCase
             self::assertSame('LleHermesBundle', $child->getTranslationDomain());
             self::assertSame('menu.' . $child->getId(), $child->getLibelle());
         }
+    }
+
+    /**
+     * @return list<object> the entries returned by the provider
+     */
+    private function entries(?bool $separator): array
+    {
+        $parameters = ['lle_hermes.menu_icons' => false, 'lle_hermes.tenant_class' => null];
+        if (null !== $separator) {
+            $parameters['lle_hermes.menu_separator'] = $separator;
+        }
+
+        return [...(new HermesMenuProvider(new ParameterBag($parameters)))->getMenuEntry()];
+    }
+
+    public function testThereIsNoSeparatorByDefault(): void
+    {
+        foreach ([null, false] as $separator) {
+            $entries = $this->entries($separator);
+
+            self::assertCount(1, $entries);
+            self::assertInstanceOf(LinkElement::class, $entries[0]);
+        }
+    }
+
+    public function testTheSeparatorComesBeforeTheMenuWithTheSameRole(): void
+    {
+        $entries = $this->entries(true);
+
+        self::assertCount(2, $entries);
+        self::assertInstanceOf(HorizontalSeparatorElement::class, $entries[0]);
+        self::assertInstanceOf(LinkElement::class, $entries[1]);
+        self::assertSame($entries[1]->getRole(), $entries[0]->getRole());
     }
 }
