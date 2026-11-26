@@ -5,9 +5,11 @@ namespace App\Tests\Service;
 use Lle\HermesBundle\Entity\Mail;
 use Lle\HermesBundle\Entity\Template;
 use Lle\HermesBundle\Service\MailTemplater;
+use Lle\HermesBundle\Twig\MailTwigEnvironment;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 use Twig\Loader\LoaderInterface;
 
 /**
@@ -52,6 +54,76 @@ class MailTemplaterTest extends TestCase
     public function testGetSenderName(): void
     {
         self::assertEquals('sender', $this->mailTemplater->getSenderName());
+    }
+
+    public function testRestoresStrictVariablesOfASharedEnvironment(): void
+    {
+        $twig = new Environment(new ArrayLoader(), ['strict_variables' => true, 'debug' => false]);
+        $mail = $this->createMail();
+        $mail->setSubject('[{{ unknown }}]');
+        $router = $this->createMock(RouterInterface::class);
+        $templater = new MailTemplater($mail, $twig, $router);
+
+        $subject = $templater->getSubject();
+
+        self::assertSame('[]', $subject);
+        self::assertTrue($twig->isStrictVariables());
+    }
+
+    public function testLeavesNonStrictEnvironmentNonStrict(): void
+    {
+        $twig = new Environment(new ArrayLoader(), ['strict_variables' => false, 'debug' => true]);
+        $mail = $this->createMail();
+        $router = $this->createMock(RouterInterface::class);
+        $templater = new MailTemplater($mail, $twig, $router);
+
+        $templater->getSubject();
+
+        self::assertFalse($twig->isStrictVariables());
+    }
+
+    public function testDeprecatesAnEnvironmentOtherThanTheMailOne(): void
+    {
+        $twig = new Environment(new ArrayLoader());
+        $mail = $this->createMail();
+        $router = $this->createMock(RouterInterface::class);
+
+        $deprecations = $this->collectDeprecations(static fn () => new MailTemplater($mail, $twig, $router));
+
+        self::assertCount(1, $deprecations);
+        self::assertStringContainsString(MailTwigEnvironment::class, $deprecations[0]);
+    }
+
+    public function testDoesNotDeprecateTheMailEnvironment(): void
+    {
+        $twig = new MailTwigEnvironment();
+        $mail = $this->createMail();
+        $router = $this->createMock(RouterInterface::class);
+
+        $deprecations = $this->collectDeprecations(static fn () => new MailTemplater($mail, $twig, $router));
+
+        self::assertSame([], $deprecations);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function collectDeprecations(callable $callable): array
+    {
+        $deprecations = [];
+        set_error_handler(static function (int $level, string $message) use (&$deprecations): bool {
+            $deprecations[] = $message;
+
+            return true;
+        }, E_USER_DEPRECATED);
+
+        try {
+            $callable();
+        } finally {
+            restore_error_handler();
+        }
+
+        return $deprecations;
     }
 
     protected function createMail(): Mail

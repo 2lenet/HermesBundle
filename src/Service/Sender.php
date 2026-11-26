@@ -18,6 +18,7 @@ use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mime\Exception\RfcComplianceException;
+use Twig\Error\Error as TwigError;
 
 /**
  * Class Sender
@@ -27,6 +28,8 @@ use Symfony\Component\Mime\Exception\RfcComplianceException;
  */
 class Sender
 {
+    public const TEMPLATE_ERROR_PREFIX = 'Template error: ';
+
     public function __construct(
         protected readonly EntityManagerInterface $em,
         protected readonly EmailErrorRepository $emailErrorRepository,
@@ -167,6 +170,13 @@ class Sender
             // Invalid address format: retrying cannot succeed
             $recipient->setStatus(Recipient::STATUS_ERROR);
             $this->errorLogger->logError('RFC error with message : ' . $e->getMessage(), $recipient);
+
+            return false;
+        } catch (TwigError $e) {
+            // Template refused by the sandbox, invalid or failing on this recipient's data: retrying
+            // cannot succeed. The mail keeps its status so that its other recipients are sent.
+            $recipient->setStatus(Recipient::STATUS_ERROR);
+            $this->errorLogger->logError(self::TEMPLATE_ERROR_PREFIX . $e->getRawMessage(), $recipient);
 
             return false;
         } catch (TransportExceptionInterface $e) {

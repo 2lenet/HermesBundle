@@ -51,4 +51,26 @@ class MailRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Reads the content of the mails in the given statuses, by batches of ids (keyset pagination):
+     * no entity is hydrated and only one batch is held in memory, whatever the size of the table.
+     *
+     * @param string[] $statuses
+     *
+     * @return array<int, array{id: int, subject: ?string, text: ?string, html: ?string}>
+     */
+    public function findContentsByStatus(array $statuses, int $afterId, int $limit): array
+    {
+        return $this->createQueryBuilder('m')
+            ->select('m.id', 'm.subject', 'm.text', 'm.html')
+            ->andWhere('m.status IN (:statuses)')
+            ->andWhere('m.id > :afterId')
+            ->setParameter('statuses', $statuses)
+            ->setParameter('afterId', $afterId)
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

@@ -3,6 +3,7 @@
 namespace Lle\HermesBundle\Twig;
 
 use Lle\HermesBundle\Entity\Mail;
+use Lle\HermesBundle\Service\MailPreviewTemplater;
 use Lle\HermesBundle\Service\MailTemplater;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -24,9 +25,13 @@ class HermesExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * Templater of the back office screens: a template that cannot be rendered shows its error
+     * instead of breaking the page (see `MailPreviewTemplater`).
+     */
     public function getTemplater(Mail $mail): MailTemplater
     {
-        $templater = new MailTemplater($mail, $this->twig, $this->router);
+        $templater = new MailPreviewTemplater($mail, $this->twig, $this->router);
         $templater->addData($mail->getData());
 
         return $templater;
